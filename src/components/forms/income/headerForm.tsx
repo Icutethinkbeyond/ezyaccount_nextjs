@@ -41,7 +41,7 @@ const HeaderForm: React.FC = () => {
   });
 
   const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | any>
   ) => {
     const { name, value, type, checked } = e.target;
     setFormData({

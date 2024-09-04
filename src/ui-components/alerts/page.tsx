@@ -5,7 +5,7 @@ import {
     Stack,
     Alert,AlertTitle
 } from '@mui/material'
-import BaseCard from '@/app/(DashboardLayout)/components/shared/BaseCard';
+import BaseCard from '@/components/shared/BaseCard';
 // import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 // const Item = styled(Paper)(({ theme }) => ({
 //     ...theme.typography.body1,

@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import Rating from '@mui/material/Rating';
 import Typography from '@mui/material/Typography';
 import {Grid} from '@mui/material'
-import BaseCard from '@/app/(DashboardLayout)/components/shared/BaseCard';
+import BaseCard from '@/components/shared/BaseCard';
 
 export default function BasicRating() {
   const [value, setValue] = React.useState<number | null>(2);
