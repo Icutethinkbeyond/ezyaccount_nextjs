@@ -12,6 +12,7 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  SelectChangeEvent,
   Table,
   TableCell,
   TableContainer,
@@ -23,9 +24,9 @@ import {
   FormDataFooter,
   useProductServiceListContext,
 } from "@/contexts/productServiceListContext";
+import { toNumber } from "lodash";
 
 const FooterForm: React.FC = () => {
-
   const { footerForm, setFooterForm } = useProductServiceListContext();
 
   // const [formData, setFormData] = useState<FormDataFooter>(footerFormClean);
@@ -38,6 +39,19 @@ const FooterForm: React.FC = () => {
       ...footerForm,
       [name]: type === "checkbox" ? checked : value,
     });
+  };
+
+  const handleChangeSelect = (e: SelectChangeEvent<number>) => {
+    const { value } = e.target;
+
+    let newValue = toNumber(value);
+
+    if (footerForm.withholdingTax !== newValue) {
+      setFooterForm({
+        ...footerForm,
+        withholdingTax: newValue,
+      });
+    }
   };
 
   return (
@@ -140,7 +154,7 @@ const FooterForm: React.FC = () => {
                         id="demo-simple-select"
                         value={footerForm.withholdingTax}
                         label="Withholding Tax"
-                        // onChange={handleChange}
+                        onChange={handleChangeSelect}
                       >
                         <MenuItem value={0}>0%</MenuItem>
                         <MenuItem value={1}>1%</MenuItem>

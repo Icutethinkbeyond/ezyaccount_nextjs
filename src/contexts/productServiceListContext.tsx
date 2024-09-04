@@ -8,7 +8,7 @@ import React, {
   ReactNode,
   useEffect,
 } from "react";
-import { calculateFooterTotals, calculateVAT } from "@/utils/utils";
+import { calculateFooterTotals, calculateTax } from "@/utils/utils";
 
 // กำหนดประเภทของสินค้าย่อย
 export interface SubProduct {
@@ -288,29 +288,39 @@ export const ProductsProvider = ({ children }: { children: ReactNode }) => {
   }, [products]);
 
   useEffect(() => {
-    console.log(footerForm);
-    if (footerForm.includeVat === true) {
-      const { totalWithVAT, vatAmount } = calculateVAT(
-        footerForm.priceAfterDiscount
-      );
+    let vatRate = footerForm.includeVat ? 0.07 : 0;
 
-      if (vatAmount !== footerForm.vatPrice) {
-        setFooterForm({
-          ...footerForm,
-          vatPrice: vatAmount,
-          totalAmount: totalWithVAT,
-        });
-      }
-    } else {
-      if (footerForm.vatPrice !== 0) {
-        setFooterForm({
-          ...footerForm,
-          vatPrice: 0,
-          totalAmount: 0,
-        });
-      }
+    const {
+      totalWithVAT,
+      vatAmount,
+      withholdingTaxAmount,
+      totalAfterWithholdingTax,
+    } = calculateTax(
+      footerForm.priceAfterDiscount,
+      vatRate,
+      footerForm.withholdingTax
+    );
+
+    // // Only update state if the calculated values are different
+    if (
+      vatAmount !== footerForm.vatPrice ||
+      totalWithVAT !== footerForm.totalAmount ||
+      withholdingTaxAmount !== footerForm.withholdingTaxPrice ||
+      totalAfterWithholdingTax !== footerForm.withholdingTaxPrice
+    ) {
+      setFooterForm((prevForm) => ({
+        ...prevForm,
+        vatPrice: vatAmount,
+        totalAmount: totalWithVAT,
+        withholdingTaxPrice: withholdingTaxAmount,
+        totalAmountDue: totalAfterWithholdingTax,
+      }));
     }
-  }, [footerForm]);
+  }, [
+    footerForm.includeVat,
+    footerForm.priceAfterDiscount,
+    footerForm.withholdingTax,
+  ]);
 
   // ฟังก์ชันสำหรับเพิ่มสินค้า
   const addProduct = (product: Product) => {

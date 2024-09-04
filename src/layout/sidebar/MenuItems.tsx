@@ -15,7 +15,7 @@ const Menuitems = [
     id: uniqueId(),
     title: "Income",
     icon: IconHome,
-    href: "/",
+    href: "/income",
   },
   // {
   //   id: uniqueId(),
