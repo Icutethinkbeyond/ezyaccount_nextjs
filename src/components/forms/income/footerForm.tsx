@@ -1,12 +1,10 @@
-import React, { useState, ChangeEvent, FormEvent } from "react";
-import TextField from "@mui/material/TextField";
+import React, { ChangeEvent } from "react";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Grid from "@mui/material/Grid";
-import BaseCard from "@/components/shared/BaseCard";
 import {
   FormControl,
   InputLabel,
@@ -19,17 +17,20 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import {
-  footerFormClean,
-  FormDataFooter,
-  useProductServiceListContext,
-} from "@/contexts/productServiceListContext";
-import { toNumber } from "lodash";
+import { useProductServiceListContext } from "@/contexts/productServiceListContext";
+import { toNumber, uniqueId } from "lodash";
+import { useDatabaseContext } from "@/contexts/dbContext";
+import router from "next/router";
+import { formatNumber } from "@/utils/utils";
 
-const FooterForm: React.FC = () => {
-  const { footerForm, setFooterForm } = useProductServiceListContext();
+interface FooterProps {
+  isEdit: boolean | null | undefined;
+}
 
-  // const [formData, setFormData] = useState<FormDataFooter>(footerFormClean);
+const FooterForm: React.FC<FooterProps> = ({ isEdit = false }) => {
+  const { footerForm, setFooterForm, headForm, products } =
+    useProductServiceListContext();
+  const { addQuotation, qoutationState } = useDatabaseContext();
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | any>
@@ -53,6 +54,22 @@ const FooterForm: React.FC = () => {
       });
     }
   };
+
+  const handleSavePost = (status: string) => {
+    addQuotation({
+      keyId: uniqueId(),
+      ownerId: "1",
+      status: status,
+      headForm: headForm,
+      products: products,
+      summary: footerForm,
+      createDate: new Date(),
+      updateDate: new Date(),
+    });
+    router.push("/income/quotation");
+  };
+
+  const handlePreview = () => {};
 
   return (
     <Box component="form" noValidate autoComplete="off">
@@ -82,7 +99,7 @@ const FooterForm: React.FC = () => {
                   </TableCell>
                   <TableCell>
                     <Typography color="textSecondary" variant="h6">
-                      {footerForm.total}
+                      {formatNumber(footerForm.total)}
                     </Typography>
                   </TableCell>
                 </TableRow>
@@ -94,7 +111,7 @@ const FooterForm: React.FC = () => {
                   </TableCell>
                   <TableCell>
                     <Typography color="textSecondary" variant="h6">
-                      {footerForm.discountPrice}
+                      {formatNumber(footerForm.discountPrice)}
                     </Typography>
                   </TableCell>
                 </TableRow>
@@ -106,7 +123,7 @@ const FooterForm: React.FC = () => {
                   </TableCell>
                   <TableCell>
                     <Typography color="textSecondary" variant="h6">
-                      {footerForm.priceAfterDiscount}
+                      {formatNumber(footerForm.priceAfterDiscount)}
                     </Typography>
                   </TableCell>
                 </TableRow>
@@ -127,7 +144,7 @@ const FooterForm: React.FC = () => {
                   </TableCell>
                   <TableCell>
                     <Typography color="textSecondary" variant="h6">
-                      {footerForm.vatPrice}
+                      {formatNumber(footerForm.vatPrice)}
                     </Typography>
                   </TableCell>
                 </TableRow>
@@ -139,7 +156,7 @@ const FooterForm: React.FC = () => {
                   </TableCell>
                   <TableCell>
                     <Typography color="textSecondary" variant="h6">
-                      {footerForm.totalAmount}
+                      {formatNumber(footerForm.totalAmount)}
                     </Typography>
                   </TableCell>
                 </TableRow>
@@ -172,7 +189,7 @@ const FooterForm: React.FC = () => {
                   </TableCell>
                   <TableCell>
                     <Typography color="textSecondary" variant="h6">
-                      {footerForm.withholdingTaxPrice}
+                      {formatNumber(footerForm.withholdingTaxPrice)}
                     </Typography>
                   </TableCell>
                 </TableRow>
@@ -184,7 +201,7 @@ const FooterForm: React.FC = () => {
                   </TableCell>
                   <TableCell>
                     <Typography color="textSecondary" variant="h6">
-                      {footerForm.totalAmountDue}
+                      {formatNumber(footerForm.totalAmountDue)}
                     </Typography>
                   </TableCell>
                 </TableRow>
@@ -200,6 +217,7 @@ const FooterForm: React.FC = () => {
               variant="contained"
               color="primary"
               sx={{ marginBottom: "5px" }}
+              onClick={() => handlePreview()}
             >
               Preview
             </Button>
@@ -207,15 +225,17 @@ const FooterForm: React.FC = () => {
               variant="contained"
               color="secondary"
               sx={{ marginBottom: "5px" }}
+              onClick={() => handleSavePost("draft")}
             >
-              Save Draft
+               {isEdit ? "Edit Draft" : "Save Draft"}
             </Button>
             <Button
               variant="contained"
               color="success"
               sx={{ marginBottom: "5px" }}
+              onClick={() => handleSavePost("approve")}
             >
-              Save and Approve
+              {isEdit ? "Edit and Approve" : "Save and Approve"}
             </Button>
           </Box>
         </Grid>
