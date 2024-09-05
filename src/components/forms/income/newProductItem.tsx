@@ -20,11 +20,11 @@ import {
 import { SubProduct, Product } from "@/contexts/productServiceListContext";
 import { toNumber } from "lodash";
 
-interface TableProps {
-  //   data: RowData[];
+interface NewProductProps {
+  isEdit?: boolean | null | undefined;
 }
 
-const NewProductItem: React.FC<TableProps> = () => {
+const NewProductItem: React.FC<NewProductProps> = ({ isEdit = false }) => {
   const {
     products,
     addProduct,
@@ -37,6 +37,8 @@ const NewProductItem: React.FC<TableProps> = () => {
     isProductEdit,
     setIsProductEdit,
     setIsSubProductEdit,
+    updateProduct,
+    updateSubProduct,
   } = useProductServiceListContext();
 
   useEffect(() => {
@@ -62,7 +64,8 @@ const NewProductItem: React.FC<TableProps> = () => {
   }, [newProduct]);
 
   useEffect(() => {
-    let sum = newSubProduct.price * newSubProduct.amount - newSubProduct.discount;
+    let sum =
+      newSubProduct.price * newSubProduct.amount - newSubProduct.discount;
     if (newSubProduct.total !== sum) {
       setnewSubProduct({
         ...newSubProduct,
@@ -115,11 +118,13 @@ const NewProductItem: React.FC<TableProps> = () => {
   const addItem = () => {
     addProduct(newProduct);
     setnewProduct(productClean);
+    setIsProductEdit(false);
   };
 
   const addSubItem = () => {
     addSubProduct(newSubProduct.productServiceKey, newSubProduct);
     setnewSubProduct(subProductClean);
+    setIsProductEdit(false);
   };
 
   const unEditProduct = () => {
@@ -134,7 +139,17 @@ const NewProductItem: React.FC<TableProps> = () => {
     setIsSubProductEdit(false);
   };
 
-  const handleEditProduct = () => {};
+  const handleEditProduct = () => {
+    setnewProduct(productClean);
+    updateProduct(newProduct);
+    setIsProductEdit(false);
+  };
+
+  const handleEditSubProduct = () => {
+    setnewSubProduct(subProductClean);
+    updateSubProduct(newSubProduct.productServiceKey, newSubProduct);
+    setIsSubProductEdit(false);
+  };
 
   return (
     <Box title="Product/Service Items">
@@ -241,7 +256,7 @@ const NewProductItem: React.FC<TableProps> = () => {
               variant="contained"
               color="success"
               sx={{ marginBottom: "5px" }}
-              onClick={() => addItem()}
+              onClick={() => !isEdit ? addItem() : handleEditProduct()}
             >
               {!isProductEdit
                 ? "Add Item"
@@ -387,7 +402,7 @@ const NewProductItem: React.FC<TableProps> = () => {
               variant="contained"
               color="success"
               sx={{ marginBottom: "5px" }}
-              onClick={() => addSubItem()}
+              onClick={() => !isEdit ? addSubItem() : handleEditSubProduct()}
             >
               {!isSubProductEdit
                 ? "Add Sub-Item"
