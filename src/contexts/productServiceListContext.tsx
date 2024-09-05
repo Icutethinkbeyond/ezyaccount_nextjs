@@ -1,6 +1,5 @@
 // contexts/ProductServiceListContext.tsx
 import { toNumber } from "lodash";
-import FooterForm from "@/components/forms/income/footerForm";
 import React, {
   createContext,
   useContext,
@@ -54,6 +53,22 @@ export interface Product {
   totalAmountDue: number;
 }
 
+export interface HeadForm {
+  quotationNumber: string;
+  companyName: string;
+  companyTel: string;
+  contactorName: string;
+  contactorTel: string;
+  companyAddress: string;
+  contactorAddress: string;
+  contactorEmail: string;
+  taxId: string;
+  branch: string;
+  dateCreate: string;
+  includeTax: boolean;
+  note: string;
+}
+
 export const productClean = {
   isSubjectItem: true,
   productServiceNumber: 0,
@@ -95,9 +110,26 @@ export const footerFormClean = {
   totalAmountDue: 0,
 };
 
+export const headerClean = {
+  quotationNumber: "",
+  companyName: "",
+  companyTel: "",
+  contactorName: "",
+  contactorTel: "",
+  companyAddress: "",
+  contactorAddress: "",
+  contactorEmail: "",
+  taxId: "",
+  branch: "",
+  dateCreate: "",
+  includeTax: false,
+  note: "",
+}
+
 // กำหนดประเภทของ Context
 interface ProductServiceListContextProps {
   products: Product[];
+  setProducts: React.Dispatch<React.SetStateAction<Product[]>>;
   addProduct: (product: Product) => void;
   removeProduct: (productServiceNumber: number) => void;
   updateProduct: (updatedProduct: Product) => void;
@@ -125,6 +157,10 @@ interface ProductServiceListContextProps {
   //ส่วนท้ายเอกสาร
   footerForm: FormDataFooter;
   setFooterForm: React.Dispatch<React.SetStateAction<FormDataFooter>>;
+  
+  //ส่วนหัวเอกสาร
+  headForm: HeadForm;
+  setHeadForm: React.Dispatch<React.SetStateAction<HeadForm>>;
 }
 
 // สร้าง Context
@@ -133,95 +169,20 @@ const ProductServiceListContext = createContext<
 >(undefined);
 
 export const ProductsProvider = ({ children }: { children: ReactNode }) => {
-  const [products, setProducts] = useState<Product[]>([
-    {
-      isSubjectItem: true,
-      productServiceNumber: 1,
-      productService: "asdasdsa",
-      description: "dadasd",
-      price: 0,
-      amount: 0,
-      discount: 0,
-      total: 0,
-      subProductList: [
-        {
-          isSubjectItem: false,
-          subProductServiceNumber: 1.1,
-          productService: "asdasdasd",
-          description: "asdasdasd",
-          price: 20,
-          amount: 1,
-          discount: 2,
-          total: 18,
-          productServiceKey: 1,
-        },
-        {
-          isSubjectItem: false,
-          subProductServiceNumber: 1.2,
-          productService: "asdasdasd",
-          description: "asdasdas",
-          price: 399,
-          amount: 1,
-          discount: 20,
-          total: 379,
-          productServiceKey: 1,
-        },
-      ],
-      totalAmount: 0,
-      totalPrice: 0,
-      totalDiscount: 0,
-      sumTotal: 0,
-      totalAmountDue: 0,
-    },
-    {
-      isSubjectItem: true,
-      productServiceNumber: 2,
-      productService: "fsdfsdfsdfsdf",
-      description: "sdfsdfsdf",
-      price: 0,
-      amount: 0,
-      discount: 0,
-      total: 0,
-      subProductList: [
-        {
-          isSubjectItem: false,
-          subProductServiceNumber: 2.1,
-          productService: "asdasdasda",
-          description: "asdasdsad",
-          price: 199,
-          amount: 1,
-          discount: 19,
-          total: 180,
-          productServiceKey: 2,
-        },
-        {
-          isSubjectItem: false,
-          subProductServiceNumber: 2.2,
-          productService: "asdasdasda",
-          description: "asdasdsad",
-          amount: 2,
-          price: 400,
-          discount: 20,
-          total: 380,
-          productServiceKey: 2,
-        },
-      ],
-      totalAmount: 0,
-      totalPrice: 0,
-      totalDiscount: 0,
-      sumTotal: 0,
-      totalAmountDue: 0,
-    },
-  ]);
+
+  const [products, setProducts] = useState<Product[]>([]);
   const [footerForm, setFooterForm] = useState<FormDataFooter>(footerFormClean);
   const [productEdit, setProductEdit] = useState<Product>(productClean);
+  const [headForm, setHeadForm] = useState<HeadForm>(headerClean);
   const [subProductEdit, setSubProductEdit] =
     useState<SubProduct>(subProductClean);
   const [isProductEdit, setIsProductEdit] = useState<boolean>(false);
   const [isSubProductEdit, setIsSubProductEdit] = useState<boolean>(false);
 
+
   // Function to calculate totals
   const calculateTotals = (products: Product[]): Product[] => {
+
     return products.map((product) => {
       const totalAmount = product.subProductList.reduce(
         (sum, subProduct) => sum + subProduct.amount,
@@ -411,6 +372,7 @@ export const ProductsProvider = ({ children }: { children: ReactNode }) => {
     <ProductServiceListContext.Provider
       value={{
         products,
+        setProducts,
         addProduct,
         removeProduct,
         updateProduct,
@@ -427,6 +389,8 @@ export const ProductsProvider = ({ children }: { children: ReactNode }) => {
         setIsSubProductEdit,
         footerForm,
         setFooterForm,
+        headForm,
+        setHeadForm
       }}
     >
       {children}
