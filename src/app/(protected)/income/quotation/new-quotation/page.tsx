@@ -19,7 +19,7 @@ const Dashboard = () => {
               <HeaderForm />
             </Grid>
             <Grid item xs={12} lg={12}>
-              <NewProductItem />
+              <NewProductItem isEdit={false}/>
             </Grid>
             <Grid item xs={12} lg={12}>
               <ProductsServicesList />
