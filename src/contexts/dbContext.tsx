@@ -11,7 +11,7 @@ import { FormDataFooter, HeadForm, Product } from "./productServiceListContext";
 
 // กำหนดประเภทของสินค้าย่อย
 export interface Quotation {
-  keyId: string;
+  keyId: string | null;
   ownerId: string | null;
   status: string;
   headForm: HeadForm | null;
@@ -20,13 +20,25 @@ export interface Quotation {
   createDate: Date;
   updateDate: Date;
 }
+
+export const quotationClean = {
+  keyId: null,
+  ownerId: null,
+  status: "draft",
+  headForm: null,
+  products: null,
+  summary: null,
+  createDate: new Date(),
+  updateDate: new Date()
+};
 // กำหนดประเภทของ Context
 interface DatabaseContextProps {
   qoutationState: Quotation[];
-  // setQuotation: React.Dispatch<React.SetStateAction<Quotation[]>>;
+  editQuotation: Quotation;
+  setEditQuotation: React.Dispatch<React.SetStateAction<Quotation>>;
   addQuotation: (qoutation: Quotation) => void;
   removeQuotation: (keyId: string) => void;
-  updateProduct: (qoutation: Quotation) => void;
+  updateQuotation: (qoutation: Quotation) => void;
 }
 
 // สร้าง Context
@@ -416,10 +428,7 @@ export const DatabaseProvider = ({ children }: { children: ReactNode }) => {
       updateDate: new Date("2024-09-05T08:01:43.342Z")
     }
   ]);
-
-  useEffect(() => {
-    console.log(qoutationState);
-  }, [qoutationState]);
+  const [editQuotation, setEditQuotation] = useState<Quotation>(quotationClean);
 
   // ฟังก์ชันสำหรับเพิ่มสินค้า
   const addQuotation = (quotation: Quotation) => {
@@ -436,23 +445,25 @@ export const DatabaseProvider = ({ children }: { children: ReactNode }) => {
   };
 
   // ฟังก์ชันสำหรับอัปเดตสินค้า
-  const updateProduct = (quotation: Quotation) => {
-    // setProducts((prevProducts) =>
-    //   prevProducts.map((product) =>
-    //     product.productServiceNumber === updatedProduct.productServiceNumber
-    //       ? updatedProduct
-    //       : product
-    //   )
-    // );
+  const updateQuotation = (updateQuotation: Quotation) => {
+    setQuotation((prevQuotation) =>
+      prevQuotation.map((quotation) =>
+        quotation.keyId === updateQuotation.keyId
+          ? updateQuotation
+          : quotation
+      )
+    );
   };
 
   return (
     <DatabaseContext.Provider
       value={{
+        editQuotation,
+        setEditQuotation,
         qoutationState,
         addQuotation,
         removeQuotation,
-        updateProduct,
+        updateQuotation,
       }}
     >
       {children}
