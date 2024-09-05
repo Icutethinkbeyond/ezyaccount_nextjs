@@ -6,17 +6,11 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Paper,
   IconButton,
-  Collapse,
   Typography,
 } from "@mui/material";
 import {
-  KeyboardArrowDown,
-  KeyboardArrowUp,
   EditNoteTwoTone,
-  Delete,
-  Edit,
   DeleteSweepTwoTone,
 } from "@mui/icons-material";
 import BaseCard from "@/components/shared/BaseCard";
@@ -25,12 +19,13 @@ import {
   SubProduct,
   useProductServiceListContext,
 } from "@/contexts/productServiceListContext";
+import { formatNumber } from "@/utils/utils";
 
 interface TableProps {
-  data: any;
+  // data: any;
 }
 
-const ProductsServicesList: React.FC<TableProps> = ({ data }) => {
+const ProductsServicesList: React.FC<TableProps> = () => {
   const {
     products,
     removeProduct,
@@ -136,16 +131,16 @@ const ProductsServicesList: React.FC<TableProps> = ({ data }) => {
                   <TableCell>{product.productService}</TableCell>
                   <TableCell>{product.description}</TableCell>
                   <TableCell align="right">
-                    {product.price === 0 ? "" : product.price}
+                    {product.price === 0 ? "" : formatNumber(product.price)}
                   </TableCell>
                   <TableCell align="right">
-                    {product.amount === 0 ? "" : product.amount}
+                    {product.amount === 0 ? "" : formatNumber(product.amount)}
                   </TableCell>
                   <TableCell align="right">
-                    {product.discount === 0 ? "" : product.discount}
+                    {product.discount === 0 ? "" : formatNumber(product.discount)}
                   </TableCell>
                   <TableCell align="right">
-                    {product.total === 0 ? "" : product.total}
+                    {product.total === 0 ? "" : formatNumber(product.total)}
                   </TableCell>
                   <TableCell>
                     <IconButton
@@ -175,11 +170,11 @@ const ProductsServicesList: React.FC<TableProps> = ({ data }) => {
                     </TableCell>
                     <TableCell>{subProduct.productService}</TableCell>
                     <TableCell>{subProduct.description}</TableCell>
-                    <TableCell align="right">{subProduct.price}</TableCell>
-                    <TableCell align="right">{subProduct.amount}</TableCell>
+                    <TableCell align="right">{formatNumber(subProduct.price)}</TableCell>
+                    <TableCell align="right">{formatNumber(subProduct.amount)}</TableCell>
 
-                    <TableCell align="right">{subProduct.discount}</TableCell>
-                    <TableCell align="right">{subProduct.total}</TableCell>
+                    <TableCell align="right">{formatNumber(subProduct.discount)}</TableCell>
+                    <TableCell align="right">{formatNumber(subProduct.total)}</TableCell>
                     <TableCell>
                       <IconButton
                         size="small"
