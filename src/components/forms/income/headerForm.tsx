@@ -1,88 +1,40 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
 import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import Checkbox from "@mui/material/Checkbox";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import Grid from "@mui/material/Grid";
+import { headerClean, HeadForm, useProductServiceListContext } from "@/contexts/productServiceListContext";
 
-interface FormData {
-  quotationNumber: string;
-  companyName: string;
-  companyTel: string;
-  contactorName: string;
-  contactorTel: string;
-  companyAddress: string;
-  contactorAddress: string;
-  contactorEmail: string;
-  taxId: string;
-  branch: string;
-  dateCreate: string;
-  includeTax: boolean;
-  note: string;
-}
 
 const HeaderForm: React.FC = () => {
-  const [formData, setFormData] = useState<FormData>({
-    quotationNumber: "",
-    companyName: "",
-    companyTel: "",
-    contactorName: "",
-    contactorTel: "",
-    companyAddress: "",
-    contactorAddress: "",
-    contactorEmail: "",
-    taxId: "",
-    branch: "",
-    dateCreate: "",
-    includeTax: false,
-    note: "",
-  });
+
+  const { headForm, setHeadForm } = useProductServiceListContext();
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | any>
   ) => {
     const { name, value, type, checked } = e.target;
-    setFormData({
-      ...formData,
+    setHeadForm({
+      ...headForm,
       [name]: type === "checkbox" ? checked : value,
     });
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log("Form Data:", formData);
-    // Handle form submission
-  };
-
   return (
-    <Box component="form" onSubmit={handleSubmit} noValidate autoComplete="off">
+    <Box component="form" noValidate autoComplete="off">
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6} lg={4}>
           <TextField
             label="Quotation Number"
             variant="outlined"
             name="quotationNumber"
-            value={formData.quotationNumber}
+            value={headForm.quotationNumber}
             onChange={handleChange}
             size="small"
             required
             fullWidth
           />
         </Grid>
-        {/* <Grid item xs={12} sm={6} lg={4}>
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={formData.includeTax}
-                onChange={handleChange}
-                name="includeTax"
-              />
-            }
-            label="Include Tax"
-          />
-        </Grid> */}
       </Grid>
       <Typography
         variant="h5"
@@ -98,7 +50,7 @@ const HeaderForm: React.FC = () => {
             variant="outlined"
             name="contactorName"
             size="small"
-            value={formData.contactorName}
+            value={headForm.contactorName}
             onChange={handleChange}
             required
             fullWidth
@@ -110,7 +62,7 @@ const HeaderForm: React.FC = () => {
             variant="outlined"
             name="contactorTel"
             size="small"
-            value={formData.contactorTel}
+            value={headForm.contactorTel}
             onChange={handleChange}
             required
             fullWidth
@@ -122,7 +74,7 @@ const HeaderForm: React.FC = () => {
             variant="outlined"
             name="contactorEmail"
             size="small"
-            value={formData.contactorEmail}
+            value={headForm.contactorEmail}
             onChange={handleChange}
             required
             type="email"
@@ -135,7 +87,7 @@ const HeaderForm: React.FC = () => {
             variant="outlined"
             name="contactorAddress"
             size="small"
-            value={formData.contactorAddress}
+            value={headForm.contactorAddress}
             onChange={handleChange}
             required
             fullWidth
@@ -159,7 +111,7 @@ const HeaderForm: React.FC = () => {
             variant="outlined"
             name="companyName"
             size="small"
-            value={formData.companyName}
+            value={headForm.companyName}
             onChange={handleChange}
             required
             fullWidth
@@ -171,7 +123,7 @@ const HeaderForm: React.FC = () => {
             variant="outlined"
             name="companyTel"
             size="small"
-            value={formData.companyTel}
+            value={headForm.companyTel}
             onChange={handleChange}
             required
             fullWidth
@@ -183,7 +135,7 @@ const HeaderForm: React.FC = () => {
             variant="outlined"
             name="taxId"
             size="small"
-            value={formData.taxId}
+            value={headForm.taxId}
             onChange={handleChange}
             required
             fullWidth
@@ -195,7 +147,7 @@ const HeaderForm: React.FC = () => {
             variant="outlined"
             name="branch"
             size="small"
-            value={formData.branch}
+            value={headForm.branch}
             onChange={handleChange}
             required
             fullWidth
@@ -207,7 +159,7 @@ const HeaderForm: React.FC = () => {
             variant="outlined"
             name="dateCreate"
             size="small"
-            value={formData.dateCreate}
+            value={headForm.dateCreate}
             onChange={handleChange}
             required
             type="date"
@@ -223,7 +175,7 @@ const HeaderForm: React.FC = () => {
             variant="outlined"
             name="companyAddress"
             size="small"
-            value={formData.companyAddress}
+            value={headForm.companyAddress}
             onChange={handleChange}
             required
             fullWidth
@@ -246,9 +198,10 @@ const HeaderForm: React.FC = () => {
             variant="outlined"
             name="companyTel"
             type="file"
-            value={formData.companyTel}
-            onChange={handleChange}
+            // value={headForm.companyTel}
+            // onChange={handleChange}
             required
+            disabled
             fullWidth
           />
         </Grid>
@@ -258,7 +211,7 @@ const HeaderForm: React.FC = () => {
             variant="outlined"
             name="note"
             size="small"
-            value={formData.note}
+            value={headForm.note}
             onChange={handleChange}
             fullWidth
             multiline
