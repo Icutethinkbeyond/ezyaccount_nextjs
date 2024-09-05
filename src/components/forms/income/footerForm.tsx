@@ -19,18 +19,20 @@ import {
 } from "@mui/material";
 import { useProductServiceListContext } from "@/contexts/productServiceListContext";
 import { toNumber, uniqueId } from "lodash";
-import { useDatabaseContext } from "@/contexts/dbContext";
-import router from "next/router";
+import { Quotation, useDatabaseContext } from "@/contexts/dbContext";
+import { useRouter } from "next/navigation";
 import { formatNumber } from "@/utils/utils";
 
 interface FooterProps {
-  isEdit: boolean | null | undefined;
+  isEdit?: boolean | null | undefined;
 }
 
 const FooterForm: React.FC<FooterProps> = ({ isEdit = false }) => {
+  const router = useRouter();
   const { footerForm, setFooterForm, headForm, products } =
     useProductServiceListContext();
-  const { addQuotation, qoutationState } = useDatabaseContext();
+  const { addQuotation, qoutationState, updateQuotation, editQuotation } =
+    useDatabaseContext();
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | any>
@@ -64,6 +66,20 @@ const FooterForm: React.FC<FooterProps> = ({ isEdit = false }) => {
       products: products,
       summary: footerForm,
       createDate: new Date(),
+      updateDate: new Date(),
+    });
+    router.push("/income/quotation");
+  };
+
+  const handleUpdatePost = () => {
+    updateQuotation({
+      keyId: editQuotation.keyId,
+      ownerId: editQuotation.ownerId,
+      status: editQuotation.status,
+      headForm: headForm,
+      products: products,
+      summary: footerForm,
+      createDate: editQuotation.createDate,
       updateDate: new Date(),
     });
     router.push("/income/quotation");
@@ -221,21 +237,26 @@ const FooterForm: React.FC<FooterProps> = ({ isEdit = false }) => {
             >
               Preview
             </Button>
-            <Button
-              variant="contained"
-              color="secondary"
-              sx={{ marginBottom: "5px" }}
-              onClick={() => handleSavePost("draft")}
-            >
-               {isEdit ? "Edit Draft" : "Save Draft"}
-            </Button>
+            {!isEdit && (
+              <Button
+                variant="contained"
+                color="secondary"
+                sx={{ marginBottom: "5px" }}
+                onClick={() => handleSavePost("draft")}
+              >
+                Save Draft
+              </Button>
+            )}
+
             <Button
               variant="contained"
               color="success"
               sx={{ marginBottom: "5px" }}
-              onClick={() => handleSavePost("approve")}
+              onClick={() =>
+                !isEdit ? handleSavePost("approve") : handleUpdatePost()
+              }
             >
-              {isEdit ? "Edit and Approve" : "Save and Approve"}
+              {isEdit ? "Edit" : "Save and Approve"}
             </Button>
           </Box>
         </Grid>
