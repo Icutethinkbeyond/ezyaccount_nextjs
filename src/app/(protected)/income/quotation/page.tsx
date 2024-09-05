@@ -4,6 +4,7 @@ import PageContainer from "@/components/container/PageContainer";
 //component
 import ProductServiceTable from "@/components/shared/productServiceTable";
 import BaseCard from "@/components/shared/BaseCard";
+import { useDatabaseContext } from "@/contexts/dbContext";
 
 const data = [
   {
@@ -18,12 +19,15 @@ const data = [
 ];
 
 const Dashboard = () => {
+
+  const { qoutationState } = useDatabaseContext();
+
   return (
     <PageContainer title="Dashboard" description="this is Dashboard">
       <Box mt={3}>
         <Grid container spacing={3}>
           <Grid item xs={12} lg={12}>
-            <ProductServiceTable data={data} />
+            <ProductServiceTable data={qoutationState} tableName="Quotation Table" newDocumentHref="/income/quotation/new-quotation" newDocumentName="New Quotation"/>
           </Grid>
           <Grid container item xs={12} lg={12} justifyContent="center">
             <Stack spacing={2}>
