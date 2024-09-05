@@ -1,5 +1,12 @@
 import React from "react";
-import { Card, CardContent, Typography, Button, Grid, Link } from "@mui/material";
+import {
+  Card,
+  CardContent,
+  Typography,
+  Button,
+  Grid,
+  Link,
+} from "@mui/material";
 import Image from "next/image";
 
 import user1 from "@/../../public/images/backgrounds/u2.jpg";
@@ -19,7 +26,7 @@ interface CardProps {
 const MenuCard: React.FC<CardProps> = ({ data }) => {
   return (
     <Grid container spacing={3}>
-      {data.map((blog, index) => (
+      {data.map((menu, index) => (
         <Grid
           key={index}
           item
@@ -37,9 +44,9 @@ const MenuCard: React.FC<CardProps> = ({ data }) => {
             }}
           >
             {" "}
-            {blog.imageIcon ? (
+            {menu.imageIcon ? (
               <Image
-                src={blog.imageIcon}
+                src={menu.imageIcon}
                 alt="img"
                 style={{ width: "100%", height: "250px" }}
               />
@@ -52,20 +59,20 @@ const MenuCard: React.FC<CardProps> = ({ data }) => {
                 paddingRight: "30px",
               }}
             >
-              <Typography variant="h4">{blog.menuName}</Typography>
-              <Link href={blog.href ? blog.href : "#"}>
-              <Button
-                variant="contained"
-                sx={{
-                  mt: "15px",
-                  backgroundColor: "primary.main",
-                  "&:hover": {
+              <Typography variant="h4">{menu.menuName}</Typography>
+              <Link href={menu.href ? menu.href : "#"}>
+                <Button
+                  variant="contained"
+                  sx={{
+                    mt: "15px",
                     backgroundColor: "primary.main",
-                  },
-                }}
-              >
-                Manage
-              </Button>
+                    "&:hover": {
+                      backgroundColor: "primary.main",
+                    },
+                  }}
+                >
+                  Manage
+                </Button>
               </Link>
             </CardContent>
           </Card>
