@@ -49,3 +49,46 @@ export const calculateFooterTotals = (products: Product[]): { totalPrice: number
     }
 
 };
+
+
+export function formatUtcDate(utcDateString?: string | null): string | null | undefined {
+
+    if (!utcDateString) {
+        return;
+    }
+
+    const utcDate = new Date(utcDateString);
+    const formattedDate = utcDate.toLocaleDateString('th-TH',
+        { day: '2-digit', month: 'long', year: 'numeric' });
+
+    return formattedDate;
+}
+
+export function makeDateMonth(utcDateString?: string): string {
+
+    if (!utcDateString) {
+        return 'ไม่พบข้อมูล';
+    }
+
+    const utcDate = new Date(utcDateString);
+    const month = String(utcDate.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed, so we add 1
+    const year = String(utcDate.getFullYear()).slice(-2); // Get last two digits of the year
+
+    return `${month}-${year}`;
+}
+
+export function formatNumber(number: number | null | undefined, needDecimal: boolean | null = true): string | null | undefined {
+    if (number !== null && number !== undefined) {
+
+        let fixedNumber: string | number;
+
+        if (needDecimal) {
+            fixedNumber = Number.isInteger(number) ? number.toFixed(2) : number.toString();
+            return parseFloat(fixedNumber).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        } else {
+            return number.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+        }
+    }
+
+    return null;
+}
