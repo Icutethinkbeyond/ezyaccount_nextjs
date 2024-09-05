@@ -10,55 +10,50 @@ import {
   Chip,
   TableContainer,
   IconButton,
-  Card,
-  Paper,
-  Fab,
   Button,
   Grid,
 } from "@mui/material";
 import BaseCard from "@/components/shared/BaseCard";
 import {
   CloudDownload,
-  DeleteSweepTwoTone,
   DriveFileRenameOutline,
-  EditNote,
-  EditNoteTwoTone,
   Email,
   Print,
   RemoveCircle,
 } from "@mui/icons-material";
-import { IconHome } from "@tabler/icons-react";
 import Link from "next/link";
-
-const products = [
-  {
-    id: "1",
-    name: "Sunil Joshi",
-    post: "Web Designer",
-    pname: "Elite Admin",
-    priority: "Low",
-    pbg: "primary.main",
-    budget: "3.9",
-  },
-];
-
-interface ProductServiceList {
-  imageIcon: string | null;
-  href: string;
-  menuName: string;
-  total: number;
-  contractorName: string;
-  status: string;
-}
+import { Quotation, useDatabaseContext } from "@/contexts/dbContext";
+import { formatNumber, formatUtcDate, makeDateMonth } from "@/utils/utils";
+import StatusChip from "./statusChip";
+import { useRouter } from "next/navigation";
 
 interface ProductTableProps {
-  data: ProductServiceList[];
-  tableName: string;
+  data: Quotation[];
+  tableName: string | null;
+  newDocumentHref: string | null;
+  newDocumentName: string | null;
 }
-const ProductServiceTable = () => {
-  // const ProductServiceTable: React.FC<ProductTableProps> = ({ data }) => {
+
+const ProductServiceTable: React.FC<ProductTableProps> = ({
+  data,
+  tableName,
+  newDocumentHref,
+  newDocumentName,
+}) => {
+
+  const { removeQuotation } = useDatabaseContext();
+  const router = useRouter();
+
+  const handleRemove = (keyId: string) => {
+    removeQuotation(keyId)
+  }
+
+  const handleEdit = (keyId: string) => {
+    router.push(`/income/quotation/edit-quotation/${keyId}`)
+  }
+
   return (
-    <BaseCard title="Product Perfomance">
+    <BaseCard title={tableName ? tableName : "Table Name"}>
       <TableContainer
         sx={{
           width: {
@@ -69,21 +64,21 @@ const ProductServiceTable = () => {
       >
         <Grid container>
           <Grid container item xs={6}>
-            <Link href="/income/quotation/new-quotation">
-            <Button
-              variant="contained"
-              color="warning"
-              sx={{ marginBottom: "5px" }}
-            >
-              New Quotation
-            </Button>
+            <Link href={newDocumentHref ? newDocumentHref : "#"}>
+              <Button
+                variant="contained"
+                color="warning"
+                sx={{ marginBottom: "5px" }}
+              >
+                {newDocumentName ? newDocumentName : "New Document"}
+              </Button>
             </Link>
           </Grid>
           <Grid container item xs={6} justifyContent="flex-end"></Grid>
         </Grid>
 
         <Table
-          aria-label="simple table"
+          aria-label="table"
           sx={{
             whiteSpace: "nowrap",
             mt: 2,
@@ -98,12 +93,12 @@ const ProductServiceTable = () => {
               </TableCell>
               <TableCell>
                 <Typography color="textSecondary" variant="h6">
-                  Date Create
+                  Contactor Name
                 </Typography>
               </TableCell>
               <TableCell>
                 <Typography color="textSecondary" variant="h6">
-                  Contactor Name
+                  Date Create
                 </Typography>
               </TableCell>
               <TableCell>
@@ -124,59 +119,62 @@ const ProductServiceTable = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {products.map((product) => (
-              <TableRow key={product.name}>
+            {data.map((data, index) => (
+              <TableRow key={index}>
                 <TableCell>
                   <Typography fontSize="15px" fontWeight={500}>
-                    {product.id}
+                    {index + 1}
                   </Typography>
                 </TableCell>
                 <TableCell>
                   <Box display="flex" alignItems="center">
                     <Box>
                       <Typography variant="h6" fontWeight={600}>
-                        {product.name}
+                        {data.headForm
+                          ? data.headForm.contactorName
+                          : "Name Surname"}
                       </Typography>
                       <Typography color="textSecondary" fontSize="13px">
-                        {product.post}
+                        No.{" "}
+                        {data.headForm
+                          ? data.headForm?.quotationNumber
+                          : "1xx-11x-xxx"}
                       </Typography>
                     </Box>
                   </Box>
                 </TableCell>
                 <TableCell>
                   <Typography color="textSecondary" variant="h6">
-                    {product.pname}
+                    {data
+                      ? formatUtcDate(data?.createDate.toDateString())
+                      : "01-01-2024"}
                   </Typography>
                 </TableCell>
                 <TableCell>
-                  <Chip
-                    sx={{
-                      pl: "4px",
-                      pr: "4px",
-                      backgroundColor: product.pbg,
-                      color: "#fff",
-                    }}
-                    size="small"
-                    label={product.priority}
-                  ></Chip>
+                  <StatusChip status={data.status} />
                 </TableCell>
                 <TableCell align="right">
-                  <Typography variant="h6">${product.budget}k</Typography>
+                  <Typography variant="h6">
+                    ฿{" "}
+                    {data.summary
+                      ? formatNumber(data.summary?.totalAmountDue)
+                      : "xxx,xxx"}
+                  </Typography>
                 </TableCell>
                 <TableCell align="right">
-                  <IconButton size="small" color="primary">
+                  <IconButton size="small" color="primary" disabled>
                     <CloudDownload />
                   </IconButton>
                   <IconButton size="small" color="primary">
                     <Print />
                   </IconButton>
-                  <IconButton size="small" color="primary">
+                  <IconButton size="small" color="primary" disabled>
                     <Email />
                   </IconButton>
-                  <IconButton size="small" color="secondary" sx={{ ml: 2 }}>
+                  <IconButton size="small" color="secondary" sx={{ ml: 2 }} onClick={() => handleEdit(data.keyId)}>
                     <DriveFileRenameOutline />
                   </IconButton>
-                  <IconButton size="small" color="error">
+                  <IconButton size="small" color="error" onClick={() => handleRemove(data.keyId)}>
                     <RemoveCircle />
                   </IconButton>
                 </TableCell>
