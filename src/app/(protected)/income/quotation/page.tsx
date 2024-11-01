@@ -2,8 +2,7 @@
 import { Grid, Box, Stack, Pagination } from "@mui/material";
 import PageContainer from "@/components/container/PageContainer";
 //component
-import ProductServiceTable from "@/components/shared/productServiceTable";
-import BaseCard from "@/components/shared/BaseCard";
+import QuotationsTable from "@/components/tables/QuotationsTable";
 import { useDatabaseContext } from "@/contexts/dbContext";
 
 const data = [
@@ -27,12 +26,7 @@ const Dashboard = () => {
       <Box mt={3}>
         <Grid container spacing={3}>
           <Grid item xs={12} lg={12}>
-            <ProductServiceTable data={qoutationState} tableName="Quotation Table" newDocumentHref="/income/quotation/new-quotation" newDocumentName="New Quotation"/>
-          </Grid>
-          <Grid container item xs={12} lg={12} justifyContent="center">
-            <Stack spacing={2}>
-              <Pagination count={10} color="secondary" />
-            </Stack>
+            <QuotationsTable data={qoutationState} tableName="Quotation Table" newDocumentHref="/income/quotation/new-quotation" newDocumentName="New Quotation"/>
           </Grid>
         </Grid>
       </Box>

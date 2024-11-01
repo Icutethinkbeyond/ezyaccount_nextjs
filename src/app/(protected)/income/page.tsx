@@ -6,7 +6,7 @@ import SalesOverview from "@/components/dashboard/SalesOverview";
 import DailyActivity from "@/components/dashboard/DailyActivity";
 import ProductPerformance from "@/components/dashboard/ProductPerformance";
 import BlogCard from "@/components/dashboard/Blog";
-import MenuCard from "@/components/shared/menuCard";
+// import MenuCard from "@/components/shared/menuCard";
 
 const incomeMenu = [
   {
@@ -23,7 +23,7 @@ const Dashboard = () => {
       <Box mt={3}>
         <Grid container spacing={3}>
           <Grid item xs={12} lg={12}>
-            <MenuCard data={incomeMenu}/>
+            {/* <MenuCard data={incomeMenu}/> */}
           </Grid>
         </Grid>
       </Box>
