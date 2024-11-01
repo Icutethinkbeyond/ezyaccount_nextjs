@@ -1,9 +1,9 @@
 "use client";
 import { styled, Container, Box } from "@mui/material";
 import React, { useState } from "react";
-import Header from "@/layout/header/Header";
-import Sidebar from "@//layout/sidebar/Sidebar";
-import Footer from "@/layout/footer/page";
+import Header from "@/components/layout/header/Header";
+import Sidebar from "@/components/layout/sidebar/Sidebar";
+import Footer from "@/components/layout/footer/page";
 
 const MainWrapper = styled("div")(() => ({
   display: "flex",
@@ -35,21 +35,12 @@ export default function RootLayout({
   const [isMobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   return (
     <MainWrapper className="mainwrapper">
-      {/* ------------------------------------------- */}
-      {/* Sidebar */}
-      {/* ------------------------------------------- */}
       <Sidebar
         isSidebarOpen={isSidebarOpen}
         isMobileSidebarOpen={isMobileSidebarOpen}
         onSidebarClose={() => setMobileSidebarOpen(false)}
       />
-      {/* ------------------------------------------- */}
-      {/* Main Wrapper */}
-      {/* ------------------------------------------- */}
       <PageWrapper className="page-wrapper">
-        {/* ------------------------------------------- */}
-        {/* Header */}
-        {/* ------------------------------------------- */}
         <Header toggleMobileSidebar={() => setMobileSidebarOpen(true)} />
         {/* ------------------------------------------- */}
         {/* PageContent */}
@@ -67,11 +58,6 @@ export default function RootLayout({
           {/* ------------------------------------------- */}
           {/* End Page */}
           {/* ------------------------------------------- */}
-
-          {/* ------------------------------------------- */}
-          {/* Footer */}
-          {/* ------------------------------------------- */}
-          <Footer />
         </Container>
       </PageWrapper>
     </MainWrapper>
