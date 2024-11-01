@@ -11,7 +11,7 @@ import { FormDataFooter, HeadForm, Product } from "./productServiceListContext";
 
 // กำหนดประเภทของสินค้าย่อย
 export interface Quotation {
-  keyId: string | null;
+  keyId: number;
   ownerId: string | null;
   status: string;
   headForm: HeadForm | null;
@@ -22,7 +22,7 @@ export interface Quotation {
 }
 
 export const quotationClean = {
-  keyId: null,
+  keyId: 0,
   ownerId: null,
   status: "draft",
   headForm: null,
@@ -37,7 +37,7 @@ interface DatabaseContextProps {
   editQuotation: Quotation;
   setEditQuotation: React.Dispatch<React.SetStateAction<Quotation>>;
   addQuotation: (qoutation: Quotation) => void;
-  removeQuotation: (keyId: string) => void;
+  removeQuotation: (keyId: number) => void;
   updateQuotation: (qoutation: Quotation) => void;
 }
 
@@ -49,7 +49,7 @@ const DatabaseContext = createContext<DatabaseContextProps | undefined>(
 export const DatabaseProvider = ({ children }: { children: ReactNode }) => {
   const [qoutationState, setQuotation] = useState<Quotation[]>([
     {
-      keyId: "8",
+      keyId: 8,
       ownerId: "1",
       status: "approve",
       headForm: {
@@ -179,7 +179,7 @@ export const DatabaseProvider = ({ children }: { children: ReactNode }) => {
       updateDate: new Date("2024-09-05T07:34:59.452Z"),
     },
     {
-      keyId: "9",
+      keyId: 9,
       ownerId: "1",
       status: "approve",
       headForm: {
@@ -309,7 +309,7 @@ export const DatabaseProvider = ({ children }: { children: ReactNode }) => {
       updateDate: new Date("2024-09-05T07:34:59.452Z"),
     },
     {
-      keyId: "3",
+      keyId: 3,
       ownerId: "1",
       status: "draft",
       headForm: {
@@ -428,6 +428,7 @@ export const DatabaseProvider = ({ children }: { children: ReactNode }) => {
       updateDate: new Date("2024-09-05T08:01:43.342Z")
     }
   ]);
+
   const [editQuotation, setEditQuotation] = useState<Quotation>(quotationClean);
 
   // ฟังก์ชันสำหรับเพิ่มสินค้า
@@ -436,7 +437,7 @@ export const DatabaseProvider = ({ children }: { children: ReactNode }) => {
   };
 
   // ฟังก์ชันสำหรับลบสินค้า
-  const removeQuotation = (keyId: string) => {
+  const removeQuotation = (keyId: number) => {
     setQuotation((prevQuotation) =>
       prevQuotation.filter(
         (quotation) => quotation.keyId !== keyId
