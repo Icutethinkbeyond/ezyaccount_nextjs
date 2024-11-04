@@ -1,14 +1,24 @@
 "use client";
-
-// import { getSession, useSession } from "next-auth/react";
-import { useRouter } from "next/router";
+import { Grid, Box, Stack, Pagination } from "@mui/material";
+import PageContainer from "@/components/container/PageContainer";
+//component
+import ProfitAndLossPreSummaryIncomeTable from "@/components/tables/report/ProfitAndLossPreSummary-IncomeTable";
+import { useDatabaseContext } from "@/contexts/dbContext";
 
 const profitandloss = () => {
 
+  const { qoutationState } = useDatabaseContext();
+
   return (
-    <main className="min-h-screen p-24">
-      profitandloss
-    </main>
+    <PageContainer title="ProfitAndLossPreSummaryIncome" description="this is ProfitAndLossPreSummaryIncome">
+      <Box mt={3}>
+        <Grid container spacing={3}>
+          <Grid item xs={12} lg={12}>
+            <ProfitAndLossPreSummaryIncomeTable data={qoutationState} tableName="ProfitAndLossPreSummaryIncome Table" newDocumentHref="/income/quotation/new-quotation" newDocumentName="New Quotation"/>
+          </Grid>
+        </Grid>
+      </Box>
+    </PageContainer>
   );
 };
 

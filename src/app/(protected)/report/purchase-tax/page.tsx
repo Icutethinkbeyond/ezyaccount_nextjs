@@ -1,14 +1,24 @@
 "use client";
-
-// import { getSession, useSession } from "next-auth/react";
-import { useRouter } from "next/router";
+import { Grid, Box, Stack, Pagination } from "@mui/material";
+import PageContainer from "@/components/container/PageContainer";
+//component
+import BuyTaxSummaryTable from "@/components/tables/report/BuyTaxSummaryTable";
+import { useDatabaseContext } from "@/contexts/dbContext";
 
 const purchasetax = () => {
 
+  const { qoutationState } = useDatabaseContext();
+
   return (
-    <main className="min-h-screen p-24">
-      purchase-tax
-    </main>
+    <PageContainer title="BuyTaxSummary" description="this is BuyTaxSummary">
+      <Box mt={3}>
+        <Grid container spacing={3}>
+          <Grid item xs={12} lg={12}>
+            <BuyTaxSummaryTable data={qoutationState} tableName="BuyTaxSummary Table" newDocumentHref="/income/quotation/new-quotation" newDocumentName="New Quotation"/>
+          </Grid>
+        </Grid>
+      </Box>
+    </PageContainer>
   );
 };
 

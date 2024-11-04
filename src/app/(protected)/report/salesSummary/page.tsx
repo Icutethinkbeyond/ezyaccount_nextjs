@@ -2,19 +2,19 @@
 import { Grid, Box, Stack, Pagination } from "@mui/material";
 import PageContainer from "@/components/container/PageContainer";
 //component
-import ExpensesPreSummaryTable from "@/components/tables/report/ExpensesPreSummaryTable";
+import SalesSummaryProductTable from "@/components/tables/report/SalesSummaryProductTable";
 import { useDatabaseContext } from "@/contexts/dbContext";
 
-const expensereport = () => {
+const salesSummary = () => {
 
   const { qoutationState } = useDatabaseContext();
 
   return (
-    <PageContainer title="ExpensesPreSummary" description="this is ExpensesPreSummary">
+    <PageContainer title="SalesSummary" description="this is SalesSummary">
       <Box mt={3}>
         <Grid container spacing={3}>
           <Grid item xs={12} lg={12}>
-            <ExpensesPreSummaryTable data={qoutationState} tableName="ExpensesPreSummary Table" newDocumentHref="/income/quotation/new-quotation" newDocumentName="New Quotation"/>
+            <SalesSummaryProductTable data={qoutationState} tableName="SalesSummary Table" newDocumentHref="/income/quotation/new-quotation" newDocumentName="New Quotation"/>
           </Grid>
         </Grid>
       </Box>
@@ -22,4 +22,4 @@ const expensereport = () => {
   );
 };
 
-export default expensereport;
+export default salesSummary;

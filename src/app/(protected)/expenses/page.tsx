@@ -1,15 +1,34 @@
 "use client";
+import { Grid, Box } from "@mui/material";
+import PageContainer from "@/components/container/PageContainer";
+// components
+import SalesOverview from "@/components/dashboard/SalesOverview";
+import DailyActivity from "@/components/dashboard/DailyActivity";
+import ProductPerformance from "@/components/dashboard/ProductPerformance";
+import BlogCard from "@/components/dashboard/Blog";
+// import MenuCard from "@/components/shared/menuCard";
 
-// import { getSession, useSession } from "next-auth/react";
-import { useRouter } from "next/router";
+const incomeMenu = [
+  {
+    imageIcon: null,
+    href: "/expenses/purchase-order",
+    menuName: "Quotation"
+  },
+];
 
-const withholdingslips = () => {
 
+const purchaseorder = () => {
   return (
-    <main className="min-h-screen p-24">
-      withholding slip
-    </main>
+    <PageContainer title="purchaseorder" description="this is purchaseorder">
+      <Box mt={3}>
+        <Grid container spacing={3}>
+          <Grid item xs={12} lg={12}>
+            {/* <MenuCard data={incomeMenu}/> */}
+          </Grid>
+        </Grid>
+      </Box>
+    </PageContainer>
   );
 };
 
-export default withholdingslips;
+export default purchaseorder;

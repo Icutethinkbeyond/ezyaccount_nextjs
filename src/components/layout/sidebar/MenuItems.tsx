@@ -45,7 +45,7 @@ export const useMenuItems = () => {
         {
           id: uniqueId(),
           title: "ใบเสร็จรับเงิน/ใบกำกับภาษี",
-          href: `/income/receipt-and-taxinvoice`,
+          href: `/income/invoice`,
         },
         {
           id: uniqueId(),
@@ -69,17 +69,17 @@ export const useMenuItems = () => {
         {
           id: uniqueId(),
           title: "ใบสั่งซื้อ",
-          href: `/expenses`,
+          href: `/expenses/purchase-order`,
         },
         {
           id: uniqueId(),
           title: "ใบรับสินค้า",
-          href: `/expenses/purchase`,
+          href: `/expenses/receipt`,
         },
         {
           id: uniqueId(),
           title: "บันทึกค่าใช้จ่าย",
-          href: `/expenses/expense-list`,
+          href: `/expenses/record-expenses`,
         },
         {
           id: uniqueId(),
@@ -92,18 +92,18 @@ export const useMenuItems = () => {
       id: uniqueId(),
       title: "สินค้า/บริการ",
       icon: IconPackage,
-      href: `/productandservice`,
+      href: `/product-and-service`,
       // กรณีมีซัพเมนูให้ใส่ตาม format ด้านล่าง หากไม่มีดูตามเมนูที่ 1
       children: [
         {
           id: uniqueId(),
           title: "รายการสินค้า/บริการ",
-          href: `/productandservice/productandservice-list`,
+          href: `/product-and-service/product-and-service-list`,
         },
         {
           id: uniqueId(),
           title: "หมวดหมู่สินค้า",
-          href: `/productandservice/category-list`,
+          href: `/product-and-service/category-list`,
         },
       ],
     },
@@ -136,12 +136,12 @@ export const useMenuItems = () => {
         {
           id: uniqueId(),
           title: "ยอดขาย",
-          href: `/report/sales`,
+          href: `/report/salesSummary`,
         },
         {
           id: uniqueId(),
           title: "ใบวางบิล",
-          href: `/report/invoice`,
+          href: `/report/billingSummary`,
         },
         {
           id: uniqueId(),
@@ -185,7 +185,7 @@ export const useMenuItems = () => {
         {
           id: uniqueId(),
           title: "รายการคลังสื่อ",
-          href: `/archive`,
+          href: `/archive/archive-list`,
         },
         {
           id: uniqueId(),

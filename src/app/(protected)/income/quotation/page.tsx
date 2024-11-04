@@ -2,7 +2,7 @@
 import { Grid, Box, Stack, Pagination } from "@mui/material";
 import PageContainer from "@/components/container/PageContainer";
 //component
-import QuotationsTable from "@/components/tables/QuotationsTable";
+import QuotationsTable from "@/components/tables/income/QuotationsTable";
 import { useDatabaseContext } from "@/contexts/dbContext";
 
 const data = [

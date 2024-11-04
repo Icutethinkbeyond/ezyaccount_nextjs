@@ -47,72 +47,58 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ data }) => {
 
   const columns: GridColDef<Quotation>[] = [
     {
-      field: "keyId",
-      headerName: "ID",
+      field: "number",
+      headerName: "ลำดับ",
       width: 150,
       valueGetter: (value, row) => row.keyId,
     },
+    { 
+      field: "customerName",
+      headerName: "ชื่อลูกค้า", 
+      width: 150,
+      valueGetter: (value, row) => row.headForm?.dateCreate,
+    },
     {
-      field: "contactorName",
-      headerName: "Contactor Name",
+      field: "taxId",
+      headerName: "เลขทะเบียนผู้เสียภาษี",
       width: 150,
       valueGetter: (value, row) => row.headForm?.contactorName, // ใช้ valueGetter เเทน renderCell ในการเข้าถึงข้อมูลใน array โดยเข้าผ่าน parameter "row"
     },
-    { field: "siteName", headerName: "Date Create", width: 150 },
     {
-      field: "status",
-      headerName: "Status",
+      field: "invoiceDate",
+      headerName: "วันที่ใบกำกับ",
       width: 150,
-      renderCell: (params) => <StatusChip status={params.value} />,
+      valueGetter: (value, row) => row.products,
     },
     {
-      field: "repirePrice",
-      headerName: "Total",
+      field: "invoiceId",
+      headerName: "เลขที่ใบกำกับภาษี",
       width: 150,
-      renderCell: (params) => formatNumber(params.value),
+      valueGetter: (value, row) => row.products,
     },
     {
-      field: "Actions",
-      headerName: "",
-      width: 200,
-      sortable: false,
-      renderCell: (params) => (
-        <>
-          {params.row.status === "pending" ? (
-            <IconButton
-              size="small"
-              color="secondary"
-              // onClick={() => handleEdit(params.row.id)}
-            >
-              <EditCalendar />
-            </IconButton>
-          ) : (
-            <IconButton
-              size="small"
-              color="secondary"
-              // onClick={() => handleUpdate(params.row.id)}
-            >
-              <ManageSearch />
-            </IconButton>
-          )}
-          <ConfirmDelete itemName="Sample Item" onDelete={handleDeleteItem} />
-
-          <IconButton
-            size="small"
-            color="info"
-            // onClick={() => handleDeleteItem(params.row.id)}
-          >
-            <CloudDownload />
-          </IconButton>
-          <IconButton
-            size="small"
-            color="success"
-            // onClick={() => handleRemove(params.row.id)}
-          >
-            <ForwardToInbox />
-          </IconButton>
-        </>
-      ),
+      field: "branch",
+      headerName: "สาขา",
+      width: 150,
+      valueGetter: (value, row) => row.products,
+    },
+    {
+      field: "Price before tax",
+      headerName: "ราคาก่อนภาษี",
+      width: 150,
+      valueGetter: (value, row) => row.status,
+    },
+    {
+      field: "vat",
+      headerName: "ภาษีมูลค่าเพิ่ม",
+      width: 150,
+      valueGetter: (value, row) => row.status,
+    },
+    {
+      field: "total value including tax",
+      headerName: "มูลค่ารวมภาษี",
+      width: 150,
+      valueGetter: (value, row) => row.status,
     },
   ];
 
@@ -133,7 +119,7 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ data }) => {
   };
 
   return (
-    <BaseCard title="Maintenance Table">
+    <BaseCard title="Sale Tax Table">
       <DataGrid
         initialState={{ pagination: { paginationModel } }}
         pageSizeOptions={[5, 10, 20]}

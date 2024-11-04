@@ -2,7 +2,7 @@
 import { Grid, Box, Stack, Pagination } from "@mui/material";
 import PageContainer from "@/components/container/PageContainer";
 //component
-import CreditsTable from "@/components/tables/income/CreditsTable";
+import ReceiptTable from "@/components/tables/expenses/ReceiptTable";
 import { useDatabaseContext } from "@/contexts/dbContext";
 
 const data = [
@@ -17,16 +17,16 @@ const data = [
   },
 ];
 
-const credits = () => {
+const receipt = () => {
 
   const { qoutationState } = useDatabaseContext();
 
   return (
-    <PageContainer title="Credits" description="this is Credits">
+    <PageContainer title="Receipt" description="this is Receipt">
       <Box mt={3}>
         <Grid container spacing={3}>
           <Grid item xs={12} lg={12}>
-            <CreditsTable data={qoutationState} tableName="Credits Table" newDocumentHref="/income/quotation/new-quotation" newDocumentName="New Quotation"/>
+            <ReceiptTable data={qoutationState} tableName="Receipt Table" newDocumentHref="/income/quotation/new-quotation" newDocumentName="New Quotation"/>
           </Grid>
         </Grid>
       </Box>
@@ -34,4 +34,4 @@ const credits = () => {
   );
 };
 
-export default credits;
+export default receipt;
