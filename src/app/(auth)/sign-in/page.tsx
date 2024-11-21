@@ -3,8 +3,8 @@ import Link from "next/link";
 import { Grid, Box, Card, Stack, Typography } from "@mui/material";
 // components
 import PageContainer from "@/components/container/PageContainer";
-import Logo from "@/layout/shared/logo/Logo";
-import AuthLogin from "@/components/auth/authLogin";
+import Logo from "@/components/shared/Logo";
+import AuthLogin from "@/components/forms/Login";
 
 const Login = () => {
   return (

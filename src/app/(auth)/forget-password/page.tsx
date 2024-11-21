@@ -2,8 +2,8 @@
 import { Grid, Box, Card, Typography, Stack } from "@mui/material";
 import Link from "next/link";
 import PageContainer from "@/components/container/PageContainer";
-import Logo from "@/layout/shared/logo/Logo";
-import AuthForgetPassword from "@/components/auth/authForgetPassword";
+import Logo from "@/components/shared/Logo";
+import AuthForgetPassword from "@/components/forms/ForgetPassword";
 
 const Register = () => (
   <PageContainer title="Forget Password" description="this is Forget Password page">
