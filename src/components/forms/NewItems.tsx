@@ -154,10 +154,10 @@ const NewItems: React.FC<NewProductProps> = ({ isEdit = false }) => {
 
   return (
     <BaseCard>
-      <Box title="Product/Service Items">
+      <Box title="รายการสินค้า/บริการ">
         <Box p={3} border="1px solid #ccc" borderRadius="8px" mb={2}>
           <Typography variant="h6" gutterBottom>
-            Item
+            สินค้า
           </Typography>
           <Typography
             style={{ marginBottom: 20 }}
@@ -165,12 +165,12 @@ const NewItems: React.FC<NewProductProps> = ({ isEdit = false }) => {
             color="text.secondary"
             gutterBottom
           >
-            Insert Your MA-Document Details
+            กรอกข้อมูลให้ครบถ้วน
           </Typography>
           <Grid container spacing={2} sx={{ mb: 4 }}>
             <Grid item xs={12} sm={6} lg={4}>
               <TextField
-                label="#Order"
+                label="#ลำดับ"
                 variant="outlined"
                 name="productServiceNumber"
                 size="small"
@@ -183,7 +183,7 @@ const NewItems: React.FC<NewProductProps> = ({ isEdit = false }) => {
             </Grid>
             <Grid item xs={12} sm={6} lg={4}>
               <TextField
-                label="Product/Service"
+                label="สินค้า/บริการ"
                 variant="outlined"
                 name="productService"
                 size="small"
@@ -195,7 +195,7 @@ const NewItems: React.FC<NewProductProps> = ({ isEdit = false }) => {
             </Grid>
             <Grid item xs={12} sm={6} lg={4}>
               <TextField
-                label="Description"
+                label="รายละเอียด"
                 variant="outlined"
                 name="description"
                 size="small"
@@ -206,7 +206,7 @@ const NewItems: React.FC<NewProductProps> = ({ isEdit = false }) => {
             </Grid>
             <Grid item xs={12} sm={6} lg={4}>
               <TextField
-                label="Price"
+                label="ราคา"
                 variant="outlined"
                 name="price"
                 size="small"
@@ -218,7 +218,7 @@ const NewItems: React.FC<NewProductProps> = ({ isEdit = false }) => {
             </Grid>
             <Grid item xs={12} sm={6} lg={4}>
               <TextField
-                label="Amount"
+                label="จำนวน"
                 variant="outlined"
                 name="amount"
                 size="small"
@@ -231,7 +231,7 @@ const NewItems: React.FC<NewProductProps> = ({ isEdit = false }) => {
             </Grid>
             <Grid item xs={12} sm={6} lg={4}>
               <TextField
-                label="Discount"
+                label="ส่วนลด"
                 variant="outlined"
                 name="discount"
                 size="small"
@@ -244,7 +244,7 @@ const NewItems: React.FC<NewProductProps> = ({ isEdit = false }) => {
             </Grid>
             <Grid item xs={12} sm={6} lg={4}>
               <TextField
-                label="Total"
+                label="รวม"
                 variant="outlined"
                 name="total"
                 size="small"
@@ -265,7 +265,7 @@ const NewItems: React.FC<NewProductProps> = ({ isEdit = false }) => {
                 onClick={() => (!isEdit ? addItem() : handleEditProduct())}
               >
                 {!isProductEdit
-                  ? "Add Item"
+                  ? "เพิ่มสินค้า"
                   : `Edit ${newProduct.productService}`}
               </Button>
               {newProduct.productServiceNumber ? (
@@ -286,7 +286,7 @@ const NewItems: React.FC<NewProductProps> = ({ isEdit = false }) => {
 
         <Box p={3} border="1px solid #ccc" borderRadius="8px">
           <Typography variant="h6" gutterBottom>
-            Sub-Item
+            สินค้าย่อย
           </Typography>
           <Typography
             style={{ marginBottom: 20 }}
@@ -294,13 +294,13 @@ const NewItems: React.FC<NewProductProps> = ({ isEdit = false }) => {
             color="text.secondary"
             gutterBottom
           >
-            Insert Your MA-Document Details
+            กรอกข้อมูลให้ครบถ้วน
           </Typography>
           <Grid container spacing={2} sx={{ mb: 4 }}>
             <Grid item xs={12} sm={6} lg={4}>
               <FormControl fullWidth size="small">
                 <InputLabel id="product-select-label">
-                  Product/Service
+                  สินค้า/บริการ
                 </InputLabel>
                 <Select
                   labelId="product-select-label"
@@ -322,7 +322,7 @@ const NewItems: React.FC<NewProductProps> = ({ isEdit = false }) => {
             </Grid>
             <Grid item xs={12} sm={6} lg={4}>
               <TextField
-                label="#Order"
+                label="#ลำดับ"
                 variant="outlined"
                 name="subProductServiceNumber"
                 size="small"
@@ -346,7 +346,7 @@ const NewItems: React.FC<NewProductProps> = ({ isEdit = false }) => {
             </Grid>
             <Grid item xs={12} sm={6} lg={4}>
               <TextField
-                label="Description"
+                label="รายละเอียด"
                 variant="outlined"
                 name="description"
                 size="small"
@@ -357,7 +357,7 @@ const NewItems: React.FC<NewProductProps> = ({ isEdit = false }) => {
             </Grid>
             <Grid item xs={12} sm={6} lg={4}>
               <TextField
-                label="Price"
+                label="ราคา"
                 variant="outlined"
                 name="price"
                 size="small"
@@ -370,7 +370,7 @@ const NewItems: React.FC<NewProductProps> = ({ isEdit = false }) => {
             </Grid>
             <Grid item xs={12} sm={6} lg={4}>
               <TextField
-                label="Amount"
+                label="จำนวน"
                 variant="outlined"
                 name="amount"
                 size="small"
@@ -384,7 +384,7 @@ const NewItems: React.FC<NewProductProps> = ({ isEdit = false }) => {
 
             <Grid item xs={12} sm={6} lg={4}>
               <TextField
-                label="Discount"
+                label="ส่วนลด"
                 variant="outlined"
                 name="discount"
                 size="small"
@@ -397,7 +397,7 @@ const NewItems: React.FC<NewProductProps> = ({ isEdit = false }) => {
             </Grid>
             <Grid item xs={12} sm={6} lg={4}>
               <TextField
-                label="Total"
+                label="ยอดรวม"
                 variant="outlined"
                 name="total"
                 size="small"
@@ -419,7 +419,7 @@ const NewItems: React.FC<NewProductProps> = ({ isEdit = false }) => {
                 }
               >
                 {!isSubProductEdit
-                  ? "Add Sub-Item"
+                  ? "เพิ่มสินค้าย่อย"
                   : `Edit ${newSubProduct.productService}`}
               </Button>
               {newSubProduct.subProductServiceNumber ? (
@@ -429,7 +429,7 @@ const NewItems: React.FC<NewProductProps> = ({ isEdit = false }) => {
                   sx={{ marginBottom: "5px", ml: 1 }}
                   onClick={() => unEditSubProduct()}
                 >
-                  Cancel The Edit
+                  ยกเลิกการแก้ไข
                 </Button>
               ) : (
                 ""

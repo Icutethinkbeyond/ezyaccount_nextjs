@@ -78,47 +78,47 @@ const ProductsServicesList: React.FC<TableProps> = () => {
             <TableRow>
               <TableCell>
                 <Typography color="textSecondary" variant="h6">
-                  #Order.
+                  #ลำดับ.
                 </Typography>
               </TableCell>
               <TableCell>
                 <Typography color="textSecondary" variant="h6">
-                  Product/Service
+                  สินค้า/บริการ
                 </Typography>
               </TableCell>
               <TableCell>
                 <Typography color="textSecondary" variant="h6">
-                  Description
+                  รายละเอียด
                 </Typography>
               </TableCell>
               <TableCell>
                 <Typography color="textSecondary" variant="h6">
-                  Price
+                  ราคา
                 </Typography>
               </TableCell>
               <TableCell>
                 <Typography color="textSecondary" variant="h6">
-                  Amount
+                  จำนวน
                 </Typography>
               </TableCell>
               <TableCell>
                 <Typography color="textSecondary" variant="h6">
-                  Discount
+                  ส่วนลด
                 </Typography>
               </TableCell>
               <TableCell>
                 <Typography color="textSecondary" variant="h6">
-                  Total
+                  รวม
                 </Typography>
               </TableCell>
               <TableCell>
                 <Typography color="textSecondary" variant="h6">
-                  Edit
+                  แก้ไข
                 </Typography>
               </TableCell>
               <TableCell>
                 <Typography color="textSecondary" variant="h6">
-                  Remove
+                  ลบ
                 </Typography>
               </TableCell>
             </TableRow>

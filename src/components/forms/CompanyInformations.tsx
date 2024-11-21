@@ -32,7 +32,7 @@ const CompanyInformation: React.FC = () => {
       <BaseCard>
         <Box p={3} border="1px solid #ccc" borderRadius="8px">
           <Typography variant="h6" gutterBottom>
-            MA-Document Details
+            ข้อมูลบริษัท
           </Typography>
           <Typography
             style={{ marginBottom: 20 }}
@@ -40,12 +40,12 @@ const CompanyInformation: React.FC = () => {
             color="text.secondary"
             gutterBottom
           >
-            Insert Your MA-Document Details
+            กรอกข้อมูลให้ครบถ้วน
           </Typography>
           <Grid2 container spacing={2}>
-            <Grid2 size={12}>
+            <Grid2 size={6}>
               <TextField
-                label="Company Name"
+                label="ชื่อบริษัท"
                 variant="outlined"
                 name="companyName"
                 size="small"
@@ -53,9 +53,9 @@ const CompanyInformation: React.FC = () => {
                 fullWidth
               />
             </Grid2>
-            <Grid2 size={12}>
+            <Grid2 size={6}>
               <TextField
-                label="Company Tel"
+                label="เบอร์โทร"
                 variant="outlined"
                 name="companyTel"
                 size="small"
@@ -65,7 +65,7 @@ const CompanyInformation: React.FC = () => {
             </Grid2>
             <Grid2 size={12}>
               <TextField
-                label="Taxpayer Identification No"
+                label="เลขประจำตัวผู้เสียภาษี"
                 variant="outlined"
                 name="taxId"
                 size="small"
@@ -75,7 +75,7 @@ const CompanyInformation: React.FC = () => {
             </Grid2>
             <Grid2 size={12}>
               <TextField
-                label="Branch"
+                label="สาขา"
                 variant="outlined"
                 name="branch"
                 size="small"
@@ -85,7 +85,7 @@ const CompanyInformation: React.FC = () => {
             </Grid2>
             <Grid2 size={12}>
               <TextField
-                label="Date Create"
+                label="วันที่สร้าง"
                 variant="outlined"
                 name="dateCreate"
                 size="small"
@@ -99,7 +99,7 @@ const CompanyInformation: React.FC = () => {
             </Grid2>
             <Grid2 size={12}>
               <TextField
-                label="Company Address"
+                label="ที่อยู่"
                 variant="outlined"
                 name="companyAddress"
                 size="small"

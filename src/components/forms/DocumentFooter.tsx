@@ -32,7 +32,7 @@ const DocumentFooter: React.FC = () => {
       <BaseCard>
         <Box p={3} border="1px solid #ccc" borderRadius="8px">
           <Typography variant="h6" gutterBottom>
-            MA-Document Details
+            แนบไฟล์
           </Typography>
           <Typography
             style={{ marginBottom: 20 }}
@@ -40,7 +40,7 @@ const DocumentFooter: React.FC = () => {
             color="text.secondary"
             gutterBottom
           >
-            Insert Your MA-Document Details
+            กรอกข้อมูล
           </Typography>
           <Grid2 container spacing={2}>
             <Grid2 size={12}>
@@ -57,7 +57,7 @@ const DocumentFooter: React.FC = () => {
             </Grid2>
             <Grid2 size={12}>
               <TextField
-                label="Note"
+                label="หมายเหตุ"
                 variant="outlined"
                 name="note"
                 size="small"

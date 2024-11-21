@@ -32,7 +32,7 @@ const ContactotInformation: React.FC = () => {
       <BaseCard>
         <Box p={3} border="1px solid #ccc" borderRadius="8px">
           <Typography variant="h6" gutterBottom>
-            MA-Document Details
+            ผู้ติดต่อ
           </Typography>
           <Typography
             style={{ marginBottom: 20 }}
@@ -40,12 +40,12 @@ const ContactotInformation: React.FC = () => {
             color="text.secondary"
             gutterBottom
           >
-            Insert Your MA-Document Details
+            กรอกข้อมูลให้ครบถ้วน
           </Typography>
           <Grid2 container spacing={2}>
             <Grid2 size={12}>
               <TextField
-                label="Contactor Name"
+                label="ชื่อผู้ติดต่อ"
                 variant="outlined"
                 name="contactorName"
                 size="small"
@@ -55,7 +55,7 @@ const ContactotInformation: React.FC = () => {
             </Grid2>
             <Grid2 size={12}>
               <TextField
-                label="Contactor Tel"
+                label="เบอร์โทร"
                 variant="outlined"
                 name="contactorTel"
                 size="small"
@@ -65,7 +65,7 @@ const ContactotInformation: React.FC = () => {
             </Grid2>
             <Grid2 size={12}>
               <TextField
-                label="Contactor Email"
+                label="อีเมล์"
                 variant="outlined"
                 name="contactorEmail"
                 size="small"
@@ -76,7 +76,7 @@ const ContactotInformation: React.FC = () => {
             </Grid2>
             <Grid2 size={12}>
               <TextField
-                label="Contactor Address"
+                label="ที่อยู่"
                 variant="outlined"
                 name="contactorAddress"
                 size="small"

@@ -27,7 +27,7 @@ const Dashboard = () => {
           { name: "Add Maintenance Request" },
         ]}
       />
-      <DashboardCard title="New Quotation">
+      <DashboardCard title="เพิ่มใบเสนอราคา">
         <Grid2 container spacing={3} sx={{ p: 3 }}>
           <Grid2 size={6}>
             <CompanyInformation />
