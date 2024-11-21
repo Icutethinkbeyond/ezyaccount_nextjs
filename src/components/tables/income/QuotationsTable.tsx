@@ -155,7 +155,7 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ data }) => {
       <>
         <Grid2 container mb={1}>
           <Grid2 size={6}>
-            <Typography variant="h3">Quotation Table</Typography>
+            <Typography variant="h3">ใบเสนอราคา</Typography>
           </Grid2>
           <Grid2 container size={6} justifyContent="flex-end">
             <Button

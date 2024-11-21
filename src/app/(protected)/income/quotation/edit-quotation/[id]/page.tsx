@@ -1,5 +1,5 @@
 "use client";
-import { Grid, Box } from "@mui/material";
+import { Grid2, Box } from "@mui/material";
 import PageContainer from "@/components/container/PageContainer";
 // components
 import HeaderForm from "@/components/forms/income/headerForm";
@@ -54,20 +54,20 @@ function EditQuotation({ params }: { params: { id: string } }) {
     <PageContainer title="Dashboard" description="this is Dashboard">
       <DashboardCard title="New Quotation">
         <Box mt={3}>
-          <Grid container spacing={3}>
-            <Grid item xs={12} lg={12}>
+          <Grid2 container spacing={3}>
+            <Grid2 size={12}>
               <HeaderForm />
-            </Grid>
-            <Grid item xs={12} lg={12}>
+            </Grid2>
+            <Grid2 size={12}>
               <NewProductItem isEdit={true} />
-            </Grid>
-            <Grid item xs={12} lg={12}>
+            </Grid2>
+            <Grid2 size={12}>
               <ProductsServicesList />
-            </Grid>
-            <Grid item xs={12} lg={12}>
+            </Grid2>
+            <Grid2 size={12}>
               <FooterForm isEdit={true} />
-            </Grid>
-          </Grid>
+            </Grid2>
+          </Grid2>
         </Box>
       </DashboardCard>
     </PageContainer>
