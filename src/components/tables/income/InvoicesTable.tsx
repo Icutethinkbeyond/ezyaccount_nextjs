@@ -153,9 +153,9 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ data }) => {
   return (
     <BaseCard title="Invoices Table">
       <>
-        <Grid2 container mb={1}>
+      <Grid2 container mb={1}>
           <Grid2 size={6}>
-            <Typography variant="h3">ใบเสร็จรับเงิน/ใบกำกับภาษี</Typography>
+            <Typography variant="h3">ใบเสร็จ/ใบกำกับภาษี</Typography>
           </Grid2>
           <Grid2 container size={6} justifyContent="flex-end">
             <Button
@@ -184,7 +184,7 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ data }) => {
           >
             <Grid2 size={3}>
               <TextField
-                label="User ID (optional)"
+                label="เลขเอกสาร (optional)"
                 type="text"
                 fullWidth
                 size="small"
@@ -192,7 +192,7 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ data }) => {
             </Grid2>
             <Grid2 size={3}>
               <TextField
-                label="Company (optional)"
+                label="ชื่อลูกค้า (optional)"
                 type="text"
                 fullWidth
                 size="small"
@@ -201,7 +201,7 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ data }) => {
 
             <Grid2 size={3}>
               <TextField
-                label="Position (optional)"
+                label="ยอดรวมสุทธิ (optional)"
                 type="text"
                 fullWidth
                 size="small"
