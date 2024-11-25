@@ -10,7 +10,7 @@ import {
   Typography, 
   FormControl,
   SelectChangeEvent, } from "@mui/material";
-import BaseCard from "../shared/BaseCard";
+import BaseCard from "../../shared/BaseCard";
 
 const WithholdingSlipCompany: React.FC = () => {
   //   const { headForm, setHeadForm } = useProductServiceListContext();

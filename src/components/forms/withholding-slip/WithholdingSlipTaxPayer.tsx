@@ -1,7 +1,7 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
 // import { headerClean, HeadForm, useProductServiceListContext } from "@/contexts/productServiceListContext";
 import { Grid2, TextField, Box, Typography } from "@mui/material";
-import BaseCard from "../shared/BaseCard";
+import BaseCard from "../../shared/BaseCard";
 
 const WithholdingSlipTaxPayer: React.FC = () => {
   //   const { headForm, setHeadForm } = useProductServiceListContext();

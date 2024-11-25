@@ -6,7 +6,7 @@ import PageContainer from "@/components/container/PageContainer";
 import HeaderForm from "@/components/forms/income/headerForm";
 import DashboardCard from "@/components/shared/DashboardCard";
 import Breadcrumb from "@/components/shared/BreadcrumbCustom";
-import AddProductAndService from "@/components/forms/AddProductAndService";
+import AddProductAndService from "@/components/forms/product-and-service/AddProductAndService";
 import NewProductItem from "@/components/forms/income/newProductItem";
 import ProductsServicesList from "@/components/forms/income/productsServicesListForm";
 import FooterForm from "@/components/forms/income/footerForm";
@@ -27,7 +27,7 @@ const Dashboard = () => {
           { name: "Add Maintenance Request" },
         ]}
       />
-      <DashboardCard title="เพิ่มใบเสนอราคา">
+      <DashboardCard title="เพิ่มสินค้า/บริการ">
         <Grid2 container spacing={2} sx={{ p: 2 }}>
           <Grid2 size={12}>
             <AddProductAndService />
