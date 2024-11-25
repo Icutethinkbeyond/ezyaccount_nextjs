@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
 import {
   Typography,
-  Grid,
+  Grid2,
   Box,
   TextField,
   InputLabel,
@@ -161,8 +161,8 @@ const NewProductItem: React.FC<NewProductProps> = ({ isEdit = false }) => {
         >
           New Item
         </Typography>
-        <Grid container spacing={2} sx={{ mb: 4 }}>
-          <Grid item xs={12} sm={6} lg={4}>
+        <Grid2 container spacing={2} sx={{ mb: 4 }}>
+          <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
             <TextField
               label="#Order"
               variant="outlined"
@@ -174,8 +174,8 @@ const NewProductItem: React.FC<NewProductProps> = ({ isEdit = false }) => {
               onChange={handleChange}
               fullWidth
             />
-          </Grid>
-          <Grid item xs={12} sm={6} lg={4}>
+          </Grid2>
+          <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
             <TextField
               label="Product/Service"
               variant="outlined"
@@ -186,8 +186,8 @@ const NewProductItem: React.FC<NewProductProps> = ({ isEdit = false }) => {
               onChange={handleChange}
               fullWidth
             />
-          </Grid>
-          <Grid item xs={12} sm={6} lg={4}>
+          </Grid2>
+          <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
             <TextField
               label="Description"
               variant="outlined"
@@ -197,8 +197,8 @@ const NewProductItem: React.FC<NewProductProps> = ({ isEdit = false }) => {
               onChange={handleChange}
               fullWidth
             />
-          </Grid>
-          <Grid item xs={12} sm={6} lg={4}>
+          </Grid2>
+          <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
             <TextField
               label="Price"
               variant="outlined"
@@ -209,8 +209,8 @@ const NewProductItem: React.FC<NewProductProps> = ({ isEdit = false }) => {
               onChange={handleChange}
               fullWidth
             />
-          </Grid>
-          <Grid item xs={12} sm={6} lg={4}>
+          </Grid2>
+          <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
             <TextField
               label="Amount"
               variant="outlined"
@@ -222,8 +222,8 @@ const NewProductItem: React.FC<NewProductProps> = ({ isEdit = false }) => {
               onChange={handleChange}
               fullWidth
             />
-          </Grid>
-          <Grid item xs={12} sm={6} lg={4}>
+          </Grid2>
+          <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
             <TextField
               label="Discount"
               variant="outlined"
@@ -235,8 +235,8 @@ const NewProductItem: React.FC<NewProductProps> = ({ isEdit = false }) => {
               onChange={handleChange}
               fullWidth
             />
-          </Grid>
-          <Grid item xs={12} sm={6} lg={4}>
+          </Grid2>
+          <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
             <TextField
               label="Total"
               variant="outlined"
@@ -249,9 +249,9 @@ const NewProductItem: React.FC<NewProductProps> = ({ isEdit = false }) => {
               onChange={handleChange}
               fullWidth
             />
-          </Grid>
+          </Grid2>
 
-          <Grid item xs={12} sm={6} lg={4}>
+          <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
             <Button
               variant="contained"
               color="success"
@@ -274,8 +274,8 @@ const NewProductItem: React.FC<NewProductProps> = ({ isEdit = false }) => {
             ) : (
               ""
             )}
-          </Grid>
-        </Grid>
+          </Grid2>
+        </Grid2>
       </Box>
 
       <Box component="form" noValidate autoComplete="off">
@@ -286,8 +286,8 @@ const NewProductItem: React.FC<NewProductProps> = ({ isEdit = false }) => {
         >
           New Sub-Item
         </Typography>
-        <Grid container spacing={2} sx={{ mb: 4 }}>
-          <Grid item xs={12} sm={6} lg={4}>
+        <Grid2 container spacing={2} sx={{ mb: 4 }}>
+          <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
             <FormControl fullWidth size="small">
               <InputLabel id="product-select-label">Product/Service</InputLabel>
               <Select
@@ -307,8 +307,8 @@ const NewProductItem: React.FC<NewProductProps> = ({ isEdit = false }) => {
                 ))}
               </Select>
             </FormControl>
-          </Grid>
-          <Grid item xs={12} sm={6} lg={4}>
+          </Grid2>
+          <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
             <TextField
               label="#Order"
               variant="outlined"
@@ -319,8 +319,8 @@ const NewProductItem: React.FC<NewProductProps> = ({ isEdit = false }) => {
               onChange={handleChangeSubProduct}
               fullWidth
             />
-          </Grid>
-          <Grid item xs={12} sm={6} lg={4}>
+          </Grid2>
+          <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
             <TextField
               label="Subject"
               variant="outlined"
@@ -331,8 +331,8 @@ const NewProductItem: React.FC<NewProductProps> = ({ isEdit = false }) => {
               onChange={handleChangeSubProduct}
               fullWidth
             />
-          </Grid>
-          <Grid item xs={12} sm={6} lg={4}>
+          </Grid2>
+          <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
             <TextField
               label="Description"
               variant="outlined"
@@ -342,8 +342,8 @@ const NewProductItem: React.FC<NewProductProps> = ({ isEdit = false }) => {
               onChange={handleChangeSubProduct}
               fullWidth
             />
-          </Grid>
-          <Grid item xs={12} sm={6} lg={4}>
+          </Grid2>
+          <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
             <TextField
               label="Price"
               variant="outlined"
@@ -355,8 +355,8 @@ const NewProductItem: React.FC<NewProductProps> = ({ isEdit = false }) => {
               required
               fullWidth
             />
-          </Grid>
-          <Grid item xs={12} sm={6} lg={4}>
+          </Grid2>
+          <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
             <TextField
               label="Amount"
               variant="outlined"
@@ -368,9 +368,9 @@ const NewProductItem: React.FC<NewProductProps> = ({ isEdit = false }) => {
               required
               fullWidth
             />
-          </Grid>
+          </Grid2>
 
-          <Grid item xs={12} sm={6} lg={4}>
+          <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
             <TextField
               label="Discount"
               variant="outlined"
@@ -382,8 +382,8 @@ const NewProductItem: React.FC<NewProductProps> = ({ isEdit = false }) => {
               required
               fullWidth
             />
-          </Grid>
-          <Grid item xs={12} sm={6} lg={4}>
+          </Grid2>
+          <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
             <TextField
               label="Total"
               variant="outlined"
@@ -396,8 +396,8 @@ const NewProductItem: React.FC<NewProductProps> = ({ isEdit = false }) => {
               required
               fullWidth
             />
-          </Grid>
-          <Grid item xs={12} sm={6} lg={4}>
+          </Grid2>
+          <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
             <Button
               variant="contained"
               color="success"
@@ -420,8 +420,8 @@ const NewProductItem: React.FC<NewProductProps> = ({ isEdit = false }) => {
             ) : (
               ""
             )}
-          </Grid>
-        </Grid>
+          </Grid2>
+        </Grid2>
       </Box>
     </Box>
   );

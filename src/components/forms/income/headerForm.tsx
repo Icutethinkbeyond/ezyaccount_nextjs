@@ -1,8 +1,10 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
-import TextField from "@mui/material/TextField";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import Grid from "@mui/material/Grid";
+import { 
+  TextField,
+  Box,
+  Typography,
+  Grid,
+  Grid2,} from "@mui/material";
 import { headerClean, HeadForm, useProductServiceListContext } from "@/contexts/productServiceListContext";
 
 
@@ -22,8 +24,8 @@ const HeaderForm: React.FC = () => {
 
   return (
     <Box component="form" noValidate autoComplete="off">
-      <Grid container spacing={2}>
-        <Grid item xs={12} sm={6} lg={4}>
+      <Grid2 container spacing={2}>
+        <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
           <TextField
             label="Quotation Number"
             variant="outlined"
@@ -34,8 +36,8 @@ const HeaderForm: React.FC = () => {
             required
             fullWidth
           />
-        </Grid>
-      </Grid>
+        </Grid2>
+      </Grid2>
       <Typography
         variant="h5"
         component="h2"
@@ -43,8 +45,8 @@ const HeaderForm: React.FC = () => {
       >
         Contactor Information
       </Typography>
-      <Grid container spacing={2}>
-        <Grid item xs={12} sm={6} lg={4}>
+      <Grid2 container spacing={2}>
+        <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
           <TextField
             label="Contactor Name"
             variant="outlined"
@@ -55,8 +57,8 @@ const HeaderForm: React.FC = () => {
             required
             fullWidth
           />
-        </Grid>
-        <Grid item xs={12} sm={6} lg={4}>
+        </Grid2>
+        <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
           <TextField
             label="Contactor Tel"
             variant="outlined"
@@ -67,8 +69,8 @@ const HeaderForm: React.FC = () => {
             required
             fullWidth
           />
-        </Grid>
-        <Grid item xs={12} sm={6} lg={4}>
+        </Grid2>
+        <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
           <TextField
             label="Contactor Email"
             variant="outlined"
@@ -80,8 +82,8 @@ const HeaderForm: React.FC = () => {
             type="email"
             fullWidth
           />
-        </Grid>
-        <Grid item xs={12} sm={6} lg={4}>
+        </Grid2>
+        <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
           <TextField
             label="Contactor Address"
             variant="outlined"
@@ -94,8 +96,8 @@ const HeaderForm: React.FC = () => {
             multiline
             rows={3}
           />
-        </Grid>
-      </Grid>
+        </Grid2>
+      </Grid2>
 
       <Typography
         variant="h5"
@@ -104,8 +106,8 @@ const HeaderForm: React.FC = () => {
       >
         Company Information
       </Typography>
-      <Grid container spacing={2}>
-        <Grid item xs={12} sm={6} lg={4}>
+      <Grid2 container spacing={2}>
+        <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
           <TextField
             label="Company Name"
             variant="outlined"
@@ -116,8 +118,8 @@ const HeaderForm: React.FC = () => {
             required
             fullWidth
           />
-        </Grid>
-        <Grid item xs={12} sm={6} lg={4}>
+        </Grid2>
+        <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
           <TextField
             label="Company Tel"
             variant="outlined"
@@ -128,8 +130,8 @@ const HeaderForm: React.FC = () => {
             required
             fullWidth
           />
-        </Grid>
-        <Grid item xs={12} sm={6} lg={4}>
+        </Grid2>
+        <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
           <TextField
             label="Taxpayer Identification No"
             variant="outlined"
@@ -140,8 +142,8 @@ const HeaderForm: React.FC = () => {
             required
             fullWidth
           />
-        </Grid>
-        <Grid item xs={12} sm={6} lg={4}>
+        </Grid2>
+        <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
           <TextField
             label="Branch"
             variant="outlined"
@@ -152,8 +154,8 @@ const HeaderForm: React.FC = () => {
             required
             fullWidth
           />
-        </Grid>
-        <Grid item xs={12} sm={6} lg={4}>
+        </Grid2>
+        <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
           <TextField
             label="Date Create"
             variant="outlined"
@@ -168,8 +170,8 @@ const HeaderForm: React.FC = () => {
               shrink: true,
             }}
           />
-        </Grid>
-        <Grid item xs={12} sm={6} lg={4}>
+        </Grid2>
+        <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
           <TextField
             label="Company Address"
             variant="outlined"
@@ -182,8 +184,8 @@ const HeaderForm: React.FC = () => {
             multiline
             rows={3}
           />
-        </Grid>
-      </Grid>
+        </Grid2>
+      </Grid2>
 
       <Typography
         variant="h5"
@@ -192,8 +194,8 @@ const HeaderForm: React.FC = () => {
       >
         Document Footer
       </Typography>
-      <Grid container spacing={2}>
-        <Grid item xs={12} sm={6} lg={4}>
+      <Grid2 container spacing={2}>
+        <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
           <TextField
             variant="outlined"
             name="companyTel"
@@ -204,8 +206,8 @@ const HeaderForm: React.FC = () => {
             disabled
             fullWidth
           />
-        </Grid>
-        <Grid item xs={12} sm={6} lg={4}>
+        </Grid2>
+        <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
           <TextField
             label="Note"
             variant="outlined"
@@ -217,8 +219,8 @@ const HeaderForm: React.FC = () => {
             multiline
             rows={3}
           />
-        </Grid>
-      </Grid>
+        </Grid2>
+      </Grid2>
     </Box>
   );
 };
