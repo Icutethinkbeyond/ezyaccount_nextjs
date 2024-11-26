@@ -3,20 +3,20 @@ import { Grid, Box, Grid2, Typography } from "@mui/material";
 import PageContainer from "@/components/container/PageContainer";
 
 // components
-import HeaderForm from "@/components/forms/income/headerForm";
+import HeaderForm from "@/components/forms/expenses/headerForm";
 import DashboardCard from "@/components/shared/DashboardCard";
 import Breadcrumb from "@/components/shared/BreadcrumbCustom";
 import CompanyInformation from "@/components/forms/CompanyInformations";
-import NewProductItem from "@/components/forms/income/newProductItem";
-import ProductsServicesList from "@/components/forms/income/productsServicesListForm";
-import FooterForm from "@/components/forms/income/footerForm";
+import NewProductItem from "@/components/forms/expenses/newProductItem";
+import ProductsServicesList from "@/components/forms/expenses/productsServicesListForm";
+import FooterForm from "@/components/forms/expenses/footerForm";
 import ContactotInformation from "@/components/forms/ContactorInformations";
 import CalculateItems from "@/components/forms/CalculateItems";
 import DocumentFooter from "@/components/forms/DocumentFooter";
 import NewItems from "@/components/forms/NewItems";
 import ItemsTable from "@/components/forms/ItemsTable";
 
-const Dashboard = () => {
+const NewPurchaseOrder = () => {
   return (
     <PageContainer>
       <Breadcrumb
@@ -71,4 +71,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default NewPurchaseOrder;
