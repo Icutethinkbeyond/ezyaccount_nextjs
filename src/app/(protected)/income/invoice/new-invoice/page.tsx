@@ -16,7 +16,7 @@ import DocumentFooter from "@/components/forms/DocumentFooter";
 import NewItems from "@/components/forms/NewItems";
 import ItemsTable from "@/components/forms/ItemsTable";
 
-const Dashboard = () => {
+const NewInvoice = () => {
   return (
     <PageContainer>
       <Breadcrumb
@@ -71,4 +71,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default NewInvoice;

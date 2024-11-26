@@ -16,7 +16,7 @@ import DocumentFooter from "@/components/forms/DocumentFooter";
 import NewItems from "@/components/forms/NewItems";
 import ItemsTable from "@/components/forms/ItemsTable";
 
-const Dashboard = () => {
+const NewRecordExpenses = () => {
   return (
     <PageContainer>
       <Breadcrumb
@@ -27,7 +27,7 @@ const Dashboard = () => {
           { name: "Add Maintenance Request" },
         ]}
       />
-      <DashboardCard title="สร้างใบบันทึกค่าใช้จ่าย">
+      <DashboardCard title="สร้างบันทึกค่าใช้จ่าย">
         <Grid2 container spacing={3} sx={{ p: 3 }}>
           <Grid2 size={12}>
             <CompanyInformation />
@@ -71,4 +71,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default NewRecordExpenses;
