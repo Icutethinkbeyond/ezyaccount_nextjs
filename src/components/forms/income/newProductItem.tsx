@@ -159,12 +159,12 @@ const NewProductItem: React.FC<NewProductProps> = ({ isEdit = false }) => {
           component="h2"
           sx={{ mb: 2, mt: 4, textAlign: "left" }}
         >
-          New Item
+          เพิ่มสินค้าหลัก
         </Typography>
         <Grid2 container spacing={2} sx={{ mb: 4 }}>
           <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
             <TextField
-              label="#Order"
+              label="#ลำดับ"
               variant="outlined"
               name="productServiceNumber"
               size="small"
@@ -177,7 +177,7 @@ const NewProductItem: React.FC<NewProductProps> = ({ isEdit = false }) => {
           </Grid2>
           <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
             <TextField
-              label="Product/Service"
+              label="สินค้า/บริการ"
               variant="outlined"
               name="productService"
               size="small"
@@ -189,7 +189,7 @@ const NewProductItem: React.FC<NewProductProps> = ({ isEdit = false }) => {
           </Grid2>
           <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
             <TextField
-              label="Description"
+              label="รายละเอียด"
               variant="outlined"
               name="description"
               size="small"
@@ -200,7 +200,7 @@ const NewProductItem: React.FC<NewProductProps> = ({ isEdit = false }) => {
           </Grid2>
           <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
             <TextField
-              label="Price"
+              label="ราคา"
               variant="outlined"
               name="price"
               size="small"
@@ -212,7 +212,7 @@ const NewProductItem: React.FC<NewProductProps> = ({ isEdit = false }) => {
           </Grid2>
           <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
             <TextField
-              label="Amount"
+              label="จำนวน"
               variant="outlined"
               name="amount"
               size="small"
@@ -225,7 +225,7 @@ const NewProductItem: React.FC<NewProductProps> = ({ isEdit = false }) => {
           </Grid2>
           <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
             <TextField
-              label="Discount"
+              label="ส่วนลด"
               variant="outlined"
               name="discount"
               size="small"
@@ -238,7 +238,7 @@ const NewProductItem: React.FC<NewProductProps> = ({ isEdit = false }) => {
           </Grid2>
           <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
             <TextField
-              label="Total"
+              label="ราคารวม"
               variant="outlined"
               name="total"
               size="small"
@@ -269,7 +269,7 @@ const NewProductItem: React.FC<NewProductProps> = ({ isEdit = false }) => {
                 sx={{ marginBottom: "5px", ml: 1 }}
                 onClick={() => unEditProduct()}
               >
-                Cancel The Edit
+                ยกเลิกแก้ไข
               </Button>
             ) : (
               ""
@@ -284,12 +284,12 @@ const NewProductItem: React.FC<NewProductProps> = ({ isEdit = false }) => {
           component="h2"
           sx={{ mb: 2, mt: 4, textAlign: "left" }}
         >
-          New Sub-Item
+          เพิ่มสินค้าย่อย
         </Typography>
         <Grid2 container spacing={2} sx={{ mb: 4 }}>
           <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
             <FormControl fullWidth size="small">
-              <InputLabel id="product-select-label">Product/Service</InputLabel>
+              <InputLabel id="product-select-label">สินค้า/บริการ</InputLabel>
               <Select
                 labelId="product-select-label"
                 id="product-select"
@@ -310,7 +310,7 @@ const NewProductItem: React.FC<NewProductProps> = ({ isEdit = false }) => {
           </Grid2>
           <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
             <TextField
-              label="#Order"
+              label="#ลำดับ"
               variant="outlined"
               name="subProductServiceNumber"
               size="small"
@@ -334,7 +334,7 @@ const NewProductItem: React.FC<NewProductProps> = ({ isEdit = false }) => {
           </Grid2>
           <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
             <TextField
-              label="Description"
+              label="รายละเอียด"
               variant="outlined"
               name="description"
               size="small"
@@ -345,7 +345,7 @@ const NewProductItem: React.FC<NewProductProps> = ({ isEdit = false }) => {
           </Grid2>
           <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
             <TextField
-              label="Price"
+              label="ราคา"
               variant="outlined"
               name="price"
               size="small"
@@ -358,7 +358,7 @@ const NewProductItem: React.FC<NewProductProps> = ({ isEdit = false }) => {
           </Grid2>
           <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
             <TextField
-              label="Amount"
+              label="จำนวน"
               variant="outlined"
               name="amount"
               size="small"
@@ -372,7 +372,7 @@ const NewProductItem: React.FC<NewProductProps> = ({ isEdit = false }) => {
 
           <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
             <TextField
-              label="Discount"
+              label="ส่วนลด"
               variant="outlined"
               name="discount"
               size="small"
@@ -385,7 +385,7 @@ const NewProductItem: React.FC<NewProductProps> = ({ isEdit = false }) => {
           </Grid2>
           <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
             <TextField
-              label="Total"
+              label="ราคารวม"
               variant="outlined"
               name="total"
               size="small"
@@ -415,7 +415,7 @@ const NewProductItem: React.FC<NewProductProps> = ({ isEdit = false }) => {
                 sx={{ marginBottom: "5px", ml: 1 }}
                 onClick={() => unEditSubProduct()}
               >
-                Cancel The Edit
+                ยกเลิกแก้ไข
               </Button>
             ) : (
               ""

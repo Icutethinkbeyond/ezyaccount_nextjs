@@ -43,12 +43,12 @@ const HeaderForm: React.FC = () => {
         component="h2"
         sx={{ mb: 2, mt: 4, textAlign: "left" }}
       >
-        Contactor Information
+        ข้อมูลผู้ติดต่อ
       </Typography>
       <Grid2 container spacing={2}>
         <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
           <TextField
-            label="Contactor Name"
+            label="ชื่อผู้ติดต่อ"
             variant="outlined"
             name="contactorName"
             size="small"
@@ -60,7 +60,7 @@ const HeaderForm: React.FC = () => {
         </Grid2>
         <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
           <TextField
-            label="Contactor Tel"
+            label="เบอร์โทร."
             variant="outlined"
             name="contactorTel"
             size="small"
@@ -72,7 +72,7 @@ const HeaderForm: React.FC = () => {
         </Grid2>
         <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
           <TextField
-            label="Contactor Email"
+            label="อีเมล์"
             variant="outlined"
             name="contactorEmail"
             size="small"
@@ -85,7 +85,7 @@ const HeaderForm: React.FC = () => {
         </Grid2>
         <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
           <TextField
-            label="Contactor Address"
+            label="ที่อยู่"
             variant="outlined"
             name="contactorAddress"
             size="small"
@@ -104,12 +104,12 @@ const HeaderForm: React.FC = () => {
         component="h2"
         sx={{ mb: 2, mt: 4, textAlign: "left" }}
       >
-        Company Information
+        ข้อมูลบริษัท
       </Typography>
       <Grid2 container spacing={2}>
         <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
           <TextField
-            label="Company Name"
+            label="ชื่อบริษัท"
             variant="outlined"
             name="companyName"
             size="small"
@@ -121,7 +121,7 @@ const HeaderForm: React.FC = () => {
         </Grid2>
         <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
           <TextField
-            label="Company Tel"
+            label="เบอร์โทร."
             variant="outlined"
             name="companyTel"
             size="small"
@@ -133,7 +133,7 @@ const HeaderForm: React.FC = () => {
         </Grid2>
         <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
           <TextField
-            label="Taxpayer Identification No"
+            label="เลขผู้เสียภาษี"
             variant="outlined"
             name="taxId"
             size="small"
@@ -145,7 +145,7 @@ const HeaderForm: React.FC = () => {
         </Grid2>
         <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
           <TextField
-            label="Branch"
+            label="สาขา"
             variant="outlined"
             name="branch"
             size="small"
@@ -157,7 +157,7 @@ const HeaderForm: React.FC = () => {
         </Grid2>
         <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
           <TextField
-            label="Date Create"
+            label="วันที่"
             variant="outlined"
             name="dateCreate"
             size="small"
@@ -173,7 +173,7 @@ const HeaderForm: React.FC = () => {
         </Grid2>
         <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
           <TextField
-            label="Company Address"
+            label="ที่อยู่"
             variant="outlined"
             name="companyAddress"
             size="small"
@@ -192,7 +192,7 @@ const HeaderForm: React.FC = () => {
         component="h2"
         sx={{ mb: 2, mt: 4, textAlign: "left" }}
       >
-        Document Footer
+        แนบไฟล์
       </Typography>
       <Grid2 container spacing={2}>
         <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
@@ -209,7 +209,7 @@ const HeaderForm: React.FC = () => {
         </Grid2>
         <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
           <TextField
-            label="Note"
+            label="หมายเหตุ"
             variant="outlined"
             name="note"
             size="small"

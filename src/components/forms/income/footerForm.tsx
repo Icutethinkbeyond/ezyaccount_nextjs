@@ -110,7 +110,7 @@ const FooterForm: React.FC<FooterProps> = ({ isEdit = false }) => {
                 <TableRow>
                   <TableCell>
                     <Typography color="textSecondary" variant="h4">
-                      Total
+                      ราคารวม
                     </Typography>
                   </TableCell>
                   <TableCell>
@@ -122,7 +122,7 @@ const FooterForm: React.FC<FooterProps> = ({ isEdit = false }) => {
                 <TableRow>
                   <TableCell>
                     <Typography color="textSecondary" variant="h6">
-                      Discount Price
+                      ส่วนลด
                     </Typography>
                   </TableCell>
                   <TableCell>
@@ -134,7 +134,7 @@ const FooterForm: React.FC<FooterProps> = ({ isEdit = false }) => {
                 <TableRow>
                   <TableCell>
                     <Typography color="textSecondary" variant="h6">
-                      Price After Discount
+                      ราคาหลังหักส่วนลด
                     </Typography>
                   </TableCell>
                   <TableCell>
@@ -154,7 +154,7 @@ const FooterForm: React.FC<FooterProps> = ({ isEdit = false }) => {
                             name="includeVat"
                           />
                         }
-                        label="Vat 7%"
+                        label="ภาษีมูลค่าเพิ่ม 7%"
                       />
                     </FormControl>
                   </TableCell>
@@ -167,7 +167,7 @@ const FooterForm: React.FC<FooterProps> = ({ isEdit = false }) => {
                 <TableRow>
                   <TableCell>
                     <Typography color="textSecondary" variant="h4">
-                      Total Amount
+                      จำนวนเงินรวมทั้งสิ้น
                     </Typography>
                   </TableCell>
                   <TableCell>
@@ -180,13 +180,13 @@ const FooterForm: React.FC<FooterProps> = ({ isEdit = false }) => {
                   <TableCell>
                     <FormControl sx={{ mb: 1, mt: 1 }} fullWidth size="small">
                       <InputLabel id="demo-simple-select-label">
-                        Withholding Tax
+                        หักภาษี ณ ที่จ่าย
                       </InputLabel>
                       <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
                         value={footerForm.withholdingTax}
-                        label="Withholding Tax"
+                        label="หักภาษี ณ ที่จ่าย"
                         onChange={handleChangeSelect}
                       >
                         <MenuItem value={0}>0%</MenuItem>
@@ -212,7 +212,7 @@ const FooterForm: React.FC<FooterProps> = ({ isEdit = false }) => {
                 <TableRow>
                   <TableCell>
                     <Typography color="textSecondary" variant="h3">
-                      Total Amount Due
+                      ยอดชำระรวม
                     </Typography>
                   </TableCell>
                   <TableCell>
