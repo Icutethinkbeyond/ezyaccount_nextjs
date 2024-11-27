@@ -161,9 +161,21 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ data }) => {
       <>
         <Grid2 container mb={1}>
           <Grid2 size={6}>
-            <Box display="flex" alignItems="center">
+            <Box display="flex" alignItems="center" gap={2}>
               <Typography variant="h3">ใบลดหนี้</Typography>
-              <IconButton color="primary" onClick={handleAddClick}>
+              <IconButton
+                color="primary"
+                onClick={handleAddClick}
+                sx={{
+                  backgroundColor: "#33CC99",
+                  color: "#fff",
+                  "&:hover": {
+                    backgroundColor: "#009933",
+                  },
+                  width: 22,
+                  height: 22,
+                }}
+              >
                 <Add />
               </IconButton>
             </Box>
