@@ -61,7 +61,7 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ data }) => {
 
   const handleAddClick = () => {
     console.log("Add button clicked!");
-    router.push("/add-new-quotation");
+    router.push("/income/quotation/new-quotation");
   };
 
   const columns: GridColDef<Quotation>[] = [
@@ -161,11 +161,11 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ data }) => {
       <>
         <Grid2 container mb={1}>
           <Grid2 size={6}>
-          <Box display="flex" alignItems="center">
-            <Typography variant="h3">ใบเสนอราคา</Typography>
-            <IconButton color="primary" onClick={handleAddClick}>
-              <Add />
-            </IconButton>
+            <Box display="flex" alignItems="center">
+              <Typography variant="h3">ใบเสนอราคา</Typography>
+              <IconButton color="primary" onClick={handleAddClick}>
+                <Add />
+              </IconButton>
             </Box>
           </Grid2>
           <Grid2 container size={6} justifyContent="flex-end">
