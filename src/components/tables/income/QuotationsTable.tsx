@@ -7,7 +7,7 @@ import {
   GridPaginationModel,
   GridCellParams,
 } from "@mui/x-data-grid";
-import { Box, Grid, Grid2, IconButton } from "@mui/material";
+import { Box, Grid, Grid2, IconButton, Typography  } from "@mui/material";
 import BaseCard from "@/components/shared/BaseCard";
 import ConfirmDelete from "@/components/shared/ConfirmDialogCustom";
 import { Quotation, useDatabaseContext } from "@/contexts/dbContext";
@@ -20,6 +20,7 @@ import {
   Email,
   ForwardToInbox,
   ManageSearch,
+  Add,
 } from "@mui/icons-material";
 import StatusChip from "@/components/shared/StatusChipCustom";
 import { formatNumber } from "@/utils/utils";
@@ -44,6 +45,11 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ data }) => {
   useEffect(() => {
     setRows(data);
   }, []);
+
+  const handleAddClick = () => {
+    console.log("Add button clicked!");
+    router.push("/add-new-quotation"); 
+  };
 
   const columns: GridColDef<Quotation>[] = [
     {
@@ -138,7 +144,17 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ data }) => {
   };
 
   return (
-    <BaseCard title="Quotation Table">
+    <BaseCard title="">
+      <Box display="inline-flex" alignItems="center" mb={2}>
+        <Typography variant="h3" component="div">
+          Quotation Table
+        </Typography>
+        <IconButton color="primary" onClick={handleAddClick}>
+          <Add />
+        </IconButton>
+      </Box>
+
+
       <DataGrid
         initialState={{ pagination: { paginationModel } }}
         pageSizeOptions={[5, 10, 20]}
