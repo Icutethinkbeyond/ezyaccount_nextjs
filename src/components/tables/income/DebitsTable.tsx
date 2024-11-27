@@ -33,6 +33,7 @@ import {
   Email,
   ForwardToInbox,
   ManageSearch,
+  Add,
 } from "@mui/icons-material";
 import StatusChip from "@/components/shared/StatusChipCustom";
 import { formatNumber } from "@/utils/utils";
@@ -58,6 +59,11 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ data }) => {
     setRows(data);
   }, []);
 
+  const handleAddClick = () => {
+    console.log("Add button clicked!");
+    router.push("/income/debit/new-debit");
+  };
+
   const columns: GridColDef<Quotation>[] = [
     {
       field: "keyId",
@@ -65,9 +71,9 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ data }) => {
       width: 150,
       valueGetter: (value, row) => row.keyId,
     },
-    { 
+    {
       field: "siteName",
-      headerName: "วันที่ออกเอกสาร", 
+      headerName: "วันที่ออกเอกสาร",
       width: 150,
       valueGetter: (value, row) => row.headForm?.dateCreate,
     },
@@ -153,16 +159,17 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ data }) => {
   return (
     <BaseCard title="Debits Table">
       <>
-      <Grid2 container mb={1}>
+        <Grid2 container mb={1}>
           <Grid2 size={6}>
-            <Typography variant="h3">ใบเพิ่มหนี้</Typography>
+            <Box display="flex" alignItems="center">
+              <Typography variant="h3">ใบเพิ่มหนี้</Typography>
+              <IconButton color="primary" onClick={handleAddClick}>
+                <Add />
+              </IconButton>
+            </Box>
           </Grid2>
           <Grid2 container size={6} justifyContent="flex-end">
-            <Button
-              variant="contained"
-              color="success"
-              sx={{ height: "100%" }}
-            >
+            <Button variant="contained" color="success" sx={{ height: "100%" }}>
               Search
             </Button>
             <Button
