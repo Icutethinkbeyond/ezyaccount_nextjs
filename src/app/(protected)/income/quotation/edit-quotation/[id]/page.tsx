@@ -1,9 +1,10 @@
 "use client";
-import { Grid, Box } from "@mui/material";
+import { Grid2, Box } from "@mui/material";
 import PageContainer from "@/components/container/PageContainer";
 // components
 import HeaderForm from "@/components/forms/income/headerForm";
 import DashboardCard from "@/components/shared/DashboardCard";
+import Breadcrumb from "@/components/shared/BreadcrumbCustom";
 import ProductsServicesList from "@/components/forms/income/productsServicesListForm";
 import FooterForm from "@/components/forms/income/footerForm";
 import NewProductItem from "@/components/forms/income/newProductItem";
@@ -52,22 +53,30 @@ function EditQuotation({ params }: { params: { id: string } }) {
 
   return (
     <PageContainer title="Dashboard" description="this is Dashboard">
-      <DashboardCard title="New Quotation">
+      <Breadcrumb
+        title="Add Maintenance Requests"
+        breadcrumbs={[
+          { name: "Home", href: "/dashboard" },
+          { name: "Maintenance Requests", href: "/maintenance-request" },
+          { name: "Add Maintenance Request" },
+        ]}
+      />
+      <DashboardCard title="แก้ไขใบเสนอราคา">
         <Box mt={3}>
-          <Grid container spacing={3}>
-            <Grid item xs={12} lg={12}>
+          <Grid2 container spacing={3}>
+            <Grid2 size={12}>
               <HeaderForm />
-            </Grid>
-            <Grid item xs={12} lg={12}>
+            </Grid2>
+            <Grid2 size={12}>
               <NewProductItem isEdit={true} />
-            </Grid>
-            <Grid item xs={12} lg={12}>
+            </Grid2>
+            <Grid2 size={12}>
               <ProductsServicesList />
-            </Grid>
-            <Grid item xs={12} lg={12}>
+            </Grid2>
+            <Grid2 size={12}>
               <FooterForm isEdit={true} />
-            </Grid>
-          </Grid>
+            </Grid2>
+          </Grid2>
         </Box>
       </DashboardCard>
     </PageContainer>

@@ -98,7 +98,7 @@ export const useMenuItems = () => {
         {
           id: uniqueId(),
           title: "รายการสินค้า/บริการ",
-          href: `/product-and-service/product-and-service-list`,
+          href: `/product-and-service/productandservice-list`,
         },
         {
           id: uniqueId(),

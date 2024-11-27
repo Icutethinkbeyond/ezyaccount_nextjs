@@ -1,5 +1,5 @@
 "use client";
-import { Grid, Box } from "@mui/material";
+import { Grid2, Box } from "@mui/material";
 import PageContainer from "@/components/container/PageContainer";
 // components
 import SalesOverview from "@/components/dashboard/SalesOverview";
@@ -21,11 +21,11 @@ const Dashboard = () => {
   return (
     <PageContainer title="Dashboard" description="this is Dashboard">
       <Box mt={3}>
-        <Grid container spacing={3}>
-          <Grid item xs={12} lg={12}>
+        <Grid2 container spacing={3}>
+          <Grid2 size={12}>
             {/* <MenuCard data={incomeMenu}/> */}
-          </Grid>
-        </Grid>
+          </Grid2>
+        </Grid2>
       </Box>
     </PageContainer>
   );
