@@ -550,3 +550,52 @@ model tbl_stock_log {
   pd_qty                Int
   pd_total              Int
 }
+
+model tbl_supplier {
+  supplier_id           Int
+  supplier_name         String
+  supplier_office       String
+  supplier_address      String
+  supplier_taxId        String
+  business_id           Int
+}
+
+model tbl_supplier_item {
+  supplier_item_id      Int
+  item_name             String
+  item_price            Int
+  supplier_id           Int
+  business_id           Int
+}
+
+model tbl_withholding {
+  withholding_id        Int
+  withholding_no        String
+  cus_id                Int
+  withholding_type      String
+  date_taxdeductible    DateTime
+  payer                 Int
+  payer_other           String
+  tax_payer             String //Old dataType "enum('ภาษีหัก ณ ที่จ่าย','ภาษีถูกหัก ณ ที่จ่าย')"
+  amount_paid           Int
+  withholding_tax       Int
+  vat                   Int
+  amount_paid_and_tax_deducted    Int //Old dataType "float"
+  tax_rate_deducted     Int
+  withholding_status    String    //Old dataType "enum('approve','cancel','wait_approve','draft')"
+  accountBoss           Int
+  money_paid_in         Int
+  numApprove            Int
+  note                  String
+  createdBy             Int
+  createdDtm            DateTime
+  business_id           Int
+}
+
+model tbl_withholding_item {
+  withholding_item_id         Int
+  department_type             Decimal(10,0)
+  withholding_item_other      String
+  date_tax_paid               DateTime
+  withholding_id              Int
+}
