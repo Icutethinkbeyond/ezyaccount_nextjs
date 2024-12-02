@@ -22,16 +22,21 @@ model tbl_users {
   tax_id                String
   roleId                Int    //Old dataType "tinyint"
   userImage             String
-  isDeleted             Boolean //Old dataType "tinyint"
+  isDeleted             IsDeleted @default(NO)
   createdBy             Int
-  createdDtm            DateTime
+  createdDtm            timestamp
   updatedBy             Int
-  updatedDtm            DateTime
+  updatedDtm            timestamp
   business_id           Int
   hash                  String
   verified              Int //Old dataType "tinyint"
-  status                Boolean //Old dataType "enum('on','off')"
+  status                Userstatus    @default(OFF)
 } 
+
+enum Userstatus {
+  ON
+  OFF
+}
 
 model tbl_account {
   id                    Int
@@ -47,8 +52,13 @@ model tbl_archive {
   file_name             String
   account_name          String
   business_id           Int
-  createDate            DateTime
-  isDeleted             Boolean //Old dataType "enum('yes','no')"
+  createDate            timestamp
+  isDeleted             IsDeleted @default(NO)
+}
+
+enum IsDeleted {
+  YES
+  NO
 }
 
 model tbl_bank {
@@ -73,10 +83,10 @@ model tbl_business {
   business_employee_count Int
   isPerson                String //Old dataType "enum('yes','no','legal','person')"
   isVat                   String //Old dataType "enum('yes','no')"
-  isDelete                Boolean //Old dataType "enum('0','1')"
+  isDeleted               IsDeleted @default(NO)
   package_id              Int
-  package_start_date      DateTime
-  package_end_date        DateTime
+  package_start_date      timestamp
+  package_end_date        timestamp
   userId                  Int
 }
 
@@ -91,7 +101,7 @@ model tbl_category {
 
 model tbl_commission {
   commission_id           Int
-  createDate              DateTime
+  createDate              timestamp
   user_id                 Int  
   sales                   Int //Old dataType "float"
   commission              Int //Old dataType "float"
@@ -152,17 +162,17 @@ model tbl_credit {
   od_shipping_email       String
   od_shipping_phone       String
   od_shipping_address     String
-  od_createDate           DateTime
+  od_createDate           timestamp
   od_createBy             Int
   od_status               Boolean //Old dataType "enum('ยังไม่ได้ชำระเงิน','ชำระเงินแล้ว','รอการตรวจสอบ','เตรียมการจัดส่ง','จัดส่งเรียบร้อยแล้ว','ยกเลิกคำสั่งซื้อ')"
-  od_updateDate           DateTime
+  od_updateDate           timestamp
   cus_id                  Int
   business_id             Int
   vat_status              Int
   tax_withheld            Int
   credit_note_No          String
   tax_invoice_No          String
-  isDeleted               Boolean //Old dataType "INT"
+  isDeleted               IsDeleted @default(NO)
   note                    String
   file_import             String
   credit_status           Boolean //Old dataType "enum('approve','wait_approve','cancel','draft','create_tax_invoice')"
@@ -192,11 +202,11 @@ model tbl_customers {
   tax_id                String
   roleId                Int    //Old dataType "tinyint"
   userImage             String
-  isDeleted             Boolean //Old dataType "tinyint"
+  isDeleted             IsDeleted @default(NO)
   createdBy             Int
-  createdDtm            DateTime
+  createdDtm            timestamp
   updatedBy             Int
-  updatedDtm            DateTime
+  updatedDtm            timestamp
   business_id           Int
   hash                  String
   verified              Int //Old dataType "tinyint"
@@ -211,17 +221,17 @@ model tbl_debit {
   od_shipping_email     String
   od_shipping_phone     String
   od_shipping_address   String
-  od_createDate         DateTime
+  od_createDate         timestamp
   od_createBy           Int
   od_status             Boolean //Old dataType "enum('ยังไม่ได้ชำระเงิน','ชำระเงินแล้ว','รอการตรวจสอบ','เตรียมการจัดส่ง','จัดส่งเรียบร้อยแล้ว','ยกเลิกคำสั่งซื้อ')"
-  od_updateDate         DateTime
+  od_updateDate         timestamp
   cus_id                Int
   business_id           Int
   vat_status            Boolean //Old dataType "int"
   tax_withheld          Int
   debit_note_No         String
   tax_invoice_No        String
-  isDeleted             Boolean //Old dataType "int"
+  isDeleted             IsDeleted @default(NO)
   debit_status          String  //Old dataType "enum('approve','wait_approve','cancel','draft','create_tax_invoice')"
   note                  String
   file_import           String
@@ -238,13 +248,13 @@ model tbl_debit_item {
 model tbl_duedate {
   duedate_id            Int
   business_id           Int
-  duedate               DateTime
+  duedate               timestamp
   doing_status          Int //Old dataType "tinyint"
 }
 
 model tbl_exchange_reward {
   id                    Int
-  createdDate           DateTime
+  createdDate           timestamp
   cus_id                Int
   gift_id               Int
   business_id           Int
@@ -253,7 +263,7 @@ model tbl_exchange_reward {
 model tbl_expenses {
   expenses_id           Int
   expenses_No           String
-  expenses_date         DateTime
+  expenses_date         timestamp
   supplier              String
   address               String
   tax_no                Int
@@ -286,8 +296,8 @@ model tbl_gift {
   gift_name             String
   gift_point            Int
   gift_image            String
-  start_date            DateTime
-  end_date              DateTime
+  start_date            timestamp
+  end_date              timestamp
   business_id           Int
   status                Boolean  //Old dataType "int"
 }
@@ -300,7 +310,7 @@ model tbl_last_login {
   userAgent             String
   agentString           String
   platform              String
-  createdDtm            DateTime
+  createdDtm            timestamp
 }
 
 model tbl_mainproduct {
@@ -322,10 +332,10 @@ model tbl_order {
   companyAdds           String
   companyTax            String
   branch                String
-  od_createDate         DateTime
+  od_createDate         timestamp
   od_createBy           Int
   cus_id                Int
-  od_updateDate         DateTime
+  od_updateDate         timestamp
   od_status             String //Old dataType "enum('ยังไม่ได้ชำระเงิน','ชำระเงินแล้ว','รอการตรวจสอบ','เตรียมการจัดส่ง','จัดส่งเรียบร้อยแล้ว','ยกเลิกคำสั่งซื้อ')"
   od_payment_type       String
   od_payment            String
@@ -339,7 +349,7 @@ model tbl_order {
   invoice_No            String
   tax_invoice_No        String
   billing_No            String
-  isDeleted             Boolean //Old dataType "int"
+  isDeleted             IsDeleted @default(NO)
   note_invoice          String
   note_tax_invoice      String
   note_billing          String
@@ -374,7 +384,7 @@ model tbl_payment_type {
 
 model tbl_point_collection {
   id                    Int
-  createdDate           DateTime
+  createdDate           timestamp
   od_id                 Int
   cus_id                Int
   total_price           Int // Old dataType "float"
@@ -396,8 +406,8 @@ model tbl_product {
   general_expenses      Int //Old dataType "float"
   pd_discount           Int //Old dataType "float"
   pd_image              String
-  pd_date               DateTime
-  pd_last_update        DateTime
+  pd_date               timestamp
+  pd_last_update        timestamp
   pd_status             String //Old dataType "enum('use','cancel')"
   business_id           Int
   point                 Int
@@ -413,9 +423,9 @@ model tbl_purchase {
   supplier_address      String
   supplier_taxId        String
   branch                String
-  createDate            DateTime
+  createDate            timestamp
   createBy              Int
-  purchaseDate          DateTime
+  purchaseDate          timestamp
   vat_status            Int
   tax_withheld          String
   price_include_vat     Boolean //Old dataType "enum('0','1')"
@@ -424,7 +434,7 @@ model tbl_purchase {
   file_import           String
   purchase_status       String  //Old dataType "enum('approve','wait_approve','cancel','draft','create_tax_invoice')"
   business_id           Int
-  isDeleted             Boolean //Old dataType "Int"
+  isDeleted             IsDeleted @default(NO)
 }
 
 model tbl_purchase_item {
@@ -446,16 +456,16 @@ model tbl_receipt {
   supplier_taxId        String
   supplier_phone        Int
   branch                String
-  createDate            DateTime
+  createDate            timestamp
   createBy              Int
-  receiptDate           DateTime
+  receiptDate           timestamp
   vat_status            Int
   tax_withheld          String
   receipt_No            String
   price_include_vat     Int
   note                  String
   business_id           Int
-  isDeleted             Boolean //Old dataType "int"
+  isDeleted             IsDeleted @default(NO)
   receipt_status        String //Old dataType "enum('approve','wait_approve','cancel','draft')"
   file_import           String
 }
@@ -476,11 +486,11 @@ model tbl_reset_password {
   activation_id         String
   agent                 String
   client_ip             String
-  isDeleted             Boolean //Old dataType "tinyint"
+  isDeleted             IsDeleted @default(NO)
   createdBy             Int //Old dataType "bigint"
-  createdDtm            DateTime
+  createdDtm            timestamp
   updatedBy             Int //Old dataType "bigint"
-  updatedDtm            DateTime
+  updatedDtm            timestamp
 }
 
 model tbl_roles {
@@ -492,10 +502,10 @@ model tbl_sales_package {
   id                    Int
   userId                Int
   package_id            Int
-  createDate            DateTime
-  updateDate            DateTime
-  startDate             DateTime
-  endDate               DateTime
+  createDate            timestamp
+  updateDate            timestamp
+  startDate             timestamp
+  endDate               timestamp
   status                Boolean //Old dataType "int"
   payment_type          String
   bill                  String
@@ -514,7 +524,7 @@ model tbl_seller_sales {
   sale_id               Int
   user_id               Int
   business_id           Int
-  createDate            DateTime
+  createDate            timestamp
 }
 
 model tbl_seller_sales_detail {
@@ -544,7 +554,7 @@ model tbl_stock_config {
 model tbl_stock_log {
   id                    Int
   business_id           Int
-  createdDate           DateTime //Old dataType "timestamp"
+  createdDate           timestamp //Old dataType "timestamp"
   stock_type            String
   pd_id                 Int
   pd_qty                Int
@@ -573,7 +583,7 @@ model tbl_withholding {
   withholding_no        String
   cus_id                Int
   withholding_type      String
-  date_taxdeductible    DateTime
+  date_taxdeductible    timestamp
   payer                 Int
   payer_other           String
   tax_payer             String //Old dataType "enum('ภาษีหัก ณ ที่จ่าย','ภาษีถูกหัก ณ ที่จ่าย')"
@@ -588,14 +598,14 @@ model tbl_withholding {
   numApprove            Int
   note                  String
   createdBy             Int
-  createdDtm            DateTime
+  createdDtm            timestamp
   business_id           Int
 }
 
 model tbl_withholding_item {
   withholding_item_id         Int
-  department_type             Decimal(10,0)
+  department_type             Decimal
   withholding_item_other      String
-  date_tax_paid               DateTime
+  date_tax_paid               timestamp
   withholding_id              Int
 }
