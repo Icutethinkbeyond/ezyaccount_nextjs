@@ -8,7 +8,7 @@ datasource db {
 }
 
 model tbl_users {
-  userId                Int   @id @default(auto()) @map("_id") @db.ObjectId
+  userId                String  @id @default(auto()) @map("_id") @db.ObjectId
   sales_supervisor      Int   
   email                 String
   username              String
@@ -24,9 +24,9 @@ model tbl_users {
   userImage             String
   isDeleted             IsDeleted @default(NO)
   createdBy             Int
-  createdDtm            timestamp
+  createdDtm            DateTime @default(now())
   updatedBy             Int
-  updatedDtm            timestamp
+  updatedDtm            DateTime @default(now())
   business_id           Int
   hash                  String
   verified              Int //Old dataType "tinyint"
@@ -39,7 +39,7 @@ enum Userstatus {
 }
 
 model tbl_account {
-  id                    Int
+  id                    String  @id @default(auto()) @map("_id") @db.ObjectId
   Bank_id               Int
   account_number        String
   account_name          String
@@ -47,12 +47,12 @@ model tbl_account {
 }
 
 model tbl_archive {
-  archive_id            Int
+  archive_id            String  @id @default(auto()) @map("_id") @db.ObjectId
   upload_by             Int
   file_name             String
   account_name          String
   business_id           Int
-  createDate            timestamp
+  createDate            DateTime @default(now())
   isDeleted             IsDeleted @default(NO)
 }
 
@@ -62,13 +62,13 @@ enum IsDeleted {
 }
 
 model tbl_bank {
-  id                    Int
+  id                    String  @id @default(auto()) @map("_id") @db.ObjectId
   bank_name             String
   bank_image            String
 }
 
 model tbl_business {
-  business_id             Int
+  business_id             String  @id @default(auto()) @map("_id") @db.ObjectId
   business_name           String
   main_branch             Int  //Old dataType "tinyint"
   branch                  String
@@ -85,13 +85,13 @@ model tbl_business {
   isVat                   String //Old dataType "enum('yes','no')"
   isDeleted               IsDeleted @default(NO)
   package_id              Int
-  package_start_date      timestamp
-  package_end_date        timestamp
+  package_start_date      DateTime @default(now())
+  package_end_date        DateTime @default(now())
   userId                  Int
 }
 
 model tbl_category {
-  cat_id                  Int
+  cat_id                  String  @id @default(auto()) @map("_id") @db.ObjectId
   cat_parent_id           Int
   cat_name                String
   cat_description         String
@@ -100,8 +100,8 @@ model tbl_category {
 }
 
 model tbl_commission {
-  commission_id           Int
-  createDate              timestamp
+  commission_id           String  @id @default(auto()) @map("_id") @db.ObjectId
+  createDate              DateTime @default(now())
   user_id                 Int  
   sales                   Int //Old dataType "float"
   commission              Int //Old dataType "float"
@@ -109,7 +109,7 @@ model tbl_commission {
 }
 
 model tbl_commissionrate {
-  commissionrate_id       Int
+  commissionrate_id       String  @id @default(auto()) @map("_id") @db.ObjectId
   business_id             Int
   role_id                 Int
   minimumrate             Int
@@ -117,26 +117,26 @@ model tbl_commissionrate {
 }
 
 model tbl_config_free {
-  business_id             Int
+  business_id             String  @id @default(auto()) @map("_id") @db.ObjectId
   status                  Boolean //Old dataType "int"
 }
 
 model tbl_config_free_detail {
-  id                      Int
+  id                      String  @id @default(auto()) @map("_id") @db.ObjectId
   business_id             Int
   minimum_rate            Int
   free_id                 Int
 }
 
 model tbl_config_gift {
-  id                      Int
+  id                      String  @id @default(auto()) @map("_id") @db.ObjectId
   business_id             Int
   minimum_rate            Int
   point                   Int
 }
 
 model tbl_config_payment {
-  id                      Int
+  id                      String  @id @default(auto()) @map("_id") @db.ObjectId
   payment_id              Int
   business_id             Int
   paypal_email            String
@@ -147,7 +147,7 @@ model tbl_config_payment {
 }
 
 model tbl_config_vat {
-  business_id             Int
+  business_id             String  @id @default(auto()) @map("_id") @db.ObjectId
   status                  Boolean //Old dataType "int"
   price_include_vat       Int
   tax_id                  String
@@ -155,17 +155,17 @@ model tbl_config_vat {
 }
 
 model tbl_credit {
-  credit_id               Int
+  credit_id               String  @id @default(auto()) @map("_id") @db.ObjectId
   od_id                   Int
   od_bill                 Int
   od_shipping_name        String
   od_shipping_email       String
   od_shipping_phone       String
   od_shipping_address     String
-  od_createDate           timestamp
+  od_createDate           DateTime @default(now())
   od_createBy             Int
   od_status               Boolean //Old dataType "enum('ยังไม่ได้ชำระเงิน','ชำระเงินแล้ว','รอการตรวจสอบ','เตรียมการจัดส่ง','จัดส่งเรียบร้อยแล้ว','ยกเลิกคำสั่งซื้อ')"
-  od_updateDate           timestamp
+  od_updateDate           DateTime @default(now())
   cus_id                  Int
   business_id             Int
   vat_status              Int
@@ -181,7 +181,7 @@ model tbl_credit {
 }
 
 model tbl_credit_item {
-  credit_item_id          Int
+  credit_item_id          String  @id @default(auto()) @map("_id") @db.ObjectId
   od_id                   Int
   pd_id                   Int
   od_qty                  Int
@@ -189,7 +189,7 @@ model tbl_credit_item {
 }
 
 model tbl_customers {
-  userId                Int   @id @default(auto()) @map("_id") @db.ObjectId  
+  userId                String  @id @default(auto()) @map("_id") @db.ObjectId
   email                 String
   username              String
   password              String
@@ -204,9 +204,9 @@ model tbl_customers {
   userImage             String
   isDeleted             IsDeleted @default(NO)
   createdBy             Int
-  createdDtm            timestamp
+  createdDtm            DateTime @default(now())
   updatedBy             Int
-  updatedDtm            timestamp
+  updatedDtm            DateTime @default(now())
   business_id           Int
   hash                  String
   verified              Int //Old dataType "tinyint"
@@ -214,17 +214,17 @@ model tbl_customers {
 }
 
 model tbl_debit {
-  debit_id              Int
+  debit_id              String  @id @default(auto()) @map("_id") @db.ObjectId
   od_id                 Int
   od_bill               Int
   od_shipping_name      String
   od_shipping_email     String
   od_shipping_phone     String
   od_shipping_address   String
-  od_createDate         timestamp
+  od_createDate         DateTime @default(now())
   od_createBy           Int
   od_status             Boolean //Old dataType "enum('ยังไม่ได้ชำระเงิน','ชำระเงินแล้ว','รอการตรวจสอบ','เตรียมการจัดส่ง','จัดส่งเรียบร้อยแล้ว','ยกเลิกคำสั่งซื้อ')"
-  od_updateDate         timestamp
+  od_updateDate         DateTime @default(now())
   cus_id                Int
   business_id           Int
   vat_status            Boolean //Old dataType "int"
@@ -238,7 +238,7 @@ model tbl_debit {
 }
 
 model tbl_debit_item {
-  debit_item_id         Int
+  debit_item_id         String  @id @default(auto()) @map("_id") @db.ObjectId
   od_id                 Int
   pd_id                 Int
   od_qty                Int
@@ -246,24 +246,24 @@ model tbl_debit_item {
 }
 
 model tbl_duedate {
-  duedate_id            Int
+  duedate_id            String  @id @default(auto()) @map("_id") @db.ObjectId
   business_id           Int
-  duedate               timestamp
+  duedate               DateTime @default(now())
   doing_status          Int //Old dataType "tinyint"
 }
 
 model tbl_exchange_reward {
-  id                    Int
-  createdDate           timestamp
+  id                    String  @id @default(auto()) @map("_id") @db.ObjectId
+  createdDate           DateTime @default(now())
   cus_id                Int
   gift_id               Int
   business_id           Int
 }
 
 model tbl_expenses {
-  expenses_id           Int
+  expenses_id           String  @id @default(auto()) @map("_id") @db.ObjectId
   expenses_No           String
-  expenses_date         timestamp
+  expenses_date         DateTime @default(now())
   supplier              String
   address               String
   tax_no                Int
@@ -277,14 +277,14 @@ model tbl_expenses {
 }
 
 model tbl_expenses_item {
-  expenses_item_id      Int
+  expenses_item_id      String  @id @default(auto()) @map("_id") @db.ObjectId
   expenses_id           Int
   description           String
   price                 Int
 }
 
 model tbl_free {
-  free_id               Int
+  free_id               String  @id @default(auto()) @map("_id") @db.ObjectId
   free_name             String
   free_image            String
   business_id           Int
@@ -292,35 +292,35 @@ model tbl_free {
 }
 
 model tbl_gift {
-  gift_id               Int
+  gift_id               String  @id @default(auto()) @map("_id") @db.ObjectId
   gift_name             String
   gift_point            Int
   gift_image            String
-  start_date            timestamp
-  end_date              timestamp
+  start_date            DateTime @default(now())
+  end_date              DateTime @default(now())
   business_id           Int
   status                Boolean  //Old dataType "int"
 }
 
 model tbl_last_login {
-  id                    Int //Old dataType "bigint"
+  id                    String  @id @default(auto()) @map("_id") @db.ObjectId
   userId                Int //Old dataType "bigint"
   sessionData           String
   machineIp             String
   userAgent             String
   agentString           String
   platform              String
-  createdDtm            timestamp
+  createdDtm            DateTime @default(now())
 }
 
 model tbl_mainproduct {
-  mp_id                 Int
+  mp_id                 String  @id @default(auto()) @map("_id") @db.ObjectId
   mp_name               String
   od_id                 Int
 }
 
 model tbl_order {
-  od_id                 Int
+  od_id                 String  @id @default(auto()) @map("_id") @db.ObjectId
   od_shipping_name      String
   od_shipping_email     String
   od_shipping_phone     String
@@ -332,10 +332,10 @@ model tbl_order {
   companyAdds           String
   companyTax            String
   branch                String
-  od_createDate         timestamp
+  od_createDate         DateTime @default(now())
   od_createBy           Int
   cus_id                Int
-  od_updateDate         timestamp
+  od_updateDate         DateTime @default(now())
   od_status             String //Old dataType "enum('ยังไม่ได้ชำระเงิน','ชำระเงินแล้ว','รอการตรวจสอบ','เตรียมการจัดส่ง','จัดส่งเรียบร้อยแล้ว','ยกเลิกคำสั่งซื้อ')"
   od_payment_type       String
   od_payment            String
@@ -362,7 +362,7 @@ model tbl_order {
 }
 
 model tbl_order_item {
-  od_id                 Int
+  od_id                 String  @id @default(auto()) @map("_id") @db.ObjectId
   pd_id                 Int
   od_qty                Int
   od_price              Int //Old dataType "float"
@@ -370,7 +370,7 @@ model tbl_order_item {
 }
 
 model tbl_package {
-  package_id            Int
+  package_id            String  @id @default(auto()) @map("_id") @db.ObjectId
   package_name          String
   package_price         Int
   annual_price          Int
@@ -378,13 +378,13 @@ model tbl_package {
 }
 
 model tbl_payment_type {
-  payment_id            Int
+  payment_id            String  @id @default(auto()) @map("_id") @db.ObjectId
   payment_type          String
 }
 
 model tbl_point_collection {
-  id                    Int
-  createdDate           timestamp
+  id                    String  @id @default(auto()) @map("_id") @db.ObjectId
+  createdDate           DateTime @default(now())
   od_id                 Int
   cus_id                Int
   total_price           Int // Old dataType "float"
@@ -393,7 +393,7 @@ model tbl_point_collection {
 }
 
 model tbl_product {
-  pd_id                 Int
+  pd_id                 String  @id @default(auto()) @map("_id") @db.ObjectId
   barcode               String
   barcode_img           String
   cat_id                Int
@@ -406,8 +406,8 @@ model tbl_product {
   general_expenses      Int //Old dataType "float"
   pd_discount           Int //Old dataType "float"
   pd_image              String
-  pd_date               timestamp
-  pd_last_update        timestamp
+  pd_date               DateTime @default(now())
+  pd_last_update        DateTime @default(now())
   pd_status             String //Old dataType "enum('use','cancel')"
   business_id           Int
   point                 Int
@@ -416,16 +416,16 @@ model tbl_product {
 }
 
 model tbl_purchase {
-  purchase_id           Int
+  purchase_id           String  @id @default(auto()) @map("_id") @db.ObjectId
   supplier_name         String
   supplier_office       String
   supplier_phone        Int
   supplier_address      String
   supplier_taxId        String
   branch                String
-  createDate            timestamp
+  createDate            DateTime @default(now())
   createBy              Int
-  purchaseDate          timestamp
+  purchaseDate          DateTime @default(now())
   vat_status            Int
   tax_withheld          String
   price_include_vat     Boolean //Old dataType "enum('0','1')"
@@ -438,7 +438,7 @@ model tbl_purchase {
 }
 
 model tbl_purchase_item {
-  purchase_item_id      Int
+  purchase_item_id      String  @id @default(auto()) @map("_id") @db.ObjectId
   purchase_id           Int
   pd_name               String
   pd_id                 Int
@@ -448,7 +448,7 @@ model tbl_purchase_item {
 }
 
 model tbl_receipt {
-  receipt_id            Int
+  receipt_id            String  @id @default(auto()) @map("_id") @db.ObjectId
   purchase_id           Int
   supplier_name         String
   supplier_office       String
@@ -456,9 +456,9 @@ model tbl_receipt {
   supplier_taxId        String
   supplier_phone        Int
   branch                String
-  createDate            timestamp
+  createDate            DateTime @default(now())
   createBy              Int
-  receiptDate           timestamp
+  receiptDate           DateTime @default(now())
   vat_status            Int
   tax_withheld          String
   receipt_No            String
@@ -471,7 +471,7 @@ model tbl_receipt {
 }
 
 model tbl_receipt_item {
-  receipt_item_id       Int
+  receipt_item_id       String  @id @default(auto()) @map("_id") @db.ObjectId
   receipt_id            Int
   od_id                 Int
   pd_id                 Int
@@ -481,31 +481,31 @@ model tbl_receipt_item {
 }
 
 model tbl_reset_password {
-  id                    Int //Old dataType "bigint"
+  id                    String  @id @default(auto()) @map("_id") @db.ObjectId
   email                 String
   activation_id         String
   agent                 String
   client_ip             String
   isDeleted             IsDeleted @default(NO)
   createdBy             Int //Old dataType "bigint"
-  createdDtm            timestamp
+  createdDtm            DateTime @default(now())
   updatedBy             Int //Old dataType "bigint"
-  updatedDtm            timestamp
+  updatedDtm            DateTime @default(now())
 }
 
 model tbl_roles {
-  roleId                Int //Old dataType "tinyint"
+  roleId                String  @id @default(auto()) @map("_id") @db.ObjectId
   role                  String
 }
 
 model tbl_sales_package {
-  id                    Int
+  id                    String  @id @default(auto()) @map("_id") @db.ObjectId
   userId                Int
   package_id            Int
-  createDate            timestamp
-  updateDate            timestamp
-  startDate             timestamp
-  endDate               timestamp
+  createDate            DateTime @default(now())
+  updateDate            DateTime @default(now())
+  startDate             DateTime @default(now())
+  endDate               DateTime @default(now())
   status                Boolean //Old dataType "int"
   payment_type          String
   bill                  String
@@ -515,46 +515,46 @@ model tbl_sales_package {
 }
 
 model tbl_sellers {
-  seller_id             Int
+  seller_id             String  @id @default(auto()) @map("_id") @db.ObjectId
   seller_name           String
   seller_code           String
 }
 
 model tbl_seller_sales {
-  sale_id               Int
+  sale_id               String  @id @default(auto()) @map("_id") @db.ObjectId
   user_id               Int
   business_id           Int
-  createDate            timestamp
+  createDate            DateTime @default(now())
 }
 
 model tbl_seller_sales_detail {
-  sale_id               Int
+  sale_id               String  @id @default(auto()) @map("_id") @db.ObjectId
   pd_id                 Int
   pd_price              Int //Old dataType "float"
   quantity              Int
 }
 
 model tbl_shipping_type {
-  shipping_type_id      Int
+  shipping_type_id      String  @id @default(auto()) @map("_id") @db.ObjectId
   shipping_type_name    String
   shipping_type_cost    Int //Old dataType "float"
   business_id           Int
 }
 
 model tbl_shopping_cart {
-  business_id           Int
+  business_id           String  @id @default(auto()) @map("_id") @db.ObjectId
   status                Int
 }
 
 model tbl_stock_config {
-  business_id           Int
+  business_id           String  @id @default(auto()) @map("_id") @db.ObjectId
   min_qty               Int
 }
 
 model tbl_stock_log {
-  id                    Int
+  id                    String  @id @default(auto()) @map("_id") @db.ObjectId
   business_id           Int
-  createdDate           timestamp //Old dataType "timestamp"
+  createdDate           DateTime @default(now()) //Old dataType "DateTime @default(now())"
   stock_type            String
   pd_id                 Int
   pd_qty                Int
@@ -562,7 +562,7 @@ model tbl_stock_log {
 }
 
 model tbl_supplier {
-  supplier_id           Int
+  supplier_id           String  @id @default(auto()) @map("_id") @db.ObjectId
   supplier_name         String
   supplier_office       String
   supplier_address      String
@@ -571,7 +571,7 @@ model tbl_supplier {
 }
 
 model tbl_supplier_item {
-  supplier_item_id      Int
+  supplier_item_id      String  @id @default(auto()) @map("_id") @db.ObjectId
   item_name             String
   item_price            Int
   supplier_id           Int
@@ -579,11 +579,11 @@ model tbl_supplier_item {
 }
 
 model tbl_withholding {
-  withholding_id        Int
+  withholding_id        String  @id @default(auto()) @map("_id") @db.ObjectId
   withholding_no        String
   cus_id                Int
   withholding_type      String
-  date_taxdeductible    timestamp
+  date_taxdeductible    DateTime @default(now())
   payer                 Int
   payer_other           String
   tax_payer             String //Old dataType "enum('ภาษีหัก ณ ที่จ่าย','ภาษีถูกหัก ณ ที่จ่าย')"
@@ -598,14 +598,14 @@ model tbl_withholding {
   numApprove            Int
   note                  String
   createdBy             Int
-  createdDtm            timestamp
+  createdDtm            DateTime @default(now())
   business_id           Int
 }
 
 model tbl_withholding_item {
-  withholding_item_id         Int
-  department_type             Decimal
+  withholding_item_id         String  @id @default(auto()) @map("_id") @db.ObjectId
+  department_type             Float
   withholding_item_other      String
-  date_tax_paid               timestamp
+  date_tax_paid               DateTime @default(now())
   withholding_id              Int
 }
