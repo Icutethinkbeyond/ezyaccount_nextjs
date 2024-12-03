@@ -87,7 +87,7 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ data }) => {
       field: "repirePrice",
       headerName: "ยอดรวมสุทธิ",
       width: 150,
-      valueGetter: (value, row) => row.products,
+      valueGetter: (value, row) => row.summary?.totalAmountDue,
     },
     {
       field: "status",
