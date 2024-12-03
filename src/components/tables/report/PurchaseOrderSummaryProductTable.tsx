@@ -31,7 +31,7 @@ interface ProductTableProps {
   newDocumentName: string | null;
 }
 
-const QuotationsTable: React.FC<ProductTableProps> = ({ data }) => {
+const PurchaseOrderSummaryProductTable: React.FC<ProductTableProps> = ({ data }) => {
   const router = useRouter();
   const [rows, setRows] = useState<Quotation[]>([]);
   const [rowCount, setRowCount] = useState<number>(0);
@@ -89,7 +89,7 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ data }) => {
   };
 
   return (
-    <BaseCard title="Purchase Order Table">
+    <BaseCard title="Product&Detail Table">
       <DataGrid
         initialState={{ pagination: { paginationModel } }}
         pageSizeOptions={[5, 10, 20]}
@@ -107,4 +107,4 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ data }) => {
   );
 };
 
-export default QuotationsTable;
+export default PurchaseOrderSummaryProductTable;

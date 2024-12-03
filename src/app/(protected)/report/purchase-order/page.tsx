@@ -2,7 +2,7 @@
 import { Grid, Box, Stack, Pagination } from "@mui/material";
 import PageContainer from "@/components/container/PageContainer";
 //component
-import PurchaseOrderSummaryOrderTable from "@/components/tables/report/PurchaseOrderSummary-orderTable";
+import PurchaseOrderSummaryOrderTable from "@/components/tables/report/PurchaseOrderSummaryOrderTable";
 import { useDatabaseContext } from "@/contexts/dbContext";
 
 const purchaseorder = () => {

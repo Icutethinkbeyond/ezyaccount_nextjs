@@ -31,7 +31,7 @@ interface ProductTableProps {
   newDocumentName: string | null;
 }
 
-const QuotationsTable: React.FC<ProductTableProps> = ({ data }) => {
+const ProfitAndLossPreSummaryExpensesTable: React.FC<ProductTableProps> = ({ data }) => {
   const router = useRouter();
   const [rows, setRows] = useState<Quotation[]>([]);
   const [rowCount, setRowCount] = useState<number>(0);
@@ -53,14 +53,26 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ data }) => {
       valueGetter: (value, row) => row.headForm?.contactorName, // ใช้ valueGetter เเทน renderCell ในการเข้าถึงข้อมูลใน array โดยเข้าผ่าน parameter "row"
     },
     {
-      field: "Revenue from product sales",
-      headerName: "รายได้จากการขายสินค้า",
+      field: "Cost of goods sold",
+      headerName: "ต้นทุนขายสินค้า",
+      width: 150,
+      valueGetter: (value, row) => row.products,
+    },
+    {
+      field: "Service costs",
+      headerName: "ค่าใช้จ่ายในการบริการ",
+      width: 150,
+      valueGetter: (value, row) => row.products,
+    },
+    {
+      field: "General expenses",
+      headerName: "ค่าใช้จ่ายทั่วไป",
       width: 150,
       valueGetter: (value, row) => row.products,
     },
     {
       field: "total",
-      headerName: "รวมรายได้สุทธิ",
+      headerName: "รวมค่าใช้จ่ายสุทธิ",
       width: 150,
       valueGetter: (value, row) => row.status,
     },
@@ -83,7 +95,7 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ data }) => {
   };
 
   return (
-    <BaseCard title="Income Table">
+    <BaseCard title="Expenses Table">
       <DataGrid
         initialState={{ pagination: { paginationModel } }}
         pageSizeOptions={[5, 10, 20]}
@@ -101,4 +113,4 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ data }) => {
   );
 };
 
-export default QuotationsTable;
+export default ProfitAndLossPreSummaryExpensesTable;

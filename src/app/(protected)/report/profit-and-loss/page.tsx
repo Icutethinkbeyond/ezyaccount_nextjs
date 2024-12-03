@@ -2,7 +2,7 @@
 import { Grid, Box, Stack, Pagination } from "@mui/material";
 import PageContainer from "@/components/container/PageContainer";
 //component
-import ProfitAndLossPreSummaryIncomeTable from "@/components/tables/report/ProfitAndLossPreSummary-IncomeTable";
+import ProfitAndLossPreSummaryIncomeTable from "@/components/tables/report/ProfitAndLossPreSummaryIncomeTable";
 import { useDatabaseContext } from "@/contexts/dbContext";
 
 const profitandloss = () => {
