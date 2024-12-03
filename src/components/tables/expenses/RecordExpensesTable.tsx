@@ -7,7 +7,20 @@ import {
   GridPaginationModel,
   GridCellParams,
 } from "@mui/x-data-grid";
-import { Box, Grid, Grid2, IconButton } from "@mui/material";
+import { 
+  Box,
+  Button,
+  Divider,
+  FormControl,
+  Grid,
+  Grid2,
+  IconButton,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+  Typography,
+} from "@mui/material";
 import BaseCard from "@/components/shared/BaseCard";
 import ConfirmDelete from "@/components/shared/ConfirmDialogCustom";
 import { Quotation, useDatabaseContext } from "@/contexts/dbContext";
@@ -20,6 +33,7 @@ import {
   Email,
   ForwardToInbox,
   ManageSearch,
+  Add,
 } from "@mui/icons-material";
 import StatusChip from "@/components/shared/StatusChipCustom";
 import { formatNumber } from "@/utils/utils";
@@ -31,7 +45,7 @@ interface ProductTableProps {
   newDocumentName: string | null;
 }
 
-const QuotationsTable: React.FC<ProductTableProps> = ({ data }) => {
+const RecordExpensesTable: React.FC<ProductTableProps> = ({ data }) => {
   const router = useRouter();
   const [rows, setRows] = useState<Quotation[]>([]);
   const [rowCount, setRowCount] = useState<number>(0);
@@ -44,6 +58,11 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ data }) => {
   useEffect(() => {
     setRows(data);
   }, []);
+
+  const handleAddClick = () => {
+    console.log("Add button clicked!");
+    router.push("/expenses/purchase-order/new-record-expenses");
+  };
 
   const columns: GridColDef<Quotation>[] = [
     {
@@ -145,21 +164,126 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ data }) => {
 
   return (
     <BaseCard title="Record Expenses Table">
-      <DataGrid
-        initialState={{ pagination: { paginationModel } }}
-        pageSizeOptions={[5, 10, 20]}
-        checkboxSelection
-        sx={{ border: 0 }}
-        getRowId={(row) => row.keyId} // ระบุ keyId เป็นค่า id ของแต่ละ row
-        rows={rows}
-        columns={columns}
-        paginationMode="server"
-        rowCount={rowCount}
-        onPaginationModelChange={setPaginationModel}
-        loading={loading}
-      />
+      <>
+      <Grid2 container mb={1}>
+          <Grid2 size={6}>
+            <Box display="flex" alignItems="center" gap={2}>
+              <Typography variant="h3">บันทึกค่าใช้จ่าย</Typography>
+              <IconButton
+                color="primary"
+                onClick={handleAddClick}
+                sx={{
+                  backgroundColor: "#33CC99",
+                  color: "#fff",
+                  "&:hover": {
+                    backgroundColor: "#009933",
+                  },
+                  width: 22,
+                  height: 22,
+                }}
+              >
+                <Add />
+              </IconButton>
+            </Box>
+          </Grid2>
+          <Grid2 container size={6} justifyContent="flex-end">
+            <Button variant="contained" color="success" sx={{ height: "100%" }}>
+              Search
+            </Button>
+            <Button
+              variant="contained"
+              color="warning"
+              sx={{ ml: 1, height: "100%" }}
+            >
+              Clear All
+            </Button>
+          </Grid2>
+        </Grid2>
+        <Divider />
+        <Grid2 mt={3} mb={3}>
+          <Grid2
+            direction="row"
+            container
+            spacing={3}
+            sx={{ background: "#fff" }}
+          >
+            <Grid2 size={3}>
+              <TextField
+                label="เลขเอกสาร (optional)"
+                type="text"
+                fullWidth
+                size="small"
+              />
+            </Grid2>
+            <Grid2 size={3}>
+              <TextField
+                label="ชื่อลูกค้า (optional)"
+                type="text"
+                fullWidth
+                size="small"
+              />
+            </Grid2>
+
+            <Grid2 size={3}>
+              <TextField
+                label="ยอดรวมสุทธิ (optional)"
+                type="text"
+                fullWidth
+                size="small"
+              />
+            </Grid2>
+            <Grid2 size={3}>
+              <FormControl fullWidth size="small">
+                <InputLabel id="demo-simple-select-label">Status</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  // value={statusBorrow}
+                  label="Status"
+                >
+                  <MenuItem value={"all-status"}>All Status</MenuItem>
+                  <MenuItem value={"borrowed"}>Active</MenuItem>
+                  <MenuItem value={"returned"}>InActive</MenuItem>
+                  <MenuItem value={"damaged"}>Waiting</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid2>
+            {/* <Grid2 size={3}>
+              <Button
+                variant="contained"
+                color="success"
+                sx={{ width: "59%", height: "100%" }}
+              >
+                Search
+              </Button>
+              <Button
+                variant="contained"
+                color="warning"
+                sx={{ ml: 1, width: "37%", height: "100%" }}
+              >
+                Clear All
+              </Button>
+            </Grid2> */}
+          </Grid2>
+        </Grid2>
+      <Box p={3} border="1px solid #ccc" borderRadius="8px" mb={2}>
+          <DataGrid
+            initialState={{ pagination: { paginationModel } }}
+            pageSizeOptions={[5, 10, 20]}
+            checkboxSelection
+            sx={{ border: 0 }}
+            getRowId={(row) => row.keyId} // ระบุ keyId เป็นค่า id ของแต่ละ row
+            rows={rows}
+            columns={columns}
+            paginationMode="server"
+            rowCount={rowCount}
+            onPaginationModelChange={setPaginationModel}
+            loading={loading}
+          />
+        </Box>
+      </>
     </BaseCard>
   );
 };
 
-export default QuotationsTable;
+export default RecordExpensesTable;
