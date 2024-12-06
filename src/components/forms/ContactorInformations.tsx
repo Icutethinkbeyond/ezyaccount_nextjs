@@ -8,7 +8,9 @@ import BaseCard from "../shared/BaseCard";
 const ContactotInformationSchema = Yup.object({
   contactorName: Yup.string().required("ชื่อผู้ติดต่อจำเป็นต้องกรอก"),
   contactorTel: Yup.string().required("เบอร์โทรจำเป็นต้องกรอก"),
-  contactorEmail: Yup.string().email("อีเมล์ไม่ถูกต้อง").required("อีเมล์จำเป็นต้องกรอก"),
+  contactorEmail: Yup.string()
+    .email("อีเมล์ไม่ถูกต้อง")
+    .required("อีเมล์จำเป็นต้องกรอก"),
   contactorAddress: Yup.string().required("ที่อยู่จำเป็นต้องกรอก"),
 });
 
@@ -51,7 +53,9 @@ const ContactotInformation: React.FC = () => {
                     size="small"
                     fullWidth
                     required
-                    error={touched.contactorName && Boolean(errors.contactorName)}
+                    error={
+                      touched.contactorName && Boolean(errors.contactorName)
+                    }
                     helperText={<ErrorMessage name="contactorName" />}
                   />
                 </Grid2>
@@ -78,7 +82,9 @@ const ContactotInformation: React.FC = () => {
                     type="email"
                     fullWidth
                     required
-                    error={touched.contactorEmail && Boolean(errors.contactorEmail)}
+                    error={
+                      touched.contactorEmail && Boolean(errors.contactorEmail)
+                    }
                     helperText={<ErrorMessage name="contactorEmail" />}
                   />
                 </Grid2>
@@ -93,7 +99,10 @@ const ContactotInformation: React.FC = () => {
                     required
                     multiline
                     rows={3}
-                    error={touched.contactorAddress && Boolean(errors.contactorAddress)}
+                    error={
+                      touched.contactorAddress &&
+                      Boolean(errors.contactorAddress)
+                    }
                     helperText={<ErrorMessage name="contactorAddress" />}
                   />
                 </Grid2>

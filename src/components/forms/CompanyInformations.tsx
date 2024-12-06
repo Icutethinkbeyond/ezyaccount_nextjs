@@ -126,7 +126,9 @@ const CompanyInformation: React.FC = () => {
                     required
                     multiline
                     rows={3}
-                    error={touched.companyAddress && Boolean(errors.companyAddress)}
+                    error={
+                      touched.companyAddress && Boolean(errors.companyAddress)
+                    }
                     helperText={<ErrorMessage name="companyAddress" />}
                   />
                 </Grid2>
