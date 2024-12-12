@@ -26,6 +26,7 @@
     "bson": "^6.10.0",
     "eslint": "8.46.0",
     "eslint-config-next": "^14.2.7",
+    "exceljs": "^4.4.0",
     "file-saver": "^2.0.5",
     "formik": "^2.4.6",
     "formik-mui": "^5.0.0-alpha.1",
