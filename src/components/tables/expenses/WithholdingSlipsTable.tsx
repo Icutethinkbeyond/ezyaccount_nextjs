@@ -7,7 +7,7 @@ import {
   GridPaginationModel,
   GridCellParams,
 } from "@mui/x-data-grid";
-import { 
+import {
   Box,
   Button,
   Divider,
@@ -20,6 +20,8 @@ import {
   Select,
   TextField,
   Typography,
+  Card,
+  CardContent,
 } from "@mui/material";
 import BaseCard from "@/components/shared/BaseCard";
 import ConfirmDelete from "@/components/shared/ConfirmDialogCustom";
@@ -71,9 +73,9 @@ const WithholdingSlipsTable: React.FC<ProductTableProps> = ({ data }) => {
       width: 150,
       valueGetter: (value, row) => row.keyId,
     },
-    { 
+    {
       field: "dateCreate",
-      headerName: "วันที่ออกเอกสาร", 
+      headerName: "วันที่ออกเอกสาร",
       width: 150,
       valueGetter: (value, row) => row.headForm?.dateCreate,
     },
@@ -146,6 +148,19 @@ const WithholdingSlipsTable: React.FC<ProductTableProps> = ({ data }) => {
     },
   ];
 
+  const approvedTotal = rows
+    .filter((row) => row.status === "approved")
+    .reduce((sum, row) => sum + (row.summary?.totalAmountDue || 0), 0);
+
+  const notApprovedTotal = rows
+    .filter((row) => row.status !== "approved")
+    .reduce((sum, row) => sum + (row.summary?.totalAmountDue || 0), 0);
+
+  const allTotal = rows.reduce(
+    (sum, row) => sum + (row.summary?.totalAmountDue || 0),
+    0
+  );
+
   const handleDeleteItem = () => {
     console.log("Item deleted");
   };
@@ -165,7 +180,92 @@ const WithholdingSlipsTable: React.FC<ProductTableProps> = ({ data }) => {
   return (
     <BaseCard title="Withholding Slips Table">
       <>
-      <Grid2 container mb={1}>
+        <Box display="flex" justifyContent="flex-end" mb={3}>
+          <Card sx={{ p: 0.5, boxShadow: 4, mb: 2, maxWidth: "350px" }}>
+            {" "}
+            <CardContent>
+              {/* Header: ราคารวมอนุมัติแล้ว */}
+              <Box display="flex" justifyContent="space-between" mb={1}>
+                <Box>
+                  <Typography
+                    variant="h4"
+                    sx={{
+                      fontWeight: "bold",
+                      color: "green",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    ราคารวมอนุมัติแล้ว
+                  </Typography>
+                  <Typography
+                    variant="h2"
+                    sx={{
+                      fontWeight: "bold",
+                      color: "green",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {approvedTotal.toLocaleString("th-TH", {
+                      style: "currency",
+                      currency: "THB",
+                    })}
+                  </Typography>
+                </Box>
+
+                <Box
+                  display="flex"
+                  flexDirection="column"
+                  alignItems="flex-end"
+                >
+                  {/* ราคารวมไม่อนุมัติ */}
+                  <Typography
+                    variant="body1"
+                    color="error"
+                    sx={{
+                      fontWeight: "bold",
+                      whiteSpace: "nowrap",
+                      mb: 0.5,
+                      ml: 3,
+                    }}
+                  >
+                    ราคารวมไม่อนุมัติ
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    color="error"
+                    sx={{ fontWeight: "bold", whiteSpace: "nowrap" }}
+                  >
+                    {notApprovedTotal.toLocaleString("th-TH", {
+                      style: "currency",
+                      currency: "THB",
+                    })}
+                  </Typography>
+
+                  {/* ราคารวมรออนุมัติ */}
+                  <Typography
+                    variant="body1"
+                    color="textPrimary"
+                    sx={{ fontWeight: "bold", whiteSpace: "nowrap", mt: 1 }}
+                  >
+                    ราคารวมรออนุมัติ
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    color="textPrimary"
+                    sx={{ fontWeight: "bold", whiteSpace: "nowrap" }}
+                  >
+                    {allTotal.toLocaleString("th-TH", {
+                      style: "currency",
+                      currency: "THB",
+                    })}
+                  </Typography>
+                </Box>
+              </Box>
+            </CardContent>
+          </Card>
+        </Box>
+
+        <Grid2 container mb={1}>
           <Grid2 size={6}>
             <Box display="flex" alignItems="center" gap={2}>
               <Typography variant="h3">ใบหักภาษี ณ ที่จ่าย</Typography>
@@ -266,7 +366,7 @@ const WithholdingSlipsTable: React.FC<ProductTableProps> = ({ data }) => {
             </Grid2> */}
           </Grid2>
         </Grid2>
-      <Box p={3} border="1px solid #ccc" borderRadius="8px" mb={2}>
+        <Box p={3} border="1px solid #ccc" borderRadius="8px" mb={2}>
           <DataGrid
             initialState={{ pagination: { paginationModel } }}
             pageSizeOptions={[5, 10, 20]}

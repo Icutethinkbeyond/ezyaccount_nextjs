@@ -174,7 +174,7 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ data }) => {
     <BaseCard title="Billings Table">
       <>
       <Box display="flex" justifyContent="flex-end" mb={3}>
-          <Card sx={{ p: 0.5, boxShadow: 3, mb: 2, maxWidth: "350px" }}>
+          <Card sx={{ p: 0.5, boxShadow: 4, mb: 2, maxWidth: "350px" }}>
             {" "}
             <CardContent>
               {/* Header: ราคารวมอนุมัติแล้ว */}
@@ -233,13 +233,13 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ data }) => {
                     })}
                   </Typography>
 
-                  {/* ราคารวมทั้งหมด */}
+                  {/* ราคารวมรออนุมัติ */}
                   <Typography
                     variant="body1"
                     color="textPrimary"
                     sx={{ fontWeight: "bold", whiteSpace: "nowrap", mt: 1 }}
                   >
-                    ราคารวมทั้งหมด
+                    ราคารวมรออนุมัติ
                   </Typography>
                   <Typography
                     variant="body1"
