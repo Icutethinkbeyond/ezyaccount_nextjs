@@ -33,7 +33,7 @@ export const quotationClean = {
 };
 // กำหนดประเภทของ Context
 interface DatabaseContextProps {
-  qoutationState: Quotation[];
+  quotationState: Quotation[];
   editQuotation: Quotation;
   setEditQuotation: React.Dispatch<React.SetStateAction<Quotation>>;
   addQuotation: (qoutation: Quotation) => void;
@@ -47,7 +47,7 @@ const DatabaseContext = createContext<DatabaseContextProps | undefined>(
 );
 
 export const DatabaseProvider = ({ children }: { children: ReactNode }) => {
-  const [qoutationState, setQuotation] = useState<Quotation[]>([
+  const [quotationState, setQuotation] = useState<Quotation[]>([
     {
       keyId: 8,
       ownerId: "1",
@@ -461,7 +461,7 @@ export const DatabaseProvider = ({ children }: { children: ReactNode }) => {
       value={{
         editQuotation,
         setEditQuotation,
-        qoutationState,
+        quotationState,
         addQuotation,
         removeQuotation,
         updateQuotation,
