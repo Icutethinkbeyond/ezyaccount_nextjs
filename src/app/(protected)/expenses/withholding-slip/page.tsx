@@ -19,14 +19,14 @@ const data = [
 
 const withholdingslips = () => {
 
-  const { qoutationState } = useDatabaseContext();
+  const { quotationState } = useDatabaseContext();
 
   return (
     <PageContainer title="Withholding Slips" description="this is Withholding Slips">
       <Box mt={3}>
         <Grid container spacing={3}>
           <Grid item xs={12} lg={12}>
-            <WithholdingSlipsTable data={qoutationState} tableName="Withholding Slips Table" newDocumentHref="/income/quotation/new-quotation" newDocumentName="New Quotation"/>
+            <WithholdingSlipsTable data={quotationState} tableName="Withholding Slips Table" newDocumentHref="/income/quotation/new-quotation" newDocumentName="New Quotation"/>
           </Grid>
         </Grid>
       </Box>

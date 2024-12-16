@@ -7,14 +7,14 @@ import { useDatabaseContext } from "@/contexts/dbContext";
 
 const expensereport = () => {
 
-  const { qoutationState } = useDatabaseContext();
+  const { quotationState } = useDatabaseContext();
 
   return (
     <PageContainer title="ExpensesPreSummary" description="this is ExpensesPreSummary">
       <Box mt={3}>
         <Grid container spacing={3}>
           <Grid item xs={12} lg={12}>
-            <ExpensesPreSummaryTable data={qoutationState} tableName="ExpensesPreSummary Table" newDocumentHref="/income/quotation/new-quotation" newDocumentName="New Quotation"/>
+            <ExpensesPreSummaryTable data={quotationState} tableName="ExpensesPreSummary Table" newDocumentHref="/income/quotation/new-quotation" newDocumentName="New Quotation"/>
           </Grid>
         </Grid>
       </Box>

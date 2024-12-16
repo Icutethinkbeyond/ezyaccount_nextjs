@@ -20,14 +20,14 @@ const data = [
 
 const invoice = () => {
 
-  const { qoutationState } = useDatabaseContext();
+  const { quotationState } = useDatabaseContext();
 
   return (
     <PageContainer title="Invoices" description="this is Invoices">
       <Box mt={3}>
         <Grid container spacing={3}>
           <Grid item xs={12} lg={12}>
-            <InvoicesTable data={qoutationState} tableName="Invoices Table" newDocumentHref="/income/quotation/new-quotation" newDocumentName="New Quotation"/>
+            <InvoicesTable data={quotationState} tableName="Invoices Table" newDocumentHref="/income/quotation/new-quotation" newDocumentName="New Quotation"/>
           </Grid>
         </Grid>
       </Box>
