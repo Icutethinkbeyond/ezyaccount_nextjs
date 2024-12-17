@@ -19,14 +19,14 @@ const data = [
 
 const categorylists = () => {
 
-  const { qoutationState } = useDatabaseContext();
+  const { quotationState } = useDatabaseContext();
 
   return (
     <PageContainer title="Category List" description="this is Category List">
       <Box mt={3}>
         <Grid container spacing={3}>
           <Grid item xs={12} lg={12}>
-            <CategoryListTable data={qoutationState} tableName="Category List Table" newDocumentHref="/income/quotation/new-quotation" newDocumentName="New Quotation"/>
+            <CategoryListTable data={quotationState} tableName="Category List Table" newDocumentHref="/income/quotation/new-quotation" newDocumentName="New Quotation"/>
           </Grid>
         </Grid>
       </Box>

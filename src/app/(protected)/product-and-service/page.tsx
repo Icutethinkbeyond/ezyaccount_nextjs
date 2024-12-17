@@ -19,14 +19,14 @@ const data = [
 
 const productandservice = () => {
 
-  const { qoutationState } = useDatabaseContext();
+  const { quotationState } = useDatabaseContext();
 
   return (
     <PageContainer title="ProductAndService List" description="this is ProductAndService List">
       <Box mt={3}>
         <Grid container spacing={3}>
           <Grid item xs={12} lg={12}>
-            <ProductAndServiceListTable data={qoutationState} tableName="ProductAndService List Table" newDocumentHref="/income/quotation/new-quotation" newDocumentName="New Quotation"/>
+            <ProductAndServiceListTable data={quotationState} tableName="ProductAndService List Table" newDocumentHref="/income/quotation/new-quotation" newDocumentName="New Quotation"/>
           </Grid>
         </Grid>
       </Box>

@@ -7,14 +7,14 @@ import { useDatabaseContext } from "@/contexts/dbContext";
 
 const purchaseorder = () => {
 
-  const { qoutationState } = useDatabaseContext();
+  const { quotationState } = useDatabaseContext();
 
   return (
     <PageContainer title="PurchaseOrder" description="this is PurchaseOrder">
       <Box mt={3}>
         <Grid container spacing={3}>
           <Grid item xs={12} lg={12}>
-            <PurchaseOrderSummaryOrderTable data={qoutationState} tableName="PurchaseOrder Table" newDocumentHref="/income/quotation/new-quotation" newDocumentName="New Quotation"/>
+            <PurchaseOrderSummaryOrderTable data={quotationState} tableName="PurchaseOrder Table" newDocumentHref="/income/quotation/new-quotation" newDocumentName="New Quotation"/>
           </Grid>
         </Grid>
       </Box>

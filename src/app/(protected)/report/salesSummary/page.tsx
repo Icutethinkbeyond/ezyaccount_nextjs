@@ -11,7 +11,7 @@ import { useDatabaseContext } from "@/contexts/dbContext";
 
 const salesSummary = () => {
 
-  const { qoutationState } = useDatabaseContext();
+  const { quotationState } = useDatabaseContext();
   const [value, setValue] = React.useState('1');
 
   const handleChange = (event: any, newValue: React.SetStateAction<string>) => {
@@ -31,14 +31,14 @@ const salesSummary = () => {
           <TabPanel value="1">
             <Grid container spacing={3}>
               <Grid item xs={12} lg={12}>
-                <SalesSummaryProductTable data={qoutationState} tableName="SalesSummaryProduct Table" newDocumentHref="/income/quotation/new-quotation" newDocumentName="New Quotation"/>
+                <SalesSummaryProductTable data={quotationState} tableName="SalesSummaryProduct Table" newDocumentHref="/income/quotation/new-quotation" newDocumentName="New Quotation"/>
               </Grid>
             </Grid>
           </TabPanel>
           <TabPanel value="2">
             <Grid container spacing={3}>
               <Grid item xs={12} lg={12}>
-                <SalesSummaryCustomerTable data={qoutationState} tableName="SalesSummaryCustomer Table" newDocumentHref="/income/quotation/new-quotation" newDocumentName="New Quotation"/>
+                <SalesSummaryCustomerTable data={quotationState} tableName="SalesSummaryCustomer Table" newDocumentHref="/income/quotation/new-quotation" newDocumentName="New Quotation"/>
               </Grid>
             </Grid>
           </TabPanel>

@@ -19,14 +19,14 @@ const data = [
 
 const Dashboard = () => {
 
-  const { qoutationState } = useDatabaseContext();
+  const { quotationState } = useDatabaseContext();
 
   return (
     <PageContainer title="Dashboard" description="this is Dashboard">
       <Box mt={3}>
         <Grid2 container spacing={3}>
           <Grid2 size={12}>
-            <QuotationsTable data={qoutationState} tableName="Quotation Table" newDocumentHref="/income/quotation/new-quotation" newDocumentName="New Quotation"/>
+            <QuotationsTable data={quotationState} tableName="Quotation Table" newDocumentHref="/income/quotation/new-quotation" newDocumentName="New Quotation"/>
           </Grid2>
         </Grid2>
       </Box>
