@@ -2,14 +2,14 @@ import React from "react";
 import { Card, CardContent, Typography, Stack, Box } from "@mui/material";
 
 type Props = {
-  title?: string;
+  title?: string | JSX.Element;
   subtitle?: string;
   action?: JSX.Element | any;
   footer?: JSX.Element;
   cardheading?: string | JSX.Element;
   headtitle?: string | JSX.Element;
   headsubtitle?: string | JSX.Element;
-  children?: JSX.Element;
+  children?: JSX.Element | JSX.Element;
   middlecontent?: string | JSX.Element;
 };
 
@@ -54,7 +54,13 @@ const DashboardCard = ({
                   ""
                 )}
               </Box>
-              {action}
+              {action && (
+                <Box
+                  sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}
+                >
+                  {action}
+                </Box>
+              )}
             </Stack>
           ) : null}
 

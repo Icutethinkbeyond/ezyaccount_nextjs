@@ -1,22 +1,31 @@
 "use client";
-import { Grid, Box, Grid2, Typography } from "@mui/material";
+import { Grid, Box, IconButton, Grid2, Typography } from "@mui/material";
+import { Print, GetApp, Message } from "@mui/icons-material";
 import PageContainer from "@/components/container/PageContainer";
 
 // components
-import HeaderForm from "@/components/forms/income/headerForm";
-import DashboardCard from "@/components/shared/DashboardCard";
 import Breadcrumb from "@/components/shared/BreadcrumbCustom";
+import DashboardCard from "@/components/shared/DashboardCard";
 import CompanyInformation from "@/components/forms/CompanyInformations";
-import NewProductItem from "@/components/forms/income/newProductItem";
-import ProductsServicesList from "@/components/forms/income/productsServicesListForm";
-import FooterForm from "@/components/forms/income/footerForm";
 import ContactotInformation from "@/components/forms/ContactorInformations";
-import CalculateItems from "@/components/forms/CalculateItems";
-import DocumentFooter from "@/components/forms/DocumentFooter";
 import NewItems from "@/components/forms/NewItems";
 import ItemsTable from "@/components/forms/ItemsTable";
+import DocumentFooter from "@/components/forms/DocumentFooter";
+import CalculateItems from "@/components/forms/CalculateItems";
 
 const NewInvoice = () => {
+  const handlePrint = () => {
+    console.log("Print clicked");
+  };
+
+  const handleDownload = () => {
+    console.log("Download clicked");
+  };
+
+  const handleMessage = () => {
+    console.log("Message clicked");
+  };
+
   return (
     <PageContainer>
       <Breadcrumb
@@ -27,7 +36,31 @@ const NewInvoice = () => {
           { name: "Add Maintenance Request" },
         ]}
       />
-      <DashboardCard title="สร้างใบเสร็จ/ใบกำกับภาษี">
+      <DashboardCard
+        title={<Typography variant="h2">สร้างใบเสร็จ/ใบกำกับภาษี</Typography>}
+        action={
+          <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
+            <IconButton
+              onClick={handlePrint}
+              sx={{ color: "primary.main", fontSize: 28 }}
+            >
+              <Print />
+            </IconButton>
+            <IconButton
+              onClick={handleMessage}
+              sx={{ color: "info.main", fontSize: 28 }}
+            >
+              <Message />
+            </IconButton>
+            <IconButton
+              onClick={handleDownload}
+              sx={{ color: "success.main", fontSize: 28 }}
+            >
+              <GetApp />
+            </IconButton>
+          </Box>
+        }
+      >
         <Grid2 container spacing={3} sx={{ p: 3 }}>
           <Grid2 size={6}>
             <CompanyInformation />
@@ -50,22 +83,6 @@ const NewInvoice = () => {
             </Grid2>
           </Grid2>
         </Grid2>
-        {/* <Box mt={3}>
-          <Grid container spacing={3}>
-            <Grid item xs={12} lg={12}>
-              <HeaderForm />
-            </Grid>
-            <Grid item xs={12} lg={12}>
-              <NewProductItem isEdit={false} />
-            </Grid>
-            <Grid item xs={12} lg={12}>
-              <ProductsServicesList />
-            </Grid>
-            <Grid item xs={12} lg={12}>
-              <FooterForm isEdit={false}/>
-            </Grid>
-          </Grid>
-        </Box> */}
       </DashboardCard>
     </PageContainer>
   );
