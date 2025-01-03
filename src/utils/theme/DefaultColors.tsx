@@ -7,7 +7,7 @@ export const dm = DM_Sans({
   weight: ["400", "500", "700"],
   subsets: ["latin"],
   display: "swap",
-  fallback: ["Helvetica", "Arial", "sans-serif"],
+  fallback: ["Propmt", "sans-serif"],
 });
 
 const baselightTheme = createTheme({
