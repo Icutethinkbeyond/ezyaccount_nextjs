@@ -339,11 +339,11 @@ const NewQuotation = () => {
   return (
     <PageContainer>
       <Breadcrumb
-        title="Add Maintenance Requests"
+        title="เพิ่มใบเสนอราคา"
         breadcrumbs={[
-          { name: "Home", href: "/dashboard" },
-          { name: "Maintenance Requests", href: "/maintenance-request" },
-          { name: "Add Maintenance Request" },
+          { name: "หน้าหลัก", href: "/dashboard" },
+          { name: "รายรับ", href: "/maintenance-request" },
+          { name: "ใบเสนอราคา" },
         ]}
       />
 
