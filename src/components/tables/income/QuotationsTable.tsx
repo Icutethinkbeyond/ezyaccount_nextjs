@@ -40,6 +40,7 @@ import {
 import StatusChip from "@/components/shared/StatusChipCustom";
 import { formatNumber } from "@/utils/utils";
 
+
 interface ProductTableProps {
   data: Quotation[];
   tableName: string | null;
@@ -257,6 +258,21 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ data }) => {
             </CardContent>
           </Card>
         </Box>
+
+        {/* Icon ดาวน์โหลด*/}
+
+        <Box display="flex" justifyContent="flex-end" mb={2}>
+          <Button
+            variant="contained"
+            color="info"
+            startIcon={<CloudDownload />}
+            onClick={() => console.log("ดาวน์โหลดข้อมูล")}
+          >
+            ดาวน์โหลดรายการ
+          </Button>
+        </Box>
+
+        {/*  ใบเสนอราคา*/}
 
         <Grid2 container mb={1}>
           <Grid2 size={6}>
