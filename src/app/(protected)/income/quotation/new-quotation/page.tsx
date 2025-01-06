@@ -40,7 +40,13 @@ const NewQuotation = () => {
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
-      link.setAttribute("download", "modified-template.xlsx");
+      // ============== For Excel File Download ==============
+      // link.setAttribute("download", "modified-template.xlsx");
+      // ============== For Excel File Download ==============
+
+      // ============== For PDF File Download ==============
+      link.setAttribute('download', 'example.pdf');
+      // ============== For Excel File Download ==============
       document.body.appendChild(link);
       link.click();
       link.parentNode?.removeChild(link);
