@@ -4,7 +4,11 @@ import { PrismaClient } from '@prisma/client';
 import ExcelJS from 'exceljs';
 import fs from 'fs';
 import path from 'path';
-// import { Category } from '@/interfaces/Category_Type';
+import { exec as execCallback } from 'child_process';
+import { promisify } from 'util';
+
+// แปลง exec ให้รองรับ Promises
+const exec = promisify(execCallback);
 
 const prisma = new PrismaClient();
 
@@ -12,6 +16,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
     try {
         // Path to your Excel template
         const templatePath = path.join(process.cwd(), 'public', 'templates', 'quotation-template-ezy.xlsx');
+        const tempExcelPath = path.join(process.cwd(), 'public', 'temp', 'excels', 'temp.xlsx');
+        const tempPdfPath = path.join(process.cwd(), 'public', 'temp', 'pdfs', 'temp.pdf');
 
         if (!fs.existsSync(templatePath)) {
             throw new Error(`Template file not found at ${templatePath}`);
@@ -26,25 +32,60 @@ export async function POST(req: NextRequest, res: NextResponse) {
         const worksheet = workbook.getWorksheet("QUOTE");
 
         if (!worksheet) {
+            console.log('WorkSheet NotFound')
             return new NextResponse(JSON.stringify({ error: 'WorkSheet NotFound' }), { status: 404 });
         }
 
         // Example: Write data into specific cells
-        worksheet.getCell('A1').value = 'ชื่อบริษัท';
-        worksheet.getCell('B1').value = 'ชื่อลูกค้า';
-        worksheet.getCell('A2').value = 'บริษัท ABC';
-        worksheet.getCell('B2').value = 'คุณสมชาย';
+        // worksheet.getCell('A1').value = 'ชื่อบริษัท';
+        // worksheet.getCell('B1').value = 'ชื่อลูกค้า';
+        // worksheet.getCell('A2').value = 'บริษัท ABC';
+        // worksheet.getCell('B2').value = 'คุณสมชาย';
 
+        // ======== For Download Excel ========
+        await workbook.xlsx.writeFile(tempExcelPath);
+
+        try {
+
+            //Convert Excel To PDF
+            // const { stdout, stderr } = await exec(`soffice --headless --convert-to pdf ${tempExcelPath} --outdir ${path.dirname(tempPdfPath)}`);
+            await exec(`soffice --headless --convert-to pdf ${tempExcelPath} --outdir ${path.dirname(tempPdfPath)}`);
+            // console.log('Output:', stdout);
+            // console.error('Error:', stderr);
+            // ตรวจสอบว่าไฟล์มีอยู่
+            if (!fs.existsSync(tempPdfPath)) {
+                console.log('File not found')
+                return new NextResponse(JSON.stringify({ error: 'File not found' }), { status: 500 });
+            }
+
+            const fileBuffer = fs.readFileSync(tempPdfPath);
+
+            // Remove Temp Files
+            fs.unlinkSync(tempExcelPath);
+            fs.unlinkSync(tempPdfPath);
+    
+            return new Response(fileBuffer, {
+                headers: {
+                    'Content-Type': 'application/pdf',
+                    'Content-Disposition': 'attachment; filename=example.pdf',
+                },
+            });
+
+        } catch (error) {
+            console.error(`Error: ${error}`);
+            return new NextResponse(JSON.stringify({ error: 'Failed to convert file' }), { status: 500 });
+        }
+
+        // ======== For Download Excel ========
         // Create a buffer of the modified Excel file
-        const buffer = await workbook.xlsx.writeBuffer();
-
+        // const buffer = await workbook.xlsx.writeBuffer();
         // Set headers for download
-        return new Response(buffer, {
-            headers: {
-                'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                'Content-Disposition': 'attachment; filename=example.xlsx',
-            },
-        });
+        // return new Response(buffer, {
+        //     headers: {
+        //         'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        //         'Content-Disposition': 'attachment; filename=example.xlsx',
+        //     },
+        // });
 
     } catch (error) {
         console.error('Error fetching categories:', error);
