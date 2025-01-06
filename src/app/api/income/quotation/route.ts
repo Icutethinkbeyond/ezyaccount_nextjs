@@ -30,10 +30,81 @@ export async function POST(req: NextRequest, res: NextResponse) {
         }
 
         // Example: Write data into specific cells
-        worksheet.getCell('A1').value = 'ชื่อบริษัท';
-        worksheet.getCell('B1').value = 'ชื่อลูกค้า';
-        worksheet.getCell('A2').value = 'บริษัท ABC';
-        worksheet.getCell('B2').value = 'คุณสมชาย';
+        //เลขเอกสารหรือเลขอ้างอิง
+        worksheet.getCell("I5").value = "#1234567";
+        // วันปัจจุบัน
+        let currentDate = new Date();
+        worksheet.getCell("B2").value = currentDate;
+        // เพิ่ม 30 วัน
+        let futureDate = new Date(currentDate);
+        futureDate.setDate(currentDate.getDate() + 30);
+        worksheet.getCell("D2").value = futureDate;
+        worksheet.getCell("D2").alignment = { horizontal: "left" };
+        // เพิ่มข้อมูลบริษัท
+        worksheet.getCell("A3").value = "[ชื่อบริษัท]";
+        worksheet.getCell("A4").value = "[ที่อยู่]";
+        worksheet.getCell("A5").value = "[เบอร์โทร]";
+        worksheet.getCell("A6").value = "[เลขที่เสียภาษี]";
+        worksheet.getCell("A7").value = "[E-mail]";
+
+        // เพิ่มข้อมูลลูกค้า
+        worksheet.getCell("A9").value = "ลูกค้า";
+        worksheet.getCell("A10").value = "[ที่อยู่]";
+        worksheet.getCell("A11").value = "[เบอร์โทร,e-mail]";
+
+        // เพิ่มข้อมูลสินค้า
+        // ตัวอย่างข้อมูล JSON
+        const jsonData = [
+            {
+            product: "Service Fee 1",
+            qty: 1,
+            price: 120.0,
+            discount: 0,
+            total: 120.0,
+            },
+            {
+            product: "Service Fee 6",
+            qty: 1,
+            price: 30.0,
+            discount: 0,
+            total: 30.0,
+            },
+            {
+            product: "Service Fee 11",
+            qty: 2,
+            price: 50.0,
+            discount: 0,
+            total: 50.0,
+            },
+            {
+            product: "Service Fee 16",
+            qty: 3,
+            price: 200.0,
+            discount: 0,
+            total: 200.0,
+            },
+        ];
+        // ใช้ลูปเพื่อใส่ข้อมูลจาก JSON ไปยังคอลัมน์ A, E, F, G, H (แถว 15 ถึง 30)
+        let rowIndex = 15; // เริ่มต้นจากแถวที่ 15
+        jsonData.forEach((data, index) => {
+            if (rowIndex + index <= 30) {
+                // ตรวจสอบว่าแถวยังไม่เกินแถว 30
+                worksheet.getCell(`A${rowIndex + index}`).value = data.product; // คอลัมน์ A
+                worksheet.getCell(`E${rowIndex + index}`).value = data.qty; // คอลัมน์ E
+                worksheet.getCell(`E${rowIndex + index}`).alignment = {
+                vertical: "middle",
+                horizontal: "center",
+                };
+                worksheet.getCell(`F${rowIndex + index}`).value = data.discount; // คอลัมน์ F
+                worksheet.getCell(`F${rowIndex + index}`).alignment = {
+                vertical: "middle",
+                horizontal: "center",
+                };
+                worksheet.getCell(`G${rowIndex + index}`).value = data.price; // คอลัมน์ G
+                worksheet.getCell(`H${rowIndex + index}`).value = data.total; // คอลัมน์ H
+            }
+        });
+        worksheet.getCell("A36").value = "ใส่ข้อมูลหมายตามสมควรในเอกสารนี้";
 
         // Create a buffer of the modified Excel file
         const buffer = await workbook.xlsx.writeBuffer();
