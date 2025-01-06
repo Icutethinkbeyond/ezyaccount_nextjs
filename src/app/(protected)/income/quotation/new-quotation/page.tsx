@@ -16,8 +16,7 @@ import ItemsTable from "@/components/forms/ItemsTable";
 import DocumentFooter from "@/components/forms/DocumentFooter";
 import CalculateItems from "@/components/forms/CalculateItems";
 import { $Enums } from "@prisma/client";
-
-const path = require('path');
+import path from 'path';
 
 const NewQuotation = () => {
   const handlePrint = () => {
@@ -26,6 +25,36 @@ const NewQuotation = () => {
 
   const handleMessage = () => {
     console.log("Message clicked");
+  };
+
+  const readAndWriteExcel = async() => {
+    // สร้าง workbook และอ่านไฟล์
+    const workbook = new ExcelJS.Workbook();
+    const filePath = path.join(process.cwd(), 'public', 'templete', 'quotation-template-ezy.xlxs');
+    await workbook.xlsx.readFile(filePath); // ชื่อไฟล์ที่ต้องการอ่าน
+    
+
+    // เลือก worksheet ที่ต้องการ
+    const worksheet = workbook.getWorksheet(1); // เลือก sheet แรก
+
+    // อ่านค่าจาก cell
+    // const cellValue = worksheet.getCell('A1').value;
+    // console.log(`ค่าที่อ่านได้จาก A1: ${cellValue}`);
+
+    // แก้ไขหรือเขียนค่าลงใน cell
+    if(worksheet === undefined)
+    {
+      console.log('undefined');
+      return
+    }
+    worksheet.getCell('B2').value = `อัพเดต:`;
+
+    // เพิ่มแถวใหม่
+    // worksheet.addRow(['ข้อมูลใหม่', '1234', 'ตัวอย่าง']);
+
+    // เขียนกลับไปยังไฟล์เดิมหรือไฟล์ใหม่
+    await workbook.xlsx.writeFile('quotation-template-ezy.xlsx'); // ไฟล์ที่เขียนออก
+    console.log('เขียนข้อมูลสำเร็จไปยัง output.xlsx');
   };
 
   const handleDownload = async () => {
@@ -365,7 +394,7 @@ const NewQuotation = () => {
               <Message />
             </IconButton>
             <IconButton
-              onClick={handleDownload}
+              onClick={readAndWriteExcel}
               sx={{ color: "success.main", fontSize: 28 }}
             >
               <GetApp />
