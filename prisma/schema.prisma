@@ -25,7 +25,6 @@ model User {
 
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
-  BankAccount BankAccount?
 
   @@index([userEmail, username])
 }
@@ -65,7 +64,6 @@ model CompanyProfile {
 
   createdAt        DateTime @default(now()) // วันที่สร้าง
   updatedAt        DateTime @updatedAt // วันที่อัปเดตล่าสุด
-  addressAddressId String?  @db.ObjectId
 }
 
 model Customer {
@@ -104,13 +102,13 @@ model Account {
 }
 
 model ResetToken {
-  id     String @id @default(auto()) @map("_id") @db.ObjectId
-  token  String @unique
-  
+  id      String   @id @default(auto()) @map("_id") @db.ObjectId
+  token   String   @unique
+  expires DateTime
+
   userId String @db.ObjectId
   user   User   @relation(fields: [userId], references: [userId])
 
-  expires   DateTime
   createdAt DateTime @default(now())
 }
 
@@ -156,13 +154,13 @@ model BankAccount {
   bankAccountNo     String
   bankAccountName   String
   bankAccountBranch String?
-  user              User    @relation(fields: [userId], references: [userId])
-  userId            String  @unique @db.ObjectId
+
+  CompanyProfile          CompanyProfile? @relation(fields: [companyProfileCompanyId], references: [companyId])
+  companyProfileCompanyId String?         @db.ObjectId
 
   createdAt               DateTime        @default(now())
   updatedAt               DateTime        @updatedAt
-  CompanyProfile          CompanyProfile? @relation(fields: [companyProfileCompanyId], references: [companyId])
-  companyProfileCompanyId String?         @db.ObjectId
+
 }
 
 // model tbl_archive {
