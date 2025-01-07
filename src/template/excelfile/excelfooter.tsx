@@ -11,7 +11,7 @@ const excelFooter = () => {
   const exportExcelFooter = async () => {
       
           worksheet.getCell('A32').value = {formula: '"("&BAHTTEXT(H38)&")"', result: 3};
-          worksheet.getCell('A35').value = 'หมายเหตุ';
+          worksheet.getCell("A36").value = "ใส่ข้อมูลหมายตามสมควรในเอกสารนี้";
             // set cell alignment to top-left, middle-center, bottom-right
           worksheet.getCell('A32').alignment = { vertical: 'middle', horizontal: 'left' };
           worksheet.getCell('A35').alignment = { vertical: 'middle', horizontal: 'left' };
