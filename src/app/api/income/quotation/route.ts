@@ -48,16 +48,18 @@ export async function POST(req: NextRequest, res: NextResponse) {
         worksheet.getCell("D2").value = futureDate;
         worksheet.getCell("D2").alignment = { horizontal: "left" };
         // เพิ่มข้อมูลบริษัท
-        worksheet.getCell("A3").value = "[ชื่อบริษัท]";
-        worksheet.getCell("A4").value = "[ที่อยู่]";
-        worksheet.getCell("A5").value = "[เบอร์โทร]";
-        worksheet.getCell("A6").value = "[เลขที่เสียภาษี]";
-        worksheet.getCell("A7").value = "[E-mail]";
+        worksheet.getCell("A3").value = "บริษัท ไอคิวท์ธิงค์บียอนด์ จำกัด";
+        worksheet.getCell("B4").value = "32/93 หมู่ 2 ต.แม่เหียะ อ.เมือง จ.เชียงใหม่ 32/93 หมู่ 2 ต.แม่เหียะ อ.เมือง จ.เชียงใหม่ ";
+        worksheet.getCell("D3").value = "โทร.095-446-4746";
+        worksheet.getCell("B5").value = "012345678948";
+        worksheet.getCell("B6").value = "icutethink.beyond@gmail.com";
 
         // เพิ่มข้อมูลลูกค้า
-        worksheet.getCell("A9").value = "ลูกค้า";
-        worksheet.getCell("A10").value = "[ที่อยู่]";
-        worksheet.getCell("A11").value = "[เบอร์โทร,e-mail]";
+        worksheet.getCell("B8").value = "นายรัฐพงษ์  หน่อแก้ว";
+        worksheet.getCell("B9").value = "32/93 หมู่ 2 ต.แม่เหียะ อ.เมือง จ.เชียงใหม่ 32/93 หมู่ 2 ต.แม่เหียะ อ.เมือง จ.เชียงใหม่";
+        worksheet.getCell("D8").value = "โทร.095-999-4444";
+        worksheet.getCell("B10").value = "012345678948";
+        worksheet.getCell("B11").value = "icutethink.beyond@gmail.com";
 
         // เพิ่มข้อมูลสินค้า
         // ตัวอย่างข้อมูล JSON
