@@ -13,49 +13,49 @@ import { uniqueId } from "lodash";
 export const useMenuItems = () => {
 
   return [
-    {
-      id: uniqueId(),
-      title: "หน้าหลัก", // ชื่อเมนู
-      icon: IconHome, // ไอคอนของเมนู
-      href: `/dashboard`, // ลิงก์ของเมนูโดยอ้างอิงตาม Folder ในการเข้าถึง หากไม่เข้าใจอ่านเพิ่ม https://nextjs.org/docs/app/building-your-application/routing/pages
-    },
+    // {
+    //   id: uniqueId(),
+    //   title: "หน้าหลัก", // ชื่อเมนู
+    //   icon: IconHome, // ไอคอนของเมนู
+    //   href: `/admin/dashboard`, // ลิงก์ของเมนูโดยอ้างอิงตาม Folder ในการเข้าถึง หากไม่เข้าใจอ่านเพิ่ม https://nextjs.org/docs/app/building-your-application/routing/pages
+    // },
     {
       id: uniqueId(),
       title: "ภาพรวม", // ชื่อเมนู
       icon: Dashboard, // ไอคอนของเมนู
-      href: `/dashboard`, // ลิงก์ของเมนูโดยอ้างอิงตาม Folder ในการเข้าถึง หากไม่เข้าใจอ่านเพิ่ม https://nextjs.org/docs/app/building-your-application/routing/pages
+      href: `/admin/dashboard`, // ลิงก์ของเมนูโดยอ้างอิงตาม Folder ในการเข้าถึง หากไม่เข้าใจอ่านเพิ่ม https://nextjs.org/docs/app/building-your-application/routing/pages
     },
     {
       id: uniqueId(),
       title: "รายรับ",
       icon: IconReceipt2,
-      href: `/income`,
+      href: `/admin/income`,
       // กรณีมีซัพเมนูให้ใส่ตาม format ด้านล่าง หากไม่มีดูตามเมนูที่ 1
       children: [
         {
           id: uniqueId(),
           title: "ใบเสนอราคา",
-          href: `/income/quotation`,
+          href: `/admin/income/quotation`,
         },
         // {
         //   id: uniqueId(),
         //   title: "ใบวางบิล/ใบแจ้งหนี้",
-        //   href: `/income/billing`,
+        //   href: `/admin/income/billing`,
         // },
         // {
         //   id: uniqueId(),
         //   title: "ใบเสร็จรับเงิน/ใบกำกับภาษี",
-        //   href: `/income/invoice`,
+        //   href: `/admin/income/invoice`,
         // },
         // {
         //   id: uniqueId(),
         //   title: "ใบลดหนี้",
-        //   href: `/income/credit`,
+        //   href: `/admin/income/credit`,
         // },
         // {
         //   id: uniqueId(),
         //   title: "ใบเพิ่มหนี้",
-        //   href: `/income/debit`,
+        //   href: `/admin/income/debit`,
         // },
       ],
     },
@@ -63,28 +63,28 @@ export const useMenuItems = () => {
     //   id: uniqueId(),
     //   title: "รายจ่าย",
     //   icon: RequestQuote,
-    //   href: `/expenses`,
+    //   href: `/admin/expenses`,
     //   // กรณีมีซัพเมนูให้ใส่ตาม format ด้านล่าง หากไม่มีดูตามเมนูที่ 1
     //   children: [
     //     {
     //       id: uniqueId(),
     //       title: "ใบสั่งซื้อ",
-    //       href: `/expenses/purchase-order`,
+    //       href: `/admin/expenses/purchase-order`,
     //     },
     //     {
     //       id: uniqueId(),
     //       title: "ใบรับสินค้า",
-    //       href: `/expenses/receipt`,
+    //       href: `/admin/expenses/receipt`,
     //     },
     //     {
     //       id: uniqueId(),
     //       title: "บันทึกค่าใช้จ่าย",
-    //       href: `/expenses/record-expenses`,
+    //       href: `/admin/expenses/record-expenses`,
     //     },
     //     {
     //       id: uniqueId(),
     //       title: "ใบหัก ณ ที่จ่าย",
-    //       href: `/expenses/withholding-slip`,
+    //       href: `/admin/expenses/withholding-slip`,
     //     },
     //   ],
     // },
@@ -92,18 +92,18 @@ export const useMenuItems = () => {
       id: uniqueId(),
       title: "สินค้า/บริการ",
       icon: IconPackage,
-      href: `/product-and-service`,
+      href: `/admin/product-and-service`,
       // กรณีมีซัพเมนูให้ใส่ตาม format ด้านล่าง หากไม่มีดูตามเมนูที่ 1
       children: [
         {
           id: uniqueId(),
           title: "รายการสินค้า/บริการ",
-          href: `/product-and-service/productandservice-list`,
+          href: `/admin/product-and-service/productandservice-list`,
         },
         {
           id: uniqueId(),
           title: "หมวดหมู่สินค้า",
-          href: `/product-and-service/category-list`,
+          href: `/admin/product-and-service/category-list`,
         },
       ],
     },
@@ -111,18 +111,18 @@ export const useMenuItems = () => {
       id: uniqueId(),
       title: "ผู้ใช้งาน/ลูกค้า",
       icon: Group,
-      href: `/user-and-customer`,
+      href: `/admin/user-and-customer`,
       // กรณีมีซัพเมนูให้ใส่ตาม format ด้านล่าง หากไม่มีดูตามเมนูที่ 1
       children: [
         {
           id: uniqueId(),
           title: "รายการผู้ใช้งาน/ลูกค้า",
-          href: `/user-and-customer/user-and-customer-lists`,
+          href: `/admin/user-and-customer/user-and-customer-lists`,
         },
         {
           id: uniqueId(),
           title: "เพิ่มผู้ใช้งาน/ลูกค้า",
-          href: `/user-and-customer/add-user-and-customer`,
+          href: `/admin/user-and-customer/add-user-and-customer`,
         },
       ],
     },
@@ -130,48 +130,48 @@ export const useMenuItems = () => {
     //   id: uniqueId(),
     //   title: "รายงาน",
     //   icon: IconChartInfographic,
-    //   href: `/report`,
+    //   href: `/admin/report`,
     //   // กรณีมีซัพเมนูให้ใส่ตาม format ด้านล่าง หากไม่มีดูตามเมนูที่ 1
     //   children: [
     //     {
     //       id: uniqueId(),
     //       title: "ยอดขาย",
-    //       href: `/report/salesSummary`,
+    //       href: `/admin/report/salesSummary`,
     //     },
     //     {
     //       id: uniqueId(),
     //       title: "ใบวางบิล",
-    //       href: `/report/billingSummary`,
+    //       href: `/admin/report/billingSummary`,
     //     },
     //     {
     //       id: uniqueId(),
     //       title: "กำไรขาดทุน",
-    //       href: `/report/profit-and-loss`,
+    //       href: `/admin/report/profit-and-loss`,
     //     },
     //     {
     //       id: uniqueId(),
     //       title: "ใบสั่งซื้อ",
-    //       href: `/report/purchase-order`,
+    //       href: `/admin/report/purchase-order`,
     //     },
     //     {
     //       id: uniqueId(),
     //       title: "ค่าใช้จ่าย",
-    //       href: `/report/expense-report`,
+    //       href: `/admin/report/expense-report`,
     //     },
     //     {
     //       id: uniqueId(),
     //       title: "ภาษีขาย",
-    //       href: `/report/sales-tax`,
+    //       href: `/admin/report/sales-tax`,
     //     },
     //     {
     //       id: uniqueId(),
     //       title: "ภาษีซื้อ",
-    //       href: `/report/purchase-tax`,
+    //       href: `/admin/report/purchase-tax`,
     //     },
     //     {
     //       id: uniqueId(),
     //       title: "ภาษีหัก ณ ที่จ่าย",
-    //       href: `/report/withholding-tax`,
+    //       href: `/admin/report/withholding-tax`,
     //     },
     //   ],
     // },
@@ -179,18 +179,18 @@ export const useMenuItems = () => {
     //   id: uniqueId(),
     //   title: "คลังสื่อ",
     //   icon: Folder,
-    //   href: `/archive`,
+    //   href: `/admin/archive`,
     //   // กรณีมีซัพเมนูให้ใส่ตาม format ด้านล่าง หากไม่มีดูตามเมนูที่ 1
     //   children: [
     //     {
     //       id: uniqueId(),
     //       title: "รายการคลังสื่อ",
-    //       href: `/archive/archive-list`,
+    //       href: `/admin/archive/archive-list`,
     //     },
     //     {
     //       id: uniqueId(),
     //       title: "เพิ่มไฟล์",
-    //       href: `/archive/add-archive`,
+    //       href: `/admin/archive/add-archive`,
     //     },
     //   ],
     // },
@@ -198,7 +198,7 @@ export const useMenuItems = () => {
       id: uniqueId(),
       title: "ตั้งค่า", // ชื่อเมนู
       icon: Settings, // ไอคอนของเมนู
-      href: `/settings`, // ลิงก์ของเมนูโดยอ้างอิงตาม Folder ในการเข้าถึง หากไม่เข้าใจอ่านเพิ่ม https://nextjs.org/docs/app/building-your-application/routing/pages
+      href: `/admin/settings`, // ลิงก์ของเมนูโดยอ้างอิงตาม Folder ในการเข้าถึง หากไม่เข้าใจอ่านเพิ่ม https://nextjs.org/docs/app/building-your-application/routing/pages
     },
   ];
 };
