@@ -16,7 +16,6 @@ const authOptions: NextAuthOptions = {
     signIn: "/auth/sign-in"
   },
   providers: [
-
     CredentialsProvider({
       name: "Credentials",
       credentials: {

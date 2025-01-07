@@ -5,6 +5,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { ProductsProvider } from "@/contexts/productServiceListContext";
 import { Prompt } from "next/font/google";
 import { DatabaseProvider } from "@/contexts/dbContext";
+import { SessionProviders } from "../../lib/SessionProviders";
 
 const prompt = Prompt({
   subsets: ["thai", "latin"], // Specify subsets if needed
@@ -21,9 +22,11 @@ export default function RootLayout({
       <body className={prompt.className}>
         <ThemeProvider theme={baselightTheme}>
           <CssBaseline />
+          <SessionProviders>
           <ProductsProvider>
             <DatabaseProvider>{children}</DatabaseProvider>
           </ProductsProvider>
+          </SessionProviders>
         </ThemeProvider>
       </body>
     </html>
