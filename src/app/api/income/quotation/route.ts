@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { NextApiResponse, NextApiRequest } from 'next';
 import { PrismaClient } from '@prisma/client';
 import ExcelJS from 'exceljs';
 import fs from 'fs';
@@ -36,7 +35,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
             return new NextResponse(JSON.stringify({ error: 'WorkSheet NotFound' }), { status: 404 });
         }
 
-        // Example: Write data into specific cells
+        // ================ Start Write Data ================
+
         //เลขเอกสารหรือเลขอ้างอิง
         worksheet.getCell("I5").value = "#1234567";
         // วันปัจจุบัน
@@ -63,32 +63,32 @@ export async function POST(req: NextRequest, res: NextResponse) {
         // ตัวอย่างข้อมูล JSON
         const jsonData = [
             {
-            product: "Service Fee 1",
-            qty: 1,
-            price: 120.0,
-            discount: 0,
-            total: 120.0,
+                product: "Service Fee 1",
+                qty: 1,
+                price: 120.0,
+                discount: 0,
+                total: 120.0,
             },
             {
-            product: "Service Fee 6",
-            qty: 1,
-            price: 30.0,
-            discount: 0,
-            total: 30.0,
+                product: "Service Fee 6",
+                qty: 1,
+                price: 30.0,
+                discount: 0,
+                total: 30.0,
             },
             {
-            product: "Service Fee 11",
-            qty: 2,
-            price: 50.0,
-            discount: 0,
-            total: 50.0,
+                product: "Service Fee 11",
+                qty: 2,
+                price: 50.0,
+                discount: 0,
+                total: 50.0,
             },
             {
-            product: "Service Fee 16",
-            qty: 3,
-            price: 200.0,
-            discount: 0,
-            total: 200.0,
+                product: "Service Fee 16",
+                qty: 3,
+                price: 200.0,
+                discount: 0,
+                total: 200.0,
             },
         ];
         // ใช้ลูปเพื่อใส่ข้อมูลจาก JSON ไปยังคอลัมน์ A, E, F, G, H (แถว 15 ถึง 30)
@@ -99,13 +99,13 @@ export async function POST(req: NextRequest, res: NextResponse) {
                 worksheet.getCell(`A${rowIndex + index}`).value = data.product; // คอลัมน์ A
                 worksheet.getCell(`E${rowIndex + index}`).value = data.qty; // คอลัมน์ E
                 worksheet.getCell(`E${rowIndex + index}`).alignment = {
-                vertical: "middle",
-                horizontal: "center",
+                    vertical: "middle",
+                    horizontal: "center",
                 };
                 worksheet.getCell(`F${rowIndex + index}`).value = data.discount; // คอลัมน์ F
                 worksheet.getCell(`F${rowIndex + index}`).alignment = {
-                vertical: "middle",
-                horizontal: "center",
+                    vertical: "middle",
+                    horizontal: "center",
                 };
                 worksheet.getCell(`G${rowIndex + index}`).value = data.price; // คอลัมน์ G
                 worksheet.getCell(`H${rowIndex + index}`).value = data.total; // คอลัมน์ H
@@ -113,6 +113,46 @@ export async function POST(req: NextRequest, res: NextResponse) {
         });
         worksheet.getCell("A36").value = "ใส่ข้อมูลหมายตามสมควรในเอกสารนี้";
 
+
+        // ================ End Write Data ================
+
+        // ======== For Download Excel ========
+        await workbook.xlsx.writeFile(tempExcelPath);
+
+        try {
+
+            // Convert Excel To PDF
+            // const { stdout, stderr } = await exec(`soffice --headless --convert-to pdf ${tempExcelPath} --outdir ${path.dirname(tempPdfPath)}`);
+            await exec(`soffice --headless --convert-to pdf ${tempExcelPath} --outdir ${path.dirname(tempPdfPath)}`);
+            // console.log('Output:', stdout);
+            // console.error('Error:', stderr);
+
+
+            // ตรวจสอบว่าไฟล์มีอยู่
+            if (!fs.existsSync(tempPdfPath)) {
+                console.log('File not found')
+                return new NextResponse(JSON.stringify({ error: 'File not found' }), { status: 500 });
+            }
+
+            const fileBuffer = fs.readFileSync(tempPdfPath);
+
+            // Remove Temp Files
+            fs.unlinkSync(tempExcelPath);
+            fs.unlinkSync(tempPdfPath);
+
+            return new Response(fileBuffer, {
+                headers: {
+                    'Content-Type': 'application/pdf',
+                    'Content-Disposition': 'attachment; filename=example.pdf',
+                },
+            });
+
+        } catch (error) {
+            console.error(`Error: ${error}`);
+            return new NextResponse(JSON.stringify({ error: 'Failed to convert file' }), { status: 500 });
+        }
+
+        // ======== For Download Excel ========
         // Create a buffer of the modified Excel file
         // const buffer = await workbook.xlsx.writeBuffer();
         // Set headers for download
