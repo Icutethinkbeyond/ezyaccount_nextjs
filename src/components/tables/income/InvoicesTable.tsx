@@ -260,22 +260,22 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ data }) => {
         <Grid2 container mb={1}>
           <Grid2 size={6}>
             <Box display="flex" alignItems="center" gap={2}>
-              <Typography variant="h3">ใบเสร็จ/ใบกำกับภาษี</Typography>
-              <IconButton
-                color="primary"
+              <Typography variant="h4" component="div">
+                ใบเสร้จรับเงิน/ใบกำกับภาษี
+              </Typography>
+              <Button
+                variant="contained"
+                startIcon={<Add />}
                 onClick={handleAddClick}
                 sx={{
                   backgroundColor: "#33CC99",
                   color: "#fff",
-                  "&:hover": {
-                    backgroundColor: "#009933",
-                  },
-                  width: 22,
-                  height: 22,
+                  "&:hover": { backgroundColor: "#009933" },
+                  textTransform: "none",
                 }}
               >
-                <Add />
-              </IconButton>
+                สร้างใบเสร้จรับเงิน/ใบกำกับภาษี
+              </Button>
             </Box>
           </Grid2>
           <Grid2 container size={6} justifyContent="flex-end">
