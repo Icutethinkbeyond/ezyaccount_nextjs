@@ -1,39 +1,40 @@
-"use client";
-
 import React, { useState, useEffect } from "react";
+import { DataGrid, GridColDef, GridPaginationModel } from "@mui/x-data-grid";
 import {
-  DataGrid,
-  GridColDef,
-  GridPaginationModel,
-  GridCellParams,
-} from "@mui/x-data-grid";
-import { Box, Grid, Grid2, IconButton } from "@mui/material";
+  Box,
+  Card,
+  CardContent,
+  Typography,
+  IconButton,
+  Button,
+  TextField,
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl,
+} from "@mui/material";
 import BaseCard from "@/components/shared/BaseCard";
 import ConfirmDelete from "@/components/shared/ConfirmDialogCustom";
-import { Quotation, useDatabaseContext } from "@/contexts/dbContext";
+import { Quotation } from "@/contexts/dbContext";
 import { useRouter } from "next/navigation";
 import {
+  Add,
   CloudDownload,
-  Download,
-  DriveFileRenameOutline,
-  EditCalendar,
-  Email,
   ForwardToInbox,
+  EditCalendar,
   ManageSearch,
+  DriveFileRenameOutline,
+  Print,
 } from "@mui/icons-material";
-import StatusChip from "@/components/shared/StatusChipCustom";
-import { formatNumber } from "@/utils/utils";
 
 interface ProductTableProps {
   data: Quotation[];
-  tableName: string | null;
-  newDocumentHref: string | null;
-  newDocumentName: string | null;
 }
 
 const QuotationsTable: React.FC<ProductTableProps> = ({ data }) => {
   const router = useRouter();
   const [rows, setRows] = useState<Quotation[]>([]);
+  const [filteredRows, setFilteredRows] = useState<Quotation[]>([]);
   const [rowCount, setRowCount] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
   const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
@@ -41,9 +42,85 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ data }) => {
     pageSize: 10,
   });
 
+  // State สำหรับการค้นหา
+  const [searchQuery, setSearchQuery] = useState<string>("");
+
+  // State สำหรับการเลือกประเภท
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
+
   useEffect(() => {
-    setRows(data);
-  }, []);
+    if (data && Array.isArray(data)) {
+      setRows(data);
+      setFilteredRows(data); // เริ่มต้นให้แสดงข้อมูลทั้งหมด
+      setRowCount(data.length); // ตั้งค่า rowCount ตามจำนวนข้อมูลทั้งหมด
+    } else {
+      setRows([]); // กรณีที่ data เป็น undefined หรือไม่ใช่ array
+      setFilteredRows([]);
+      setRowCount(0);
+    }
+  }, [data]);
+
+  // ฟังก์ชันสำหรับกรองข้อมูล
+  useEffect(() => {
+    let filtered = rows;
+
+    // กรองตามการค้นหาข้อมูล
+    if (searchQuery) {
+      filtered = filtered.filter((row) =>
+        ["keyId", "headForm?.contactorName", "products"]
+          .map((field) =>
+            String(row[field as keyof Quotation] || "").toLowerCase()
+          )
+          .some((value) => value.includes(searchQuery.toLowerCase()))
+      );
+    }
+
+    // กรองตามประเภท
+    if (selectedCategory) {
+      filtered = filtered.filter((row) => row.status === selectedCategory);
+    }
+
+    setFilteredRows(filtered);
+    setRowCount(filtered.length); // อัปเดต rowCount เมื่อมีการกรองข้อมูล
+  }, [searchQuery, rows, selectedCategory]);
+
+  // State สำหรับราคารวม
+  const [approvedTotal, setApprovedTotal] = useState<number>(0);
+  const [notApprovedTotal, setNotApprovedTotal] = useState<number>(0);
+  const [allTotal, setAllTotal] = useState<number>(0);
+
+  useEffect(() => {
+    const approved = (rows || [])
+      .filter((row) => row.status === "approved")
+      .reduce((sum, row) => sum + (row.summary?.totalAmountDue || 0), 0);
+
+    const notApproved = (rows || [])
+      .filter((row) => row.status !== "approved")
+      .reduce((sum, row) => sum + (row.summary?.totalAmountDue || 0), 0);
+
+    const total = (rows || []).reduce(
+      (sum, row) => sum + (row.summary?.totalAmountDue || 0),
+      0
+    );
+
+    setApprovedTotal(approved);
+    setNotApprovedTotal(notApproved);
+    setAllTotal(total);
+  }, [rows]);
+
+  const handleDownload = () => {
+    console.log("ดาวน์โหลดไฟล์");
+    // เพิ่มโค้ดสำหรับดาวน์โหลดไฟล์
+  };
+
+  const handlePrint = () => {
+    console.log("ปริ้นรายการ");
+    window.print(); // ใช้ window.print() สำหรับการปริ้นในเบราว์เซอร์
+  };
+
+  const handleAddClick = () => {
+    router.push("/path/to/new-product");
+  };
 
   const columns: GridColDef<Quotation>[] = [
     {
@@ -52,9 +129,9 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ data }) => {
       width: 150,
       valueGetter: (value, row) => row.keyId,
     },
-    { 
-      field: "Name",
-      headerName: "ชื่อ-นามสกุล", 
+    {
+      field: "name",
+      headerName: "ชื่อ-นามสกุล",
       width: 150,
       valueGetter: (value, row) => row.headForm?.dateCreate,
     },
@@ -62,7 +139,7 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ data }) => {
       field: "email",
       headerName: "อีเมล์",
       width: 150,
-      valueGetter: (value, row) => row.headForm?.contactorName, // ใช้ valueGetter เเทน renderCell ในการเข้าถึงข้อมูลใน array โดยเข้าผ่าน parameter "row"
+      valueGetter: (value, row) => row.headForm?.contactorName,
     },
     {
       field: "tel",
@@ -90,36 +167,22 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ data }) => {
       renderCell: (params) => (
         <>
           {params.row.status === "pending" ? (
-            <IconButton
-              size="small"
-              color="secondary"
-              // onClick={() => handleEdit(params.row.id)}
-            >
+            <IconButton size="small" color="secondary">
               <EditCalendar />
             </IconButton>
           ) : (
-            <IconButton
-              size="small"
-              color="secondary"
-              // onClick={() => handleUpdate(params.row.id)}
-            >
+            <IconButton size="small" color="secondary">
               <ManageSearch />
             </IconButton>
           )}
-          <ConfirmDelete itemName="Sample Item" onDelete={handleDeleteItem} />
-
-          <IconButton
-            size="small"
-            color="info"
-            // onClick={() => handleDeleteItem(params.row.id)}
-          >
+          <ConfirmDelete
+            itemName="Sample Item"
+            onDelete={() => console.log("Deleted")}
+          />
+          <IconButton size="small" color="info">
             <CloudDownload />
           </IconButton>
-          <IconButton
-            size="small"
-            color="success"
-            // onClick={() => handleRemove(params.row.id)}
-          >
+          <IconButton size="small" color="success">
             <ForwardToInbox />
           </IconButton>
         </>
@@ -127,37 +190,196 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ data }) => {
     },
   ];
 
-  const handleDeleteItem = () => {
-    console.log("Item deleted");
-  };
-
-  const handleRemove = (keyId: string) => {
-    return <ConfirmDelete itemName="Sample Item" onDelete={handleDeleteItem} />;
-  };
-
-  const handleEdit = (keyId: string) => {
-    router.push(``);
-  };
-
-  const handleUpdate = (keyId: string) => {
-    router.push(``);
-  };
-
   return (
-    <BaseCard title="User List Table">
-      <DataGrid
-        initialState={{ pagination: { paginationModel } }}
-        pageSizeOptions={[5, 10, 20]}
-        checkboxSelection
-        sx={{ border: 0 }}
-        getRowId={(row) => row.keyId} // ระบุ keyId เป็นค่า id ของแต่ละ row
-        rows={rows}
-        columns={columns}
-        paginationMode="server"
-        rowCount={rowCount}
-        onPaginationModelChange={setPaginationModel}
-        loading={loading}
-      />
+    <BaseCard title="">
+      <>
+        {/* Section: Totals */}
+        <Box display="flex" justifyContent="flex-end" mb={3}>
+          <Card sx={{ p: 0.5, boxShadow: 4, mb: 2, maxWidth: "350px" }}>
+            <CardContent>
+              <Box display="flex" justifyContent="space-between" mb={1}>
+                <Box>
+                  <Typography
+                    variant="h4"
+                    sx={{
+                      fontWeight: "bold",
+                      color: "green",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    ราคารวมอนุมัติแล้ว
+                  </Typography>
+                  <Typography
+                    variant="h2"
+                    sx={{
+                      fontWeight: "bold",
+                      color: "green",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {approvedTotal.toLocaleString("th-TH", {
+                      style: "currency",
+                      currency: "THB",
+                    })}
+                  </Typography>
+                </Box>
+                <Box
+                  display="flex"
+                  flexDirection="column"
+                  alignItems="flex-end"
+                >
+                  <Typography
+                    variant="body1"
+                    color="error"
+                    sx={{
+                      fontWeight: "bold",
+                      whiteSpace: "nowrap",
+                      mb: 0.5,
+                      ml: 3,
+                    }}
+                  >
+                    ราคารวมไม่อนุมัติ
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    color="error"
+                    sx={{ fontWeight: "bold", whiteSpace: "nowrap" }}
+                  >
+                    {notApprovedTotal.toLocaleString("th-TH", {
+                      style: "currency",
+                      currency: "THB",
+                    })}
+                  </Typography>
+
+                  <Typography
+                    variant="body1"
+                    color="textPrimary"
+                    sx={{ fontWeight: "bold", whiteSpace: "nowrap", mt: 1 }}
+                  >
+                    ราคารวมรออนุมัติ
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    color="textPrimary"
+                    sx={{ fontWeight: "bold", whiteSpace: "nowrap" }}
+                  >
+                    {allTotal.toLocaleString("th-TH", {
+                      style: "currency",
+                      currency: "THB",
+                    })}
+                  </Typography>
+                </Box>
+              </Box>
+            </CardContent>
+          </Card>
+        </Box>
+
+        {/* Section: Add Button */}
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          mb={2}
+        >
+          <Box display="flex" alignItems="center" gap={2}>
+            <Typography variant="h3" component="div">
+              รายการผู้ใช้งาน/ลูกค้า
+            </Typography>
+            <Button
+              variant="contained"
+              startIcon={<Add />}
+              onClick={handleAddClick}
+              sx={{
+                backgroundColor: "#33CC99",
+                color: "#fff",
+                "&:hover": { backgroundColor: "#009933" },
+                textTransform: "none",
+              }}
+            >
+              สร้างรายการผู้ใช้งาน/ลูกค้า
+            </Button>
+          </Box>
+
+          <Box display="flex" alignItems="center" gap={1}>
+            <Button
+              variant="contained"
+              startIcon={<Print />}
+              onClick={handlePrint}
+              sx={{
+                backgroundColor: "#33CC99",
+                color: "#fff",
+                "&:hover": { backgroundColor: "#009933" },
+                textTransform: "none",
+              }}
+            >
+              ปริ้น
+            </Button>
+            <Button
+              variant="contained"
+              startIcon={<CloudDownload />}
+              onClick={handleDownload}
+              sx={{
+                backgroundColor: "#33CC99",
+                color: "#fff",
+                "&:hover": { backgroundColor: "#009933" },
+                textTransform: "none",
+              }}
+            >
+              ดาวน์โหลด
+            </Button>
+          </Box>
+        </Box>
+
+        {/* Section: Search and Category Select */}
+        <Box display="flex" alignItems="center" gap={2} mb={3}>
+          <TextField
+            label="ค้นหาสินค้าและบริการ"
+            variant="outlined"
+            size="small"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            sx={{ width: "200%" }}
+          />
+
+          {/* Select for Category */}
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+            width="100%"
+          >
+            <Box flexGrow={1} />
+
+            <FormControl size="small" sx={{ minWidth: 130 }}>
+              <InputLabel>เลือกประเภท</InputLabel>
+              <Select
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+                label="ประเภท"
+              >
+                <MenuItem value={"category1"}>หมวดหมู่ 1</MenuItem>
+                <MenuItem value={"category2"}>หมวดหมู่ 2</MenuItem>
+                <MenuItem value={"category3"}>หมวดหมู่ 3</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
+        </Box>
+
+        {/* Data Grid */}
+        <DataGrid
+          initialState={{ pagination: { paginationModel } }}
+          pageSizeOptions={[5, 10, 20]}
+          checkboxSelection
+          sx={{ border: 0 }}
+          getRowId={(row) => row.keyId}
+          rows={filteredRows}
+          columns={columns}
+          paginationMode="server"
+          rowCount={rowCount}
+          onPaginationModelChange={setPaginationModel}
+          loading={loading}
+        />
+      </>
     </BaseCard>
   );
 };
