@@ -9,7 +9,9 @@ import {
   Card,
   CardContent,
   Tooltip,
-  Button ,
+  Button,
+  TextField,
+  MenuItem,
 } from "@mui/material";
 import BaseCard from "@/components/shared/BaseCard";
 import ConfirmDelete from "@/components/shared/ConfirmDialogCustom";
@@ -36,6 +38,9 @@ const CategoryListTable: React.FC<ProductTableProps> = ({ data }) => {
     pageSize: 10,
   });
 
+  const [searchText, setSearchText] = useState<string>(""); // สำหรับเก็บข้อความที่ค้นหา
+  const [statusFilter, setStatusFilter] = useState<string>(""); // สำหรับเก็บสถานะที่เลือก
+
   // Declare state variables for totals
   const [approvedTotal, setApprovedTotal] = useState<number>(0);
   const [notApprovedTotal, setNotApprovedTotal] = useState<number>(0);
@@ -44,6 +49,25 @@ const CategoryListTable: React.FC<ProductTableProps> = ({ data }) => {
   useEffect(() => {
     setRows(data);
   }, [data]);
+
+  // ฟังก์ชันสำหรับค้นหา
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchText(event.target.value);
+  };
+
+  const handleStatusChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setStatusFilter(event.target.value);
+  };
+
+  const filteredRows = (rows || []).filter((row) => {
+    const matchesSearch =
+      row.headForm?.contactorName
+        ?.toLowerCase()
+        .includes(searchText.toLowerCase()) ||
+      row.keyId?.toString().includes(searchText);
+    const matchesStatus = statusFilter ? row.status === statusFilter : true;
+    return matchesSearch && matchesStatus;
+  });
 
   useEffect(() => {
     const approved = rows
@@ -241,6 +265,31 @@ const CategoryListTable: React.FC<ProductTableProps> = ({ data }) => {
           >
             เพิ่มหมวดหมู่
           </Button>
+        </Box>
+
+        <Box display="flex" alignItems="center" gap={2} mb={3}>
+          <TextField
+            label="ค้นหา"
+            variant="outlined"
+            size="small"
+            value={searchText}
+            onChange={handleSearchChange}
+            sx={{ flex: 1 }} // เปลี่ยน width เป็น flex เพื่อให้ปรับขนาดอัตโนมัติ
+          />
+
+          <TextField
+            label="เลือกสถานะ"
+            variant="outlined"
+            select
+            size="small"
+            value={statusFilter}
+            onChange={handleStatusChange}
+            sx={{ width: 130 }} // กำหนดความกว้างคงที่ให้กับตัวเลือกสถานะ
+          >
+            <MenuItem value="">ทั้งหมด</MenuItem>
+            <MenuItem value="approved">อนุมัติ</MenuItem>
+            <MenuItem value="notApproved">ไม่อนุมัติ</MenuItem>
+          </TextField>
         </Box>
 
         <DataGrid

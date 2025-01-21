@@ -338,7 +338,7 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ data }) => {
             size="small"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            sx={{ width: "200%" }}
+            sx={{ width: "700%" }}
           />
 
           {/* Select for Category */}
