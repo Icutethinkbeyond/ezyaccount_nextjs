@@ -1,10 +1,9 @@
 import { 
-  CollectionsBookmark, Group, Handyman,
-  Dashboard, Settings, RequestQuote,
-  Folder
+  Group,
+  Dashboard, Settings,
 } from "@mui/icons-material";
 import {
- IconHome, IconPackage, IconChartInfographic,
+ IconHome, IconPackage, 
  IconReceipt2
 } from "@tabler/icons-react";
 
@@ -13,6 +12,7 @@ import { Pin } from "lucide-react";
 import { useTranslations, useLocale } from "next-intl";
 
 export const useMenuItems = () => {
+
   const t = useTranslations("Menus");
   const localActive = useLocale();
 

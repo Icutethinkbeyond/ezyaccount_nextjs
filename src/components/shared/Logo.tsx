@@ -18,10 +18,10 @@ const Logo = () => {
     <LinkStyled href={`/${localActive}/dashboard`}>
       <Grid2 container justifyContent="center" alignItems={"center"}>
         <Image
-          src="/images/logos/image004.png"
+          src="/images/logos/logo-normal-png.png"
           alt="logo"
           height={70}
-          width={105}
+          width={80}
           priority
         />
       </Grid2>
