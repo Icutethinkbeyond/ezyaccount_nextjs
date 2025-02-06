@@ -13,9 +13,7 @@ import {
   TextField,
   MenuItem,
 } from "@mui/material";
-// import BaseCard from "@/components/shared/BaseCard";
-// import ConfirmDelete from "@/components/shared/ConfirmDialogCustom";
-// import { Quotation } from "@/contexts/dbContext";
+import { useBreadcrumbContext } from "@/contexts/BreadcrumbContext";
 import { useRouter } from "next/navigation";
 import {
   Add,
@@ -29,6 +27,21 @@ interface ProductTableProps {
 }
 
 const categorylists: React.FC<ProductTableProps> = ({  }) => {
+
+    //Set Breadcrumb
+    const { setBreadcrumbs } = useBreadcrumbContext();
+  
+    useEffect(() => {
+      setBreadcrumbs([
+        { name: "หน้าแรก", href: "/dashboard" },
+        { name: "คลังอุปกรณ์", href: "/inventory" },
+        { name: "อุปกรณ์ทั้งหมด" },
+      ]);
+      return () => {
+        setBreadcrumbs([]);
+      };
+    }, []);
+
   const router = useRouter();
   // const [rows, setRows] = useState<Quotation[]>([]); // ค่าเริ่มต้นเป็น array เปล่า
   const [rowCount, setRowCount] = useState<number>(0);

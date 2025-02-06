@@ -1,31 +1,31 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { DataGrid, GridColDef, GridPaginationModel } from "@mui/x-data-grid";
-import {
-  Box,
-  IconButton,
-  Typography,
-  Card,
-  CardContent,
-  Tooltip,
-  Button,
-  TextField,
-  MenuItem,
-} from "@mui/material";
+import {  GridPaginationModel } from "@mui/x-data-grid";
 import { useRouter } from "next/navigation";
-import {
-  Add,
-  CloudDownload,
-  EditCalendar,
-  ForwardToInbox,
-} from "@mui/icons-material";
+import {useBreadcrumbContext} from "@/contexts/BreadcrumbContext"
 
 interface ProductTableProps {
   // data: Quotation[];
 }
 
 const productandservicelists: React.FC<ProductTableProps> = ({  }) => {
+
+
+  //Set Breadcrumb
+  const { setBreadcrumbs } = useBreadcrumbContext();
+
+  useEffect(() => {
+    setBreadcrumbs([
+      { name: "หน้าแรก", href: "/dashboard" },
+      { name: "คลังอุปกรณ์", href: "/inventory" },
+      { name: "อุปกรณ์ทั้งหมด" },
+    ]);
+    return () => {
+      setBreadcrumbs([]);
+    };
+  }, []);
+
   const router = useRouter();
   const [rowCount, setRowCount] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
