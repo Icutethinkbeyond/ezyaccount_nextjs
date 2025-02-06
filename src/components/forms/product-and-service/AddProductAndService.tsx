@@ -13,7 +13,7 @@ import {
   SelectChangeEvent, } from "@mui/material";
 import BaseCard from "../../shared/BaseCard";
 
-const CompanyInformation: React.FC = () => {
+const AddProductAndService: React.FC = () => {
   //   const { headForm, setHeadForm } = useProductServiceListContext();
 
   //   const handleChange = (
@@ -162,4 +162,4 @@ const CompanyInformation: React.FC = () => {
   );
 };
 
-export default CompanyInformation;
+export default AddProductAndService;
