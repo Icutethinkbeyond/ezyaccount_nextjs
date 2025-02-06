@@ -119,7 +119,7 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ data }) => {
   };
 
   const handleAddClick = () => {
-    router.push("/path/to/new-product");
+    router.push("/user-and-customer/add-user-and-customer");
   };
 
   const columns: GridColDef<Quotation>[] = [

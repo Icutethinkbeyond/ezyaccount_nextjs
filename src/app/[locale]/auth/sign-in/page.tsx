@@ -42,7 +42,7 @@ const LoginPage = () => {
           }}
         >
                   <Image
-                    src="/images/logos/logo-normal-png.png"
+                    src="/images/logos/logo-white-png.png"
                     alt="logo"
                     height={70}
                     width={80}
