@@ -1,165 +1,237 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
+import { useFormik } from "formik"
 // import { headerClean, HeadForm, useProductServiceListContext } from "@/contexts/productServiceListContext";
 import { 
-  Grid2, 
-  TextField, 
+  Box,
+  TextField,
+  Button,
+  MenuItem,
+  Typography,
+  Paper,
+  Grid,
+  FormControl,
   InputLabel,
   Select,
-  MenuItem,
-  Box, 
-  Typography, 
-  FormControl,
-  Button,
   SelectChangeEvent, } from "@mui/material";
 import BaseCard from "../../shared/BaseCard";
+import { Editor } from "@tinymce/tinymce-react"
+import { productSchema } from "@/components/forms/product-and-service/productSchema"
 
-const AddProductAndService: React.FC = () => {
-  //   const { headForm, setHeadForm } = useProductServiceListContext();
+const categories = [
+  { value: "electronics", label: "เครื่องใช้ไฟฟ้า" },
+  { value: "clothing", label: "เสื้อผ้า" },
+  { value: "food", label: "อาหาร" },
+]
+export default function AddProductAndService() {
+  const [imagePreview, setImagePreview] = useState<string | null>(null)
 
-  //   const handleChange = (
-  //     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | any>
-  //   ) => {
-  //     const { name, value, type, checked } = e.target;
-  //     setHeadForm({
-  //       ...headForm,
-  //       [name]: type === "checkbox" ? checked : value,
-  //     });
-  //   };
+  const formik = useFormik({
+    initialValues: {
+      name: "",
+      category: "",
+      quantity: "",
+      details: "",
+      regularPrice: "",
+      salePrice: "",
+      productCode: "1053929195",
+      image: null,
+    },
+    validationSchema: productSchema,
+    onSubmit: (values) => {
+      console.log(values)
+      // Handle form submission here
+    },
+  })
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.currentTarget.files?.[0]
+    if (file) {
+      formik.setFieldValue("image", file)
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string)
+      }
+      reader.readAsDataURL(file)
+    }
+  }
+
   return (
-    <>
-      {/* <Typography variant="h6" gutterBottom>
-        Company Details
-      </Typography>
-      <Typography
-        style={{ marginBottom: 20 }}
-        variant="body2"
-        color="text.secondary"
-        gutterBottom
-      >
-        Insert Your Company Details
-      </Typography> */}
-      <BaseCard>
-        <Box p={3} border="1px solid #ccc" borderRadius="8px">
-          <Typography variant="h6" gutterBottom>
-            เพิ่มสินค้า/บริการ
-          </Typography>
-          <Typography
-            style={{ marginBottom: 20 }}
-            variant="body2"
-            color="text.secondary"
-            gutterBottom
-          >
-            กรอกรายละเอียดสินค้า
-          </Typography>
-          <Grid2 container spacing={2}>
-            <Grid2 size={12}>
-                <TextField
-                  label="ชื่อสินค้าและบริการ"
-                  variant="outlined"
-                  name="productName"
-                  size="small"
-                  fullWidth
-                />
-            </Grid2>
-            <Grid2 size={6}>
-              <FormControl fullWidth size="small">
-                  <InputLabel id="demo-simple-select-label-tax">หมวดหมู่สินค้า</InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select-tax"
-                    // value={statusBorrow}
-                    label="หมวดหมู่สินค้า"
-                  >
-                    <MenuItem value={"เลือกหมวดหมู่สินค้า"}>เลือกหมวดหมู่สินค้า</MenuItem>
-                    <MenuItem value={"แป้ง"}>แป้ง</MenuItem>
-                    <MenuItem value={"อื่นๆ"}>อื่นๆ</MenuItem>
-                  </Select>
-                </FormControl>
-            </Grid2>
-            <Grid2 size={6}>
-              <TextField
-                label="จำนวนสินค้าทั้งหมดในสต๊อค"
-                variant="outlined"
-                name="productQty"
-                size="small"
-                fullWidth
-              />
-            </Grid2>
-            <Grid2 size={6}>
-              <TextField
-                label="ค่าใช้จ่ายในการบริการ"
-                variant="outlined"
-                name="serviceCost"
-                size="small"
-                fullWidth
-              />
-            </Grid2>
-            <Grid2 size={6}>
-              <TextField
-                label="ค่าใช้จ่ายทั่วไป"
-                variant="outlined"
-                name="generalExpense"
-                size="small"
-                fullWidth
-              />
-            </Grid2>
-            <Grid2 size={12}>
-              <TextField
-                label="รายละเอียดสินค้า"
-                variant="outlined"
-                name="productDetail"
-                size="small"
-                fullWidth
-              />
-            </Grid2>
-            <Grid2 size={6}>
-              <TextField
-                label="ราคาสินค้า"
-                variant="outlined"
-                name="productPrice"
-                size="small"
-                fullWidth
-              />
-            </Grid2>
-            <Grid2 size={6}>
-              <TextField
-                label="ราคาส่วนลด"
-                variant="outlined"
-                name="productDiscount"
-                size="small"
-                fullWidth
-              />
-            </Grid2>
-            <Grid2 size={12}>
-              <Button
-                variant="contained"
-                color="success"
-                sx={{ marginBottom: "5px" }}
-                // onClick={}
-              >
-                บันทึก
-                {/* {!isProductEdit
-                  ? "เพิ่มสินค้า"
-                  : `Edit ${newProduct.productService}`} */}
-              </Button>
-              {/* {newProduct.ProductServiceNumber ? ( */}
-                <Button
-                  variant="contained"
-                  color="error"
-                  sx={{ marginBottom: "5px", ml: 1 }}
-                  // onClick={}
-                >
-                  ยกเลิก
-                </Button>
-              {/* ) : (
-                ""
-              )} */}
-            </Grid2>
-          </Grid2>
-        </Box>
-      </BaseCard>
-    </>
-  );
-};
+    <Paper elevation={3} sx={{ p: 4, maxWidth: 1200, mx: "auto", my: 4 }}>
+      <form onSubmit={formik.handleSubmit}>
+        <Typography variant="h5" gutterBottom>
+          ข้อมูลสินค้า/บริการ
+        </Typography>
 
-export default AddProductAndService;
+        <Grid container spacing={3}>
+          <Grid item xs={12} md={8}>
+            <TextField
+              fullWidth
+              id="name"
+              name="name"
+              label="ชื่อสินค้า/บริการ"
+              value={formik.values.name}
+              onChange={formik.handleChange}
+              error={formik.touched.name && Boolean(formik.errors.name)}
+              helperText={formik.touched.name && formik.errors.name}
+              margin="normal"
+            />
+          </Grid>
+
+          <Grid item xs={12} md={4}>
+            <TextField
+              fullWidth
+              disabled
+              id="productCode"
+              name="productCode"
+              label="รหัสสินค้า"
+              value={formik.values.productCode}
+              margin="normal"
+            />
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+            <FormControl fullWidth margin="normal">
+              <InputLabel>หมวดหมู่สินค้า</InputLabel>
+              <Select
+                id="category"
+                name="category"
+                value={formik.values.category}
+                onChange={formik.handleChange}
+                error={formik.touched.category && Boolean(formik.errors.category)}
+                label="หมวดหมู่สินค้า"
+              >
+                {categories.map((category) => (
+                  <MenuItem key={category.value} value={category.value}>
+                    {category.label}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+            <TextField
+              fullWidth
+              id="quantity"
+              name="quantity"
+              label="จำนวนสินค้าทั้งหมดในสต็อก"
+              type="number"
+              value={formik.values.quantity}
+              onChange={formik.handleChange}
+              error={formik.touched.quantity && Boolean(formik.errors.quantity)}
+              helperText={formik.touched.quantity && formik.errors.quantity}
+              margin="normal"
+            />
+          </Grid>
+
+          <Grid item xs={12}>
+            <Typography variant="subtitle1" gutterBottom>
+              รายละเอียด
+            </Typography>
+            <Editor
+              apiKey="your-tinymce-key"
+              init={{
+                height: 300,
+                menubar: false,
+                plugins: [
+                  "advlist",
+                  "autolink",
+                  "lists",
+                  "link",
+                  "image",
+                  "charmap",
+                  "preview",
+                  "anchor",
+                  "searchreplace",
+                  "visualblocks",
+                  "code",
+                  "fullscreen",
+                  "insertdatetime",
+                  "media",
+                  "table",
+                  "code",
+                  "help",
+                  "wordcount",
+                ],
+                toolbar:
+                  "undo redo | blocks | " +
+                  "bold italic forecolor | alignleft aligncenter " +
+                  "alignright alignjustify | bullist numlist outdent indent | " +
+                  "removeformat | help",
+              }}
+              value={formik.values.details}
+              onEditorChange={(content: any) => formik.setFieldValue("details", content)}
+            />
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+            <TextField
+              fullWidth
+              id="regularPrice"
+              name="regularPrice"
+              label="ราคาปกติ"
+              type="number"
+              value={formik.values.regularPrice}
+              onChange={formik.handleChange}
+              error={formik.touched.regularPrice && Boolean(formik.errors.regularPrice)}
+              helperText={formik.touched.regularPrice && formik.errors.regularPrice}
+              margin="normal"
+            />
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+            <TextField
+              fullWidth
+              id="salePrice"
+              name="salePrice"
+              label="ราคาส่วนลด"
+              type="number"
+              value={formik.values.salePrice}
+              onChange={formik.handleChange}
+              error={formik.touched.salePrice && Boolean(formik.errors.salePrice)}
+              helperText={formik.touched.salePrice && formik.errors.salePrice}
+              margin="normal"
+            />
+          </Grid>
+
+          <Grid item xs={12}>
+            <Box sx={{ mt: 2 }}>
+              <Typography variant="subtitle1" gutterBottom>
+                เพิ่มรูป
+              </Typography>
+              <input
+                accept="image/*"
+                style={{ display: "none" }}
+                id="image-upload"
+                type="file"
+                onChange={handleImageChange}
+              />
+              <label htmlFor="image-upload">
+                <Button variant="contained" component="span">
+                  เลือกไฟล์
+                </Button>
+              </label>
+              {imagePreview && (
+                <Box sx={{ mt: 2 }}>
+                  <img
+                    src={imagePreview || "/placeholder.svg"}
+                    alt="Preview"
+                    style={{ maxWidth: "200px", maxHeight: "200px" }}
+                  />
+                </Box>
+              )}
+            </Box>
+          </Grid>
+
+          <Grid item xs={12}>
+            <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 3 }}>
+              <Button variant="contained" color="primary" type="submit" size="large">
+                บันทึก
+              </Button>
+            </Box>
+          </Grid>
+        </Grid>
+      </form>
+    </Paper>
+  )
+}
