@@ -1,23 +1,27 @@
 import { 
-   CollectionsBookmark, Group, Handyman,
-   Dashboard, Settings, RequestQuote,
-   Folder
+  CollectionsBookmark, Group, Handyman,
+  Dashboard, Settings, RequestQuote,
+  Folder
 } from "@mui/icons-material";
 import {
-  IconHome, IconPackage, IconChartInfographic,
-  IconReceipt2
+ IconHome, IconPackage, IconChartInfographic,
+ IconReceipt2
 } from "@tabler/icons-react";
 
 import { uniqueId } from "lodash";
+import { Pin } from "lucide-react";
+import { useTranslations, useLocale } from "next-intl";
 
 export const useMenuItems = () => {
+  const t = useTranslations("Menus");
+  const localActive = useLocale();
 
   return [
     {
       id: uniqueId(),
-      title: "หน้าหลัก", // ชื่อเมนู
-      icon: IconHome, // ไอคอนของเมนู
-      href: `/dashboard`, // ลิงก์ของเมนูโดยอ้างอิงตาม Folder ในการเข้าถึง หากไม่เข้าใจอ่านเพิ่ม https://nextjs.org/docs/app/building-your-application/routing/pages
+      title: t("menu1"),
+      icon: IconHome,
+      href: `/${localActive}/protected/dashboard`,
     },
     {
       id: uniqueId(),

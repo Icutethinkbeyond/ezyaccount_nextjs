@@ -1,4 +1,4 @@
-import { Product } from "@/contexts/productServiceListContext";
+import { Product } from "@/contexts/QuotationContext";
 
 // Function to calculate Tax
 export const calculateTax = (totalPrice: number, vatRate: number, withholdingTaxPercent: number): { vatAmount: number; totalWithVAT: number; withholdingTaxAmount: number; totalAfterWithholdingTax: number } => {

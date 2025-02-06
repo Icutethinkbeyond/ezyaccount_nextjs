@@ -61,6 +61,7 @@ const User = mongoose.models.User || mongoose.model("User", userSchema);
 
 // จัดการ POST request
 export async function POST(req: Request) {
+  
   await connectDB();
 
   try {

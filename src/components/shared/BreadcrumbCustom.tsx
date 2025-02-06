@@ -1,23 +1,34 @@
-import React from 'react';
-import { Breadcrumbs, Link, Typography } from '@mui/material';
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import React from "react";
+import { Avatar, Breadcrumbs, Grid2, Link, Typography } from "@mui/material";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import { MapPin } from "lucide-react";
+import { useBreadcrumbContext } from "@/contexts/BreadcrumbContext";
 
 interface BreadcrumbProps {
-  title: string;
-  breadcrumbs?: { name: string; href?: string }[];
+  // title: string;
+  // breadcrumbs?: { name: string; href?: string }[];
+  // icon?: JSX.Element;
 }
 
-const BreadcrumbCustom: React.FC<BreadcrumbProps> = ({ title, breadcrumbs = [] }) => {
+const BreadcrumbCustom: React.FC<BreadcrumbProps> = (
+  {
+    // title,
+    // breadcrumbs = [],
+    // icon,
+  }
+) => {
+  const { breadcrumbs, icon } = useBreadcrumbContext();
+
   return (
-    <div>
-      {/* Title */}
-      <Typography variant="h4" gutterBottom>
-        {title}
-      </Typography>
-      
-      {/* Breadcrumbs */}
+    <Grid2
+      container
+      justifyItems="center"
+      alignContent="center"
+      alignItems="center"
+    >
+      {/* {icon && <Avatar sx={{ bgcolor: "primary.main", width: "40px", height: "40px" }}>{icon}</Avatar>} */}
       <Breadcrumbs
-        separator={<NavigateNextIcon fontSize="small" />}
+        separator={<NavigateNextIcon fontSize="small" color="primary" />}
         aria-label="breadcrumb"
         sx={{ marginBottom: 2 }} // Add some margin below
       >
@@ -38,7 +49,7 @@ const BreadcrumbCustom: React.FC<BreadcrumbProps> = ({ title, breadcrumbs = [] }
           )
         )}
       </Breadcrumbs>
-    </div>
+    </Grid2>
   );
 };
 

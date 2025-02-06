@@ -1,13 +1,14 @@
 "use client"
 
 import React from 'react';
-import { Box, AppBar, Toolbar, styled, Stack, IconButton, Badge, Button } from '@mui/material';
+import { Box, AppBar, Toolbar, styled, Stack, IconButton, Badge, Button, Grid2 } from '@mui/material';
 import PropTypes from 'prop-types';
 
 // components
 import Profile from './Profile';
-import Search from './Search';
 import {IconMenu2 } from '@tabler/icons-react';
+import LanguageSwitcher from '@/components/shared/LanguageSwitcher';
+import BreadcrumbCustom from '@/components/shared/BreadcrumbCustom';
 
 interface ItemType {
   toggleMobileSidebar?:  (event: React.MouseEvent<HTMLElement>) => void ;
@@ -20,8 +21,10 @@ const Header = ({toggleMobileSidebar}: ItemType) => {
 
   
   const AppBarStyled = styled(AppBar)(({ theme }) => ({
-    boxShadow: 'none',
-    background: theme.palette.background.paper,
+    // boxShadow: 'none',
+    // background: theme.palette.background.paper,
+    boxShadow: '10px 0.1px 10px rgb(117, 227, 255)',
+    background: '#ffffff',
     justifyContent: 'center',
     backdropFilter: 'blur(4px)',
     [theme.breakpoints.up('lg')]: {
@@ -36,7 +39,7 @@ const Header = ({toggleMobileSidebar}: ItemType) => {
   return (
     <AppBarStyled position="sticky" color="default">
       <ToolbarStyled>
-        {/* <IconButton
+        <IconButton
           color="inherit"
           aria-label="menu"
           onClick={toggleMobileSidebar}
@@ -48,12 +51,14 @@ const Header = ({toggleMobileSidebar}: ItemType) => {
           }}
         >
           <IconMenu2 width="20" height="20" />
-        </IconButton> */}
+        </IconButton>
 
         {/* <Search/> */}
-         
+        <BreadcrumbCustom/>
+        
         <Box flexGrow={1} />
         <Stack spacing={1} direction="row" alignItems="center">
+          <LanguageSwitcher/>
           <Profile />
         </Stack>
       </ToolbarStyled>

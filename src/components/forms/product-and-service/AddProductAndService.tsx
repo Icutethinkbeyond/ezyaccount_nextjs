@@ -11,7 +11,6 @@ import {
   FormControl,
   Button,
   SelectChangeEvent, } from "@mui/material";
-import BaseCard from "../../shared/BaseCard";
 
 const AddProductAndService: React.FC = () => {
   //   const { headForm, setHeadForm } = useProductServiceListContext();
@@ -38,7 +37,6 @@ const AddProductAndService: React.FC = () => {
       >
         Insert Your Company Details
       </Typography> */}
-      <BaseCard>
         <Box p={3} border="1px solid #ccc" borderRadius="8px">
           <Typography variant="h6" gutterBottom>
             เพิ่มสินค้า/บริการ
@@ -157,7 +155,6 @@ const AddProductAndService: React.FC = () => {
             </Grid2>
           </Grid2>
         </Box>
-      </BaseCard>
     </>
   );
 };

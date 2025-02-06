@@ -44,16 +44,10 @@ const baselightTheme = createTheme({
     },
     warning: {
       main: "#fec90f",
-      light: '#fff4e5',
+      light: "#fff4e5",
       dark: "#dcb014",
       contrastText: "#ffffff",
     },
-    // purple: {
-    //   A50: "#EBF3FE",
-    //   A100: "#6610f2",
-    //   A200: "#557fb9",
-    //   contrastText: "#ffffff",
-    // },
     grey: {
       100: "#F2F6FA",
       200: "#EAEFF4",
@@ -124,13 +118,10 @@ const baselightTheme = createTheme({
     },
   },
   components: {
-
-  
     MuiCssBaseline: {
       styleOverrides: {
         ".MuiPaper-elevation9, .MuiPopover-root .MuiPaper-elevation": {
-          boxShadow:
-            "0px 7px 30px 0px rgba(90, 114, 123, 0.11) !important",
+          boxShadow: "0px 7px 30px 0px rgba(90, 114, 123, 0.11) !important",
         },
         a: {
           textDecoration: "none",
@@ -201,7 +192,6 @@ const baselightTheme = createTheme({
       },
     },
 
-
     MuiAlert: {
       styleOverrides: {
         filledSuccess: {
@@ -247,12 +237,10 @@ const baselightTheme = createTheme({
         outlinedInfo: {
           borderColor: theme.palette.info.main,
           color: theme.palette.info.main,
-        }
+        },
       },
     },
-
   },
-  
 });
 
 export { baselightTheme };

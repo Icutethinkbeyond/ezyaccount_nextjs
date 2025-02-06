@@ -13,7 +13,7 @@ import {
   List,
 } from "@mui/material";
 import Link from "next/link";
-import { usePathname } from "next/navigation"; // Import usePathname from Next.js
+import { usePathname, useRouter } from "next/navigation"; // Import usePathname from Next.js
 
 type NavGroup = {
   [x: string]: any;
@@ -33,6 +33,9 @@ interface ItemType {
 }
 
 const NavItem = ({ item, pathDirect, onClick }: ItemType) => {
+
+  const router = useRouter();
+  
   const Icon = item.icon;
   const theme = useTheme();
   const pathname = usePathname(); // Get the current path using usePathname from Next.js
@@ -48,8 +51,8 @@ const NavItem = ({ item, pathDirect, onClick }: ItemType) => {
       backgroundColor: "inherit",
       color: theme.palette.text.secondary,
       "&:hover": {
-        backgroundColor: theme.palette.primary.light,
-        color: theme.palette.primary.main,
+        backgroundColor: theme.palette.primary.main,
+        color: '#ffffff',
       },
       "&.Mui-selected": {
         color: "white",
@@ -73,7 +76,7 @@ const NavItem = ({ item, pathDirect, onClick }: ItemType) => {
     }
   }, [isActive, item.children]);
 
-  const handleClick = (event: any) => {
+  const handleClick = (event?: any) => {
     // Prevent the link navigation if the item has children
     if (item.children) {
       event.preventDefault();
@@ -82,6 +85,7 @@ const NavItem = ({ item, pathDirect, onClick }: ItemType) => {
       onClick(event); // Call onClick for navigation if no children
     }
   };
+
 
   return (
     <>
@@ -111,7 +115,7 @@ const NavItem = ({ item, pathDirect, onClick }: ItemType) => {
           <Collapse in={open} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
               {item.children.map((subItem) => (
-                <ListItem key={subItem.id} sx={{ pl: 4 }}>
+                <ListItem key={subItem.id} sx={{ pl: 2 }}>
                   <ListItemButton
                     component={Link}
                     href={subItem.href}

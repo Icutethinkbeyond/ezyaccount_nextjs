@@ -1,4 +1,4 @@
-import { useMediaQuery, Box, Drawer } from "@mui/material";
+import { useMediaQuery, Box, Drawer, Grid2 } from "@mui/material";
 import Logo from "@/components/shared/Logo";
 import SidebarItems from "./SidebarItems";
 
@@ -53,14 +53,16 @@ const Sidebar = ({
             {/* ------------------------------------------- */}
             {/* Logo */}
             {/* ------------------------------------------- */}
-            <Box px={2}>
-              <Logo />
+            <Box>
+                <Logo />
             </Box>
             <Box>
               {/* ------------------------------------------- */}
               {/* Sidebar Items */}
               {/* ------------------------------------------- */}
-              <Box mt={3}><SidebarItems /></Box>
+              <Box mt={2}>
+                <SidebarItems />
+              </Box>
             </Box>
           </Box>
         </Drawer>

@@ -6,7 +6,7 @@ const Footer = () => {
   return (
     <Box sx={{ pt: 6, textAlign: "center" }}>
       <Typography>
-        © {new Date().getFullYear()} All rights reserved by{" "}
+        © {new Date().getFullYear()} All rights reserved by {"Bouygues-Thai"}
         <Link href="#">
           
         </Link>{" "}

@@ -1,4 +1,17 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {}
+// === old settings === 
+// /** @type {import('next').NextConfig} */
+// const nextConfig = {
+// }
+const withNextIntl = require('next-intl/plugin')();
 
-module.exports = nextConfig
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  output: 'standalone', // เปิดใช้งานโหมด standalone
+};
+
+module.exports = withNextIntl(nextConfig);
+
+
+
+
+
