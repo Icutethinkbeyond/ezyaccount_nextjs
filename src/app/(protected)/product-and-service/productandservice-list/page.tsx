@@ -92,7 +92,7 @@ const productandservicelists: React.FC<ProductTableProps> = ({ data }) => {
 
   const handleAddClick = () => {
     console.log("Add button clicked!");
-    router.push("/path/to/new-productandservice"); // เปลี่ยนเส้นทางไปยังหน้าเพิ่มหมวดหมู่ใหม่
+    router.push("/product-and-service/productandservice-list/new-productandservice"); // เปลี่ยนเส้นทางไปยังหน้าเพิ่มหมวดหมู่ใหม่
   };
 
   const columns: GridColDef<Quotation>[] = [
