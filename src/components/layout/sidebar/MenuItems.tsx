@@ -1,18 +1,11 @@
-import { 
-  Group,
-  Dashboard, Settings,
-} from "@mui/icons-material";
-import {
- IconHome, IconPackage, 
- IconReceipt2
-} from "@tabler/icons-react";
+import { Group, Dashboard, Settings } from "@mui/icons-material";
+import { IconHome, IconPackage, IconReceipt2 } from "@tabler/icons-react";
 
 import { uniqueId } from "lodash";
 import { Pin } from "lucide-react";
 import { useTranslations, useLocale } from "next-intl";
 
 export const useMenuItems = () => {
-
   const t = useTranslations("Menus");
   const localActive = useLocale();
 
@@ -20,26 +13,21 @@ export const useMenuItems = () => {
     {
       id: uniqueId(),
       title: t("menu1"),
-      icon: IconHome,
+      icon: Dashboard,
       href: `/${localActive}/protected/dashboard`,
     },
-    {
-      id: uniqueId(),
-      title: "ภาพรวม", // ชื่อเมนู
-      icon: Dashboard, // ไอคอนของเมนู
-      href: `/dashboard`, // ลิงก์ของเมนูโดยอ้างอิงตาม Folder ในการเข้าถึง หากไม่เข้าใจอ่านเพิ่ม https://nextjs.org/docs/app/building-your-application/routing/pages
-    },
+
     {
       id: uniqueId(),
       title: "รายรับ",
       icon: IconReceipt2,
-      href: `/income`,
+      href: `/${localActive}/protected/income`,
       // กรณีมีซัพเมนูให้ใส่ตาม format ด้านล่าง หากไม่มีดูตามเมนูที่ 1
       children: [
         {
           id: uniqueId(),
           title: "ใบเสนอราคา",
-          href: `/income/quotation`,
+          href: `/${localActive}/protected/income/quotation`,
         },
         // {
         //   id: uniqueId(),
@@ -96,18 +84,18 @@ export const useMenuItems = () => {
       id: uniqueId(),
       title: "สินค้า/บริการ",
       icon: IconPackage,
-      href: `/product-and-service`,
+      href: `/${localActive}/protected/product-and-service`,
       // กรณีมีซัพเมนูให้ใส่ตาม format ด้านล่าง หากไม่มีดูตามเมนูที่ 1
       children: [
         {
           id: uniqueId(),
           title: "รายการสินค้า/บริการ",
-          href: `/product-and-service/productandservice-list`,
+          href: `/${localActive}/protected/product-and-service/productandservice-list`,
         },
         {
           id: uniqueId(),
           title: "หมวดหมู่สินค้า",
-          href: `/product-and-service/category-list`,
+          href: `/${localActive}/protected/product-and-service/category-list`,
         },
       ],
     },
@@ -115,18 +103,18 @@ export const useMenuItems = () => {
       id: uniqueId(),
       title: "ผู้ใช้งาน/ลูกค้า",
       icon: Group,
-      href: `/user-and-customer`,
+      href: `/${localActive}/protected/user-and-customer`,
       // กรณีมีซัพเมนูให้ใส่ตาม format ด้านล่าง หากไม่มีดูตามเมนูที่ 1
       children: [
         {
           id: uniqueId(),
           title: "รายการผู้ใช้งาน/ลูกค้า",
-          href: `/user-and-customer/user-and-customer-lists`,
+          href: `/${localActive}/protected/user-and-customer/user-and-customer-lists`,
         },
         {
           id: uniqueId(),
           title: "เพิ่มผู้ใช้งาน/ลูกค้า",
-          href: `/user-and-customer/add-user-and-customer`,
+          href: `/${localActive}/protected/user-and-customer/add-user-and-customer`,
         },
       ],
     },
@@ -202,7 +190,7 @@ export const useMenuItems = () => {
       id: uniqueId(),
       title: "ตั้งค่า", // ชื่อเมนู
       icon: Settings, // ไอคอนของเมนู
-      href: `/settings`, // ลิงก์ของเมนูโดยอ้างอิงตาม Folder ในการเข้าถึง หากไม่เข้าใจอ่านเพิ่ม https://nextjs.org/docs/app/building-your-application/routing/pages
+      href: `/${localActive}/protected/settings`, // ลิงก์ของเมนูโดยอ้างอิงตาม Folder ในการเข้าถึง หากไม่เข้าใจอ่านเพิ่ม https://nextjs.org/docs/app/building-your-application/routing/pages
     },
   ];
 };
