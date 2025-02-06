@@ -1,7 +1,8 @@
-import React, { useState, ChangeEvent, FormEvent } from "react";
+"use client"
+
 import { useFormik } from "formik"
-// import { headerClean, HeadForm, useProductServiceListContext } from "@/contexts/productServiceListContext";
-import { 
+import { useState } from "react"
+import {
   Box,
   TextField,
   Button,
@@ -12,8 +13,8 @@ import {
   FormControl,
   InputLabel,
   Select,
-  SelectChangeEvent, } from "@mui/material";
-// import { Editor } from "@tinymce/tinymce-react"
+} from "@mui/material"
+import { Editor } from "@tinymce/tinymce-react"
 import { productSchema } from "@/components/forms/product-and-service/productSchema"
 
 const categories = [
@@ -21,7 +22,8 @@ const categories = [
   { value: "clothing", label: "เสื้อผ้า" },
   { value: "food", label: "อาหาร" },
 ]
-export default function AddProductAndService() {
+
+export default function ProductForm() {
   const [imagePreview, setImagePreview] = useState<string | null>(null)
 
   const formik = useFormik({
@@ -126,7 +128,7 @@ export default function AddProductAndService() {
             <Typography variant="subtitle1" gutterBottom>
               รายละเอียด
             </Typography>
-            {/* <Editor
+            <Editor
               apiKey="your-tinymce-key"
               init={{
                 height: 300,
@@ -156,10 +158,10 @@ export default function AddProductAndService() {
                   "bold italic forecolor | alignleft aligncenter " +
                   "alignright alignjustify | bullist numlist outdent indent | " +
                   "removeformat | help",
-              }} */}
-              {/* value={formik.values.details}
-              onEditorChange={(content: any) => formik.setFieldValue("details", content)}
-            /> */}
+              }}
+              value={formik.values.details}
+              onEditorChange={(content) => formik.setFieldValue("details", content)}
+            />
           </Grid>
 
           <Grid item xs={12} md={6}>
@@ -232,3 +234,4 @@ export default function AddProductAndService() {
       </form>
   )
 }
+
