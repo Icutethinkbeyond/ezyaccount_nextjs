@@ -1,5 +1,14 @@
-import { Group, Dashboard, Settings } from "@mui/icons-material";
-import { IconHome, IconPackage, IconReceipt2 } from "@tabler/icons-react";
+import { 
+  Group,
+  Dashboard, Settings,
+  Folder,
+  RequestQuote,
+} from "@mui/icons-material";
+import {
+  IconChartInfographic,
+ IconHome, IconPackage, 
+ IconReceipt2
+} from "@tabler/icons-react";
 
 import { uniqueId } from "lodash";
 import { Pin } from "lucide-react";
@@ -29,57 +38,57 @@ export const useMenuItems = () => {
           title: "ใบเสนอราคา",
           href: `/${localActive}/protected/income/quotation`,
         },
-        // {
-        //   id: uniqueId(),
-        //   title: "ใบวางบิล/ใบแจ้งหนี้",
-        //   href: `/income/billing`,
-        // },
-        // {
-        //   id: uniqueId(),
-        //   title: "ใบเสร็จรับเงิน/ใบกำกับภาษี",
-        //   href: `/income/invoice`,
-        // },
-        // {
-        //   id: uniqueId(),
-        //   title: "ใบลดหนี้",
-        //   href: `/income/credit`,
-        // },
-        // {
-        //   id: uniqueId(),
-        //   title: "ใบเพิ่มหนี้",
-        //   href: `/income/debit`,
-        // },
+        {
+          id: uniqueId(),
+          title: "ใบวางบิล/ใบแจ้งหนี้",
+          href: `/income/billing`,
+        },
+        {
+          id: uniqueId(),
+          title: "ใบเสร็จรับเงิน/ใบกำกับภาษี",
+          href: `/income/invoice`,
+        },
+        {
+          id: uniqueId(),
+          title: "ใบลดหนี้",
+          href: `/income/credit`,
+        },
+        {
+          id: uniqueId(),
+          title: "ใบเพิ่มหนี้",
+          href: `/income/debit`,
+        },
       ],
     },
-    // {
-    //   id: uniqueId(),
-    //   title: "รายจ่าย",
-    //   icon: RequestQuote,
-    //   href: `/expenses`,
-    //   // กรณีมีซัพเมนูให้ใส่ตาม format ด้านล่าง หากไม่มีดูตามเมนูที่ 1
-    //   children: [
-    //     {
-    //       id: uniqueId(),
-    //       title: "ใบสั่งซื้อ",
-    //       href: `/expenses/purchase-order`,
-    //     },
-    //     {
-    //       id: uniqueId(),
-    //       title: "ใบรับสินค้า",
-    //       href: `/expenses/receipt`,
-    //     },
-    //     {
-    //       id: uniqueId(),
-    //       title: "บันทึกค่าใช้จ่าย",
-    //       href: `/expenses/record-expenses`,
-    //     },
-    //     {
-    //       id: uniqueId(),
-    //       title: "ใบหัก ณ ที่จ่าย",
-    //       href: `/expenses/withholding-slip`,
-    //     },
-    //   ],
-    // },
+    {
+      id: uniqueId(),
+      title: "รายจ่าย",
+      icon: RequestQuote,
+      href: `/expenses`,
+      // กรณีมีซัพเมนูให้ใส่ตาม format ด้านล่าง หากไม่มีดูตามเมนูที่ 1
+      children: [
+        {
+          id: uniqueId(),
+          title: "ใบสั่งซื้อ",
+          href: `/expenses/purchase-order`,
+        },
+        {
+          id: uniqueId(),
+          title: "ใบรับสินค้า",
+          href: `/expenses/receipt`,
+        },
+        {
+          id: uniqueId(),
+          title: "บันทึกค่าใช้จ่าย",
+          href: `/expenses/record-expenses`,
+        },
+        {
+          id: uniqueId(),
+          title: "ใบหัก ณ ที่จ่าย",
+          href: `/expenses/withholding-slip`,
+        },
+      ],
+    },
     {
       id: uniqueId(),
       title: "สินค้า/บริการ",
@@ -118,74 +127,74 @@ export const useMenuItems = () => {
         },
       ],
     },
-    // {
-    //   id: uniqueId(),
-    //   title: "รายงาน",
-    //   icon: IconChartInfographic,
-    //   href: `/report`,
-    //   // กรณีมีซัพเมนูให้ใส่ตาม format ด้านล่าง หากไม่มีดูตามเมนูที่ 1
-    //   children: [
-    //     {
-    //       id: uniqueId(),
-    //       title: "ยอดขาย",
-    //       href: `/report/salesSummary`,
-    //     },
-    //     {
-    //       id: uniqueId(),
-    //       title: "ใบวางบิล",
-    //       href: `/report/billingSummary`,
-    //     },
-    //     {
-    //       id: uniqueId(),
-    //       title: "กำไรขาดทุน",
-    //       href: `/report/profit-and-loss`,
-    //     },
-    //     {
-    //       id: uniqueId(),
-    //       title: "ใบสั่งซื้อ",
-    //       href: `/report/purchase-order`,
-    //     },
-    //     {
-    //       id: uniqueId(),
-    //       title: "ค่าใช้จ่าย",
-    //       href: `/report/expense-report`,
-    //     },
-    //     {
-    //       id: uniqueId(),
-    //       title: "ภาษีขาย",
-    //       href: `/report/sales-tax`,
-    //     },
-    //     {
-    //       id: uniqueId(),
-    //       title: "ภาษีซื้อ",
-    //       href: `/report/purchase-tax`,
-    //     },
-    //     {
-    //       id: uniqueId(),
-    //       title: "ภาษีหัก ณ ที่จ่าย",
-    //       href: `/report/withholding-tax`,
-    //     },
-    //   ],
-    // },
-    // {
-    //   id: uniqueId(),
-    //   title: "คลังสื่อ",
-    //   icon: Folder,
-    //   href: `/archive`,
-    //   // กรณีมีซัพเมนูให้ใส่ตาม format ด้านล่าง หากไม่มีดูตามเมนูที่ 1
-    //   children: [
-    //     {
-    //       id: uniqueId(),
-    //       title: "รายการคลังสื่อ",
-    //       href: `/archive/archive-list`,
-    //     },
-    //     {
-    //       id: uniqueId(),
-    //       title: "เพิ่มไฟล์",
-    //       href: `/archive/add-archive`,
-    //     },
-    //   ],
-    // },
+    {
+      id: uniqueId(),
+      title: "รายงาน",
+      icon: IconChartInfographic,
+      href: `/report`,
+      // กรณีมีซัพเมนูให้ใส่ตาม format ด้านล่าง หากไม่มีดูตามเมนูที่ 1
+      children: [
+        {
+          id: uniqueId(),
+          title: "ยอดขาย",
+          href: `/report/salesSummary`,
+        },
+        {
+          id: uniqueId(),
+          title: "ใบวางบิล",
+          href: `/report/billingSummary`,
+        },
+        {
+          id: uniqueId(),
+          title: "กำไรขาดทุน",
+          href: `/report/profit-and-loss`,
+        },
+        {
+          id: uniqueId(),
+          title: "ใบสั่งซื้อ",
+          href: `/report/purchase-order`,
+        },
+        {
+          id: uniqueId(),
+          title: "ค่าใช้จ่าย",
+          href: `/report/expense-report`,
+        },
+        {
+          id: uniqueId(),
+          title: "ภาษีขาย",
+          href: `/report/sales-tax`,
+        },
+        {
+          id: uniqueId(),
+          title: "ภาษีซื้อ",
+          href: `/report/purchase-tax`,
+        },
+        {
+          id: uniqueId(),
+          title: "ภาษีหัก ณ ที่จ่าย",
+          href: `/report/withholding-tax`,
+        },
+      ],
+    },
+    {
+      id: uniqueId(),
+      title: "คลังสื่อ",
+      icon: Folder,
+      href: `/archive`,
+      // กรณีมีซัพเมนูให้ใส่ตาม format ด้านล่าง หากไม่มีดูตามเมนูที่ 1
+      children: [
+        {
+          id: uniqueId(),
+          title: "รายการคลังสื่อ",
+          href: `/archive/archive-list`,
+        },
+        {
+          id: uniqueId(),
+          title: "เพิ่มไฟล์",
+          href: `/archive/add-archive`,
+        },
+      ],
+    },
     {
       id: uniqueId(),
       title: "ตั้งค่า", // ชื่อเมนู
