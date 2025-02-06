@@ -2,10 +2,10 @@
 import { Grid2, Box } from "@mui/material";
 import PageContainer from "@/components/container/PageContainer";
 // components
-import SalesOverview from "@/components/dashboard/SalesOverview";
-import DailyActivity from "@/components/dashboard/DailyActivity";
-import ProductPerformance from "@/components/dashboard/ProductPerformance";
-import BlogCard from "@/components/dashboard/Blog";
+// import SalesOverview from "@/components/dashboard/SalesOverview";
+// import DailyActivity from "@/components/dashboard/DailyActivity";
+// import ProductPerformance from "@/components/dashboard/ProductPerformance";
+// import BlogCard from "@/components/dashboard/Blog";
 // import MenuCard from "@/components/shared/menuCard";
 
 const incomeMenu = [

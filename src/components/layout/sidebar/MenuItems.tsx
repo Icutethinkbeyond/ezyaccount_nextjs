@@ -41,22 +41,22 @@ export const useMenuItems = () => {
         {
           id: uniqueId(),
           title: "ใบวางบิล/ใบแจ้งหนี้",
-          href: `/income/billing`,
+          href: `/${localActive}/protected/income/billing`,
         },
         {
           id: uniqueId(),
           title: "ใบเสร็จรับเงิน/ใบกำกับภาษี",
-          href: `/income/invoice`,
+          href: `/${localActive}/protected/income/invoice`,
         },
         {
           id: uniqueId(),
           title: "ใบลดหนี้",
-          href: `/income/credit`,
+          href: `/${localActive}/protected/income/credit`,
         },
         {
           id: uniqueId(),
           title: "ใบเพิ่มหนี้",
-          href: `/income/debit`,
+          href: `/${localActive}/protected/income/debit`,
         },
       ],
     },
@@ -64,28 +64,28 @@ export const useMenuItems = () => {
       id: uniqueId(),
       title: "รายจ่าย",
       icon: RequestQuote,
-      href: `/expenses`,
+      href: `/${localActive}/protected/expenses`,
       // กรณีมีซัพเมนูให้ใส่ตาม format ด้านล่าง หากไม่มีดูตามเมนูที่ 1
       children: [
         {
           id: uniqueId(),
           title: "ใบสั่งซื้อ",
-          href: `/expenses/purchase-order`,
+          href: `/${localActive}/protected/expenses/purchase-order`,
         },
         {
           id: uniqueId(),
           title: "ใบรับสินค้า",
-          href: `/expenses/receipt`,
+          href: `/${localActive}/protected/expenses/receipt`,
         },
         {
           id: uniqueId(),
           title: "บันทึกค่าใช้จ่าย",
-          href: `/expenses/record-expenses`,
+          href: `/${localActive}/protected/expenses/record-expenses`,
         },
         {
           id: uniqueId(),
           title: "ใบหัก ณ ที่จ่าย",
-          href: `/expenses/withholding-slip`,
+          href: `/${localActive}/protected/expenses/withholding-slip`,
         },
       ],
     },
@@ -101,11 +101,11 @@ export const useMenuItems = () => {
           title: "รายการสินค้า/บริการ",
           href: `/${localActive}/protected/product-and-service`,
         },
-        {
-          id: uniqueId(),
-          title: "หมวดหมู่สินค้า",
-          href: `/${localActive}/protected/product-and-service/category-list`,
-        },
+        // {
+        //   id: uniqueId(),
+        //   title: "หมวดหมู่สินค้า",
+        //   href: `/${localActive}/protected/product-and-service/category-list`,
+        // },
       ],
     },
     {
@@ -131,48 +131,48 @@ export const useMenuItems = () => {
       id: uniqueId(),
       title: "รายงาน",
       icon: IconChartInfographic,
-      href: `/report`,
+      href: `/${localActive}/protected/report`,
       // กรณีมีซัพเมนูให้ใส่ตาม format ด้านล่าง หากไม่มีดูตามเมนูที่ 1
       children: [
         {
           id: uniqueId(),
           title: "ยอดขาย",
-          href: `/report/salesSummary`,
+          href: `/${localActive}/protected/report/salesSummary`,
         },
         {
           id: uniqueId(),
           title: "ใบวางบิล",
-          href: `/report/billingSummary`,
+          href: `/${localActive}/protected/report/billingSummary`,
         },
         {
           id: uniqueId(),
           title: "กำไรขาดทุน",
-          href: `/report/profit-and-loss`,
+          href: `/${localActive}/protected/report/profit-and-loss`,
         },
         {
           id: uniqueId(),
           title: "ใบสั่งซื้อ",
-          href: `/report/purchase-order`,
+          href: `/${localActive}/protected/report/purchase-order`,
         },
         {
           id: uniqueId(),
           title: "ค่าใช้จ่าย",
-          href: `/report/expense-report`,
+          href: `/${localActive}/protected/report/expense-report`,
         },
         {
           id: uniqueId(),
           title: "ภาษีขาย",
-          href: `/report/sales-tax`,
+          href: `/${localActive}/protected/report/sales-tax`,
         },
         {
           id: uniqueId(),
           title: "ภาษีซื้อ",
-          href: `/report/purchase-tax`,
+          href: `/${localActive}/protected/report/purchase-tax`,
         },
         {
           id: uniqueId(),
           title: "ภาษีหัก ณ ที่จ่าย",
-          href: `/report/withholding-tax`,
+          href: `/${localActive}/protected/report/withholding-tax`,
         },
       ],
     },
@@ -186,12 +186,12 @@ export const useMenuItems = () => {
         {
           id: uniqueId(),
           title: "รายการคลังสื่อ",
-          href: `/archive/archive-list`,
+          href: `/${localActive}/protected/archive/archive-list`,
         },
         {
           id: uniqueId(),
           title: "เพิ่มไฟล์",
-          href: `/archive/add-archive`,
+          href: `/${localActive}/protected/archive/add-archive`,
         },
       ],
     },

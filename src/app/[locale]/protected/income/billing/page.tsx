@@ -3,7 +3,6 @@ import { Grid, Box, Stack, Pagination } from "@mui/material";
 import PageContainer from "@/components/container/PageContainer";
 //component
 import BillingTable from "@/components/tables/income/BillingTable";
-import { useDatabaseContext } from "@/contexts/dbContext";
 
 const data = [
   {
@@ -19,14 +18,12 @@ const data = [
 
 const billings = () => {
 
-  const { quotationState } = useDatabaseContext();
-
   return (
     <PageContainer title="Billing" description="this is Billing">
       <Box mt={3}>
         <Grid container spacing={3}>
           <Grid item xs={12} lg={12}>
-            <BillingTable data={quotationState} tableName="Billing Table" newDocumentHref="/income/quotation/new-quotation" newDocumentName="New Quotation"/>
+            <BillingTable tableName="Billing Table" newDocumentHref="/income/quotation/new-quotation" newDocumentName="New Quotation" data={[]}/>
           </Grid>
         </Grid>
       </Box>

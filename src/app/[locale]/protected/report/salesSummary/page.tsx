@@ -7,11 +7,9 @@ import { TabContext, TabList, TabPanel } from '@mui/lab';
 //component
 import SalesSummaryProductTable from "@/components/tables/report/SalesSummaryProductTable";
 import SalesSummaryCustomerTable from "@/components/tables/report/SalesSummaryCustomerTable";
-import { useDatabaseContext } from "@/contexts/dbContext";
 
 const salesSummary = () => {
 
-  const { quotationState } = useDatabaseContext();
   const [value, setValue] = React.useState('1');
 
   const handleChange = (event: any, newValue: React.SetStateAction<string>) => {
@@ -31,14 +29,14 @@ const salesSummary = () => {
           <TabPanel value="1">
             <Grid container spacing={3}>
               <Grid item xs={12} lg={12}>
-                <SalesSummaryProductTable data={quotationState} tableName="SalesSummaryProduct Table" newDocumentHref="/income/quotation/new-quotation" newDocumentName="New Quotation"/>
+                <SalesSummaryProductTable tableName="SalesSummaryProduct Table" newDocumentHref="/income/quotation/new-quotation" newDocumentName="New Quotation" data={[]}/>
               </Grid>
             </Grid>
           </TabPanel>
           <TabPanel value="2">
             <Grid container spacing={3}>
               <Grid item xs={12} lg={12}>
-                <SalesSummaryCustomerTable data={quotationState} tableName="SalesSummaryCustomer Table" newDocumentHref="/income/quotation/new-quotation" newDocumentName="New Quotation"/>
+                <SalesSummaryCustomerTable tableName="SalesSummaryCustomer Table" newDocumentHref="/income/quotation/new-quotation" newDocumentName="New Quotation" data={[]}/>
               </Grid>
             </Grid>
           </TabPanel>

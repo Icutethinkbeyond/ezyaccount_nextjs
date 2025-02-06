@@ -3,18 +3,16 @@ import { Grid, Box, Stack, Pagination } from "@mui/material";
 import PageContainer from "@/components/container/PageContainer";
 //component
 import BuyTaxSummaryTable from "@/components/tables/report/BuyTaxSummaryTable";
-import { useDatabaseContext } from "@/contexts/dbContext";
 
 const purchasetax = () => {
 
-  const { quotationState } = useDatabaseContext();
 
   return (
     <PageContainer title="BuyTaxSummary" description="this is BuyTaxSummary">
       <Box mt={3}>
         <Grid container spacing={3}>
           <Grid item xs={12} lg={12}>
-            <BuyTaxSummaryTable data={quotationState} tableName="BuyTaxSummary Table" newDocumentHref="/income/quotation/new-quotation" newDocumentName="New Quotation"/>
+            <BuyTaxSummaryTable  tableName="BuyTaxSummary Table" newDocumentHref="/income/quotation/new-quotation" newDocumentName="New Quotation" data={[]}/>
           </Grid>
         </Grid>
       </Box>
