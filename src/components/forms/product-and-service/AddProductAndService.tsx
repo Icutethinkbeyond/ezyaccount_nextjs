@@ -56,7 +56,6 @@ export default function AddProductAndService() {
   }
 
   return (
-    <Paper elevation={3} sx={{ p: 4, maxWidth: 1200, mx: "auto", my: 4 }}>
       <form onSubmit={formik.handleSubmit}>
         <Typography variant="h5" gutterBottom>
           ข้อมูลสินค้า/บริการ
@@ -232,6 +231,5 @@ export default function AddProductAndService() {
           </Grid>
         </Grid>
       </form>
-    </Paper>
   )
 }
