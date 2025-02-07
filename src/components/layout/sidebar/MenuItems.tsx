@@ -104,7 +104,7 @@ export const useMenuItems = () => {
         {
           id: uniqueId(),
           title: "หมวดหมู่สินค้า",
-          href: `/${localActive}/protected/product-and-service/category-list`,
+          href: `/${localActive}/protected/product-and-service/category`,
         },
       ],
     },

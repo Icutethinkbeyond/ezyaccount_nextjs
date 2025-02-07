@@ -14,7 +14,6 @@ import {
   InputLabel,
   Select,
 } from "@mui/material"
-import { Editor } from "@tinymce/tinymce-react"
 import { productSchema } from "@/components/forms/product-and-service/productSchema"
 
 const categories = [
@@ -128,40 +127,6 @@ export default function ProductForm() {
             <Typography variant="subtitle1" gutterBottom>
               รายละเอียด
             </Typography>
-            <Editor
-              apiKey="your-tinymce-key"
-              init={{
-                height: 300,
-                menubar: false,
-                plugins: [
-                  "advlist",
-                  "autolink",
-                  "lists",
-                  "link",
-                  "image",
-                  "charmap",
-                  "preview",
-                  "anchor",
-                  "searchreplace",
-                  "visualblocks",
-                  "code",
-                  "fullscreen",
-                  "insertdatetime",
-                  "media",
-                  "table",
-                  "code",
-                  "help",
-                  "wordcount",
-                ],
-                toolbar:
-                  "undo redo | blocks | " +
-                  "bold italic forecolor | alignleft aligncenter " +
-                  "alignright alignjustify | bullist numlist outdent indent | " +
-                  "removeformat | help",
-              }}
-              value={formik.values.details}
-              onEditorChange={(content) => formik.setFieldValue("details", content)}
-            />
           </Grid>
 
           <Grid item xs={12} md={6}>

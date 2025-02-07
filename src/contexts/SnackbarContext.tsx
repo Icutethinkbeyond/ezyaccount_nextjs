@@ -1,8 +1,6 @@
 // contexts/SnackbarContext.tsx
 
 "use client";
-
-import { AutohideSnackbarState, initialSnackbar } from "@/interfaces/AutohideSnackbarState";
 import React, {
   createContext,
   useContext,
@@ -10,6 +8,16 @@ import React, {
   ReactNode,
   Dispatch,
 } from "react";
+
+export interface AutohideSnackbarState {
+  message?: string | null
+  notiColor: string
+}
+
+export const initialSnackbar: AutohideSnackbarState = { 
+  message: "",
+  notiColor: "error",
+}
 
 // กำหนดประเภทของ Context
 interface SnackbarContextProps {
