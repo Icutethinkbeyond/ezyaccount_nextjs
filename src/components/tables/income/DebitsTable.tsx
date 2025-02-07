@@ -387,7 +387,7 @@ const DebitsTable: React.FC<ProductTableProps> = ({ data }) => {
     //     </Box>
     //   </>
     // </BaseCard>
-    <div></div>
+    <div>ใบเพิ่มหนี้</div>
   );
 };
 

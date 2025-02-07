@@ -387,7 +387,7 @@ const CreditsTable: React.FC<ProductTableProps> = ({ data }) => {
     //     </Box>
     //   </>
     // </BaseCard>
-    <div></div>
+    <div>ใบลดหนี้</div>
   );
 };
 

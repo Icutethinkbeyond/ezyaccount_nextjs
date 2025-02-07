@@ -387,7 +387,7 @@ const BillingTable: React.FC<ProductTableProps> = ({ data }) => {
     //     </Box>
     //   </>
     // </BaseCard>
-    <div></div>
+    <div>ใบวางบิล</div>
   );
 };
 

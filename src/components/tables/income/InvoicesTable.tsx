@@ -387,7 +387,7 @@ const InvoicesTable: React.FC<ProductTableProps> = ({ data }) => {
     //     </Box>
     //   </>
     // </BaseCard>
-    <div></div>
+    <div>ใบกำกับภาษี</div>
   );
 };
 

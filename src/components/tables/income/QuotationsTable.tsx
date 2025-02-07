@@ -387,7 +387,7 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ data }) => {
     //     </Box>
     //   </>
     // </BaseCard>
-    <div></div>
+    <div>ใบเสนอราคา</div>
   );
 };
 
