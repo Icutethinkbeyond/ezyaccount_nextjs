@@ -123,7 +123,7 @@ export const useMenuItems = () => {
         // {
         //   id: uniqueId(),
         //   title: "เพิ่มผู้ใช้งาน/ลูกค้า",
-        //   href: `/${localActive}/protected/user-and-customer/user-and-customer-lists`,
+        //   href: `/protected/user-and-customer`,
         // },
       ],
     },

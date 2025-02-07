@@ -302,7 +302,7 @@ const productandservicelists: React.FC<ProductTableProps> = ({  }) => {
     //     />
     //   </>
     // </BaseCard>
-    <></>
+    <>สินค้า/บริการ</>
   );
 };
 
