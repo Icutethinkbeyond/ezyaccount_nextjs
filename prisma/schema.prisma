@@ -178,6 +178,7 @@ model Product {
   productName        String // ชื่อสินค้า
   productSKU         String? // รหัสสินค้า
   productDescription String? // คำอธิบายสินค้า
+  productImage       String?
 
   aboutProduct AboutProduct?
 

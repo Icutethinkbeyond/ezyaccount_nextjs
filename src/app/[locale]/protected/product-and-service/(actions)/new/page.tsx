@@ -23,9 +23,7 @@ const Dashboard = () => {
 
   return (
     <PageContainer>
-      <Grid2 container spacing={2} sx={{ p: 2 }}>
-        <ProductForm />
-      </Grid2>
+      <ProductForm />
     </PageContainer>
   );
 };

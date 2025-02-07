@@ -26,6 +26,7 @@ export interface Product {
   productSKU: string | null,
   productDescription: string | null,
   aboutProduct: AboutProduct,
+  productImage: string | null,
   category: Category
   categoryId: string | null
 }
@@ -54,6 +55,7 @@ export const initialProduct: Product = {
   productName: "",
   productSKU: "",
   productDescription: "",
+  productImage: "",
   aboutProduct: initialAboutProduct,
   category: initialCategory,
   categoryId: "",

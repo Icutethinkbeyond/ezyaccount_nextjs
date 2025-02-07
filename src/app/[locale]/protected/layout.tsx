@@ -6,6 +6,8 @@ import Header from "@/components/layout/header/Header";
 import Sidebar from "@/components/layout/sidebar/Sidebar";
 import AutohideSnackbar from "@/components/shared/SnackBarCustom";
 import { useSnackbarContext } from "@/contexts/SnackbarContext";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 const MainWrapper = styled("div")(() => ({
   display: "flex",
@@ -56,7 +58,9 @@ export default function RootLayout({
               message={snackbar.message}
               notiColor={snackbar.notiColor}
             />
-            {children}
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              {children}
+            </LocalizationProvider>
           </Box>
           {/* <Footer /> */}
         </Container>

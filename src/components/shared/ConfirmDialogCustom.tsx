@@ -11,7 +11,7 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
-import { Cancel, Delete, RemoveCircle } from "@mui/icons-material";
+import { Cancel, CleanHands, CleaningServices, Clear, Delete, RemoveCircle } from "@mui/icons-material";
 import { AlertOctagon, Trash2 } from "lucide-react";
 import { useSnackbarContext } from "@/contexts/SnackbarContext";
 // import { DocumentStatus } from "@prisma/client";
@@ -70,11 +70,11 @@ const ConfirmDelete: React.FC<ConfirmDeleteProps> = ({
         variant="outlined"
         // color={onDisable ? "primary.main" : "#ffcbb5"}
         // sx={{ mr: 1, bgcolor: !onDisable ? "primary.main" : "#ffcbb5" }}
-        startIcon={<Cancel />}
+        startIcon={<CleaningServices />}
         disabled={onDisable}
         onClick={() => handleClickOpen()}
       >
-        ล้างค่าฟอร์ม
+        ล้างฟอร์ม
       </Button>
       <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
         <DialogTitle id="alert-dialog-title" variant="h3">

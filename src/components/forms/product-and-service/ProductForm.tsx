@@ -1,37 +1,29 @@
 "use client";
 
-import { Field, FieldProps, Form, Formik, useFormik } from "formik";
+import { Field, FieldProps, Form, Formik } from "formik";
 import { FC, useState } from "react";
-import {
-  Box,
-  TextField,
-  Button,
-  MenuItem,
-  Typography,
-  Paper,
-  Grid,
-  FormControl,
-  InputLabel,
-  Select,
-  Grid2,
-  Avatar,
-} from "@mui/material";
-import { productSchema } from "@/components/forms/product-and-service/productSchema";
+import { Box, TextField, Grid2, Autocomplete } from "@mui/material";
 import BaseCard from "@/components/shared/BaseCard";
 import ConfirmDelete from "@/components/shared/ConfirmDialogCustom";
 import { LoadingButton } from "@mui/lab";
 import * as Yup from "yup";
-import { initialProduct, Product } from "@/interfaces/Product";
-import { Category, ProductionQuantityLimits } from "@mui/icons-material";
+import { CategorySelect, initialProduct, Product } from "@/interfaces/Product";
+import { ProductionQuantityLimitsOutlined, Save } from "@mui/icons-material";
+import PageTitle from "@/components/shared/PageTitle";
+import { useProductContext } from "@/contexts/ProductContext";
+import DragDropImage from "@/components/shared/DragDropImage";
 
-interface FormProps {}
+interface FormProps {
+  viewOnly?: boolean;
+}
 
 const validationSchema = Yup.object().shape({
-  categoryName: Yup.string().required("กรุณากรอกชื่อหมวดหมู่"),
+  productName: Yup.string().required("กรุณากรอกชื่อสินค้า"),
 });
 
-const ProductForm: FC<FormProps> = () => {
+const ProductForm: FC<FormProps> = ({ viewOnly = false }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { categorySelectState } = useProductContext();
 
   const handleFormSubmit = (
     value: Product,
@@ -47,72 +39,214 @@ const ProductForm: FC<FormProps> = () => {
           onSubmit={handleFormSubmit}
           enableReinitialize // เพื่อให้ Formik อัปเดตค่าจาก useState
         >
-          {({ errors, touched, resetForm, values, setFieldValue }) => (
+          {({
+            errors,
+            touched,
+            resetForm,
+            values,
+            setFieldValue,
+            isSubmitting,
+          }) => (
             <Form>
               <Box p={3} border="1px solid #ccc" borderRadius="8px">
-                <Grid2 container spacing={2}>
-                  <Grid2 size={8}>
-                  <Grid2 size={{ xs: 12 }} sx={{ mb: 1 }}>
-                    <Grid2 size={{ xs: 12 }} mb={2}>
-                      <Grid2 container alignItems="center">
-                        <Avatar sx={{ bgcolor: "primary.main" }}>
-                          <ProductionQuantityLimits fontSize="small" />
-                        </Avatar>
-                        <Typography variant="h4" gutterBottom ml={2} mt={0.5}>
-                          เพิ่มสินค้า
-                        </Typography>
+                <Grid2 size={12} container>
+                  <PageTitle
+                    title="เพิ่มสินค้า"
+                    icon={<ProductionQuantityLimitsOutlined />}
+                  />
+                  <Grid2 container size={9} spacing={3}>
+                    <Grid2 size={12} container>
+                      <Grid2 size={{ xs: 6 }}>
+                        <Field name="productName">
+                          {({ field }: FieldProps) => (
+                            <TextField
+                              {...field}
+                              name="productName"
+                              label="ชื่อหมวดหมู่ (จำเป็น)"
+                              value={values.productName}
+                              onChange={(e) => {
+                                setFieldValue("productName", e.target.value);
+                              }}
+                              error={
+                                touched.productName &&
+                                Boolean(errors.productName)
+                              }
+                              helperText={
+                                touched.productName && errors.productName
+                              }
+                              fullWidth
+                              slotProps={{
+                                inputLabel: { shrink: true },
+                              }}
+                            />
+                          )}
+                        </Field>
+                      </Grid2>
+                      <Grid2 size={{ xs: 6 }}>
+                        <Field name="productSKU">
+                          {({ field }: FieldProps) => (
+                            <TextField
+                              {...field}
+                              name="productSKU"
+                              slotProps={{
+                                inputLabel: { shrink: true },
+                              }}
+                              label="SKU (ถ้ามี)"
+                              value={values.productSKU ? values.productSKU : ""}
+                              onChange={(e) => {
+                                setFieldValue("productSKU", e.target.value);
+                              }}
+                              fullWidth
+                            />
+                          )}
+                        </Field>
+                      </Grid2>
+                    </Grid2>
+
+                    <Grid2 size={12} container>
+                      <Grid2 size={{ xs: 6 }}>
+                        <Field name="categoryId">
+                          {({ field }: FieldProps) => (
+                            <Autocomplete
+                              disabled={isSubmitting || isLoading}
+                              id="categoryId"
+                              options={categorySelectState}
+                              getOptionLabel={(option: CategorySelect) =>
+                                option.categoryName
+                              }
+                              isOptionEqualToValue={(option, value) =>
+                                option.categoryId === value.categoryId
+                              }
+                              value={
+                                categorySelectState.find(
+                                  (cat) => cat.categoryId === values.categoryId
+                                ) || null
+                              }
+                              onChange={(event, value) => {
+                                setFieldValue(
+                                  "categoryId",
+                                  value ? value.categoryId : ""
+                                );
+                              }}
+                              readOnly={viewOnly}
+                              renderInput={(params) => (
+                                <TextField
+                                  {...params}
+                                  label="หมวดหมู่"
+                                  name="categoryId"
+                                />
+                              )}
+                            />
+                          )}
+                        </Field>
+                      </Grid2>
+                      <Grid2 size={{ xs: 6 }}>
+                        <Field name="aboutProduct.productStock">
+                          {({ field }: FieldProps) => (
+                            <TextField
+                              {...field}
+                              name="aboutProduct.productStock"
+                              label="จำนวนสินค้าในสต็อค (ถ้ามี)"
+                              value={values.aboutProduct?.productStock}
+                              onChange={(e) => {
+                                setFieldValue(
+                                  "aboutProduct.productStock",
+                                  e.target.value
+                                );
+                              }}
+                              fullWidth
+                              slotProps={{
+                                inputLabel: { shrink: true },
+                              }}
+                            />
+                          )}
+                        </Field>
+                      </Grid2>
+                    </Grid2>
+
+                    <Grid2 size={{ xs: 12 }}>
+                      <Field name="productDescription">
+                        {({ field }: FieldProps) => (
+                          <TextField
+                            {...field}
+                            name="productDescription"
+                            multiline
+                            rows={4}
+                            slotProps={{
+                              inputLabel: { shrink: true },
+                            }}
+                            label="รายละเอียด (ถ้ามี)"
+                            value={
+                              values.productDescription
+                                ? values.productDescription
+                                : ""
+                            }
+                            onChange={(e) => {
+                              setFieldValue(
+                                "productDescription",
+                                e.target.value
+                              );
+                            }}
+                            fullWidth
+                          />
+                        )}
+                      </Field>
+                    </Grid2>
+
+                    <Grid2 size={12} container>
+                      <Grid2 size={{ xs: 6 }}>
+                        <Field name="aboutProduct.productPrice">
+                          {({ field }: FieldProps) => (
+                            <TextField
+                              {...field}
+                              name="aboutProduct.productPrice"
+                              label="ราคาสินค้า (ถ้ามี)"
+                              value={values.aboutProduct?.productPrice}
+                              onChange={(e) => {
+                                setFieldValue(
+                                  "aboutProduct.productPrice",
+                                  e.target.value
+                                );
+                              }}
+                              fullWidth
+                              slotProps={{
+                                inputLabel: { shrink: true },
+                              }}
+                            />
+                          )}
+                        </Field>
+                      </Grid2>
+                      <Grid2 size={{ xs: 6 }}>
+                        <Field name="aboutProduct.productDiscountPrice">
+                          {({ field }: FieldProps) => (
+                            <TextField
+                              {...field}
+                              name="aboutProduct.productDiscountPrice"
+                              label="ราคาสินค้าที่ลด (ถ้ามี)"
+                              value={values.aboutProduct?.productDiscountPrice}
+                              onChange={(e) => {
+                                setFieldValue(
+                                  "aboutProduct.productDiscountPrice",
+                                  e.target.value
+                                );
+                              }}
+                              fullWidth
+                              slotProps={{
+                                inputLabel: { shrink: true },
+                              }}
+                            />
+                          )}
+                        </Field>
                       </Grid2>
                     </Grid2>
                   </Grid2>
-
-                  <Grid2 size={{ xs: 12 }} mb={2}>
-                    <Field name="categoryName">
-                      {({ field }: FieldProps) => (
-                        <TextField
-                          {...field}
-                          name="categoryName"
-                          label="ชื่อหมวดหมู่ (จำเป็น)"
-                          value={values.categoryName}
-                          onChange={(e) => {
-                            setFieldValue("categoryName", e.target.value);
-                          }}
-                          error={
-                            touched.categoryName && Boolean(errors.categoryName)
-                          }
-                          helperText={
-                            touched.categoryName && errors.categoryName
-                          }
-                          fullWidth
-                          slotProps={{
-                            inputLabel: { shrink: true },
-                          }}
-                        />
-                      )}
-                    </Field>
+                  <Grid2 size={3} pl={2}>
+                    <Field
+                      name="productImage"
+                      component={DragDropImage}
+                      setFieldValue={setFieldValue}
+                    />
                   </Grid2>
-                  <Grid2 size={{ xs: 12 }}>
-                    <Field name="categoryDesc">
-                      {({ field }: FieldProps) => (
-                        <TextField
-                          {...field}
-                          name="categoryDesc"
-                          multiline
-                          rows={4}
-                          slotProps={{
-                            inputLabel: { shrink: true },
-                          }}
-                          label="รายละเอียดหมวดหมู่ (ถ้ามี)"
-                          value={values.categoryDesc ? values.categoryDesc : ""}
-                          onChange={(e) => {
-                            setFieldValue("categoryDesc", e.target.value);
-                          }}
-                          fullWidth
-                        />
-                      )}
-                    </Field>
-                  </Grid2>
-                  </Grid2>
-                  <Grid2 size={4}>
                 </Grid2>
               </Box>
               <Box sx={{ mt: 3, display: "flex", justifyContent: "flex-end" }}>
@@ -122,6 +256,7 @@ const ProductForm: FC<FormProps> = () => {
                   color="primary"
                   sx={{ mr: 1 }}
                   loading={isLoading}
+                  startIcon={<Save />}
                 >
                   บันทึก
                 </LoadingButton>
