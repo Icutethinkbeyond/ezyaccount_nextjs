@@ -101,11 +101,11 @@ export const useMenuItems = () => {
           title: "รายการสินค้า/บริการ",
           href: `/${localActive}/protected/product-and-service`,
         },
-        // {
-        //   id: uniqueId(),
-        //   title: "หมวดหมู่สินค้า",
-        //   href: `/${localActive}/protected/product-and-service/category-list`,
-        // },
+        {
+          id: uniqueId(),
+          title: "หมวดหมู่สินค้า",
+          href: `/${localActive}/protected/product-and-service/category-list`,
+        },
       ],
     },
     {
