@@ -10,6 +10,8 @@ import { SessionProviders } from "../../lib/SessionProviders";
 import { SnackbarProvider } from "@/contexts/SnackbarContext";
 import { BreadcrumbProvider } from "@/contexts/BreadcrumbContext";
 import ThemeRegistry from "@/components/themeRegistry/ThemeRegistry";
+import { Category } from "@mui/icons-material";
+import { ProductProvider } from "@/contexts/ProductContext";
 
 export const dynamic = "force-dynamic";
 
@@ -37,9 +39,11 @@ export default async function RootLayout({
         <SessionProviders>
           <SnackbarProvider>
             <BreadcrumbProvider>
-              <NextIntlClientProvider messages={messages}>
-                <ThemeRegistry>{children}</ThemeRegistry>
-              </NextIntlClientProvider>
+              <ProductProvider>
+                <NextIntlClientProvider messages={messages}>
+                  <ThemeRegistry>{children}</ThemeRegistry>
+                </NextIntlClientProvider>
+              </ProductProvider>
             </BreadcrumbProvider>
           </SnackbarProvider>
         </SessionProviders>

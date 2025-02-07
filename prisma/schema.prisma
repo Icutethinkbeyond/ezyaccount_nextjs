@@ -6,6 +6,7 @@ datasource db {
 generator client {
   provider = "prisma-client-js"
 }
+
 model User {
   userId       String     @id @default(auto()) @map("_id") @db.ObjectId
   username     String?
@@ -22,8 +23,8 @@ model User {
   companyProfile CompanyProfile?
   resetTokens    ResetToken[]
 
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([userEmail, username])
 }
@@ -61,8 +62,8 @@ model CompanyProfile {
   userId       String        @unique @db.ObjectId
   customers    Customer[]
 
-  createdAt        DateTime @default(now()) // วันที่สร้าง
-  updatedAt        DateTime @updatedAt // วันที่อัปเดตล่าสุด
+  createdAt DateTime @default(now()) // วันที่สร้าง
+  updatedAt DateTime @updatedAt // วันที่อัปเดตล่าสุด
 }
 
 model Customer {
@@ -157,9 +158,72 @@ model BankAccount {
   CompanyProfile          CompanyProfile? @relation(fields: [companyProfileCompanyId], references: [companyId])
   companyProfileCompanyId String?         @db.ObjectId
 
-  createdAt               DateTime        @default(now())
-  updatedAt               DateTime        @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
 
+model Category {
+  categoryId   String    @id @default(auto()) @map("_id") @db.ObjectId
+  categoryName String
+  categoryDesc String?
+  products     Product[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Product {
+  equipmentId   String  @id @default(auto()) @map("_id") @db.ObjectId
+  equipmentName String // ชื่อสินค้า
+  serialNo      String? // รหัสสินค้า
+  brand         String? // ยี่ห้อ/แบรนด์ (อาจเป็น null ได้)
+  description   String? // คำอธิบายสินค้า
+
+  equipmentOwn   Boolean       @default(true)
+  aboutEquipment AboutProduct?
+
+  category   Category? @relation(fields: [categoryId], references: [categoryId])
+  categoryId String?   @db.ObjectId
+
+  // equipmentType   EquipmentType? @relation(fields: [equipmentTypeId], references: [equipmentTypeId])
+  equipmentTypeId String? @db.ObjectId
+
+  createdAt DateTime @default(now()) // วันที่สร้าง
+  updatedAt DateTime @updatedAt // อัปเดตล่าสุด
+}
+
+model AboutProduct {
+  aboutEquipmentId String @id @default(auto()) @map("_id") @db.ObjectId
+
+  product     Product @relation(fields: [equipmentId], references: [equipmentId], onDelete: Cascade)
+  equipmentId String  @unique @db.ObjectId
+
+  //Price
+  productPrice Float?    @default(0)
+  purchaseDate DateTime?
+
+  unitName String @default("Unit")
+
+  // stockStatus EquipmentStatus
+
+  createdAt DateTime @default(now()) // วันที่สร้าง
+  updatedAt DateTime @updatedAt // อัปเดตล่าสุด
+}
+
+model Document {
+  documentId      String  @id @default(auto()) @map("_id") @db.ObjectId
+  documentIdNo    String  @unique
+  documentDetials String?
+  // documentType    DocumentCategory @default(Rental)
+
+  // site   Site?   @relation(fields: [siteId], references: [siteId])
+  // siteId String? @db.ObjectId
+
+  // documentStatus DocumentStatus @default(Open)
+  // documentStep   DocumentStep   @default(Location)
+
+  createdAt DateTime @default(now()) // วันที่สร้าง
+  updatedAt DateTime @updatedAt // อัปเดตล่าสุด
 }
 
 // model tbl_archive {
@@ -499,27 +563,9 @@ model BankAccount {
 //   pre_order_id          Int
 // }
 
-// model tbl_package {
-//   package_id            String  @id @default(auto()) @map("_id") @db.ObjectId
-//   package_name          String
-//   package_price         Int
-//   annual_price          Int
-//   package_desc          String
-// }
-
 // model tbl_payment_type {
 //   payment_id            String  @id @default(auto()) @map("_id") @db.ObjectId
 //   payment_type          String
-// }
-
-// model tbl_point_collection {
-//   id                    String  @id @default(auto()) @map("_id") @db.ObjectId
-//   createdDate           DateTime @default(now())
-//   od_id                 Int
-//   cus_id                Int
-//   total_price           Float // Old dataType "float"
-//   point                 Int
-//   business_id           Int
 // }
 
 // model tbl_product {
@@ -608,24 +654,6 @@ model BankAccount {
 //   od_qty                Int
 //   od_price              Int
 //   pd_discount           Int
-// }
-
-// model tbl_reset_password {
-//   id                    String  @id @default(auto()) @map("_id") @db.ObjectId
-//   email                 String
-//   activation_id         String
-//   agent                 String
-//   client_ip             String
-//   isDeleted             IsDeleted @default(NO)
-//   createdBy             Int //Old dataType "bigint"
-//   createdDtm            DateTime @default(now())
-//   updatedBy             Int //Old dataType "bigint"
-//   updatedDtm            DateTime @default(now())
-// }
-
-// model tbl_roles {
-//   roleId                String  @id @default(auto()) @map("_id") @db.ObjectId
-//   role                  String
 // }
 
 // model tbl_sales_package {
