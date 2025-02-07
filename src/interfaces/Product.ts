@@ -1,33 +1,64 @@
-import { Equipment, EquipmentQuery } from "./Equipment";
 
-
-// Category
 export interface Category {
   categoryId: string;
   categoryName: string;
-  categoryDesc?: string;
-  equipments: Equipment[];
-  _count?: {
-    equipments: number
-  }
+  categoryDesc?: string | null;
+  products: Product[];
+  // _count?: {
+  //   equipments: number
+  // }
 }
 
-export interface CategoryQuery {
-  categoryId: string;
-  categoryName: string;
-  categoryDesc?: string | null | undefined;
-  equipments: EquipmentQuery[];
-  _count?: {
-    equipments: number
-  }
+export interface AboutProduct {
+  aboutProductId: string | null
+  product: Product | null
+  productId: string | null,
+  productPrice: number
+  productDiscountPrice: number
+  productStock: number
+  productBrand: string | null
+  unitName: string
+}
+
+export interface Product {
+  productId: string | null,
+  productName: string,
+  productSKU: string | null,
+  productDescription: string | null,
+  aboutProduct: AboutProduct,
+  category: Category
+  categoryId: string | null
 }
 
 export const initialCategory: Category = {
   categoryId: '',
   categoryName: '',
   categoryDesc: '',
-  equipments: [],
+  products: [],
 };
+
+
+export const initialAboutProduct: AboutProduct = {
+  aboutProductId: "",
+  product: null,
+  productId: "",
+  productPrice: 0,
+  productDiscountPrice: 0,
+  productStock: 0,
+  productBrand: "",
+  unitName: '',
+}
+
+export const initialProduct: Product = {
+  productId: "",
+  productName: "",
+  productSKU: "",
+  productDescription: "",
+  aboutProduct: initialAboutProduct,
+  category: initialCategory,
+  categoryId: "",
+}
+
 
 export type CategorySelect = {
   categoryId: string; // ID ของหมวดหมู่

@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { Box, Grid2, Typography } from "@mui/material";
 import PageContainer from "@/components/container/PageContainer";
 import { useBreadcrumbContext } from "@/contexts/BreadcrumbContext";
-import AddProductAndService from "@/components/forms/product-and-service/AddProductAndService";
+import ProductForm from "@/components/forms/product-and-service/ProductForm";
 
 const Dashboard = () => {
   //Set Breadcrumb
@@ -24,7 +24,7 @@ const Dashboard = () => {
   return (
     <PageContainer>
       <Grid2 container spacing={2} sx={{ p: 2 }}>
-        <AddProductAndService />
+        <ProductForm />
       </Grid2>
     </PageContainer>
   );

@@ -8,6 +8,8 @@ import {
   CategorySelect,
 } from "@/interfaces/Product";
 import { faker } from "@faker-js/faker";
+import { Dayjs } from "dayjs";
+
 import React, {
   createContext,
   useContext,

@@ -1,120 +1,48 @@
-import React, { Dispatch, FC, useState } from "react";
+"use client";
+
+import { Field, FieldProps, Form, Formik, useFormik } from "formik";
+import { FC, useState } from "react";
 import {
   Box,
-  Typography,
-  Grid2,
   TextField,
-  InputAdornment,
+  Button,
+  MenuItem,
+  Typography,
+  Paper,
+  Grid,
+  FormControl,
+  InputLabel,
+  Select,
+  Grid2,
   Avatar,
 } from "@mui/material";
+import { productSchema } from "@/components/forms/product-and-service/productSchema";
 import BaseCard from "@/components/shared/BaseCard";
-import { Category, initialCategory } from "@/interfaces/Product";
-import * as Yup from "yup";
-import { Field, FieldProps, Form, Formik } from "formik";
-import { LoadingButton } from "@mui/lab";
-import { useProductContext } from "@/contexts/ProductContext";
 import ConfirmDelete from "@/components/shared/ConfirmDialogCustom";
-import { useSnackbarContext } from "@/contexts/SnackbarContext";
-import axios from "axios";
-import CategoryIcon from "@mui/icons-material/Category";
+import { LoadingButton } from "@mui/lab";
+import * as Yup from "yup";
+import { initialProduct, Product } from "@/interfaces/Product";
+import { Category, ProductionQuantityLimits } from "@mui/icons-material";
+
+interface FormProps {}
 
 const validationSchema = Yup.object().shape({
   categoryName: Yup.string().required("กรุณากรอกชื่อหมวดหมู่"),
 });
 
-interface CategoryFormProps {
-  setRecall: Dispatch<React.SetStateAction<boolean>>;
-  recall: boolean;
-}
-
-const CategoryForm: FC<CategoryFormProps> = ({ setRecall, recall }) => {
-  const { categoryForm, setCategoryForm, categoryEdit, setCategoryEdit } =
-    useProductContext();
-  const { setOpenDialog, snackbar, setSnackbar } = useSnackbarContext();
+const ProductForm: FC<FormProps> = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  // Handle form submission
   const handleFormSubmit = (
-    value: Category,
+    value: Product,
     { resetForm, validateForm }: any
-  ) => {
-    validateForm(); // บังคับ validate หลังจากรีเซ็ต
-    if (categoryEdit) {
-      updateCategory(value);
-    } else {
-      createCategory(value);
-    }
-    resetForm(); // รีเซ็ตค่าฟอร์ม
-  };
-
-  const updateCategory = (category: Category) => {
-    axios
-      .patch("/api/equipment/category", category)
-      .then(() => {
-        setOpenDialog(true);
-        setSnackbar({
-          ...snackbar,
-          message: `แก้ไขหมวดหมู่ ${category.categoryName} สำเร็จ`,
-          notiColor: "success",
-        });
-        setRecall((prev) => !prev);
-      })
-      .catch((error) => {
-        if (error.name === "AbortError") {
-          console.log("Request cancelled");
-        } else {
-          console.error("Fetch error:", error);
-          setOpenDialog(true);
-          setSnackbar({
-            ...snackbar,
-            message: error.response.data,
-            notiColor: "error",
-          });
-        }
-      })
-      .finally(() => {
-        setIsLoading(false);
-        setCategoryForm(initialCategory);
-        setCategoryEdit(false);
-      });
-  };
-
-  const createCategory = (category: Category) => {
-    axios
-      .post("/api/equipment/category", category)
-      .then(() => {
-        setOpenDialog(true);
-        setSnackbar({
-          ...snackbar,
-          message: `สร้างหมวดหมู่ ${category.categoryName} สำเร็จ`,
-          notiColor: "success",
-        });
-        setRecall((prev) => !prev);
-      })
-      .catch((error) => {
-        if (error.name === "AbortError") {
-          console.log("Request cancelled");
-        } else {
-          console.error("Fetch error:", error);
-          setOpenDialog(true);
-          setSnackbar({
-            ...snackbar,
-            message: error.response.data,
-            notiColor: "error",
-          });
-        }
-      })
-      .finally(() => {
-        setIsLoading(false);
-        setCategoryForm(initialCategory);
-      });
-  };
+  ) => {};
 
   return (
     <BaseCard>
       <>
-        <Formik
-          initialValues={categoryForm} // ใช้ state เป็น initialValues
+        <Formik<Product>
+          initialValues={initialProduct} // ใช้ state เป็น initialValues
           validationSchema={validationSchema}
           onSubmit={handleFormSubmit}
           enableReinitialize // เพื่อให้ Formik อัปเดตค่าจาก useState
@@ -123,20 +51,20 @@ const CategoryForm: FC<CategoryFormProps> = ({ setRecall, recall }) => {
             <Form>
               <Box p={3} border="1px solid #ccc" borderRadius="8px">
                 <Grid2 container spacing={2}>
+                  <Grid2 size={8}>
                   <Grid2 size={{ xs: 12 }} sx={{ mb: 1 }}>
                     <Grid2 size={{ xs: 12 }} mb={2}>
                       <Grid2 container alignItems="center">
                         <Avatar sx={{ bgcolor: "primary.main" }}>
-                          <CategoryIcon fontSize="small" />
+                          <ProductionQuantityLimits fontSize="small" />
                         </Avatar>
                         <Typography variant="h4" gutterBottom ml={2} mt={0.5}>
-                          เพิ่มหมวดหมู่สินค้า
+                          เพิ่มสินค้า
                         </Typography>
                       </Grid2>
                     </Grid2>
                   </Grid2>
 
-                  {/* Issue Date */}
                   <Grid2 size={{ xs: 12 }} mb={2}>
                     <Field name="categoryName">
                       {({ field }: FieldProps) => (
@@ -168,7 +96,7 @@ const CategoryForm: FC<CategoryFormProps> = ({ setRecall, recall }) => {
                         <TextField
                           {...field}
                           name="categoryDesc"
-                          multiline // เพิ่มคุณสมบัตินี้เพื่อทำให้ TextField เป็น textarea
+                          multiline
                           rows={4}
                           slotProps={{
                             inputLabel: { shrink: true },
@@ -183,6 +111,8 @@ const CategoryForm: FC<CategoryFormProps> = ({ setRecall, recall }) => {
                       )}
                     </Field>
                   </Grid2>
+                  </Grid2>
+                  <Grid2 size={4}>
                 </Grid2>
               </Box>
               <Box sx={{ mt: 3, display: "flex", justifyContent: "flex-end" }}>
@@ -193,7 +123,7 @@ const CategoryForm: FC<CategoryFormProps> = ({ setRecall, recall }) => {
                   sx={{ mr: 1 }}
                   loading={isLoading}
                 >
-                  {!categoryEdit ? "เพิ่มหมวดหมู่" : "แก้ไขหมวดหมู่"}
+                  บันทึก
                 </LoadingButton>
                 <ConfirmDelete
                   itemId={""}
@@ -209,4 +139,4 @@ const CategoryForm: FC<CategoryFormProps> = ({ setRecall, recall }) => {
   );
 };
 
-export default CategoryForm;
+export default ProductForm;

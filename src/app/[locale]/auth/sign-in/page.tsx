@@ -1,5 +1,3 @@
-
-
 import { Box, Card, Button, Typography, Divider } from "@mui/material";
 import { Google } from "@mui/icons-material";
 import Link from "next/link";
@@ -41,13 +39,13 @@ const LoginPage = () => {
             padding: 6,
           }}
         >
-                  <Image
-                    src="/images/logos/logo-white-png.png"
-                    alt="logo"
-                    height={70}
-                    width={80}
-                    priority
-                  />
+          <Image
+            src="/images/logos/logo-white-png.png"
+            alt="logo"
+            height={70}
+            width={80}
+            priority
+          />
           <Typography variant="h3" fontWeight="bold" mb={3}>
             EzyAccount
           </Typography>
