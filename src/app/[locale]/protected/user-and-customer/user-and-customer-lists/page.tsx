@@ -24,7 +24,7 @@ const userandcustomerlists = () => {
       <Box mt={3}>
         <Grid container spacing={3}>
           <Grid item xs={12} lg={12}>
-            <UserAndCustomerListsTable tableName="UserListTable" newDocumentHref="/income/quotation/new-quotation" newDocumentName="New Quotation"/>
+            <UserAndCustomerListsTable tableName="UserList Table"/>
           </Grid>
         </Grid>
       </Box>

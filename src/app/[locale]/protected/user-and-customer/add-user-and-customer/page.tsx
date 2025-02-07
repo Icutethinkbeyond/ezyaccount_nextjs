@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import { useRouter } from "next/navigation";
-import BaseCard from "@/components/shared/BaseCard";
+// import BaseCard from "@/components/shared/BaseCard";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 
@@ -119,7 +119,7 @@ const AddUserAndCustomer = () => {
         </Box>
       </Box>
 
-      <BaseCard title="">
+      {/* <BaseCard title=""> */}
         <CardContent>
           <Typography variant="h5" gutterBottom>
             ข้อมูลสินค้า/บริการ
@@ -285,7 +285,7 @@ const AddUserAndCustomer = () => {
             )}
           </Formik>
         </CardContent>
-      </BaseCard>
+      {/* </BaseCard> */}
     </main>
   );
 };

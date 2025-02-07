@@ -8,9 +8,8 @@ import {
   GridCellParams,
 } from "@mui/x-data-grid";
 import { Box, Grid, Grid2, IconButton } from "@mui/material";
-import BaseCard from "@/components/shared/BaseCard";
-import ConfirmDelete from "@/components/shared/ConfirmDialogCustom";
-import { Quotation, useDatabaseContext } from "@/contexts/dbContext";
+// import BaseCard from "@/components/shared/BaseCard";
+import ConfirmDelete from "@/components/shared/ConfirmRemove";
 import { useRouter } from "next/navigation";
 import {
   CloudDownload,
@@ -21,11 +20,10 @@ import {
   ForwardToInbox,
   ManageSearch,
 } from "@mui/icons-material";
-import StatusChip from "@/components/shared/StatusChipCustom";
 import { formatNumber } from "@/utils/utils";
 
 interface ProductTableProps {
-  data: Quotation[];
+  data: [];
   tableName: string | null;
   newDocumentHref: string | null;
   newDocumentName: string | null;
@@ -33,7 +31,7 @@ interface ProductTableProps {
 
 const ArchiveListTable: React.FC<ProductTableProps> = ({ data }) => {
   const router = useRouter();
-  const [rows, setRows] = useState<Quotation[]>([]);
+  const [rows, setRows] = useState<[]>([]);
   const [rowCount, setRowCount] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
   const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
@@ -45,7 +43,7 @@ const ArchiveListTable: React.FC<ProductTableProps> = ({ data }) => {
     setRows(data);
   }, []);
 
-  const columns: GridColDef<Quotation>[] = [
+  const columns: GridColDef[] = [
     {
       field: "keyId",
       headerName: "ไฟล์",
@@ -82,7 +80,7 @@ const ArchiveListTable: React.FC<ProductTableProps> = ({ data }) => {
               <ManageSearch />
             </IconButton>
           )}
-          <ConfirmDelete itemName="Sample Item" onDelete={handleDeleteItem} />
+          {/* <ConfirmDelete itemName="Sample Item" onDelete={handleDeleteItem} /> */}
 
           <IconButton
             size="small"
@@ -103,24 +101,23 @@ const ArchiveListTable: React.FC<ProductTableProps> = ({ data }) => {
     },
   ];
 
-  const handleDeleteItem = () => {
-    console.log("Item deleted");
-  };
+  // const handleDeleteItem = () => {
+  //   console.log("Item deleted");
+  // };
 
-  const handleRemove = (keyId: string) => {
-    return <ConfirmDelete itemName="Sample Item" onDelete={handleDeleteItem} />;
-  };
+  // const handleRemove = (keyId: string) => {
+  //   return <ConfirmDelete itemName="Sample Item" onDelete={handleDeleteItem} />;
+  // };
 
-  const handleEdit = (keyId: string) => {
-    router.push(``);
-  };
+  // const handleEdit = (keyId: string) => {
+  //   router.push(``);
+  // };
 
-  const handleUpdate = (keyId: string) => {
-    router.push(``);
-  };
+  // const handleUpdate = (keyId: string) => {
+  //   router.push(``);
+  // };
 
   return (
-    <BaseCard title="Archive Table">
       <DataGrid
         initialState={{ pagination: { paginationModel } }}
         pageSizeOptions={[5, 10, 20]}
@@ -134,7 +131,6 @@ const ArchiveListTable: React.FC<ProductTableProps> = ({ data }) => {
         onPaginationModelChange={setPaginationModel}
         loading={loading}
       />
-    </BaseCard>
   );
 };
 

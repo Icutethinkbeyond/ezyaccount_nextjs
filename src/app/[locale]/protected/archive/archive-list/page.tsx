@@ -4,7 +4,7 @@ import PageContainer from "@/components/container/PageContainer";
 //component
 import ArchiveListTable from "@/components/tables/archive/ArchiveListTable";
 
-const addarchive = () => {
+const archive = () => {
 
 
   return (
@@ -20,4 +20,4 @@ const addarchive = () => {
   );
 };
 
-export default addarchive;
+export default archive;

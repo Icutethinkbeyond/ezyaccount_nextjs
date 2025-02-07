@@ -120,11 +120,11 @@ export const useMenuItems = () => {
           title: "รายการผู้ใช้งาน/ลูกค้า",
           href: `/${localActive}/protected/user-and-customer/user-and-customer-lists`,
         },
-        {
-          id: uniqueId(),
-          title: "เพิ่มผู้ใช้งาน/ลูกค้า",
-          href: `/${localActive}/protected/user-and-customer/add-user-and-customer`,
-        },
+        // {
+        //   id: uniqueId(),
+        //   title: "เพิ่มผู้ใช้งาน/ลูกค้า",
+        //   href: `/${localActive}/protected/user-and-customer/user-and-customer-lists`,
+        // },
       ],
     },
     {

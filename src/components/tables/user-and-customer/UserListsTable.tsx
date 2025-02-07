@@ -13,9 +13,6 @@ import {
   InputLabel,
   FormControl,
 } from "@mui/material";
-import BaseCard from "@/components/shared/BaseCard";
-import ConfirmDelete from "@/components/shared/ConfirmDialogCustom";
-import { Quotation } from "@/contexts/dbContext";
 import { useRouter } from "next/navigation";
 import {
   Add,
@@ -28,13 +25,13 @@ import {
 } from "@mui/icons-material";
 
 interface ProductTableProps {
-  data: Quotation[];
+  data: [];
 }
 
 const QuotationsTable: React.FC<ProductTableProps> = ({ data }) => {
   const router = useRouter();
-  const [rows, setRows] = useState<Quotation[]>([]);
-  const [filteredRows, setFilteredRows] = useState<Quotation[]>([]);
+  const [rows, setRows] = useState<[]>([]);
+  const [filteredRows, setFilteredRows] = useState<[]>([]);
   const [rowCount, setRowCount] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
   const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
@@ -60,53 +57,53 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ data }) => {
     }
   }, [data]);
 
-  // ฟังก์ชันสำหรับกรองข้อมูล
-  useEffect(() => {
-    let filtered = rows;
+  // // ฟังก์ชันสำหรับกรองข้อมูล
+  // useEffect(() => {
+  //   let filtered = rows;
 
-    // กรองตามการค้นหาข้อมูล
-    if (searchQuery) {
-      filtered = filtered.filter((row) =>
-        ["keyId", "headForm?.contactorName", "products"]
-          .map((field) =>
-            String(row[field as keyof Quotation] || "").toLowerCase()
-          )
-          .some((value) => value.includes(searchQuery.toLowerCase()))
-      );
-    }
+  //   // กรองตามการค้นหาข้อมูล
+  //   if (searchQuery) {
+  //     filtered = filtered.filter((row) =>
+  //       ["keyId", "headForm?.contactorName", "products"]
+  //         .map((field) =>
+  //           String(row[field as keyof Quotation] || "").toLowerCase()
+  //         )
+  //         .some((value) => value.includes(searchQuery.toLowerCase()))
+  //     );
+  //   }
 
-    // กรองตามประเภท
-    if (selectedCategory) {
-      filtered = filtered.filter((row) => row.status === selectedCategory);
-    }
+  //   // กรองตามประเภท
+  //   if (selectedCategory) {
+  //     filtered = filtered.filter((row) => row.status === selectedCategory);
+  //   }
 
-    setFilteredRows(filtered);
-    setRowCount(filtered.length); // อัปเดต rowCount เมื่อมีการกรองข้อมูล
-  }, [searchQuery, rows, selectedCategory]);
+  //   setFilteredRows(filtered);
+  //   setRowCount(filtered.length); // อัปเดต rowCount เมื่อมีการกรองข้อมูล
+  // }, [searchQuery, rows, selectedCategory]);
 
-  // State สำหรับราคารวม
+  // // State สำหรับราคารวม
   const [approvedTotal, setApprovedTotal] = useState<number>(0);
   const [notApprovedTotal, setNotApprovedTotal] = useState<number>(0);
   const [allTotal, setAllTotal] = useState<number>(0);
 
-  useEffect(() => {
-    const approved = (rows || [])
-      .filter((row) => row.status === "approved")
-      .reduce((sum, row) => sum + (row.summary?.totalAmountDue || 0), 0);
+  // useEffect(() => {
+  //   const approved = (rows || [])
+  //     .filter((row) => row.status === "approved")
+  //     .reduce((sum, row) => sum + (row.summary?.totalAmountDue || 0), 0);
 
-    const notApproved = (rows || [])
-      .filter((row) => row.status !== "approved")
-      .reduce((sum, row) => sum + (row.summary?.totalAmountDue || 0), 0);
+  //   const notApproved = (rows || [])
+  //     .filter((row) => row.status !== "approved")
+  //     .reduce((sum, row) => sum + (row.summary?.totalAmountDue || 0), 0);
 
-    const total = (rows || []).reduce(
-      (sum, row) => sum + (row.summary?.totalAmountDue || 0),
-      0
-    );
+  //   const total = (rows || []).reduce(
+  //     (sum, row) => sum + (row.summary?.totalAmountDue || 0),
+  //     0
+  //   );
 
-    setApprovedTotal(approved);
-    setNotApprovedTotal(notApproved);
-    setAllTotal(total);
-  }, [rows]);
+  //   setApprovedTotal(approved);
+  //   setNotApprovedTotal(notApproved);
+  //   setAllTotal(total);
+  // }, [rows]);
 
   const handleDownload = () => {
     console.log("ดาวน์โหลดไฟล์");
@@ -119,10 +116,10 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ data }) => {
   };
 
   const handleAddClick = () => {
-    router.push("/user-and-customer/add-user-and-customer");
+    router.push(`/protected/user-and-customer/add-user-and-customer`);
   };
 
-  const columns: GridColDef<Quotation>[] = [
+  const columns: GridColDef[] = [
     {
       field: "userId",
       headerName: "รหัสผู้ใช้งาน",
@@ -175,10 +172,10 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ data }) => {
               <ManageSearch />
             </IconButton>
           )}
-          <ConfirmDelete
+          {/* <ConfirmDelete
             itemName="Sample Item"
             onDelete={() => console.log("Deleted")}
-          />
+          /> */}
           <IconButton size="small" color="info">
             <CloudDownload />
           </IconButton>
@@ -191,88 +188,7 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ data }) => {
   ];
 
   return (
-    <BaseCard title="">
       <>
-        {/* Section: Totals */}
-        <Box display="flex" justifyContent="flex-end" mb={3}>
-          <Card sx={{ p: 0.5, boxShadow: 4, mb: 2, maxWidth: "350px" }}>
-            <CardContent>
-              <Box display="flex" justifyContent="space-between" mb={1}>
-                <Box>
-                  <Typography
-                    variant="h4"
-                    sx={{
-                      fontWeight: "bold",
-                      color: "green",
-                      whiteSpace: "nowrap",
-                    }}
-                  >
-                    ราคารวมอนุมัติแล้ว
-                  </Typography>
-                  <Typography
-                    variant="h2"
-                    sx={{
-                      fontWeight: "bold",
-                      color: "green",
-                      whiteSpace: "nowrap",
-                    }}
-                  >
-                    {approvedTotal.toLocaleString("th-TH", {
-                      style: "currency",
-                      currency: "THB",
-                    })}
-                  </Typography>
-                </Box>
-                <Box
-                  display="flex"
-                  flexDirection="column"
-                  alignItems="flex-end"
-                >
-                  <Typography
-                    variant="body1"
-                    color="error"
-                    sx={{
-                      fontWeight: "bold",
-                      whiteSpace: "nowrap",
-                      mb: 0.5,
-                      ml: 3,
-                    }}
-                  >
-                    ราคารวมไม่อนุมัติ
-                  </Typography>
-                  <Typography
-                    variant="body1"
-                    color="error"
-                    sx={{ fontWeight: "bold", whiteSpace: "nowrap" }}
-                  >
-                    {notApprovedTotal.toLocaleString("th-TH", {
-                      style: "currency",
-                      currency: "THB",
-                    })}
-                  </Typography>
-
-                  <Typography
-                    variant="body1"
-                    color="textPrimary"
-                    sx={{ fontWeight: "bold", whiteSpace: "nowrap", mt: 1 }}
-                  >
-                    ราคารวมรออนุมัติ
-                  </Typography>
-                  <Typography
-                    variant="body1"
-                    color="textPrimary"
-                    sx={{ fontWeight: "bold", whiteSpace: "nowrap" }}
-                  >
-                    {allTotal.toLocaleString("th-TH", {
-                      style: "currency",
-                      currency: "THB",
-                    })}
-                  </Typography>
-                </Box>
-              </Box>
-            </CardContent>
-          </Card>
-        </Box>
 
         {/* Section: Add Button */}
         <Box
@@ -380,7 +296,7 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ data }) => {
           loading={loading}
         />
       </>
-    </BaseCard>
+    // <></>
   );
 };
 
