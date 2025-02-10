@@ -62,28 +62,25 @@ const CategoryTable: React.FC<CategoryProps> = ({}) => {
     {
       field: "actions",
       headerName: "การจัดการ",
-      width: 150,
+      width: 200,
       sortable: false,
       renderCell: (params) => (
         <>
-          {params.row.categoryName !== "uncategorized" && (
-            <>
-              <IconButton
-                size="small"
-                color="secondary"
-                onClick={() => handleEdit(params.row)}
-              >
-                <Avatar sx={{ bgcolor: "primary.main", width: 30, height: 30 }}>
-                  <Edit size={15} />
-                </Avatar>
-              </IconButton>
-              {/* <ConfirmDelete
-                itemId={params.row.categoryId}
-                onDelete={handleDeleteCategory}
-                massage={`คุณต้องการลบหมวดหมู่ ${params.row.categoryName} ใช่หรือไม่?`}
-              /> */}
-            </>
-          )}
+          <IconButton
+            size="small"
+            color="secondary"
+            onClick={() => handleEdit(params.row)}
+          >
+            <Avatar sx={{ bgcolor: "primary.main", width: 30, height: 30 }}>
+              <Edit size={15} />
+            </Avatar>
+          </IconButton>
+          <ConfirmDelete
+            isIconButton={true}
+            itemId={params.row.categoryId}
+            onDelete={handleDeleteCategory}
+            massage={`คุณต้องการลบหมวดหมู่ ${params.row.categoryName} ใช่หรือไม่?`}
+          />
         </>
       ),
     },
@@ -130,6 +127,9 @@ const CategoryTable: React.FC<CategoryProps> = ({}) => {
       message: result.message,
       color: result.success ? "success" : "error",
     });
+    if (result.success) {
+      getData();
+    }
   };
 
   const handleEdit = (category: Category) => {

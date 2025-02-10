@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
 import ProductService, { Pagination } from '@/services/database/ProductServices';
 
 export const dynamic = "force-dynamic";
@@ -7,6 +6,7 @@ export const dynamic = "force-dynamic";
 export async function GET(req: NextRequest) {
 
     try {
+        
         // ดึง query parameters เช่น categoryId
         const { searchParams } = new URL(req.url);
         let categoryName = searchParams.get('categoryName');

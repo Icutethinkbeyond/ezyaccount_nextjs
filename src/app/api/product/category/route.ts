@@ -7,7 +7,9 @@ export const dynamic = "force-dynamic";
 const prisma = new PrismaClient();
 
 export async function GET(req: NextRequest) {
+
     try {
+
         // ดึง query parameters เช่น categoryId
         const { searchParams } = new URL(req.url);
         const categoryId = searchParams.get('categoryId');
@@ -80,40 +82,29 @@ export async function POST(req: NextRequest) {
 
 };
 
-// export async function DELETE(req: NextRequest) {
+export async function DELETE(req: NextRequest) {
 
-//     try {
-//         // รับ categoryId จาก query parameter
-//         const { searchParams } = new URL(req.url);
-//         const categoryId = searchParams.get('categoryId');
+    try {
+        // รับ categoryId จาก query parameter
+        const { searchParams } = new URL(req.url);
+        const categoryId = searchParams.get('categoryId');
+        let productService = new ProductService();
 
-//         // ตรวจสอบว่ามี categoryId หรือไม่
-//         if (!categoryId) {
-//             return new NextResponse(JSON.stringify('Category ID is required'), { status: 400 });
-//         }
+        // ตรวจสอบว่ามี categoryId หรือไม่
+        if (!categoryId) {
+            return new NextResponse(JSON.stringify('Category ID is required'), { status: 400 });
+        }
 
-//         // ลบ category โดยใช้ categoryId
-//         const deletedCategory = await prisma.category.delete({
-//             where: {
-//                 categoryId,
-//             },
-//         });
+        // ลบ category โดยใช้ categoryId
+        const deletedCategory = await productService.deleteCategory(categoryId)
 
-//         // ส่งข้อมูล category ที่ถูกลบกลับ
-//         return new NextResponse(JSON.stringify(deletedCategory), { status: 200 });
-//     } catch (error: any) {
-//         console.error('Error deleting category:', error);
-
-//         if (error.code === 'P2025') {
-//             // Prisma error code สำหรับการไม่พบ record ที่ต้องการลบ
-//             return new NextResponse(JSON.stringify('Category not found'), { status: 404 });
-//         }
-
-//         return new NextResponse(JSON.stringify({ error: 'Internal server error' }), { status: 500 });
-//     } finally {
-//         await prisma.$disconnect();
-//     }
-// }
+        // ส่งข้อมูล category ที่ถูกลบกลับ
+        return new NextResponse(JSON.stringify(deletedCategory), { status: 200 });
+    } catch (error: any) {
+        console.error('Error deleting category:', error);
+        return new NextResponse(JSON.stringify({ error: 'Internal server error' }), { status: 500 });
+    }
+}
 
 export async function PATCH(req: NextRequest) {
 
@@ -139,9 +130,9 @@ export async function PATCH(req: NextRequest) {
         }
 
         // Create a new category
-        const newCategory = await productService.updateCategory(categoryId, { categoryName, categoryDesc })
+        const updateCategory = await productService.updateCategory(categoryId, { categoryName, categoryDesc })
 
-        return new NextResponse(JSON.stringify(newCategory), { status: 201 });
+        return new NextResponse(JSON.stringify(updateCategory), { status: 201 });
 
     } catch (error: any) {
 

@@ -8,11 +8,10 @@ import {
   DialogContentText,
   DialogTitle,
   Grid2,
+  IconButton,
   Typography,
 } from "@mui/material";
-import {
-  CleaningServices,
-} from "@mui/icons-material";
+import { CleaningServices, Remove } from "@mui/icons-material";
 import { AlertOctagon, Trash2 } from "lucide-react";
 import { useNotifyContext } from "@/contexts/NotifyContext";
 // import { DocumentStatus } from "@prisma/client";
@@ -25,6 +24,7 @@ interface ConfirmDeleteProps {
   onDisable?: boolean;
   deleteIcon?: string | JSX.Element;
   documentStatus?: any;
+  isIconButton?: boolean;
 }
 
 const ConfirmDelete: React.FC<ConfirmDeleteProps> = ({
@@ -35,9 +35,10 @@ const ConfirmDelete: React.FC<ConfirmDeleteProps> = ({
   onDisable = false,
   deleteIcon,
   documentStatus,
+  isIconButton = false,
 }) => {
   const [open, setOpen] = useState(false);
-  const { setNotify, setOpenBackdrop, openBackdrop } = useNotifyContext();
+  const { setNotify } = useNotifyContext();
 
   // Open the dialog
   const handleClickOpen = () => {
@@ -65,17 +66,23 @@ const ConfirmDelete: React.FC<ConfirmDeleteProps> = ({
 
   return (
     <>
-      <Button
-        // variant="contained"
-        variant="outlined"
-        // color={onDisable ? "primary.main" : "#ffcbb5"}
-        // sx={{ mr: 1, bgcolor: !onDisable ? "primary.main" : "#ffcbb5" }}
-        startIcon={<CleaningServices />}
-        disabled={onDisable}
-        onClick={() => handleClickOpen()}
-      >
-        ล้างฟอร์ม
-      </Button>
+      {isIconButton == true ? (
+        <IconButton size="small" color="secondary" onClick={handleClickOpen}>
+          <Avatar sx={{ bgcolor: "primary.main", width: 30, height: 30 }}>
+            <Trash2 size={16} />
+          </Avatar>
+        </IconButton>
+      ) : (
+        <Button
+          variant="outlined"
+          startIcon={<CleaningServices />}
+          disabled={onDisable}
+          onClick={() => handleClickOpen()}
+        >
+          ล้างฟอร์ม
+        </Button>
+      )}
+
       <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
         <DialogTitle id="alert-dialog-title" variant="h3">
           <Grid2 container>
