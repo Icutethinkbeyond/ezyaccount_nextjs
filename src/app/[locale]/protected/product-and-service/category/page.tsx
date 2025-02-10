@@ -1,7 +1,6 @@
 "use client";
 
 import { Grid2 } from "@mui/material";
-import PageContainer from "@/components/container/PageContainer";
 import { useEffect, useState } from "react";
 
 import CategoryForm from "@/components/forms/product-and-service/CategoryForm";
@@ -9,6 +8,7 @@ import CategoryTable from "@/components/forms/product-and-service/tables/Categor
 import { useBreadcrumbContext } from "@/contexts/BreadcrumbContext";
 import { useProductContext } from "@/contexts/ProductContext";
 import { initialCategory } from "@/interfaces/Product";
+import PageContainer from "@/components/shared/PageContainer";
 
 
 const CategoryPage = () => {

@@ -62,7 +62,7 @@ const ProductForm: FC<FormProps> = ({ viewOnly = false }) => {
                             <TextField
                               {...field}
                               name="productName"
-                              label="ชื่อหมวดหมู่ (จำเป็น)"
+                              label="ชื่อสินค้า (จำเป็น)"
                               value={values.productName}
                               onChange={(e) => {
                                 setFieldValue("productName", e.target.value);

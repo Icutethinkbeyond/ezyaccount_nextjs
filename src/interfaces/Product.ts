@@ -4,9 +4,9 @@ export interface Category {
   categoryName: string;
   categoryDesc?: string | null;
   products: Product[];
-  // _count?: {
-  //   equipments: number
-  // }
+  _count?: {
+    equipments: number
+  }
 }
 
 export interface AboutProduct {

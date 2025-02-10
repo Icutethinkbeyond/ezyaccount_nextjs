@@ -2,9 +2,9 @@
 
 import { useEffect } from "react";
 import { Box, Grid2, Typography } from "@mui/material";
-import PageContainer from "@/components/container/PageContainer";
 import { useBreadcrumbContext } from "@/contexts/BreadcrumbContext";
 import ProductForm from "@/components/forms/product-and-service/ProductForm";
+import PageContainer from "@/components/shared/PageContainer";
 
 const Dashboard = () => {
   //Set Breadcrumb
@@ -13,8 +13,8 @@ const Dashboard = () => {
   useEffect(() => {
     setBreadcrumbs([
       { name: "หน้าแรก", href: "/dashboard" },
-      { name: "คลังอุปกรณ์", href: "/inventory" },
-      { name: "อุปกรณ์ทั้งหมด" },
+      { name: "สินค้าเเละบริการ", href: "/product-and-service" },
+      { name: "เพิ่มสินค้าเเละบริการ" },
     ]);
     return () => {
       setBreadcrumbs([]);
