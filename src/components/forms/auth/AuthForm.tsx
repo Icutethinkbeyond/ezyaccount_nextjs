@@ -15,7 +15,7 @@ import * as Yup from "yup";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useSnackbarContext } from "@/contexts/SnackbarContext";
+import { useNotifyContext } from "@/contexts/NotifyContext";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required("กรุณากรอกอีเมล").email("รูปแบบอีเมลไม่ถูกต้อง"),
@@ -61,14 +61,14 @@ const AuthForm: React.FC<loginType> = ({
 
   const [error, setError] = useState<string | undefined>();
   const [disableLogin, setDisableLogin] = useState<boolean>(false);
-  const { setOpenDialog, setSnackbar, snackbar } = useSnackbarContext();
+  const { setNotify, setOpenBackdrop, openBackdrop } = useNotifyContext();
 
   const onLogin = async (credential: Login) => {
 
+    setOpenBackdrop(true)
+
     setDisableLogin(true);
     const { email, password } = credential;
-
-    console.log(credential)
 
     if (email && password) {
       const result = await signIn("credentials", {
@@ -78,16 +78,13 @@ const AuthForm: React.FC<loginType> = ({
         callbackUrl: "/",
       });
 
-      console.log(result)
-
       if (result?.error) {
         setError(result.error); // เก็บข้อความข้อผิดพลาด
-        setOpenDialog(true); // เปิด dialog
-        setSnackbar({
-          ...snackbar,
-          notiColor: 'error',
-          message: result.error
-        })
+        setNotify({
+          open: true,
+          message: result.error,
+          color: "error"
+        });
         setDisableLogin(false);
       } else if (result?.url) {
         setDisableLogin(true);
@@ -96,11 +93,14 @@ const AuthForm: React.FC<loginType> = ({
             router.push(result.url);
           } else if (result.error) {
             setError(result.error); // เก็บข้อความข้อผิดพลาด
-            setOpenDialog(true); // เปิด dialog
+            // setOpenDialog(true); // เปิด dialog
           }
         }, 1000);
       }
     }
+
+    setOpenBackdrop(true)
+    
   };
 
   useEffect(() => {

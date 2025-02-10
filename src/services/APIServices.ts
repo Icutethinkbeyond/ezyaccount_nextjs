@@ -1,4 +1,4 @@
-import { AutohideSnackbarState } from "@/contexts/SnackbarContext";
+
 import axios, { AxiosRequestConfig } from "axios";
 
 class ApiService {
@@ -26,7 +26,7 @@ class ApiService {
       if (setRowCount && data.pagination) {
         setRowCount(data.pagination.totalItems);
       }
-      return data.data;
+      return data;
     } catch (error: any) {
       console.error("GET Error:", error.message);
       throw error;

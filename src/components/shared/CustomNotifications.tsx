@@ -1,29 +1,23 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import {
-  Snackbar,
-  Button,
-  IconButton,
-  Alert,
-  AlertTitle,
-  Stack,
-  Typography,
-} from "@mui/material";
+import React from "react";
+import { Snackbar, IconButton, Alert, AlertTitle } from "@mui/material";
 import {
   Close as CloseIcon,
   ThumbUp,
   ThumbDown,
   Undo,
 } from "@mui/icons-material";
-import { useCustomNotificationContext } from "@/contexts/CustomNotificationContext";
+import { useNotifyContext } from "@/contexts/NotifyContext";
 
 export default function CustomNotification() {
-  const { open, severity, message, setOpen, setMessage, setSeverity, header } =
-    useCustomNotificationContext();
+  const { notify, setNotify } = useNotifyContext();
 
   const onClose = () => {
-    setOpen(false);
+    setNotify({
+      ...notify,
+      open: false,
+    });
   };
 
   return (
@@ -32,13 +26,13 @@ export default function CustomNotification() {
         vertical: "top",
         horizontal: "right",
       }}
-      open={open}
+      open={notify.open}
       autoHideDuration={3000}
       onClose={onClose}
     >
       <Alert
         variant="filled"
-        severity={severity}
+        severity={notify.color}
         action={
           <React.Fragment>
             {/* {action} */}
@@ -55,8 +49,8 @@ export default function CustomNotification() {
           </React.Fragment>
         }
       >
-        <AlertTitle>{header ? header : "แจ้งเตือน"}</AlertTitle>
-        {message}
+        <AlertTitle>{notify.header ? notify.header : "แจ้งเตือน"}</AlertTitle>
+        {notify.message}
       </Alert>
     </Snackbar>
   );

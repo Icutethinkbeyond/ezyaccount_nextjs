@@ -1,24 +1,15 @@
-import { baselightTheme } from "@/utils/theme/DefaultColors";
-import { ThemeProvider } from "@mui/material/styles";
-import CssBaseline from "@mui/material/CssBaseline";
 import { Prompt } from "next/font/google";
 
 // import mutiMassages next-intl
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 import { SessionProviders } from "../../lib/SessionProviders";
-import { SnackbarProvider } from "@/contexts/SnackbarContext";
+import { NotifyProvider } from "@/contexts/NotifyContext";
 import { BreadcrumbProvider } from "@/contexts/BreadcrumbContext";
 import ThemeRegistry from "@/components/themeRegistry/ThemeRegistry";
-import { Category } from "@mui/icons-material";
 import { ProductProvider } from "@/contexts/ProductContext";
 
 export const dynamic = "force-dynamic";
-
-const prompt = Prompt({
-  subsets: ["thai", "latin"], // Specify subsets if needed
-  weight: ["400", "700"], // Specify the font weights you need
-});
 
 export default async function RootLayout({
   children,
@@ -35,9 +26,9 @@ export default async function RootLayout({
 
   return (
     <html lang={locale}>
-      <body className={prompt.className}>
+      <body>
         <SessionProviders>
-          <SnackbarProvider>
+          <NotifyProvider>
             <BreadcrumbProvider>
               <ProductProvider>
                 <NextIntlClientProvider messages={messages}>
@@ -45,7 +36,7 @@ export default async function RootLayout({
                 </NextIntlClientProvider>
               </ProductProvider>
             </BreadcrumbProvider>
-          </SnackbarProvider>
+          </NotifyProvider>
         </SessionProviders>
       </body>
     </html>

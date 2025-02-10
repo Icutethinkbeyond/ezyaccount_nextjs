@@ -1,37 +1,39 @@
-import React, { Dispatch, FC, useState } from "react";
+import React, { FC, useEffect } from "react";
 import {
   Box,
   Typography,
   Grid2,
   TextField,
-  InputAdornment,
   Avatar,
+  Button,
 } from "@mui/material";
 import BaseCard from "@/components/shared/BaseCard";
 import { Category, initialCategory } from "@/interfaces/Product";
 import * as Yup from "yup";
 import { Field, FieldProps, Form, Formik } from "formik";
-import { LoadingButton } from "@mui/lab";
 import { useProductContext } from "@/contexts/ProductContext";
 import ConfirmDelete from "@/components/shared/ConfirmDialogCustom";
-import { useSnackbarContext } from "@/contexts/SnackbarContext";
-import axios from "axios";
+import { useNotifyContext } from "@/contexts/NotifyContext";
 import CategoryIcon from "@mui/icons-material/Category";
+import { categoryService } from "@/services/api/ProductService";
+import { Save } from "@mui/icons-material";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useLocale } from "next-intl";
 
-const validationSchema = Yup.object().shape({
-  categoryName: Yup.string().required("กรุณากรอกชื่อหมวดหมู่"),
-});
+interface CategoryFormProps {}
 
-interface CategoryFormProps {
-  setRecall: Dispatch<React.SetStateAction<boolean>>;
-  recall: boolean;
-}
+const CategoryForm: FC<CategoryFormProps> = ({}) => {
+  const { categoryForm, setCategoryForm } = useProductContext();
+  const { setNotify, setOpenBackdrop, openBackdrop } = useNotifyContext();
 
-const CategoryForm: FC<CategoryFormProps> = ({ setRecall, recall }) => {
-  const { categoryForm, setCategoryForm, categoryEdit, setCategoryEdit } =
-    useProductContext();
-  const { setOpenDialog, snackbar, setSnackbar } = useSnackbarContext();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const pathname = usePathname();
+  const params = useSearchParams();
+  const localActive = useLocale();
+  const router = useRouter();
+
+  const validationSchema = Yup.object().shape({
+    categoryName: Yup.string().required("กรุณากรอกชื่อหมวดหมู่"),
+  });
 
   // Handle form submission
   const handleFormSubmit = (
@@ -39,76 +41,70 @@ const CategoryForm: FC<CategoryFormProps> = ({ setRecall, recall }) => {
     { resetForm, validateForm }: any
   ) => {
     validateForm(); // บังคับ validate หลังจากรีเซ็ต
-    if (categoryEdit) {
-      updateCategory(value);
+    if (!pathname.includes("new")) {
+      handleUpdateCategory(value);
     } else {
-      createCategory(value);
+      handleCreateCategory(value);
     }
     resetForm(); // รีเซ็ตค่าฟอร์ม
   };
 
-  const updateCategory = (category: Category) => {
-    axios
-      .patch("/api/equipment/category", category)
-      .then(() => {
-        setOpenDialog(true);
-        setSnackbar({
-          ...snackbar,
-          message: `แก้ไขหมวดหมู่ ${category.categoryName} สำเร็จ`,
-          notiColor: "success",
-        });
-        setRecall((prev) => !prev);
-      })
-      .catch((error) => {
-        if (error.name === "AbortError") {
-          console.log("Request cancelled");
-        } else {
-          console.error("Fetch error:", error);
-          setOpenDialog(true);
-          setSnackbar({
-            ...snackbar,
-            message: error.response.data,
-            notiColor: "error",
-          });
-        }
-      })
-      .finally(() => {
-        setIsLoading(false);
-        setCategoryForm(initialCategory);
-        setCategoryEdit(false);
-      });
+  const handleUpdateCategory = async (category: Category) => {
+    setOpenBackdrop(true);
+    const result = await categoryService.updateCategory(category);
+    setOpenBackdrop(false);
+    setNotify({
+      open: true,
+      message: result.message,
+      color: result.success ? "success" : "error",
+    });
+    if (result.success) {
+      handleRedirect();
+    }
   };
 
-  const createCategory = (category: Category) => {
-    axios
-      .post("/api/equipment/category", category)
-      .then(() => {
-        setOpenDialog(true);
-        setSnackbar({
-          ...snackbar,
-          message: `สร้างหมวดหมู่ ${category.categoryName} สำเร็จ`,
-          notiColor: "success",
-        });
-        setRecall((prev) => !prev);
-      })
-      .catch((error) => {
-        if (error.name === "AbortError") {
-          console.log("Request cancelled");
-        } else {
-          console.error("Fetch error:", error);
-          setOpenDialog(true);
-          setSnackbar({
-            ...snackbar,
-            message: error.response.data,
-            notiColor: "error",
-          });
-        }
-      })
-      .finally(() => {
-        setIsLoading(false);
-        setCategoryForm(initialCategory);
-      });
+  const handleCreateCategory = async (category: Category) => {
+    setOpenBackdrop(true);
+    const result = await categoryService.createCategory(category);
+    setOpenBackdrop(false);
+    setNotify({
+      open: true,
+      message: result.message,
+      color: result.success ? "success" : "error",
+    });
+    if (result.success) {
+      handleRedirect();
+    }
   };
+
+  const handleRedirect = () => {
+    router.push(`/${localActive}/protected/product-and-service/category`);
+  };
+
+  const handleGetCategory = async (categoryId: string) => {
+    setOpenBackdrop(true);
+    const result = await categoryService.getCategory(categoryId);
+    if (result.success) {
+      setCategoryForm(result.data);
+    }
+    setOpenBackdrop(false);
+    setNotify({
+      open: true,
+      message: result.message,
+      color: result.success ? "success" : "error",
+    });
+  };
+
+  useEffect(() => {
+    const categoryId = params.get("categoryId");
+    if (!pathname.includes("new")) {
+      if (categoryId) handleGetCategory(categoryId);
+    }
+    // คืนค่าเริ่มต้นเมื่อปิดหน้าหรือเปลี่ยนหน้า
+    return () => {
+      setCategoryForm(initialCategory);
+    };
+  }, []);
 
   return (
     <BaseCard>
@@ -119,7 +115,14 @@ const CategoryForm: FC<CategoryFormProps> = ({ setRecall, recall }) => {
           onSubmit={handleFormSubmit}
           enableReinitialize // เพื่อให้ Formik อัปเดตค่าจาก useState
         >
-          {({ errors, touched, resetForm, values, setFieldValue }) => (
+          {({
+            errors,
+            touched,
+            resetForm,
+            values,
+            setFieldValue,
+            isSubmitting,
+          }) => (
             <Form>
               <Box p={3} border="1px solid #ccc" borderRadius="8px">
                 <Grid2 container spacing={2}>
@@ -136,7 +139,6 @@ const CategoryForm: FC<CategoryFormProps> = ({ setRecall, recall }) => {
                     </Grid2>
                   </Grid2>
 
-                  {/* Issue Date */}
                   <Grid2 size={{ xs: 12 }} mb={2}>
                     <Field name="categoryName">
                       {({ field }: FieldProps) => (
@@ -145,6 +147,7 @@ const CategoryForm: FC<CategoryFormProps> = ({ setRecall, recall }) => {
                           name="categoryName"
                           label="ชื่อหมวดหมู่ (จำเป็น)"
                           value={values.categoryName}
+                          disabled={isSubmitting || openBackdrop}
                           onChange={(e) => {
                             setFieldValue("categoryName", e.target.value);
                           }}
@@ -170,6 +173,7 @@ const CategoryForm: FC<CategoryFormProps> = ({ setRecall, recall }) => {
                           name="categoryDesc"
                           multiline // เพิ่มคุณสมบัตินี้เพื่อทำให้ TextField เป็น textarea
                           rows={4}
+                          disabled={isSubmitting || openBackdrop}
                           slotProps={{
                             inputLabel: { shrink: true },
                           }}
@@ -186,15 +190,16 @@ const CategoryForm: FC<CategoryFormProps> = ({ setRecall, recall }) => {
                 </Grid2>
               </Box>
               <Box sx={{ mt: 3, display: "flex", justifyContent: "flex-end" }}>
-                <LoadingButton
+                <Button
                   variant="contained"
                   type="submit"
                   color="primary"
                   sx={{ mr: 1 }}
-                  loading={isLoading}
+                  disabled={isSubmitting || openBackdrop}
+                  startIcon={<Save />}
                 >
-                  {!categoryEdit ? "เพิ่มหมวดหมู่" : "แก้ไขหมวดหมู่"}
-                </LoadingButton>
+                  บันทึก
+                </Button>
                 <ConfirmDelete
                   itemId={""}
                   onDelete={() => resetForm()}

@@ -4,13 +4,10 @@ import { Grid2 } from "@mui/material";
 import { useEffect, useState } from "react";
 
 import CategoryForm from "@/components/forms/product-and-service/CategoryForm";
-import CategoryTable from "@/components/forms/product-and-service/tables/CategoryTable";
 import { useBreadcrumbContext } from "@/contexts/BreadcrumbContext";
-import { useProductContext } from "@/contexts/ProductContext";
-import { initialCategory } from "@/interfaces/Product";
 import PageContainer from "@/components/shared/PageContainer";
 
-const CategoryPage = () => {
+const CategoryNewPage = () => {
 
   const { setBreadcrumbs } = useBreadcrumbContext();
 
@@ -18,7 +15,7 @@ const CategoryPage = () => {
     setBreadcrumbs([
       { name: "หน้าแรก", href: "/dashboard" },
       { name: "คลังสินค้า", href: "/inventory" },
-      { name: "หมวดหมู่ทั้งหมด" },
+      { name: "เพิ่มหมวดหมู่ใหม่" },
     ]);
     return () => {
       setBreadcrumbs([]);
@@ -27,9 +24,9 @@ const CategoryPage = () => {
 
   return (
     <PageContainer>
-      <CategoryTable />
+      <CategoryForm />
     </PageContainer>
   );
 };
 
-export default CategoryPage;
+export default CategoryNewPage;

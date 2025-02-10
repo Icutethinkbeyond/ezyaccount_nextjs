@@ -13,7 +13,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Cancel, Delete, RemoveCircle } from "@mui/icons-material";
-import { useSnackbarContext } from "@/contexts/SnackbarContext";
+import { useSnackbarContext } from "@/contexts/NotifyContext";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DocumentStatus } from "@prisma/client";

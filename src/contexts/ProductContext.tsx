@@ -8,6 +8,7 @@ import {
   CategorySelect,
 } from "@/interfaces/Product";
 import { faker } from "@faker-js/faker";
+import { GridPaginationModel } from "@mui/x-data-grid";
 import { Dayjs } from "dayjs";
 
 import React, {
@@ -19,18 +20,24 @@ import React, {
   useEffect,
 } from "react";
 
+export interface SearchFormData {
+  categoryName: string;
+}
+
 // กำหนดประเภทของ Context
 interface ProductContextProps {
   categoryState: Category[];
   setCategoryState: Dispatch<React.SetStateAction<Category[]>>;
   categoryForm: Category;
   setCategoryForm: Dispatch<React.SetStateAction<Category>>;
-  categoryEdit: boolean;
-  setCategoryEdit: Dispatch<React.SetStateAction<boolean>>;
   setCategorySelectState: Dispatch<React.SetStateAction<CategorySelect[]>>;
   categorySelectState: CategorySelect[];
-  setTypeEdit: Dispatch<React.SetStateAction<boolean>>;
-  typeEdit: boolean;
+  paginationModel: GridPaginationModel;
+  setPaginationModel: Dispatch<React.SetStateAction<GridPaginationModel>>;
+  rowCount: number;
+  setRowCount: Dispatch<React.SetStateAction<number>>;
+  searchForm: SearchFormData;
+  setSearchForm: Dispatch<React.SetStateAction<SearchFormData>>;
 }
 
 // สร้าง Context
@@ -38,46 +45,37 @@ const ProductContext = createContext<ProductContextProps | undefined>(
   undefined
 );
 
-
 export const ProductProvider = ({ children }: { children: ReactNode }) => {
   const [categoryState, setCategoryState] = useState<Category[]>([]);
   const [categorySelectState, setCategorySelectState] = useState<
     CategorySelect[]
   >([]);
   const [categoryForm, setCategoryForm] = useState<Category>(initialCategory);
-  const [categoryEdit, setCategoryEdit] = useState<boolean>(false);
-  const [typeEdit, setTypeEdit] = useState<boolean>(false);
+  const [rowCount, setRowCount] = useState<number>(0);
+  const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
+    page: 0,
+    pageSize: 10,
+  });
 
-  useEffect(() => {
-    // setCategoryForm({
-    //   ...categoryForm,
-    //   categoryId: "",
-    //   categoryName: faker.company.name(),
-    //   categoryDesc: faker.lorem.lines(),
-    //   equipments: [],
-    // });
-    // setTypeForm({
-    //   ...typeForm,
-    //   equipmentTypeId: "",
-    //   equipmentTypeName: faker.finance.currencyCode(),
-    //   equipmentTypeDesc: faker.lorem.lines(),
-    //   equipments: [],
-    // });
-  }, []);
+  const [searchForm, setSearchForm] = useState<SearchFormData>({
+    categoryName: "",
+  });
 
   return (
     <ProductContext.Provider
       value={{
+        searchForm,
+        setSearchForm,
+        setRowCount,
+        rowCount,
         categoryState,
         setCategoryState,
         categoryForm,
         setCategoryForm,
-        categoryEdit,
-        setCategoryEdit,
-        typeEdit,
-        setTypeEdit,
         categorySelectState,
         setCategorySelectState,
+        setPaginationModel,
+        paginationModel,
       }}
     >
       {children}

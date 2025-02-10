@@ -5,9 +5,10 @@ import React, { useState } from "react";
 import Header from "@/components/layout/header/Header";
 import Sidebar from "@/components/layout/sidebar/Sidebar";
 import AutohideSnackbar from "@/components/shared/SnackBarCustom";
-import { useSnackbarContext } from "@/contexts/SnackbarContext";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import LoadingBackdrop from "@/components/shared/BackdropLoading";
+import CustomNotification from "@/components/shared/CustomNotifications";
 
 const MainWrapper = styled("div")(() => ({
   display: "flex",
@@ -35,7 +36,7 @@ export default function RootLayout({
 }) {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
   const [isMobileSidebarOpen, setMobileSidebarOpen] = useState(false);
-  const { setOpenDialog, openDialog, snackbar } = useSnackbarContext();
+  //
   return (
     <MainWrapper className="mainwrapper">
       <Sidebar
@@ -52,17 +53,13 @@ export default function RootLayout({
           }}
         >
           <Box sx={{ minHeight: "calc(100vh - 170px)" }}>
-            <AutohideSnackbar
-              handleOpen={setOpenDialog}
-              open={openDialog}
-              message={snackbar.message}
-              notiColor={snackbar.notiColor}
-            />
+            <LoadingBackdrop />
+            {/* <AutohideSnackbar /> */}
+            <CustomNotification/>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               {children}
             </LocalizationProvider>
           </Box>
-          {/* <Footer /> */}
         </Container>
       </PageWrapper>
     </MainWrapper>

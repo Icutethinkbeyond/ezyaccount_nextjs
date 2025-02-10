@@ -15,7 +15,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Cancel, Close } from "@mui/icons-material";
-import { useSnackbarContext } from "@/contexts/SnackbarContext";
+import { useSnackbarContext } from "@/contexts/NotifyContext";
 import { AlertOctagon } from "lucide-react";
 import { useFormik } from "formik";
 import * as Yup from "yup";

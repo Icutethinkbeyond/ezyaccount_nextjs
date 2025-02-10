@@ -8,12 +8,13 @@ import {
   DialogContentText,
   DialogTitle,
   Grid2,
-  IconButton,
   Typography,
 } from "@mui/material";
-import { Cancel, CleanHands, CleaningServices, Clear, Delete, RemoveCircle } from "@mui/icons-material";
+import {
+  CleaningServices,
+} from "@mui/icons-material";
 import { AlertOctagon, Trash2 } from "lucide-react";
-import { useSnackbarContext } from "@/contexts/SnackbarContext";
+import { useNotifyContext } from "@/contexts/NotifyContext";
 // import { DocumentStatus } from "@prisma/client";
 
 interface ConfirmDeleteProps {
@@ -36,7 +37,7 @@ const ConfirmDelete: React.FC<ConfirmDeleteProps> = ({
   documentStatus,
 }) => {
   const [open, setOpen] = useState(false);
-  const { setOpenDialog, setSnackbar, snackbar } = useSnackbarContext();
+  const { setNotify, setOpenBackdrop, openBackdrop } = useNotifyContext();
 
   // Open the dialog
   const handleClickOpen = () => {
@@ -51,11 +52,10 @@ const ConfirmDelete: React.FC<ConfirmDeleteProps> = ({
   // Handle the deletion
   const handleDelete = () => {
     if (!itemId) {
-      setOpenDialog(true);
-      setSnackbar({
-        ...snackbar,
+      setNotify({
+        open: true,
         message: "พบปัญหาบางอย่างโปรดติดต่อผู้พัฒนา",
-        notiColor: "error",
+        color: "error",
       });
       return;
     }

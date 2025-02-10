@@ -12,7 +12,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Cancel, Delete, RemoveCircle } from "@mui/icons-material";
-import { useSnackbarContext } from "@/contexts/SnackbarContext";
+import { useSnackbarContext } from "@/contexts/NotifyContext";
 import { DocumentStatus } from "@prisma/client";
 import { AlertOctagon, BookDown } from "lucide-react";
 import {

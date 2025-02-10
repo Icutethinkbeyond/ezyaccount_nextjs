@@ -9,44 +9,21 @@ import {
   GridToolbarContainer,
   GridToolbarDensitySelector,
 } from "@mui/x-data-grid";
-import {
-  Avatar,
-  Box,
-  Button,
-  Grid2,
-  IconButton,
-  InputAdornment,
-  MenuItem,
-  Paper,
-  styled,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Button, Grid2, Typography } from "@mui/material";
 import BaseCard from "@/components/shared/BaseCard";
 import ConfirmDelete from "@/components/shared/ConfirmDialogCustom";
-import {
-  Archive,
-  Barcode,
-  Baseline,
-  CirclePlus,
-  Edit,
-  Eye,
-  ScanSearch,
-  Search,
-} from "lucide-react";
+import { CirclePlus } from "lucide-react";
 import { Product } from "@/interfaces/Product";
 import axios, { AxiosError } from "axios";
-import { CustomNoRowsOverlay } from "@/components/shared/NoData";
 import { formatNumber } from "@/utils/utils";
 // import StatusEquipment from "@/components/shared/used/Status";
 import { Clear } from "@mui/icons-material";
-import { useSnackbarContext } from "@/contexts/SnackbarContext";
 import { useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
 import { useProductContext } from "@/contexts/ProductContext";
+import { useNotifyContext } from "@/contexts/NotifyContext";
 
-interface Props {
-}
+interface Props {}
 
 interface SearchFormData {
   equipmentName: string;
@@ -54,10 +31,9 @@ interface SearchFormData {
   stockStatus: string;
 }
 
-const ProductTable: React.FC<Props> = ({  }) => {
-
-  const { } = useProductContext();
-  const { setOpenDialog, setSnackbar, snackbar } = useSnackbarContext();
+const ProductTable: React.FC<Props> = ({}) => {
+  const {} = useProductContext();
+  const { setNotify, setOpenBackdrop, openBackdrop } = useNotifyContext();
 
   const router = useRouter();
   const localActive = useLocale();
@@ -128,8 +104,7 @@ const ProductTable: React.FC<Props> = ({  }) => {
       field: "RentalPriceCurrent",
       headerName: "ราคา",
       width: 150,
-      valueGetter: (value, row) =>
-        formatNumber(row.aboutProduct?.productPrice),
+      valueGetter: (value, row) => formatNumber(row.aboutProduct?.productPrice),
     },
     // {
     //   field: "stockStatus",
@@ -197,11 +172,10 @@ const ProductTable: React.FC<Props> = ({  }) => {
     axios
       .delete(`/api/equipment?equipmentId=${equipmentId}`)
       .then((data) => {
-        setOpenDialog(true);
-        setSnackbar({
-          ...snackbar,
+        setNotify({
+          open: true,
           message: `ระบบได้ลบ ${data.data.equipmentName} เเล้ว`,
-          notiColor: "success",
+          color: "success",
         });
       })
       .catch((error) => {
@@ -209,11 +183,10 @@ const ProductTable: React.FC<Props> = ({  }) => {
           console.log("Request cancelled");
         } else {
           console.error("Fetch error:", error);
-          setOpenDialog(true);
-          setSnackbar({
-            ...snackbar,
+          setNotify({
+            open: true,
             message: error.message,
-            notiColor: "error",
+            color: "error",
           });
         }
       })
@@ -296,7 +269,9 @@ const ProductTable: React.FC<Props> = ({  }) => {
 
   return (
     <>
-    <Typography variant="h4" mt={2}>อปุกรณ์ทั้งหมด</Typography>
+      <Typography variant="h4" mt={2}>
+        อปุกรณ์ทั้งหมด
+      </Typography>
       {/* <form onSubmit={handleSubmit}>
         <Box sx={{ display: "grid", gap: 3 }} mb={4} mt={4}>
           <Grid2 container spacing={2} >

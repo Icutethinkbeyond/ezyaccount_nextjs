@@ -1,20 +1,18 @@
 import * as React from "react";
 import Snackbar, { SnackbarCloseReason } from "@mui/material/Snackbar";
 import { Alert } from "@mui/material";
+import { useNotifyContext } from "@/contexts/NotifyContext";
 
 interface SnackProps {
-  message?: string | null;
-  handleOpen: (value: boolean) => void;
-  open: boolean;
-  notiColor?: any;
+
 }
 
 const AutohideSnackbar: React.FC<SnackProps> = ({
-  message = "This Snackbar will be dismissed in 5 seconds.",
-  handleOpen,
-  open = false,
-  notiColor = 'success'
+ 
 }) => {
+
+   const { notify, setNotify } = useNotifyContext();
+
   const handleClose = (
     event: React.SyntheticEvent | Event,
     reason?: SnackbarCloseReason
@@ -23,24 +21,27 @@ const AutohideSnackbar: React.FC<SnackProps> = ({
       return;
     }
 
-    handleOpen(false);
+    setNotify({
+      ...notify,
+      open: false
+    });
   };
 
   return (
     <div>
       <Snackbar
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-        open={open}
+        open={notify.open}
         autoHideDuration={3000}
         onClose={handleClose}
       >
         <Alert
           onClose={handleClose}
-          severity={notiColor}
+          severity={notify.color}
           variant="filled"
           sx={{ width: "100%" }}
         >
-          {message}
+          {notify.message}
         </Alert>
       </Snackbar>
     </div>
