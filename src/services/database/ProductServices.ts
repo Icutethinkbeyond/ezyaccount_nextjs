@@ -91,6 +91,13 @@ class ProductService {
     });
   }
 
+  async deleteCategory(categoryId: string): Promise<Category> {
+    return await prisma.category.delete({
+      where: { categoryId },
+    });
+  }
+
+
   async getCategoryPagination(pageParam: null | string, pageSizeParam: null | string, categoryName?: string | null): Promise<Pagination> {
 
     const page = parseInt(pageParam || '1', 10); // หน้าเริ่มต้นที่ 1
