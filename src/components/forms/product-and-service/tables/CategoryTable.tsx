@@ -8,7 +8,6 @@ import {
   GridToolbarColumnsButton,
   GridToolbarContainer,
   GridToolbarDensitySelector,
-  GridToolbarFilterButton,
 } from "@mui/x-data-grid";
 import {
   Avatar,
@@ -24,148 +23,155 @@ import ConfirmDelete from "@/components/shared/ConfirmDialogCustom";
 import { Baseline, Edit, Search } from "lucide-react";
 import { Category } from "@/interfaces/Product";
 import { CustomNoRowsOverlay } from "@/components/shared/NoData";
-import { useProductContext } from "@/contexts/ProductContext";
+// import StatusEquipment from "@/components/shared/used/Status";
 import { Clear } from "@mui/icons-material";
+import { useRouter } from "next/navigation";
+import { useLocale } from "next-intl";
 import {
   CATEGORY_API_BASE_URL,
   categoryService,
 } from "@/services/api/ProductService";
+import APIServices from "@/services/APIServices";
+import { useProductContext } from "@/contexts/ProductContext";
 import { useNotifyContext } from "@/contexts/NotifyContext";
 import CustomToolbar from "@/components/shared/CustomToolbar";
-import APIServices from "@/services/APIServices";
-import { useLocale } from "next-intl";
-import { useRouter } from "next/navigation";
 import FloatingButton from "@/components/shared/FloatingButton";
 
-interface CategoryProps {}
+interface Props {}
 
-const CategoryTable: React.FC<CategoryProps> = ({}) => {
+interface SearchFormData {
+  equipmentName: string;
+  serialNo: string;
+  stockStatus: string;
+}
+
+const CategoryTable: React.FC<Props> = ({}) => {
   const {
-    categoryState,
-    setCategoryState,
-    paginationModel,
-    setSearchForm,
-    searchForm,
-    setPaginationModel,
-    rowCount,
-    setRowCount,
-  } = useProductContext();
-
-  const { setNotify, setOpenBackdrop } = useNotifyContext();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  const localActive = useLocale();
-  const router = useRouter();
+      categoryState,
+      setCategoryState,
+      paginationModel,
+      setSearchForm,
+      searchForm,
+      setPaginationModel,
+      rowCount,
+      setRowCount,
+    } = useProductContext();
+    const { setNotify, setOpenBackdrop } = useNotifyContext();
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+  
+    const localActive = useLocale();
+    const router = useRouter();
 
   const columns: GridColDef<Category>[] = [
     { field: "rowIndex", headerName: "ลำดับ", width: 70 },
-    {
-      field: "actions",
-      headerName: "การจัดการ",
-      width: 150,
-      sortable: false,
-      renderCell: (params) => (
-        <>
-          {params.row.categoryName !== "uncategorized" && (
+        {
+          field: "actions",
+          headerName: "การจัดการ",
+          width: 150,
+          sortable: false,
+          renderCell: (params) => (
             <>
-              <IconButton
-                size="small"
-                color="secondary"
-                onClick={() => handleEdit(params.row)}
-              >
-                <Avatar sx={{ bgcolor: "primary.main", width: 30, height: 30 }}>
-                  <Edit size={15} />
-                </Avatar>
-              </IconButton>
-              {/* <ConfirmDelete
-                itemId={params.row.categoryId}
-                onDelete={handleDeleteCategory}
-                massage={`คุณต้องการลบหมวดหมู่ ${params.row.categoryName} ใช่หรือไม่?`}
-              /> */}
+              {params.row.categoryName !== "uncategorized" && (
+                <>
+                  <IconButton
+                    size="small"
+                    color="secondary"
+                    onClick={() => handleEdit(params.row)}
+                  >
+                    <Avatar sx={{ bgcolor: "primary.main", width: 30, height: 30 }}>
+                      <Edit size={15} />
+                    </Avatar>
+                  </IconButton>
+                  {/* <ConfirmDelete
+                    itemId={params.row.categoryId}
+                    onDelete={handleDeleteCategory}
+                    massage={`คุณต้องการลบหมวดหมู่ ${params.row.categoryName} ใช่หรือไม่?`}
+                  /> */}
+                </>
+              )}
             </>
-          )}
-        </>
-      ),
-    },
-    { field: "categoryName", headerName: "ชื่อหมวดหมู่", width: 300 },
-    { field: "categoryDesc", headerName: "รายละเอียดหมวดหมู่", width: 250 },
-    {
-      field: "equipments",
-      headerName: "จำนวนสินค้า",
-      width: 200,
-      valueGetter: (value, row) => row._count?.equipments,
-    },
-  ];
-
-  const getData = async () => {
-    await APIServices.get(
-      `${CATEGORY_API_BASE_URL}?page=${paginationModel.page + 1}&pageSize=${
-        paginationModel.pageSize
-      }`,
-      setCategoryState,
-      setRowCount,
-      setIsLoading
-    );
-  };
-
-  const searchData = async () => {
-    await APIServices.get(
-      `${CATEGORY_API_BASE_URL}/search?page=${
-        paginationModel.page + 1
-      }&pageSize=${paginationModel.pageSize}&categoryName=${
-        searchForm.categoryName
-      }`,
-      setCategoryState,
-      setRowCount,
-      setIsLoading
-    );
-  };
-
-  const handleDeleteCategory = async (categoryId: string) => {
-    setOpenBackdrop(true);
-    const result = await categoryService.deleteCategory(categoryId);
-    setOpenBackdrop(false);
-    setNotify({
-      open: true,
-      message: result.message,
-      color: result.success ? "success" : "error",
-    });
-  };
-
-  const handleEdit = (category: Category) => {
-    router.push(
-      `/${localActive}/protected/product-and-service/category/edit?categoryId=${category.categoryId}`
-    );
-  };
-
-  const handleClear = () => {
-    setSearchForm({
-      categoryName: "",
-    });
-    getData();
-  };
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setSearchForm((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-    searchData();
-  };
-
-  useEffect(() => {
-    getData();
-  }, [paginationModel]);
-
-  //return state
-  useEffect(() => {
-    setCategoryState([]);
-  }, []);
+          ),
+        },
+        { field: "categoryName", headerName: "ชื่อสินค้า", width: 300 },
+        { field: "categoryDesc", headerName: "รายละเอียดสินค้า/บริการ", width: 250 },
+        {
+          field: "equipments",
+          headerName: "จำนวนสินค้า",
+          width: 200,
+          valueGetter: (value, row) => row._count?.equipments,
+        },
+      ];
+    
+      const getData = async () => {
+        await APIServices.get(
+          `${CATEGORY_API_BASE_URL}?page=${paginationModel.page + 1}&pageSize=${
+            paginationModel.pageSize
+          }`,
+          setCategoryState,
+          setRowCount,
+          setIsLoading
+        );
+      };
+    
+      const searchData = async () => {
+        await APIServices.get(
+          `${CATEGORY_API_BASE_URL}/search?page=${
+            paginationModel.page + 1
+          }&pageSize=${paginationModel.pageSize}&categoryName=${
+            searchForm.categoryName
+          }`,
+          setCategoryState,
+          setRowCount,
+          setIsLoading
+        );
+      };
+    
+      const handleDeleteCategory = async (categoryId: string) => {
+        setOpenBackdrop(true);
+        const result = await categoryService.deleteCategory(categoryId);
+        setOpenBackdrop(false);
+        setNotify({
+          open: true,
+          message: result.message,
+          color: result.success ? "success" : "error",
+        });
+      };
+    
+      const handleEdit = (category: Category) => {
+        router.push(
+          `/${localActive}/protected/product-and-service/category/edit?categoryId=${category.categoryId}`
+        );
+      };
+    
+      const handleClear = () => {
+        setSearchForm({
+          categoryName: "",
+          productName: "",
+        });
+        getData();
+      };
+    
+      const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = event.target;
+        setSearchForm((prev) => ({
+          ...prev,
+          [name]: value,
+        }));
+      };
+    
+      const handleSubmit = (event: React.FormEvent) => {
+        event.preventDefault();
+        searchData();
+      };
+    
+      useEffect(() => {
+        getData();
+      }, [paginationModel]);
+    
+      //return state
+      useEffect(() => {
+        setCategoryState([]);
+      }, []);
 
   return (
     <>
