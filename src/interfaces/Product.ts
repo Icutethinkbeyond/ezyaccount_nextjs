@@ -66,3 +66,7 @@ export type CategorySelect = {
   categoryId: string; // ID ของหมวดหมู่
   categoryName: string; // ชื่อของหมวดหมู่
 };
+export type ProductSelect = {
+  productId: string; // ID ของสินค้า
+  productName: string; // ชื่อของสินค้า
+};

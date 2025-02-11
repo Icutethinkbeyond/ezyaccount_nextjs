@@ -8,7 +8,6 @@ import {
   GridToolbarColumnsButton,
   GridToolbarContainer,
   GridToolbarDensitySelector,
-  GridToolbarFilterButton,
 } from "@mui/x-data-grid";
 import {
   Avatar,
@@ -24,38 +23,44 @@ import ConfirmDelete from "@/components/shared/ConfirmDialogCustom";
 import { Baseline, Edit, Search } from "lucide-react";
 import { Category } from "@/interfaces/Product";
 import { CustomNoRowsOverlay } from "@/components/shared/NoData";
-import { useProductContext } from "@/contexts/ProductContext";
+// import StatusEquipment from "@/components/shared/used/Status";
 import { Clear } from "@mui/icons-material";
+import { useRouter } from "next/navigation";
+import { useLocale } from "next-intl";
 import {
   CATEGORY_API_BASE_URL,
   categoryService,
 } from "@/services/api/ProductService";
+import APIServices from "@/services/APIServices";
+import { useProductContext } from "@/contexts/ProductContext";
 import { useNotifyContext } from "@/contexts/NotifyContext";
 import CustomToolbar from "@/components/shared/CustomToolbar";
-import APIServices from "@/services/APIServices";
-import { useLocale } from "next-intl";
-import { useRouter } from "next/navigation";
 import FloatingButton from "@/components/shared/FloatingButton";
 
-interface CategoryProps {}
+interface Props {}
 
-const CategoryTable: React.FC<CategoryProps> = ({}) => {
+interface SearchFormData {
+  equipmentName: string;
+  serialNo: string;
+  stockStatus: string;
+}
+
+const CategoryTable: React.FC<Props> = ({}) => {
   const {
-    categoryState,
-    setCategoryState,
-    paginationModel,
-    setSearchForm,
-    searchForm,
-    setPaginationModel,
-    rowCount,
-    setRowCount,
-  } = useProductContext();
-
-  const { setNotify, setOpenBackdrop } = useNotifyContext();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  const localActive = useLocale();
-  const router = useRouter();
+      categoryState,
+      setCategoryState,
+      paginationModel,
+      setSearchForm,
+      searchForm,
+      setPaginationModel,
+      rowCount,
+      setRowCount,
+    } = useProductContext();
+    const { setNotify, setOpenBackdrop } = useNotifyContext();
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+  
+    const localActive = useLocale();
+    const router = useRouter();
 
   const columns: GridColDef<Category>[] = [
     { field: "rowIndex", headerName: "ลำดับ", width: 70 },
