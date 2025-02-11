@@ -1,8 +1,7 @@
 "use client";
 import { Grid2, Box, Stack, Pagination } from "@mui/material";
-import PageContainer from "@/components/container/PageContainer";
-//component
 import QuotationsTable from "@/components/tables/income/QuotationsTable";
+import PageContainer from "@/components/shared/PageContainer";
 
 const data = [
   {

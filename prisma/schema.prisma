@@ -71,13 +71,12 @@ model Customer {
   customerEmail String  @unique
   customerTaxId String? @unique
 
-  // Relations
-  role           Role            @relation(fields: [roleId], references: [roleId])
-  roleId         String          @db.ObjectId
   profile        Profile?
   address        Address?
   companyProfile CompanyProfile? @relation(fields: [companyId], references: [companyId])
   companyId      String?         @db.ObjectId
+
+  documentPaper DocumentPaper[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -102,6 +101,7 @@ model Account {
 }
 
 model ResetToken {
+  
   id      String   @id @default(auto()) @map("_id") @db.ObjectId
   token   String   @unique
   expires DateTime
@@ -118,9 +118,8 @@ model Role {
   description String?
 
   users       User[]
-  userIds     String[]   @db.ObjectId
-  Customer    Customer[]
-  customerIds String[]   @db.ObjectId
+  userIds     String[] @db.ObjectId
+  customerIds String[] @db.ObjectId
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -182,6 +181,9 @@ model Product {
 
   aboutProduct AboutProduct?
 
+  documentProduct    DocumentProduct[] @relation(fields: [documentProductIds], references: [documentProductId])
+  documentProductIds String[]          @db.ObjectId
+
   category   Category? @relation(fields: [categoryId], references: [categoryId])
   categoryId String?   @db.ObjectId
 
@@ -207,20 +209,97 @@ model AboutProduct {
   updatedAt DateTime @updatedAt // อัปเดตล่าสุด
 }
 
-model Document {
+model DocumentPaper {
   documentId      String  @id @default(auto()) @map("_id") @db.ObjectId
   documentIdNo    String  @unique
   documentDetials String?
-  // documentType    DocumentCategory @default(Rental)
 
-  // site   Site?   @relation(fields: [siteId], references: [siteId])
-  // siteId String? @db.ObjectId
+  customer   Customer? @relation(fields: [customerId], references: [customerId])
+  customerId String?   @db.ObjectId
 
-  // documentStatus DocumentStatus @default(Open)
-  // documentStep   DocumentStep   @default(Location)
+  documentType   DocumentType   @default(Quotation)
+  documentStatus DocumentStatus @default(Draft)
+
+  documentCreateDate DateTime?
+  documentExpire     DateTime?
+
+  priceTotal    Float @default(0)
+  discountTotal Float @default(0)
+
+  includeVat Boolean @default(false)
+  vatPrice   Float   @default(0)
+
+  withHolding        Boolean @default(false)
+  withHoldingPercent Float   @default(0)
+  withHoldingPrice   Float   @default(0)
+
+  files                DocumentFile[]
+  documentProductGroup DocumentProductGroup[]
+  documentProduct      DocumentProduct[]
 
   createdAt DateTime @default(now()) // วันที่สร้าง
   updatedAt DateTime @updatedAt // อัปเดตล่าสุด
+}
+
+model DocumentProductGroup {
+  documentProductGroupId String @id @default(auto()) @map("_id") @db.ObjectId
+
+  documentProductGroupName String
+  documentProductGroupDesc String?
+
+  documentPaper   DocumentPaper @relation(fields: [documentPaperId], references: [documentId])
+  documentPaperId String        @db.ObjectId
+
+  documentProduct DocumentProduct[]
+
+  createdAt DateTime @default(now()) // วันที่สร้าง
+  updatedAt DateTime @updatedAt // อัปเดตล่าสุด
+}
+
+model DocumentProduct {
+  documentProductId String @id @default(auto()) @map("_id") @db.ObjectId
+
+  products   Product[] @relation(fields: [productIds], references: [productId])
+  productIds String[]  @db.ObjectId
+
+  quantity Int @default(1)
+
+  price         Float @default(0)
+  discountPrice Float @default(0)
+
+  documentPaper   DocumentPaper @relation(fields: [documentPaperId], references: [documentId])
+  documentPaperId String        @db.ObjectId
+
+  documentProductGroup   DocumentProductGroup @relation(fields: [documentProductGroupId], references: [documentProductGroupId])
+  documentProductGroupId String               @db.ObjectId
+
+  createdAt DateTime @default(now()) // วันที่สร้าง
+  updatedAt DateTime @updatedAt // อัปเดตล่าสุด
+}
+
+model DocumentFile {
+  fileId   String @id @default(auto()) @map("_id") @db.ObjectId
+  filePath String
+  fileName String
+
+  fileType String?
+
+  documentPaper   DocumentPaper @relation(fields: [documentPaperId], references: [documentId])
+  documentPaperId String        @unique @db.ObjectId
+
+  createdAt DateTime @default(now()) // วันที่สร้าง
+  updatedAt DateTime @updatedAt // อัปเดตล่าสุด
+}
+
+enum DocumentType {
+  Quotation
+}
+
+enum DocumentStatus {
+  Draft
+  Waiting
+  Approve
+  Cancel
 }
 
 enum VerifiedStatus {
