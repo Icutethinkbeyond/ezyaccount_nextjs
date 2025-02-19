@@ -1,6 +1,7 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { compare, hash } from "bcryptjs";
+import GoogleProvider from "next-auth/providers/google";
 // import client from "@/../../lib/mongoClient";
 import { PrismaClient, UserStatus } from '@prisma/client';
 
@@ -13,6 +14,11 @@ const authOptions: NextAuthOptions = {
     maxAge: 1 * 60 * 60 // 1 hours
   },
   providers: [
+
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    }),
 
     CredentialsProvider({
       name: "Credentials",
@@ -85,6 +91,9 @@ const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
+        token.email = user.email;
+        token.role = (user as { role?: string }).role;
+        token.name = user.name;        
       }
       return token;
     },
