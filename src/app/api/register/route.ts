@@ -24,18 +24,22 @@ export async function POST(req: Request) {
       return NextResponse.json({ message: 'รหัสผ่านต้องประกอบด้วยตัวพิมพ์ใหญ่ ตัวพิมพ์เล็ก และตัวเลขอย่างน้อย 8 ตัว' }, { status: 400 });
     }
 
-    const existingUser = await prisma.user.findFirst({
-      where: {
-        OR: [
-          { userEmail: email },
-          { username: username }
-        ]
-      }
+    const existingEmail = await prisma.user.findUnique({
+      where: { userEmail: email },
     });
-
-    if (existingUser) {
-      return NextResponse.json({ message: 'มีผู้ใช้ที่ใช้อีเมลหรือชื่อผู้ใช้นี้แล้ว' }, { status: 400 });
+    
+    if (existingEmail) {
+      return NextResponse.json({ message: "อีเมลนี้ถูกใช้งานแล้ว" }, { status: 400 });
     }
+    
+    const existingUsername = await prisma.user.findFirst({
+      where: { username: username },
+    });
+    
+    if (existingUsername) {
+      return NextResponse.json({ message: "ชื่อผู้ใช้นี้ถูกใช้งานแล้ว" }, { status: 400 });
+    }
+    
 
 
     const role = await prisma.role.findFirst({
