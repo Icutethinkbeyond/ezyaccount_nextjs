@@ -1,11 +1,21 @@
 "use client";
 
 import { useState } from "react";
-import { Grid, TextField, Button, InputAdornment, IconButton, CircularProgress, FormControlLabel, Checkbox, Typography } from "@mui/material";
+import {
+  Grid,
+  TextField,
+  Button,
+  InputAdornment,
+  IconButton,
+  CircularProgress,
+  FormControlLabel,
+  Checkbox,
+  Typography,
+} from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
-import { useSnackbarContext } from "@/contexts/SnackbarContext";
+import { useNotifyContext } from "@/contexts/NotifyContext";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
@@ -13,7 +23,9 @@ const validationSchema = Yup.object().shape({
   name: Yup.string().required("กรุณากรอกชื่อ"),
   username: Yup.string().required("กรุณากรอกชื่อผู้ใช้งาน"),
   address: Yup.string().required("กรุณากรอกที่อยู่"),
-  phone: Yup.string().required("กรุณากรอกเบอร์โทร").matches(/^[0-9]{10}$/, "เบอร์โทรต้องมี 10 หลัก"),
+  phone: Yup.string()
+    .required("กรุณากรอกเบอร์โทร")
+    .matches(/^[0-9]{10}$/, "เบอร์โทรต้องมี 10 หลัก"),
   email: Yup.string().required("กรุณากรอกอีเมล").email("รูปแบบอีเมลไม่ถูกต้อง"),
   password: Yup.string().required("กรุณากรอกรหัสผ่าน"),
   confirmPassword: Yup.string()
@@ -26,7 +38,7 @@ const AuthRegisterForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [registeredName, setRegisteredName] = useState(""); // เก็บชื่อผู้ใช้ที่สมัครสำเร็จ
-  const { setSnackbar } = useSnackbarContext();
+  const { setNotify } = useNotifyContext();
   const router = useRouter();
 
   const handleTogglePassword = () => setShowPassword(!showPassword);
@@ -47,9 +59,10 @@ const AuthRegisterForm = () => {
 
       if (res.ok) {
         setRegisteredName(data.user.name); // บันทึกชื่อผู้ใช้ที่สมัครสำเร็จ
-        setSnackbar({
+        setNotify({
+          open: true,
           message: `สมัครสมาชิกสำเร็จ! ยินดีต้อนรับคุณ ${data.user.name}`,
-          notiColor: "success",
+          color: "success",
         });
 
         // **Login อัตโนมัติหลังจากสมัครสมาชิก**
@@ -60,23 +73,29 @@ const AuthRegisterForm = () => {
         });
 
         if (loginRes?.error) {
-          setSnackbar({ message: loginRes.error, notiColor: "error" });
+          setNotify({ 
+            open: true,
+            message: loginRes.error, 
+            color: "error" });
         } else {
           router.push("/protected/dashboard"); // ไปหน้า Dashboard
         }
       } else {
         // แสดงข้อความผิดพลาดจาก API
-        const errorMessage = data.message || "เกิดข้อผิดพลาดระหว่างการสมัครสมาชิก";
-        setSnackbar({
+        const errorMessage =
+          data.message || "เกิดข้อผิดพลาดระหว่างการสมัครสมาชิก";
+        setNotify({
+          open: true,
           message: errorMessage,
-          notiColor: "error",
+          color: "error",
         });
         console.error("Error during registration:", errorMessage); // ล็อกข้อผิดพลาด
       }
     } catch (error) {
-      setSnackbar({
+      setNotify({
+        open: true,
         message: "เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์",
-        notiColor: "error",
+        color: "error",
       });
       console.error("Server error:", error); // ล็อกข้อผิดพลาด
     } finally {
@@ -93,7 +112,7 @@ const AuthRegisterForm = () => {
           ยินดีต้อนรับ, {registeredName}!
         </Typography>
       )}
-      
+
       <Formik
         initialValues={{
           name: "",
@@ -114,35 +133,71 @@ const AuthRegisterForm = () => {
               <Grid item xs={6}>
                 <Field name="name">
                   {({ field }: any) => (
-                    <TextField {...field} label="ชื่อ" placeholder="กรุณากรอกชื่อ" fullWidth error={touched.name && Boolean(errors.name)} helperText={touched.name && errors.name} />
+                    <TextField
+                      {...field}
+                      label="ชื่อ"
+                      placeholder="กรุณากรอกชื่อ"
+                      fullWidth
+                      error={touched.name && Boolean(errors.name)}
+                      helperText={touched.name && errors.name}
+                    />
                   )}
                 </Field>
               </Grid>
               <Grid item xs={6}>
                 <Field name="username">
                   {({ field }: any) => (
-                    <TextField {...field} label="ชื่อผู้ใช้งาน" placeholder="กรุณากรอกชื่อผู้ใช้งาน" fullWidth error={touched.username && Boolean(errors.username)} helperText={touched.username && errors.username} />
+                    <TextField
+                      {...field}
+                      label="ชื่อผู้ใช้งาน"
+                      placeholder="กรุณากรอกชื่อผู้ใช้งาน"
+                      fullWidth
+                      error={touched.username && Boolean(errors.username)}
+                      helperText={touched.username && errors.username}
+                    />
                   )}
                 </Field>
               </Grid>
               <Grid item xs={12}>
                 <Field name="address">
                   {({ field }: any) => (
-                    <TextField {...field} label="ที่อยู่" placeholder="บ้านเลขที่, ตำบล, อำเภอ, จังหวัด, รหัสไปรษณีย์ " fullWidth error={touched.address && Boolean(errors.address)} helperText={touched.address && errors.address} />
+                    <TextField
+                      {...field}
+                      label="ที่อยู่"
+                      placeholder="บ้านเลขที่, ตำบล, อำเภอ, จังหวัด, รหัสไปรษณีย์ "
+                      fullWidth
+                      error={touched.address && Boolean(errors.address)}
+                      helperText={touched.address && errors.address}
+                    />
                   )}
                 </Field>
               </Grid>
               <Grid item xs={6}>
                 <Field name="phone">
                   {({ field }: any) => (
-                    <TextField {...field} label="เบอร์โทร" placeholder="กรุณากรอกเบอร์โทร เช่น 0901234567" fullWidth error={touched.phone && Boolean(errors.phone)} helperText={touched.phone && errors.phone} />
+                    <TextField
+                      {...field}
+                      label="เบอร์โทร"
+                      placeholder="กรุณากรอกเบอร์โทร เช่น 0901234567"
+                      fullWidth
+                      error={touched.phone && Boolean(errors.phone)}
+                      helperText={touched.phone && errors.phone}
+                    />
                   )}
                 </Field>
               </Grid>
               <Grid item xs={6}>
                 <Field name="email">
                   {({ field }: any) => (
-                    <TextField {...field} label="อีเมล" placeholder="กรุณากรอกอีเมล" type="email" fullWidth error={touched.email && Boolean(errors.email)} helperText={touched.email && errors.email} />
+                    <TextField
+                      {...field}
+                      label="อีเมล"
+                      placeholder="กรุณากรอกอีเมล"
+                      type="email"
+                      fullWidth
+                      error={touched.email && Boolean(errors.email)}
+                      helperText={touched.email && errors.email}
+                    />
                   )}
                 </Field>
               </Grid>
@@ -161,7 +216,11 @@ const AuthRegisterForm = () => {
                         endAdornment: (
                           <InputAdornment position="end">
                             <IconButton onClick={handleTogglePassword}>
-                              {showPassword ? <VisibilityOff /> : <Visibility />}
+                              {showPassword ? (
+                                <VisibilityOff />
+                              ) : (
+                                <Visibility />
+                              )}
                             </IconButton>
                           </InputAdornment>
                         ),
@@ -179,13 +238,22 @@ const AuthRegisterForm = () => {
                       type={showPassword ? "text" : "password"}
                       placeholder="กรุณากรอกยืนยันรหัสผ่าน"
                       fullWidth
-                      error={touched.confirmPassword && Boolean(errors.confirmPassword)}
-                      helperText={touched.confirmPassword && errors.confirmPassword}
+                      error={
+                        touched.confirmPassword &&
+                        Boolean(errors.confirmPassword)
+                      }
+                      helperText={
+                        touched.confirmPassword && errors.confirmPassword
+                      }
                       InputProps={{
                         endAdornment: (
                           <InputAdornment position="end">
                             <IconButton onClick={handleTogglePassword}>
-                              {showPassword ? <VisibilityOff /> : <Visibility />}
+                              {showPassword ? (
+                                <VisibilityOff />
+                              ) : (
+                                <Visibility />
+                              )}
                             </IconButton>
                           </InputAdornment>
                         ),
@@ -196,10 +264,20 @@ const AuthRegisterForm = () => {
               </Grid>
               <Grid item xs={12}>
                 <FormControlLabel
-                  control={<Checkbox name="termsAccepted" checked={values.termsAccepted} onChange={(e) => setFieldValue("termsAccepted", e.target.checked)} />}
+                  control={
+                    <Checkbox
+                      name="termsAccepted"
+                      checked={values.termsAccepted}
+                      onChange={(e) =>
+                        setFieldValue("termsAccepted", e.target.checked)
+                      }
+                    />
+                  }
                   label="ฉันยอมรับเงื่อนไขการใช้บริการ"
                 />
-                {errors.termsAccepted && <Typography color="error">{errors.termsAccepted}</Typography>}
+                {errors.termsAccepted && (
+                  <Typography color="error">{errors.termsAccepted}</Typography>
+                )}
               </Grid>
               <Grid item xs={12}>
                 {isSubmitting ? (
