@@ -1,4 +1,5 @@
 // contexts/ProductServiceListContext.tsx
+"use client";
 import { toNumber } from "lodash";
 import React, {
   createContext,

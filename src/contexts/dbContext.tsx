@@ -1,4 +1,5 @@
 // contexts/DatabaseContext.tsx
+"use client"
 
 import React, {
   createContext,
