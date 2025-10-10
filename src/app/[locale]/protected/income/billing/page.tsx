@@ -1,6 +1,6 @@
 "use client";
 import { Grid, Box, Stack, Pagination } from "@mui/material";
-import PageContainer from "@/components/container/PageContainer";
+// import PageContainer from "@/components/container/PageContainer";
 //component
 import BillingTable from "@/components/tables/income/BillingTable";
 
@@ -19,7 +19,8 @@ const data = [
 const billings = () => {
 
   return (
-    <PageContainer title="Billing" description="this is Billing">
+    // <PageContainer title="Billing" description="this is Billing">
+    <>
       <Box mt={3}>
         <Grid container spacing={3}>
           <Grid item xs={12} lg={12}>
@@ -27,7 +28,9 @@ const billings = () => {
           </Grid>
         </Grid>
       </Box>
-    </PageContainer>
+      {/* </PageContainer> */}
+      </>
+
   );
 };
 

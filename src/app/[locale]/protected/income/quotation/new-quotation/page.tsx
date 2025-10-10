@@ -1,10 +1,10 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { Grid, Box, IconButton, Grid2, Typography } from "@mui/material";
 import { Print, GetApp, Message } from "@mui/icons-material";
 import ExcelJS from "exceljs";
-import { saveAs } from "file-saver";
-import PageContainer from "@/components/container/PageContainer";
+// import { saveAs } from "file-saver";
+import PageContainer from "@/components/shared/PageContainer";
 
 // components
 import Breadcrumb from "@/components/shared/BreadcrumbCustom";
@@ -16,8 +16,12 @@ import ItemsTable from "@/components/forms/ItemsTable";
 import DocumentFooter from "@/components/forms/DocumentFooter";
 import CalculateItems from "@/components/forms/CalculateItems";
 import path, { dirname } from "path";
+import { useBreadcrumbContext } from "@/contexts/BreadcrumbContext";
 
 const NewQuotation = () => {
+
+  const { setBreadcrumbs } = useBreadcrumbContext();
+  
   const handlePrint = () => {
     console.log("Print clicked");
   };
@@ -500,47 +504,23 @@ const NewQuotation = () => {
     const blob = new Blob([buffer], {
       type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     });
-    saveAs(blob, "Quotation.xlsx");
+    // saveAs(blob, "Quotation.xlsx");
   };
+
+  
+  useEffect(() => {
+    setBreadcrumbs([
+      { name: "หน้าแรก", href: "/dashboard" },
+      { name: "คลังอุปกรณ์", href: "/inventory" },
+      { name: "เพิ่มอุปกรณ์ใหม่" },
+    ]);
+    return () => {
+      setBreadcrumbs([]);
+    };
+  }, []);
 
   return (
     <PageContainer>
-      <Breadcrumb
-        title="เพิ่มใบเสนอราคา"
-        breadcrumbs={[
-          { name: "หน้าหลัก", href: "/dashboard" },
-          { name: "รายรับ", href: "/maintenance-request" },
-          { name: "ใบเสนอราคา" },
-        ]}
-      />
-
-      {/* DashboardCard พร้อมส่วนหัวแบบกำหนดเอง */}
-      <DashboardCard
-        title={<Typography variant="h2">เพิ่มใบเสนอราคา</Typography>}
-        action={
-          <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
-            <IconButton
-              onClick={handlePrint}
-              sx={{ color: "primary.main", fontSize: 28 }}
-            >
-              <Print />
-            </IconButton>
-            <IconButton
-              onClick={handleMessage}
-              sx={{ color: "info.main", fontSize: 28 }}
-            >
-              <Message />
-            </IconButton>
-            <IconButton
-              onClick={() => handleExport()}
-              sx={{ color: "success.main", fontSize: 28 }}
-            >
-              <GetApp />
-            </IconButton>
-          </Box>
-        }
-      >
-        {/* เนื้อหาใน DashboardCard */}
         <Grid2 container spacing={3} sx={{ p: 3 }}>
           <Grid2 size={6}>
             <CompanyInformation />
@@ -563,7 +543,6 @@ const NewQuotation = () => {
             </Grid2>
           </Grid2>
         </Grid2>
-      </DashboardCard>
     </PageContainer>
   );
 };

@@ -35,15 +35,21 @@ import {
   Add,
 } from "@mui/icons-material";
 import { formatNumber } from "@/utils/utils";
+import FloatingButton from "@/components/shared/FloatingButton";
+import { useLocale } from "next-intl";
 
 interface ProductTableProps {
-  data: [];
-  tableName: string | null;
-  newDocumentHref: string | null;
-  newDocumentName: string | null;
+  // data: [];
+  // tableName: string | null;
+  // newDocumentHref: string | null;
+  // newDocumentName: string | null;
 }
 
-const QuotationsTable: React.FC<ProductTableProps> = ({ data }) => {
+const QuotationsTable: React.FC<ProductTableProps> = ({ }) => {
+
+  const router = useRouter();
+  const localActive = useLocale();
+
   // const router = useRouter();
   // const [rows, setRows] = useState<Quotation[]>([]);
   // const [rowCount, setRowCount] = useState<number>(0);
@@ -387,7 +393,14 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ data }) => {
     //     </Box>
     //   </>
     // </BaseCard>
-    <div>ใบเสนอราคา</div>
+    <>
+              <FloatingButton
+        onClick={() => router.push(`/${localActive}/protected/income/quotation/new`)}
+      />
+      <div>ใบเสนอราคา</div>
+      </>
+
+    
   );
 };
 

@@ -19,7 +19,7 @@ import {
 } from "@mui/material";
 import { useProductServiceListContext } from "@/contexts/QuotationContext";
 import { toNumber, uniqueId } from "lodash";
-import { Quotation, useDatabaseContext } from "@/contexts/dbContext";
+// import { Quotation, useDatabaseContext } from "@/contexts/dbContext";
 import { useRouter } from "next/navigation";
 import { formatNumber } from "@/utils/utils";
 
@@ -31,8 +31,8 @@ const CalculateItems: React.FC<CalculateItemsProps> = ({ isEdit = false }) => {
   const router = useRouter();
   const { footerForm, setFooterForm, headForm, products } =
     useProductServiceListContext();
-  const { addQuotation, qoutationState, updateQuotation, editQuotation } =
-    useDatabaseContext();
+  // const { addQuotation, qoutationState, updateQuotation, editQuotation } =
+  //   useDatabaseContext();
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | any>
@@ -58,30 +58,30 @@ const CalculateItems: React.FC<CalculateItemsProps> = ({ isEdit = false }) => {
   };
 
   const handleSavePost = (status: string) => {
-    addQuotation({
-      keyId: 1,
-      ownerId: "1",
-      status: status,
-      headForm: headForm,
-      products: products,
-      summary: footerForm,
-      createDate: new Date(),
-      updateDate: new Date(),
-    });
+    // addQuotation({
+    //   keyId: 1,
+    //   ownerId: "1",
+    //   status: status,
+    //   headForm: headForm,
+    //   products: products,
+    //   summary: footerForm,
+    //   createDate: new Date(),
+    //   updateDate: new Date(),
+    // });
     router.push("/income/quotation");
   };
 
   const handleUpdatePost = () => {
-    updateQuotation({
-      keyId: editQuotation.keyId,
-      ownerId: editQuotation.ownerId,
-      status: editQuotation.status,
-      headForm: headForm,
-      products: products,
-      summary: footerForm,
-      createDate: editQuotation.createDate,
-      updateDate: new Date(),
-    });
+    // updateQuotation({
+    //   keyId: editQuotation.keyId,
+    //   ownerId: editQuotation.ownerId,
+    //   status: editQuotation.status,
+    //   headForm: headForm,
+    //   products: products,
+    //   summary: footerForm,
+    //   createDate: editQuotation.createDate,
+    //   updateDate: new Date(),
+    // });
     router.push("/income/quotation");
   };
 

@@ -22,6 +22,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const ProductForm: FC<FormProps> = ({ viewOnly = false }) => {
+  
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { categorySelectState } = useProductContext();
 
