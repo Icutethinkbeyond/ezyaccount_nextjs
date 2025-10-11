@@ -37,13 +37,13 @@ import {
 import { formatNumber } from "@/utils/utils";
 
 interface ProductTableProps {
-  data: [];
-  tableName: string | null;
-  newDocumentHref: string | null;
-  newDocumentName: string | null;
+  // data: [];
+  // tableName: string | null;
+  // newDocumentHref: string | null;
+  // newDocumentName: string | null;
 }
 
-const QuotationsTable: React.FC<ProductTableProps> = ({ data }) => {
+const QuotationsTable: React.FC<ProductTableProps> = ({ }) => {
   // const router = useRouter();
   // const [rows, setRows] = useState<Quotation[]>([]);
   // const [rowCount, setRowCount] = useState<number>(0);

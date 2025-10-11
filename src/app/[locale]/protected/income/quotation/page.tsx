@@ -1,28 +1,25 @@
 "use client";
-import { Grid2, Box, Stack, Pagination } from "@mui/material";
+
+import { Grid2, Box } from "@mui/material";
 import QuotationsTable from "@/components/tables/income/QuotationsTable";
 import PageContainer from "@/components/shared/PageContainer";
-
-const data = [
-  {
-    id: "1",
-    name: "Sunil Joshi",
-    post: "Web Designer",
-    pname: "Elite Admin",
-    priority: "Low",
-    pbg: "primary.main",
-    budget: "3.9",
-  },
-];
+import FloatingButton from "@/components/shared/FloatingButton";
+import { useRouter } from "next/navigation";
+import { useLocale } from "next-intl";
 
 const Dashboard = () => {
+  const router = useRouter();
+  const localActive = useLocale();
 
   return (
-    <PageContainer title="Dashboard" description="this is Dashboard">
+    <PageContainer title="Quotation" description="">
+      <FloatingButton
+        onClick={() => router.push(`/${localActive}/protected/income/quotation/new-quotation`)}
+      />
       <Box mt={3}>
         <Grid2 container spacing={3}>
           <Grid2 size={12}>
-            <QuotationsTable  tableName="Quotation Table" newDocumentHref="/income/quotation/new-quotation" newDocumentName="New Quotation" data={[]}/>
+            <QuotationsTable />
           </Grid2>
         </Grid2>
       </Box>
