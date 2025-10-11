@@ -8,6 +8,7 @@ import { NotifyProvider } from "@/contexts/NotifyContext";
 import { BreadcrumbProvider } from "@/contexts/BreadcrumbContext";
 import ThemeRegistry from "@/components/themeRegistry/ThemeRegistry";
 import { ProductProvider } from "@/contexts/ProductContext";
+import { QuotationProvider } from "@/contexts/QuotationContext";
 
 export const dynamic = "force-dynamic";
 
@@ -31,9 +32,11 @@ export default async function RootLayout({
           <NotifyProvider>
             <BreadcrumbProvider>
               <ProductProvider>
+                <QuotationProvider>
                 <NextIntlClientProvider messages={messages}>
                   <ThemeRegistry>{children}</ThemeRegistry>
                 </NextIntlClientProvider>
+                </QuotationProvider>
               </ProductProvider>
             </BreadcrumbProvider>
           </NotifyProvider>

@@ -129,7 +129,7 @@ export const headerClean = {
 }
 
 // กำหนดประเภทของ Context
-interface ProductServiceListContextProps {
+interface QuotationListContextProps {
   products: Product[];
   setProducts: React.Dispatch<React.SetStateAction<Product[]>>;
   addProduct: (product: Product) => void;
@@ -166,11 +166,11 @@ interface ProductServiceListContextProps {
 }
 
 // สร้าง Context
-const ProductServiceListContext = createContext<
-  ProductServiceListContextProps | undefined
+const QuotationListContext = createContext<
+  QuotationListContextProps | undefined
 >(undefined);
 
-export const ProductsProvider = ({ children }: { children: ReactNode }) => {
+export const QuotationProvider = ({ children }: { children: ReactNode }) => {
 
   const [products, setProducts] = useState<Product[]>([]);
   const [footerForm, setFooterForm] = useState<FormDataFooter>(footerFormClean);
@@ -371,7 +371,7 @@ export const ProductsProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <ProductServiceListContext.Provider
+    <QuotationListContext.Provider
       value={{
         products,
         setProducts,
@@ -396,16 +396,16 @@ export const ProductsProvider = ({ children }: { children: ReactNode }) => {
       }}
     >
       {children}
-    </ProductServiceListContext.Provider>
+    </QuotationListContext.Provider>
   );
 };
 
 // Hook สำหรับใช้ Context
-export const useProductServiceListContext = () => {
-  const context = useContext(ProductServiceListContext);
+export const useQuotationListContext = () => {
+  const context = useContext(QuotationListContext);
   if (!context) {
     throw new Error(
-      "useProductServiceListContext must be used within a ProductsProvider"
+      "useQuotationListContext must be used within a QuotationProvider"
     );
   }
   return context;

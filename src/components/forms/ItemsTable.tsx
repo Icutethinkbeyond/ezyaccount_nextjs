@@ -17,7 +17,7 @@ import BaseCard from "@/components/shared/BaseCard";
 import {
   Product,
   SubProduct,
-  useProductServiceListContext,
+  useQuotationListContext,
 } from "@/contexts/QuotationContext";
 import { formatNumber } from "@/utils/utils";
 
@@ -34,7 +34,7 @@ const ProductsServicesList: React.FC<TableProps> = () => {
     setSubProductEdit,
     setIsProductEdit,
     setIsSubProductEdit,
-  } = useProductServiceListContext();
+  } = useQuotationListContext();
 
   const handleRemoveProduct = (productServiceNumber: number) => {
     removeProduct(productServiceNumber);

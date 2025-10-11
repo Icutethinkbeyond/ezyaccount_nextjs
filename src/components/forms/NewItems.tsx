@@ -15,7 +15,7 @@ import {
 import {
   productClean,
   subProductClean,
-  useProductServiceListContext,
+  useQuotationListContext,
 } from "@/contexts/QuotationContext";
 import { SubProduct, Product } from "@/contexts/QuotationContext";
 import { toNumber } from "lodash";
@@ -40,7 +40,7 @@ const NewItems: React.FC<NewProductProps> = ({ isEdit = false }) => {
     setIsSubProductEdit,
     updateProduct,
     updateSubProduct,
-  } = useProductServiceListContext();
+  } = useQuotationListContext();
 
   useEffect(() => {
     setnewProduct(productEdit);
