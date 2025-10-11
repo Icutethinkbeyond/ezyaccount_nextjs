@@ -45,7 +45,7 @@ export default async function middleware(req: NextRequest) {
 
     // Redirect ไป `/protected/dashboard` ถ้า path ไม่ถูกต้อง
     if (!trimmedPath || trimmedPath === "/") {
-      return NextResponse.redirect(new URL(`/${locale}/protected/dashboard`, req.url));
+      return NextResponse.redirect(new URL(`/${locale}/auth/sign-in`, req.url));
     }
   }
 

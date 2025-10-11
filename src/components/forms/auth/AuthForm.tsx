@@ -1,13 +1,7 @@
-"use client"
+"use client";
 
-import React, {  useEffect, useState } from "react";
-import {
-  Typography,
-  Grid2,
-  InputAdornment,
-  IconButton,
-  TextField,
-} from "@mui/material";
+import React, { useState, useEffect } from "react";
+import { Typography, Grid2, InputAdornment, IconButton, TextField } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { initialLogin, Login } from "@/interfaces/User";
 import { Field, Form, Formik } from "formik";
@@ -16,6 +10,9 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useNotifyContext } from "@/contexts/NotifyContext";
+import Button from '@mui/material/Button'; 
+import { Google } from "@mui/icons-material"; 
+
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required("กรุณากรอกอีเมล").email("รูปแบบอีเมลไม่ถูกต้อง"),
@@ -39,15 +36,11 @@ const AuthForm: React.FC<loginType> = ({
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
-  const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
+  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
   };
 
-  const handleMouseUpPassword = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
+  const handleMouseUpPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
   };
 
@@ -64,9 +57,7 @@ const AuthForm: React.FC<loginType> = ({
   const { setNotify, setOpenBackdrop, openBackdrop } = useNotifyContext();
 
   const onLogin = async (credential: Login) => {
-
-    setOpenBackdrop(true)
-
+    setOpenBackdrop(true);
     setDisableLogin(true);
     const { email, password } = credential;
 
@@ -75,7 +66,7 @@ const AuthForm: React.FC<loginType> = ({
         email: email,
         password: password,
         redirect: false,
-        callbackUrl: "/",
+        callbackUrl: "/protected/dashboard",
       });
 
       if (result?.error) {
@@ -93,14 +84,11 @@ const AuthForm: React.FC<loginType> = ({
             router.push(result.url);
           } else if (result.error) {
             setError(result.error); // เก็บข้อความข้อผิดพลาด
-            // setOpenDialog(true); // เปิด dialog
           }
         }, 1000);
       }
     }
-
-    setOpenBackdrop(true)
-    
+    setOpenBackdrop(false);
   };
 
   useEffect(() => {
@@ -114,6 +102,19 @@ const AuthForm: React.FC<loginType> = ({
       setCredentail(initialLogin);
     };
   }, []);
+
+  // ฟังก์ชันล็อกอิน Google
+  const handleGoogleLogin = async () => {
+    const result = await signIn("google", { callbackUrl: "/protected/dashboard" });
+    if (result?.error) {
+      setError(result.error);
+      setNotify({
+        open: true,
+        message: result.error,
+        color: "error"
+      });
+    }
+  };
 
   return (
     <>
@@ -216,6 +217,17 @@ const AuthForm: React.FC<loginType> = ({
           </Form>
         )}
       </Formik>
+
+      <Button
+        variant="outlined"
+        fullWidth
+        startIcon={<Google />}
+        size="large"
+        sx={{ mt: 2 }}
+        onClick={handleGoogleLogin} // เชื่อมโยงกับฟังก์ชัน login
+      >
+        Log in with Google
+      </Button>
     </>
   );
 };

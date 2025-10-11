@@ -1,94 +1,77 @@
-"use client";
-import { Grid, Box, Card, Typography, Stack } from "@mui/material";
-import Link from "next/link";
-import PageContainer from "@/components/container/PageContainer";
-import Logo from "@/components/shared/Logo";
-import AuthForgetPassword from "@/components/forms/ForgetPassword";
+import { Box, Card, Typography } from "@mui/material";
+import ForgetPasswordForm from "@/components/forms/auth/ForgetPasswordForm";
+import Image from "next/image";
 
-const Register = () => (
-  <PageContainer title="Forget Password" description="this is Forget Password page">
+const ForgetPassword = () => {
+  return (
     <Box
       sx={{
-        position: "relative",
-        "&:before": {
-          content: '""',
-          background: "radial-gradient(#d2f1df, #d3d7fa, #bad8f4)",
-          backgroundSize: "400% 400%",
-          animation: "gradient 15s ease infinite",
-          position: "absolute",
-          height: "100%",
-          width: "100%",
-          opacity: "0.3",
-        },
+        height: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#f9f9f9",
+        padding: 4,
       }}
     >
-      <Grid
-        container
-        spacing={0}
-        justifyContent="center"
-        sx={{ height: "100vh" }}
+      <Card
+        sx={{
+          width: "100%",
+          maxWidth: "1200px",
+          display: "flex",
+          borderRadius: "16px",
+          overflow: "hidden",
+          boxShadow: 4,
+          minHeight: "500px",
+        }}
       >
-        <Grid
-          item
-          xs={12}
-          sm={12}
-          lg={4}
-          xl={3}
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
+        {/* Left Section */}
+        <Box
+          sx={{
+            backgroundColor: "#3f51b5",
+            color: "#fff",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            width: "50%",
+            flexDirection: "column",
+            padding: 6,
+          }}
         >
-          <Card
-            elevation={9}
-            sx={{ p: 4, zIndex: 1, width: "100%", maxWidth: "500px" }}
-          >
-            <Box display="flex" alignItems="center" justifyContent="center">
-              <Logo />
-            </Box>
-            <AuthForgetPassword
-              subtext={
-                <Typography
-                  variant="subtitle1"
-                  textAlign="center"
-                  color="textSecondary"
-                  mb={1}
-                >
-                  Your Social Campaigns
-                </Typography>
-              }
-              subtitle={
-                <Stack
-                  direction="row"
-                  justifyContent="center"
-                  spacing={1}
-                  mt={3}
-                >
-                  <Typography
-                    color="textSecondary"
-                    variant="h6"
-                    fontWeight="400"
-                  >
-                    Already have an Account?
-                  </Typography>
-                  <Typography
-                    component={Link}
-                    href="/authentication/login"
-                    fontWeight="500"
-                    sx={{
-                      textDecoration: "none",
-                      color: "primary.main",
-                    }}
-                  >
-                    Sign In
-                  </Typography>
-                </Stack>
-              }
-            />
-          </Card>
-        </Grid>
-      </Grid>
-    </Box>
-  </PageContainer>
-);
+          <Image
+            src="/images/logos/logo-white-png.png"
+            alt="logo"
+            height={70}
+            width={80}
+            priority
+          />
 
-export default Register;
+          <Typography variant="h3" fontWeight="bold" mb={3}>
+            EzyAccount
+          </Typography>
+          <Typography variant="h6" textAlign="center">
+          โปรแกรมบัญชีใช้งานง่าย ที่เป็นเสมือนเพื่อคู่คิดธุรกิจคุณ
+          </Typography>
+        </Box>
+
+        {/* Right Section */}
+        <Box
+          sx={{
+            flex: 1,
+            padding: 6,
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+          }}
+        >
+          <Typography variant="h4" fontWeight="bold" textAlign="center" mb={4}>
+            ลืมรหัสผ่าน
+          </Typography>
+          <ForgetPasswordForm />
+        </Box>
+      </Card>
+    </Box>
+  );
+};
+
+export default ForgetPassword;

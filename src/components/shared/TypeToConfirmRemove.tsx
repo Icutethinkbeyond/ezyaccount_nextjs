@@ -15,7 +15,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Cancel, Close } from "@mui/icons-material";
-import { useSnackbarContext } from "@/contexts/NotifyContext";
+import { useNotifyContext } from "@/contexts/NotifyContext";
 import { AlertOctagon } from "lucide-react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -56,8 +56,7 @@ const TypeToConfirmRemove: React.FC<TypeToConfirmRemoveProps> = ({
   isLoading,
 }) => {
   const [open, setOpen] = useState(false);
-  const { setOpenDialog, setNoti, noti } = useSnackbarContext();
-
+  const { setNotify, notify, setOpenBackdrop, openBackdrop } = useNotifyContext()
   // เปิด Dialog
   const handleClickOpen = () => {
     if (
@@ -88,12 +87,13 @@ const TypeToConfirmRemove: React.FC<TypeToConfirmRemoveProps> = ({
     }),
     onSubmit: () => {
       if (!documentIdNo) {
-        setOpenDialog(true);
-        setNoti({
-          ...noti,
+        setNotify({
+          ...notify,
+          open: true,
           message: "พบปัญหาบางอย่างโปรดติดต่อผู้พัฒนา",
-          notiColor: "error",
+          color: "error",
         });
+  
         return;
       }
       onDelete(documentId, documentIdNo, documentStatus, documentStep);

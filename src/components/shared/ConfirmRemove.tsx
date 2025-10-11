@@ -12,7 +12,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Cancel, Delete, RemoveCircle } from "@mui/icons-material";
-import { useSnackbarContext } from "@/contexts/NotifyContext";
+import { useNotifyContext } from "@/contexts/NotifyContext";
 import { DocumentStatus } from "@prisma/client";
 import { AlertOctagon, BookDown } from "lucide-react";
 import {
@@ -48,7 +48,7 @@ const ConfirmRemove: React.FC<ConfirmRemoveProps> = ({
   isLoading,
 }) => {
   const [open, setOpen] = useState(false);
-  const { setOpenDialog, setNoti, noti } = useSnackbarContext();
+  const { setNotify, notify } = useNotifyContext()
 
   // Open the dialog
   const handleClickOpen = () => {
@@ -63,12 +63,13 @@ const ConfirmRemove: React.FC<ConfirmRemoveProps> = ({
   // Handle the deletion
   const handleDelete = () => {
     if (!itemId) {
-      setOpenDialog(true);
-      setNoti({
-        ...noti,
+      setNotify({
+        ...notify,
+        open: true,
         message: "พบปัญหาบางอย่างโปรดติดต่อผู้พัฒนา",
-        notiColor: "error",
+        color: "error",
       });
+
       return;
     }
     onDelete(itemId, subItemId);

@@ -10,9 +10,11 @@ datasource db {
 model User {
   userId       String     @id @default(auto()) @map("_id") @db.ObjectId
   username     String?
-  userEmail    String
+  userEmail    String     @unique
   userPassword String
   userStatus   UserStatus @default(Active)
+  name         String?
+  phone        String?
 
   // Relations
   account        Account?
@@ -21,6 +23,7 @@ model User {
   profile        Profile?
   address        Address?
   companyProfile CompanyProfile?
+  customerId     String?    
   resetTokens    ResetToken[]
 
   createdAt DateTime @default(now())
@@ -37,19 +40,17 @@ model Profile {
   profilePhone   String?
 
   // Relations
-  user       User?     @relation(fields: [userId], references: [userId])
-  userId     String?   @unique @db.ObjectId
-  customer   Customer? @relation(fields: [customerId], references: [customerId])
-  customerId String?   @unique @db.ObjectId
+  user   User?   @relation(fields: [userId], references: [userId])
+  userId String? @unique @db.ObjectId
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model CompanyProfile {
-  companyId               String   @id @default(auto()) @map("_id") @db.ObjectId
+  companyId               String    @id @default(auto()) @map("_id") @db.ObjectId
   companyName             String // ชื่อบริษัท
-  companyAddress          Address? // ที่อยู่บริษัท
+  companyAddress          Address[] // ที่อยู่บริษัท
   companyTaxId            String? // เลขประจำตัวผู้เสียภาษี
   companyPhoneNumber      String? // เบอร์โทรศัพท์
   companyEmail            String? // อีเมล
@@ -71,8 +72,7 @@ model Customer {
   customerEmail String  @unique
   customerTaxId String? @unique
 
-  profile        Profile?
-  address        Address?
+  address        Address[]
   companyProfile CompanyProfile? @relation(fields: [companyId], references: [companyId])
   companyId      String?         @db.ObjectId
 
@@ -101,7 +101,6 @@ model Account {
 }
 
 model ResetToken {
-  
   id      String   @id @default(auto()) @map("_id") @db.ObjectId
   token   String   @unique
   expires DateTime
@@ -140,9 +139,9 @@ model Address {
   user           User            @relation(fields: [userId], references: [userId])
   userId         String          @unique @db.ObjectId
   customer       Customer?       @relation(fields: [customerId], references: [customerId])
-  customerId     String?         @unique @db.ObjectId
+  customerId     String?         @db.ObjectId
   CompanyProfile CompanyProfile? @relation(fields: [companyId], references: [companyId])
-  companyId      String?         @unique @db.ObjectId
+  companyId      String?         @db.ObjectId
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
