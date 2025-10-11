@@ -92,6 +92,7 @@ class ProductService {
   }
 
   async deleteCategory(categoryId: string): Promise<Category> {
+    
     return await prisma.category.delete({
       where: { categoryId },
     });
