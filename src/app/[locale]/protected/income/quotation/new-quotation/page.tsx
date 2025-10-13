@@ -12,16 +12,18 @@ import ItemsTable from "@/components/forms/ItemsTable";
 import DocumentFooter from "@/components/forms/DocumentFooter";
 import CalculateItems from "@/components/forms/CalculateItems";
 import { useBreadcrumbContext } from "@/contexts/BreadcrumbContext";
+import { useLocale } from "next-intl";
 
 const NewQuotation = () => {
 
   const { setBreadcrumbs } = useBreadcrumbContext();
+    const localActive = useLocale();
 
     useEffect(() => {
       setBreadcrumbs([
-        { name: "เพิ่มใบเสนอราคา", href: "/dashboard" },
-        { name: "รายรับ", href: "/inventory" },
-        { name: "ใบเสนอราคา" },
+        { name: "เพิ่มใบเสนอราคา",  href: `/${localActive}/protected/dashboard` },
+        { name: "ใบเสนอ", href: `/${localActive}/protected/income/quotation` },
+        { name: "เพิ่มใบเสนอราคาใหม่" },
       ]);
       return () => {
         setBreadcrumbs([]);
@@ -29,16 +31,16 @@ const NewQuotation = () => {
     }, []);
 
   
-  useEffect(() => {
-    setBreadcrumbs([
-      { name: "หน้าแรก", href: "/dashboard" },
-      { name: "คลังอุปกรณ์", href: "/inventory" },
-      { name: "เพิ่มอุปกรณ์ใหม่" },
-    ]);
-    return () => {
-      setBreadcrumbs([]);
-    };
-  }, []);
+  // useEffect(() => {
+  //   setBreadcrumbs([
+  //     { name: "หน้าแรก", href: "/dashboard" },
+  //     { name: "คลังอุปกรณ์", href: "/inventory" },
+  //     { name: "เพิ่มอุปกรณ์ใหม่" },
+  //   ]);
+  //   return () => {
+  //     setBreadcrumbs([]);
+  //   };
+  // }, []);
 
   return (
      <PageContainer>
