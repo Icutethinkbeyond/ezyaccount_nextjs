@@ -17,7 +17,7 @@ const Dashboard = () => {
 
     useEffect(() => {
     setBreadcrumbs([
-      { name: "หน้าแรก", href: `/${localActive}/protected//dashboard` },
+      { name: "หน้าแรก", href: `/${localActive}/protected/dashboard` },
       { name: "ใบเสนอ", href: `/${localActive}/protected/income/quotation` },
       { name: "เพิ่มใบเสนอราคาใหม่" },
     ]);
