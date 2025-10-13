@@ -197,11 +197,11 @@ export const useMenuItems = () => {
     //     },
     //   ],
     // },
-    {
-      id: uniqueId(),
-      title: "ตั้งค่า", // ชื่อเมนู
-      icon: Settings, // ไอคอนของเมนู
-      href: `/${localActive}/protected/settings`, // ลิงก์ของเมนูโดยอ้างอิงตาม Folder ในการเข้าถึง หากไม่เข้าใจอ่านเพิ่ม https://nextjs.org/docs/app/building-your-application/routing/pages
-    },
+    // {
+    //   id: uniqueId(),
+    //   title: "ตั้งค่า", // ชื่อเมนู
+    //   icon: Settings, // ไอคอนของเมนู
+    //   href: `/${localActive}/protected/settings`, // ลิงก์ของเมนูโดยอ้างอิงตาม Folder ในการเข้าถึง หากไม่เข้าใจอ่านเพิ่ม https://nextjs.org/docs/app/building-your-application/routing/pages
+    // },
   ];
 };

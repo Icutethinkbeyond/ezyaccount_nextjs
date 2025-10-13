@@ -73,7 +73,7 @@ const NewQuotation = () => {
               <DocumentFooter />
             </Grid2>
             <Grid2 size={6}>
-              {/* <CalculateItems /> */}
+              <CalculateItems />
             </Grid2>
           </Grid2>
         </Grid2>

@@ -300,7 +300,7 @@ const NewItems: React.FC<NewProductProps> = ({ isEdit = false }) => {
             <Grid item xs={12} sm={6} lg={4}>
               <FormControl fullWidth size="small">
                 <InputLabel id="product-select-label">
-                  สินค้า/บริการ
+                  เลือกสินค้า/บริการหลัก
                 </InputLabel>
                 <Select
                   labelId="product-select-label"
@@ -334,7 +334,7 @@ const NewItems: React.FC<NewProductProps> = ({ isEdit = false }) => {
             </Grid>
             <Grid item xs={12} sm={6} lg={4}>
               <TextField
-                label="Subject"
+                label="สินค้า/บริการย่อย"
                 variant="outlined"
                 name="productService"
                 size="small"
