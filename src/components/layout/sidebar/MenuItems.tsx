@@ -17,57 +17,51 @@ import { useTranslations, useLocale } from "next-intl";
 export const useMenuItems = () => {
   const t = useTranslations("Menus");
   const localActive = useLocale();
-
+ห
   return [
+
 
     {
       id: uniqueId(),
-      title: "ใบเสนอราคา",
+      title: "แผงควบคุม",
       icon: Dashboard,
-      href: `/${localActive}/protected/income/quotation`,
+      href: `/${localActive}/protected/dashboard`,
     },
-    
-    // {
-    //   id: uniqueId(),
-    //   title: t("menu1"),
-    //   icon: Dashboard,
-    //   href: `/${localActive}/protected/dashboard`,
-    // },
 
-    // {
-    //   id: uniqueId(),
-    //   title: "รายรับ",
-    //   icon: IconReceipt2,
-    //   href: `/${localActive}/protected/income`,
-    //   // กรณีมีซัพเมนูให้ใส่ตาม format ด้านล่าง หากไม่มีดูตามเมนูที่ 1
-    //   children: [
-    //     {
-    //       id: uniqueId(),
-    //       title: "ใบเสนอราคา",
-    //       href: `/${localActive}/protected/income/quotation`,
-    //     },
-    //     {
-    //       id: uniqueId(),
-    //       title: "ใบวางบิล/ใบแจ้งหนี้",
-    //       href: `/${localActive}/protected/income/billing`,
-    //     },
-    //     {
-    //       id: uniqueId(),
-    //       title: "ใบเสร็จรับเงิน/ใบกำกับภาษี",
-    //       href: `/${localActive}/protected/income/invoice`,
-    //     },
-    //     {
-    //       id: uniqueId(),
-    //       title: "ใบลดหนี้",
-    //       href: `/${localActive}/protected/income/credit`,
-    //     },
-    //     {
-    //       id: uniqueId(),
-    //       title: "ใบเพิ่มหนี้",
-    //       href: `/${localActive}/protected/income/debit`,
-    //     },
-    //   ],
-    // },
+    {
+      id: uniqueId(),
+      title: "รายรับ",
+      icon: IconReceipt2,
+      href: `/${localActive}/protected/income`,
+      // กรณีมีซัพเมนูให้ใส่ตาม format ด้านล่าง หากไม่มีดูตามเมนูที่ 1
+      children: [
+        {
+          id: uniqueId(),
+          title: "ใบเสนอราคา",
+          href: `/${localActive}/protected/income/quotation`,
+        },
+        // {
+        //   id: uniqueId(),
+        //   title: "ใบวางบิล/ใบแจ้งหนี้",
+        //   href: `/${localActive}/protected/income/billing`,
+        // },
+        // {
+        //   id: uniqueId(),
+        //   title: "ใบเสร็จรับเงิน/ใบกำกับภาษี",
+        //   href: `/${localActive}/protected/income/invoice`,
+        // },
+        // {
+        //   id: uniqueId(),
+        //   title: "ใบลดหนี้",
+        //   href: `/${localActive}/protected/income/credit`,
+        // },
+        // {
+        //   id: uniqueId(),
+        //   title: "ใบเพิ่มหนี้",
+        //   href: `/${localActive}/protected/income/debit`,
+        // },
+      ],
+    },
     // {
     //   id: uniqueId(),
     //   title: "รายจ่าย",

@@ -46,10 +46,6 @@ interface ProductTableProps {
 }
 
 const QuotationsTable: React.FC<ProductTableProps> = ({ }) => {
-
-  const router = useRouter();
-  const localActive = useLocale();
-
   // const router = useRouter();
   // const [rows, setRows] = useState<Quotation[]>([]);
   // const [rowCount, setRowCount] = useState<number>(0);
@@ -61,7 +57,7 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ }) => {
 
   // useEffect(() => {
   //   setRows(data);
-  // }, []);
+  // }, []);ห
 
   // const handleAddClick = () => {
   //   console.log("Add button clicked!");

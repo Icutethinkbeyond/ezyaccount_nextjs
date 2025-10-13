@@ -17,7 +17,8 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import { useProductServiceListContext } from "@/contexts/QuotationContext";
+
+import { useQuotationListContext } from "@/contexts/QuotationContext";
 import { toNumber, uniqueId } from "lodash";
 // import { Quotation, useDatabaseContext } from "@/contexts/dbContext";
 import { useRouter } from "next/navigation";
@@ -28,9 +29,11 @@ interface CalculateItemsProps {
 }
 
 const CalculateItems: React.FC<CalculateItemsProps> = ({ isEdit = false }) => {
+
   const router = useRouter();
-  const { footerForm, setFooterForm, headForm, products } =
-    useProductServiceListContext();
+
+  const { footerForm, setFooterForm, headForm, products } = useQuotationListContext();
+
   // const { addQuotation, qoutationState, updateQuotation, editQuotation } =
   //   useDatabaseContext();
 
@@ -69,6 +72,7 @@ const CalculateItems: React.FC<CalculateItemsProps> = ({ isEdit = false }) => {
     //   updateDate: new Date(),
     // });
     router.push("/income/quotation");
+    
   };
 
   const handleUpdatePost = () => {

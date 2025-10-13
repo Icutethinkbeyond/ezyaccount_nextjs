@@ -32,11 +32,11 @@ export default async function RootLayout({
           <NotifyProvider>
             <BreadcrumbProvider>
               <ProductProvider>
-                <Qou>
+                <QuotationProvider>
                 <NextIntlClientProvider messages={messages}>
                   <ThemeRegistry>{children}</ThemeRegistry>
                 </NextIntlClientProvider>
-                </Qou>
+                </QuotationProvider>
               </ProductProvider>
             </BreadcrumbProvider>
           </NotifyProvider>

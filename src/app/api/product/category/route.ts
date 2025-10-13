@@ -40,7 +40,6 @@ export async function GET(req: NextRequest) {
             );
         }
 
-        // return new NextResponse(JSON.stringify(categories), { status: 200 });
     } catch (error) {
         console.error('Error fetching categories:', error);
         return new NextResponse(JSON.stringify({ error: 'Internal server error' }), { status: 500 });
@@ -56,19 +55,6 @@ export async function POST(req: NextRequest) {
 
         let productService = new ProductService()
 
-        // Validation
-        if (!categoryName) {
-            return new NextResponse(JSON.stringify('Category name is required'), { status: 400 });
-        }
-
-        //check name is exist
-        const nameIsAlready = await prisma.category.findFirst({ where: { categoryName: { equals: categoryName } } })
-
-        if (nameIsAlready) {
-            return new NextResponse(JSON.stringify('Category name is Already'), { status: 400 });
-        }
-
-        // Create a new category
         const newCategory = await productService.createCategory({ categoryName, categoryDesc })
 
         return new NextResponse(JSON.stringify(newCategory), { status: 201 });
@@ -90,16 +76,12 @@ export async function DELETE(req: NextRequest) {
         const categoryId = searchParams.get('categoryId');
         let productService = new ProductService();
 
-        // ตรวจสอบว่ามี categoryId หรือไม่
-        if (!categoryId) {
-            return new NextResponse(JSON.stringify('Category ID is required'), { status: 400 });
-        }
+        if (!categoryId) return new NextResponse(JSON.stringify('Category ID is required'), { status: 400 });
 
-        // ลบ category โดยใช้ categoryId
         const deletedCategory = await productService.deleteCategory(categoryId)
-
-        // ส่งข้อมูล category ที่ถูกลบกลับ
+        
         return new NextResponse(JSON.stringify(deletedCategory), { status: 200 });
+
     } catch (error: any) {
         console.error('Error deleting category:', error);
         return new NextResponse(JSON.stringify({ error: 'Internal server error' }), { status: 500 });
