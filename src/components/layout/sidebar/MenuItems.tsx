@@ -17,7 +17,7 @@ import { useTranslations, useLocale } from "next-intl";
 export const useMenuItems = () => {
   const t = useTranslations("Menus");
   const localActive = useLocale();
-ห
+
   return [
 
 

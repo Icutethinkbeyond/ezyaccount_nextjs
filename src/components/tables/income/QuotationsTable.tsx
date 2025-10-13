@@ -46,6 +46,7 @@ interface ProductTableProps {
 }
 
 const QuotationsTable: React.FC<ProductTableProps> = ({ }) => {
+  
   // const router = useRouter();
   // const [rows, setRows] = useState<Quotation[]>([]);
   // const [rowCount, setRowCount] = useState<number>(0);
@@ -390,9 +391,6 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ }) => {
     //   </>
     // </BaseCard>
     <>
-              <FloatingButton
-        onClick={() => router.push(`/${localActive}/protected/income/quotation/new`)}
-      />
       <div>ใบเสนอราคา</div>
       </>
 

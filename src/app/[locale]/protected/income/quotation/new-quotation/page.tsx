@@ -42,31 +42,6 @@ const NewQuotation = () => {
 
   return (
      <PageContainer>
-       {/* <DashboardCard
-        title={<Typography variant="h2">เพิ่มใบเสนอราคา</Typography>}
-        action={
-          <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
-            <IconButton
-              onClick={handlePrint}
-              sx={{ color: "primary.main", fontSize: 28 }}
-            >
-              <Print />
-            </IconButton>
-            <IconButton
-              onClick={handleMessage}
-              sx={{ color: "info.main", fontSize: 28 }}
-            >
-              <Message />
-            </IconButton>
-            <IconButton
-              onClick={() => handleExport()}
-              sx={{ color: "success.main", fontSize: 28 }}
-            >
-              <GetApp />
-            </IconButton>
-          </Box>
-        }
-      > */}
         <Grid2 container spacing={3} sx={{ p: 3 }}>
           <Grid2 size={6}>
             <CompanyInformation />
