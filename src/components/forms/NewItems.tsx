@@ -19,12 +19,22 @@ import {
 } from "@/contexts/QuotationContext";
 import { SubProduct, Product } from "@/contexts/QuotationContext";
 import { toNumber } from "lodash";
+import { Formik, Field, Form, ErrorMessage } from "formik";
+import * as Yup from "yup";
 import BaseCard from "../shared/BaseCard";
 
 interface NewProductProps {
   isEdit?: boolean | null | undefined;
 }
 
+// Validation Schema with Yup
+const NewItemSchema = Yup.object({
+  productServiceNumber: Yup.string().required("ลำดับสินค้าจำเป็นต้องกรอก"),
+  productService: Yup.string().required("สินค้าจำเป็นต้องกรอก"),
+  amount: Yup.string().required("จำนวนจำเป็นต้องกรอก"),
+  subProductServiceNumber: Yup.string().required("สินค้าย่อยจำเป็นต้องกรอก"),
+  price: Yup.date().required("ราคาจำเป็นต้องกรอก"),
+});
 const NewItems: React.FC<NewProductProps> = ({ isEdit = false }) => {
   const {
     products,
@@ -154,6 +164,21 @@ const NewItems: React.FC<NewProductProps> = ({ isEdit = false }) => {
 
   return (
     <BaseCard>
+        <Formik
+            initialValues={{
+              productServiceNumber: "",
+              productService: "",
+              amount: "",
+              subProductServiceNumber: "",
+              price: "",
+            }}
+            validationSchema={NewItemSchema}
+            onSubmit={(values) => {
+              console.log(values); // Handle form submission
+            }}
+        >
+        {({ touched, errors }) => (
+     <Form>
       <Box title="รายการสินค้า/บริการ">
         <Box p={3} border="1px solid #ccc" borderRadius="8px" mb={2}>
           <Typography variant="h6" gutterBottom>
@@ -169,35 +194,46 @@ const NewItems: React.FC<NewProductProps> = ({ isEdit = false }) => {
           </Typography>
           <Grid container spacing={2} sx={{ mb: 4 }}>
             <Grid item xs={12} sm={6} lg={4}>
-              <TextField
+              <Field
                 label="#ลำดับ"
                 variant="outlined"
                 name="productServiceNumber"
+                as={TextField}
                 size="small"
                 type="number"
                 required
                 value={newProduct.productServiceNumber}
                 onChange={handleChange}
                 fullWidth
+                error={
+                       touched.productServiceNumber && Boolean(errors.productServiceNumber)
+                      }
+                helperText={<ErrorMessage name="productServiceNumber" />}
               />
             </Grid>
             <Grid item xs={12} sm={6} lg={4}>
-              <TextField
+              <Field
                 label="สินค้า/บริการ"
                 variant="outlined"
                 name="productService"
+                as={TextField}
                 size="small"
                 required
                 value={newProduct.productService}
                 onChange={handleChange}
                 fullWidth
+                error={
+                       touched.productService && Boolean(errors.productService)
+                      }
+                helperText={<ErrorMessage name="productService" />}
               />
             </Grid>
             <Grid item xs={12} sm={6} lg={4}>
-              <TextField
+              <Field
                 label="รายละเอียด"
                 variant="outlined"
                 name="description"
+                as={TextField}
                 size="small"
                 value={newProduct.description}
                 onChange={handleChange}
@@ -205,10 +241,11 @@ const NewItems: React.FC<NewProductProps> = ({ isEdit = false }) => {
               />
             </Grid>
             <Grid item xs={12} sm={6} lg={4}>
-              <TextField
+              <Field
                 label="ราคา"
                 variant="outlined"
                 name="price"
+                as={TextField}
                 size="small"
                 type="number"
                 value={newProduct.price}
@@ -217,23 +254,29 @@ const NewItems: React.FC<NewProductProps> = ({ isEdit = false }) => {
               />
             </Grid>
             <Grid item xs={12} sm={6} lg={4}>
-              <TextField
+              <Field
                 label="จำนวน"
                 variant="outlined"
                 name="amount"
+                as={TextField}
                 size="small"
                 type="number"
                 required
                 value={newProduct.amount}
                 onChange={handleChange}
                 fullWidth
+                error={
+                       touched.amount && Boolean(errors.amount)
+                      }
+                helperText={<ErrorMessage name="amount" />}
               />
             </Grid>
             <Grid item xs={12} sm={6} lg={4}>
-              <TextField
+              <Field
                 label="ส่วนลด"
                 variant="outlined"
                 name="discount"
+                as={TextField}
                 size="small"
                 type="number"
                 required
@@ -243,10 +286,11 @@ const NewItems: React.FC<NewProductProps> = ({ isEdit = false }) => {
               />
             </Grid>
             <Grid item xs={12} sm={6} lg={4}>
-              <TextField
+              <Field
                 label="รวม"
                 variant="outlined"
                 name="total"
+                as={TextField}
                 size="small"
                 type="number"
                 required
@@ -321,34 +365,45 @@ const NewItems: React.FC<NewProductProps> = ({ isEdit = false }) => {
               </FormControl>
             </Grid>
             <Grid item xs={12} sm={6} lg={4}>
-              <TextField
+              <Field
                 label="#ลำดับ"
                 variant="outlined"
                 name="subProductServiceNumber"
+                as={TextField}
                 size="small"
                 required
                 value={newSubProduct.subProductServiceNumber}
                 onChange={handleChangeSubProduct}
                 fullWidth
+                error={
+                       touched.subProductServiceNumber && Boolean(errors.subProductServiceNumber)
+                      }
+                helperText={<ErrorMessage name="subProductServiceNumber" />}
               />
             </Grid>
             <Grid item xs={12} sm={6} lg={4}>
-              <TextField
+              <Field
                 label="สินค้า/บริการย่อย"
                 variant="outlined"
                 name="productService"
+                as={TextField}
                 size="small"
                 required
                 value={newSubProduct.productService}
                 onChange={handleChangeSubProduct}
                 fullWidth
+                error={
+                       touched.productService && Boolean(errors.productService)
+                      }
+                helperText={<ErrorMessage name="productService" />}
               />
             </Grid>
             <Grid item xs={12} sm={6} lg={4}>
-              <TextField
+              <Field
                 label="รายละเอียด"
                 variant="outlined"
                 name="description"
+                as={TextField}
                 size="small"
                 value={newSubProduct.description}
                 onChange={handleChangeSubProduct}
@@ -356,37 +411,48 @@ const NewItems: React.FC<NewProductProps> = ({ isEdit = false }) => {
               />
             </Grid>
             <Grid item xs={12} sm={6} lg={4}>
-              <TextField
+              <Field
                 label="ราคา"
                 variant="outlined"
                 name="price"
+                as={TextField}
                 size="small"
                 type="number"
                 value={newSubProduct.price}
                 onChange={handleChangeSubProduct}
                 required
                 fullWidth
+                error={
+                       touched.price && Boolean(errors.price)
+                      }
+                helperText={<ErrorMessage name="price" />}
               />
             </Grid>
             <Grid item xs={12} sm={6} lg={4}>
-              <TextField
+              <Field
                 label="จำนวน"
                 variant="outlined"
                 name="amount"
+                as={TextField}
                 size="small"
                 type="number"
                 value={newSubProduct.amount}
                 onChange={handleChangeSubProduct}
                 required
                 fullWidth
+                error={
+                       touched.amount && Boolean(errors.amount)
+                      }
+                helperText={<ErrorMessage name="amount" />}
               />
             </Grid>
 
             <Grid item xs={12} sm={6} lg={4}>
-              <TextField
+              <Field
                 label="ส่วนลด"
                 variant="outlined"
                 name="discount"
+                as={TextField}
                 size="small"
                 type="number"
                 value={newSubProduct.discount}
@@ -396,10 +462,11 @@ const NewItems: React.FC<NewProductProps> = ({ isEdit = false }) => {
               />
             </Grid>
             <Grid item xs={12} sm={6} lg={4}>
-              <TextField
+              <Field
                 label="ยอดรวม"
                 variant="outlined"
                 name="total"
+                as={TextField}
                 size="small"
                 type="number"
                 disabled
@@ -438,6 +505,9 @@ const NewItems: React.FC<NewProductProps> = ({ isEdit = false }) => {
           </Grid>
         </Box>
       </Box>
+      </Form>
+      )}
+      </Formik>
     </BaseCard>
   );
 };
