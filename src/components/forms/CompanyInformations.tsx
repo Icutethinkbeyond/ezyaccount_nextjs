@@ -3,7 +3,7 @@ import { Grid2, TextField, Box, Typography } from "@mui/material";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import BaseCard from "../shared/BaseCard";
-import { useQuotationListContext } from "@/contexts/QuotationContext";
+import { HeadForm, useQuotationListContext } from "@/contexts/QuotationContext";
 
 // Validation Schema with Yup
 const CompanyInformationSchema = Yup.object({
@@ -21,7 +21,7 @@ const CompanyInformation: React.FC = () => {
 
   return (
     <BaseCard>
-      <Formik
+      <Formik<HeadForm>
         initialValues={headForm}
         validationSchema={CompanyInformationSchema}
         enableReinitialize

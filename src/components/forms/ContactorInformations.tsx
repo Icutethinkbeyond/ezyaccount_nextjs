@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Grid2, TextField, Box, Typography } from "@mui/material";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import BaseCard from "../shared/BaseCard";
+import { HeadForm, useQuotationListContext } from "@/contexts/QuotationContext";
 
 // Validation Schema with Yup
 const ContactotInformationSchema = Yup.object({
@@ -15,21 +16,38 @@ const ContactotInformationSchema = Yup.object({
 });
 
 const ContactotInformation: React.FC = () => {
+
+  const { footerForm, setFooterForm, headForm, products, setHeadForm } = useQuotationListContext();
+
+  
   return (
     <BaseCard>
-      <Formik
-        initialValues={{
-          contactorName: "",
-          contactorTel: "",
-          contactorEmail: "",
-          contactorAddress: "",
-        }}
+      <Formik<HeadForm>
+        // initialValues={{
+        //   contactorName: "",
+        //   contactorTel: "",
+        //   contactorEmail: "",
+        //   contactorAddress: "",
+        // }}
+        // validationSchema={ContactotInformationSchema}
+        // onSubmit={(values) => {
+        //   console.log(values); // Handle form submission
+        // }}
+        initialValues={headForm}
         validationSchema={ContactotInformationSchema}
+        enableReinitialize
         onSubmit={(values) => {
-          console.log(values); // Handle form submission
+          console.log("บันทึกข้อมูล:", values);
+          setHeadForm(values);
         }}
       >
-        {({ touched, errors }) => (
+        {({ touched, errors, values }) => {
+
+          useEffect(() => {
+            setHeadForm(values);
+          }, [values, setHeadForm]);
+
+          return (
           <Form>
             <Box p={3} border="1px solid #ccc" borderRadius="8px">
               <Typography variant="h6" gutterBottom>
@@ -109,7 +127,8 @@ const ContactotInformation: React.FC = () => {
               </Grid2>
             </Box>
           </Form>
-        )}
+        )
+        } }
       </Formik>
     </BaseCard>
   );
