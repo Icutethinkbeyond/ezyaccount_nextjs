@@ -4,15 +4,23 @@ import ExcelJS from 'exceljs';
 import fs from 'fs';
 import path from 'path';
 import { promisify } from 'util';
+import { FormDataFooter, HeadForm, Product } from '@/contexts/QuotationContext';
 
 const prisma = new PrismaClient();
 
 export async function POST(req: NextRequest, res: NextResponse) {
     try {
 
-        const data = await req.json() ;
+        const { footerForm, headForm, products } = await req.json();
+        let _footerForm = footerForm as FormDataFooter
+        let _headForm= headForm as HeadForm
+        let _products = products as Product[]
 
-        console.log(data)
+        console.log(_footerForm)
+        console.log(_headForm)
+        console.log(_products)
+
+        return new NextResponse(JSON.stringify('asd'), { status: 201 });
 
     } catch (error) {
         console.error('Error fetching categories:', error);

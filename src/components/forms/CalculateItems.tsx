@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -36,6 +36,10 @@ const CalculateItems: React.FC<CalculateItemsProps> = ({ isEdit = false }) => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
   const { footerForm, setFooterForm, headForm, products } = useQuotationListContext();
+
+  useEffect(() => {
+     console.log(headForm)
+  }, [headForm])
 
   // const { addQuotation, qoutationState, updateQuotation, editQuotation } =
   //   useDatabaseContext();
@@ -87,7 +91,7 @@ const approveDocument = () => {
         setLoading(false);
 
       })
-      .catch((error) => {
+      .catch((error) => { 
         console.error("Fetch error:", error);
         setNotify({
           ...notify,
