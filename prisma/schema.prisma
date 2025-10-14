@@ -240,55 +240,55 @@ model DocumentPaper {
   updatedAt DateTime @updatedAt // อัปเดตล่าสุด
 }
 
-model DocumentProductGroup {
-  documentProductGroupId String @id @default(auto()) @map("_id") @db.ObjectId
+// model DocumentProductGroup {
+//   documentProductGroupId String @id @default(auto()) @map("_id") @db.ObjectId
 
-  documentProductGroupName String
-  documentProductGroupDesc String?
+//   documentProductGroupName String
+//   documentProductGroupDesc String?
 
-  documentPaper   DocumentPaper @relation(fields: [documentPaperId], references: [documentId])
-  documentPaperId String        @db.ObjectId
+//   documentPaper   DocumentPaper @relation(fields: [documentPaperId], references: [documentId])
+//   documentPaperId String        @db.ObjectId
 
-  documentProduct DocumentProduct[]
+//   documentProduct DocumentProduct[]
 
-  createdAt DateTime @default(now()) // วันที่สร้าง
-  updatedAt DateTime @updatedAt // อัปเดตล่าสุด
-}
+//   createdAt DateTime @default(now()) // วันที่สร้าง
+//   updatedAt DateTime @updatedAt // อัปเดตล่าสุด
+// }
 
-model DocumentProduct {
-  documentProductId String @id @default(auto()) @map("_id") @db.ObjectId
+// model DocumentProduct {
+//   documentProductId String @id @default(auto()) @map("_id") @db.ObjectId
 
-  products   Product[] @relation(fields: [productIds], references: [productId])
-  productIds String[]  @db.ObjectId
+//   products   Product[] @relation(fields: [productIds], references: [productId])
+//   productIds String[]  @db.ObjectId
 
-  quantity Int @default(1)
+//   quantity Int @default(1)
 
-  price         Float @default(0)
-  discountPrice Float @default(0)
+//   price         Float @default(0)
+//   discountPrice Float @default(0)
 
-  documentPaper   DocumentPaper @relation(fields: [documentPaperId], references: [documentId])
-  documentPaperId String        @db.ObjectId
+//   documentPaper   DocumentPaper @relation(fields: [documentPaperId], references: [documentId])
+//   documentPaperId String        @db.ObjectId
 
-  documentProductGroup   DocumentProductGroup @relation(fields: [documentProductGroupId], references: [documentProductGroupId])
-  documentProductGroupId String               @db.ObjectId
+//   documentProductGroup   DocumentProductGroup @relation(fields: [documentProductGroupId], references: [documentProductGroupId])
+//   documentProductGroupId String               @db.ObjectId
 
-  createdAt DateTime @default(now()) // วันที่สร้าง
-  updatedAt DateTime @updatedAt // อัปเดตล่าสุด
-}
+//   createdAt DateTime @default(now()) // วันที่สร้าง
+//   updatedAt DateTime @updatedAt // อัปเดตล่าสุด
+// }
 
-model DocumentFile {
-  fileId   String @id @default(auto()) @map("_id") @db.ObjectId
-  filePath String
-  fileName String
+// model DocumentFile {
+//   fileId   String @id @default(auto()) @map("_id") @db.ObjectId
+//   filePath String
+//   fileName String
 
-  fileType String?
+//   fileType String?
 
-  documentPaper   DocumentPaper @relation(fields: [documentPaperId], references: [documentId])
-  documentPaperId String        @unique @db.ObjectId
+//   documentPaper   DocumentPaper @relation(fields: [documentPaperId], references: [documentId])
+//   documentPaperId String        @unique @db.ObjectId
 
-  createdAt DateTime @default(now()) // วันที่สร้าง
-  updatedAt DateTime @updatedAt // อัปเดตล่าสุด
-}
+//   createdAt DateTime @default(now()) // วันที่สร้าง
+//   updatedAt DateTime @updatedAt // อัปเดตล่าสุด
+// }
 
 enum DocumentType {
   Quotation

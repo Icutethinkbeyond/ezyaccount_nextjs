@@ -20,6 +20,16 @@ export async function POST(req: NextRequest, res: NextResponse) {
         console.log(_headForm)
         console.log(_products)
 
+        const newDocument = await prisma.document.create({
+            data: {
+                documentIdNo,
+                documentDetials,
+                documentType,
+                documentStatus: DocumentStatus.Draft,
+                documentStep: repairLocation === LocationType.OnPlant ? DocumentStep.Equipment : DocumentStep.Location
+            },
+        });
+
         return new NextResponse(JSON.stringify('asd'), { status: 201 });
 
     } catch (error) {
