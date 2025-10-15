@@ -205,7 +205,7 @@ model Product {
 
   aboutProduct AboutProduct?
 
-  documentProduct    DocumentProduct[]
+  // documentProduct    DocumentProduct[]
 
   // documentProduct    DocumentProduct[] @relation(fields: [documentProductIds], references: [documentProductId])
   // documentProductIds String[]          @db.ObjectId
@@ -277,6 +277,10 @@ model DocumentPaper {
 
 }
 
+model DocumentProductGroup {
+  
+}
+
 // model DocumentProductGroup {
 
 //   documentProductGroupId String @id @default(auto()) @map("_id") @db.ObjectId
@@ -294,32 +298,37 @@ model DocumentPaper {
 
 // }
 
-model DocumentProduct {
+// model DocumentProduct {
 
-  documentProductId String @id @default(auto()) @map("_id") @db.ObjectId
+//   documentProductId String @id @default(auto()) @map("_id") @db.ObjectId
 
-  isSubject Boolean @default(false)
-  subjectOrder Int?
-  order Int @default(1)
+//   isSubjectItem Boolean @default(false)
+//   productServiceKey Int?
+//   productServiceNumber Int? @default(1) //this is order
+//   subProductServiceNumber Int? @default(1)
 
-  products   Product @relation(fields: [productIds], references: [productId])
-  productIds String  @db.ObjectId
+//   productService String
 
-  quantity Int @default(1)
+//   description String?
 
-  price         Float @default(0)
-  discountPrice Float @default(0)
+//   // products   Product @relation(fields: [productIds], references: [productId])
+//   // productIds String  @db.ObjectId
 
-  documentPaper   DocumentPaper @relation(fields: [documentPaperId], references: [documentId])
-  documentPaperId String        @db.ObjectId
+//   amount Int @default(1)
 
-  // documentProductGroup   DocumentProductGroup @relation(fields: [documentProductGroupId], references: [documentProductGroupId])
-  documentProductGroupId String               @db.ObjectId
+//   price         Float @default(0)
+//   discount Float @default(0)
 
-  createdAt DateTime @default(now()) // วันที่สร้าง
-  updatedAt DateTime @updatedAt // อัปเดตล่าสุด
+//   documentPaper   DocumentPaper @relation(fields: [documentPaperId], references: [documentId])
+//   documentPaperId String        @db.ObjectId
 
-}
+//   // documentProductGroup   DocumentProductGroup @relation(fields: [documentProductGroupId], references: [documentProductGroupId])
+//   documentProductGroupId String               @db.ObjectId
+
+//   createdAt DateTime @default(now()) // วันที่สร้าง
+//   updatedAt DateTime @updatedAt // อัปเดตล่าสุด
+
+// }
 
 // model DocumentFile {
 //   fileId   String @id @default(auto()) @map("_id") @db.ObjectId

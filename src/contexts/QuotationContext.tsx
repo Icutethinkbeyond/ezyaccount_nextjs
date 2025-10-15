@@ -287,6 +287,7 @@ export const QuotationProvider = ({ children }: { children: ReactNode }) => {
 
   // ฟังก์ชันสำหรับเพิ่มสินค้า
   const addProduct = (product: Product) => {
+    console.log(product)
     setProducts((prevProducts) => [...prevProducts, product]);
   };
 
@@ -315,6 +316,7 @@ export const QuotationProvider = ({ children }: { children: ReactNode }) => {
     productServiceNumber: number,
     subProduct: SubProduct
   ) => {
+    console.log(subProduct)
     setProducts((prevProducts) =>
       prevProducts.map((product) =>
         toNumber(product.productServiceNumber) === productServiceNumber
