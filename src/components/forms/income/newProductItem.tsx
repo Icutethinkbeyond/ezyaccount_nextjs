@@ -15,7 +15,7 @@ import {
 import {
   productClean,
   subProductClean,
-  useProductServiceListContext,
+  useQuotationListContext,
 } from "@/contexts/QuotationContext";
 import { SubProduct, Product } from "@/contexts/QuotationContext";
 import { toNumber } from "lodash";
@@ -39,7 +39,7 @@ const NewProductItem: React.FC<NewProductProps> = ({ isEdit = false }) => {
     setIsSubProductEdit,
     updateProduct,
     updateSubProduct,
-  } = useProductServiceListContext();
+  } = useQuotationListContext();
 
   useEffect(() => {
     setnewProduct(productEdit);
@@ -297,7 +297,7 @@ const NewProductItem: React.FC<NewProductProps> = ({ isEdit = false }) => {
                 onChange={handleChangeSelect}
                 label="Select Product"
               >
-                {products.map((product) => (
+                {products.map((product: any) => (
                   <MenuItem
                     key={product.productServiceNumber}
                     value={product.productServiceNumber}

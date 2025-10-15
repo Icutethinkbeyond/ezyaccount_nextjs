@@ -77,6 +77,14 @@ export function makeDateMonth(utcDateString?: string): string {
     return `${month}-${year}`;
 }
 
+export const getMonthAbbreviation = (month: number): string => {
+  const monthAbbrs = [
+    "JAN", "FEB", "MAR", "APR", "MAY", "JUN",
+    "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"
+  ];
+  return monthAbbrs[month];
+};
+
 export function formatNumber(number: number | null | undefined, needDecimal: boolean | null = true): string | null | undefined {
     if (number !== null && number !== undefined) {
 

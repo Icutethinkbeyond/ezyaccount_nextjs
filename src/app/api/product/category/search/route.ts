@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import ProductService, { Pagination } from '@/services/database/ProductServices';
+import ProductService, { Pagination } from '@/services/database/_ProductServices';
 
 export const dynamic = "force-dynamic";
 

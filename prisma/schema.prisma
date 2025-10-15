@@ -21,7 +21,8 @@ model User {
   role           Role?           @relation(fields: [roleId], references: [roleId])
   roleId         String?         @db.ObjectId
   profile        Profile?
-  address        Address?
+  // address        Address?
+  address       String?
   companyProfile CompanyProfile?
   customerId     String?    
   resetTokens    ResetToken[]
@@ -50,7 +51,8 @@ model Profile {
 model CompanyProfile {
   companyId               String    @id @default(auto()) @map("_id") @db.ObjectId
   companyName             String // ชื่อบริษัท
-  companyAddress          Address[] // ที่อยู่บริษัท
+  // companyAddress          Address[] // ที่อยู่บริษัท
+  companyAddress          String? // ที่อยู่บริษัท
   companyTaxId            String? // เลขประจำตัวผู้เสียภาษี
   companyPhoneNumber      String? // เบอร์โทรศัพท์
   companyEmail            String? // อีเมล
@@ -58,29 +60,17 @@ model CompanyProfile {
   companyRegistrationDate DateTime // วันที่จดทะเบียน
   companyBusinessType     String? // ประเภทธุรกิจ
 
-  bankAccounts BankAccount[] // ความสัมพันธ์กับบัญชีธนาคารของบริษัท
+  // bankAccounts BankAccount[] // ความสัมพันธ์กับบัญชีธนาคารของบริษัท
   user         User          @relation(fields: [userId], references: [userId])
   userId       String        @unique @db.ObjectId
-  customers    Customer[]
+
+  customerCompany         CustomerCompany?
+  // customerCompany    CustomerCompany[]
 
   createdAt DateTime @default(now()) // วันที่สร้าง
   updatedAt DateTime @updatedAt // วันที่อัปเดตล่าสุด
 }
 
-model Customer {
-  customerId    String  @id @default(auto()) @map("_id") @db.ObjectId
-  customerEmail String  @unique
-  customerTaxId String? @unique
-
-  address        Address[]
-  companyProfile CompanyProfile? @relation(fields: [companyId], references: [companyId])
-  companyId      String?         @db.ObjectId
-
-  documentPaper DocumentPaper[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
 
 model Account {
   id                String  @id @default(auto()) @map("_id") @db.ObjectId
@@ -126,45 +116,80 @@ model Role {
   @@unique([name])
 }
 
-model Address {
-  addressId   String  @id @default(auto()) @map("_id") @db.ObjectId
-  address1    String
-  address2    String?
-  subDistrict String
-  city        String
-  state       String
-  postalCode  String
-  country     String
+// model Address {
+//   addressId   String  @id @default(auto()) @map("_id") @db.ObjectId
+//   address1    String
+//   address2    String?
+//   subDistrict String
+//   city        String
+//   state       String
+//   postalCode  String
+//   country     String
 
-  user           User            @relation(fields: [userId], references: [userId])
-  userId         String          @unique @db.ObjectId
-  customer       Customer?       @relation(fields: [customerId], references: [customerId])
-  customerId     String?         @db.ObjectId
-  CompanyProfile CompanyProfile? @relation(fields: [companyId], references: [companyId])
-  companyId      String?         @db.ObjectId
+//   user           User            @relation(fields: [userId], references: [userId])
+//   userId         String          @unique @db.ObjectId
+//   customer       Customer?       @relation(fields: [customerId], references: [customerId])
+//   customerId     String?         @db.ObjectId
+//   CompanyProfile CompanyProfile? @relation(fields: [companyId], references: [companyId])
+//   companyId      String?         @db.ObjectId
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+// }
 
-model BankAccount {
-  bankAccountId     String  @id @default(auto()) @map("_id") @db.ObjectId
-  bankAccountNo     String
-  bankAccountName   String
-  bankAccountBranch String?
+// model BankAccount {
+//   bankAccountId     String  @id @default(auto()) @map("_id") @db.ObjectId
+//   bankAccountNo     String
+//   bankAccountName   String
+//   bankAccountBranch String?
 
-  CompanyProfile          CompanyProfile? @relation(fields: [companyProfileCompanyId], references: [companyId])
-  companyProfileCompanyId String?         @db.ObjectId
+//   CompanyProfile          CompanyProfile? @relation(fields: [companyProfileCompanyId], references: [companyId])
+//   companyProfileCompanyId String?         @db.ObjectId
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+// }
 
 model Category {
   categoryId   String    @id @default(auto()) @map("_id") @db.ObjectId
   categoryName String
   categoryDesc String?
   products     Product[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model CustomerCompany {
+
+  customerCompanyId    String  @id @default(auto()) @map("_id") @db.ObjectId
+  customerCompanyEmail String  @unique
+  customerCompanyTaxId String? @unique
+
+  // address        Address[]
+  address        String?
+
+  companyProfile CompanyProfile? @relation(fields: [companyId], references: [companyId])
+  companyId      String?         @db.ObjectId @unique
+
+  documentPaper DocumentPaper[]
+  contactor Contactor[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Contactor {
+
+  contactorId         String  @id @default(auto()) @map("_id") @db.ObjectId
+  contactorEmail      String?  
+  contactorTel        String?
+  contractorAddress   String?
+  
+  customerCompany      CustomerCompany? @relation(fields: [customerCompanyId], references: [customerCompanyId])
+  customerCompanyId    String?         @db.ObjectId
+
+  documentPaper DocumentPaper[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -180,8 +205,10 @@ model Product {
 
   aboutProduct AboutProduct?
 
-  documentProduct    DocumentProduct[] @relation(fields: [documentProductIds], references: [documentProductId])
-  documentProductIds String[]          @db.ObjectId
+  documentProduct    DocumentProduct[]
+
+  // documentProduct    DocumentProduct[] @relation(fields: [documentProductIds], references: [documentProductId])
+  // documentProductIds String[]          @db.ObjectId
 
   category   Category? @relation(fields: [categoryId], references: [categoryId])
   categoryId String?   @db.ObjectId
@@ -210,37 +237,48 @@ model AboutProduct {
 
 model DocumentPaper {
   documentId      String  @id @default(auto()) @map("_id") @db.ObjectId
+
   documentIdNo    String  @unique
   documentDetials String?
 
-  customer   Customer? @relation(fields: [customerId], references: [customerId])
-  customerId String?   @db.ObjectId
+  docType  String
+  docMonth String
+  docYear  String
 
-  documentType   DocumentType   @default(Quotation)
+  customerCompany   CustomerCompany? @relation(fields: [customerCompanyId], references: [customerCompanyId])
+  customerCompanyId String?   @db.ObjectId
+
+  documentType   eDocumentType   @default(Quotation)
   documentStatus DocumentStatus @default(Draft)
 
   documentCreateDate DateTime?
   documentExpire     DateTime?
 
-  priceTotal    Float @default(0)
-  discountTotal Float @default(0)
+  total    Float @default(0)
+  discountPrice Float @default(0)
 
   includeVat Boolean @default(false)
   vatPrice   Float   @default(0)
 
-  withHolding        Boolean @default(false)
-  withHoldingPercent Float   @default(0)
-  withHoldingPrice   Float   @default(0)
+  withholdingTax     Float @default(0)
+  withholdingTaxPrice  Float   @default(0) // after cal tax 
+  totalAmountDue       Float   @default(0) // after sum tax
 
-  files                DocumentFile[]
-  documentProductGroup DocumentProductGroup[]
+  contactor            Contactor?     @relation(fields: [contactorId], references: [contactorId])
+  contactorId          String?        @db.ObjectId 
+
+  // files                DocumentFile[]
+  // documentProductGroup DocumentProductGroup[]
   documentProduct      DocumentProduct[]
+
 
   createdAt DateTime @default(now()) // วันที่สร้าง
   updatedAt DateTime @updatedAt // อัปเดตล่าสุด
+
 }
 
 // model DocumentProductGroup {
+
 //   documentProductGroupId String @id @default(auto()) @map("_id") @db.ObjectId
 
 //   documentProductGroupName String
@@ -253,28 +291,35 @@ model DocumentPaper {
 
 //   createdAt DateTime @default(now()) // วันที่สร้าง
 //   updatedAt DateTime @updatedAt // อัปเดตล่าสุด
+
 // }
 
-// model DocumentProduct {
-//   documentProductId String @id @default(auto()) @map("_id") @db.ObjectId
+model DocumentProduct {
 
-//   products   Product[] @relation(fields: [productIds], references: [productId])
-//   productIds String[]  @db.ObjectId
+  documentProductId String @id @default(auto()) @map("_id") @db.ObjectId
 
-//   quantity Int @default(1)
+  isSubject Boolean @default(false)
+  subjectOrder Int?
+  order Int @default(1)
 
-//   price         Float @default(0)
-//   discountPrice Float @default(0)
+  products   Product @relation(fields: [productIds], references: [productId])
+  productIds String  @db.ObjectId
 
-//   documentPaper   DocumentPaper @relation(fields: [documentPaperId], references: [documentId])
-//   documentPaperId String        @db.ObjectId
+  quantity Int @default(1)
 
-//   documentProductGroup   DocumentProductGroup @relation(fields: [documentProductGroupId], references: [documentProductGroupId])
-//   documentProductGroupId String               @db.ObjectId
+  price         Float @default(0)
+  discountPrice Float @default(0)
 
-//   createdAt DateTime @default(now()) // วันที่สร้าง
-//   updatedAt DateTime @updatedAt // อัปเดตล่าสุด
-// }
+  documentPaper   DocumentPaper @relation(fields: [documentPaperId], references: [documentId])
+  documentPaperId String        @db.ObjectId
+
+  // documentProductGroup   DocumentProductGroup @relation(fields: [documentProductGroupId], references: [documentProductGroupId])
+  documentProductGroupId String               @db.ObjectId
+
+  createdAt DateTime @default(now()) // วันที่สร้าง
+  updatedAt DateTime @updatedAt // อัปเดตล่าสุด
+
+}
 
 // model DocumentFile {
 //   fileId   String @id @default(auto()) @map("_id") @db.ObjectId
@@ -290,7 +335,7 @@ model DocumentPaper {
 //   updatedAt DateTime @updatedAt // อัปเดตล่าสุด
 // }
 
-enum DocumentType {
+enum eDocumentType {
   Quotation
 }
 

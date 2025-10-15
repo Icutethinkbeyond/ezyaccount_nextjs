@@ -19,7 +19,7 @@ export interface Pagination {
   }
 }
 
-class ProductService {
+class ContactorServices {
   // 📌 ดึงข้อมูลสินค้า (พร้อม category และ aboutProduct)
   // async getProducts(): Promise<Product[]> {
   //   return await prisma.product.findMany({
@@ -99,60 +99,60 @@ class ProductService {
   // }
 
 
-  async getCategoryPagination(pageParam: null | string, pageSizeParam: null | string, categoryName?: string | null): Promise<Pagination> {
+  // async getCategoryPagination(pageParam: null | string, pageSizeParam: null | string, categoryName?: string | null): Promise<Pagination> {
 
-    const page = parseInt(pageParam || '1', 10); // หน้าเริ่มต้นที่ 1
-    const pageSize = parseInt(pageSizeParam || '10', 10); // จำนวนข้อมูลต่อหน้าเริ่มต้นที่ 10
+  //   const page = parseInt(pageParam || '1', 10); // หน้าเริ่มต้นที่ 1
+  //   const pageSize = parseInt(pageSizeParam || '10', 10); // จำนวนข้อมูลต่อหน้าเริ่มต้นที่ 10
 
-    // คำนวณ skip และ take
-    const skip = (page - 1) * pageSize;
-    const take = pageSize;
+  //   // คำนวณ skip และ take
+  //   const skip = (page - 1) * pageSize;
+  //   const take = pageSize;
 
-    const [categories, totalItems] = await Promise.all([
-      prisma.category.findMany({
-        skip,
-        take,
-        orderBy: { createdAt: 'desc' }, // เรียงลำดับตามวันที่สร้าง
-        where: {
-          ...(categoryName && { categoryName: { contains: categoryName, mode: "insensitive" } }),
-        }
-      }),
-      prisma.category.count(), // นับจำนวนทั้งหมดของรายการ
-    ]);
+  //   const [categories, totalItems] = await Promise.all([
+  //     prisma.category.findMany({
+  //       skip,
+  //       take,
+  //       orderBy: { createdAt: 'desc' }, // เรียงลำดับตามวันที่สร้าง
+  //       where: {
+  //         ...(categoryName && { categoryName: { contains: categoryName, mode: "insensitive" } }),
+  //       }
+  //     }),
+  //     prisma.category.count(), // นับจำนวนทั้งหมดของรายการ
+  //   ]);
 
-    const totalPages = Math.ceil(totalItems / pageSize);
+  //   const totalPages = Math.ceil(totalItems / pageSize);
 
-    // เพิ่ม rowIndex ในข้อมูลแต่ละแถว
-    const categoriesWithIndex = categories.map((category, index) => ({
-      ...category,
-      rowIndex: skip + index + 1, // ลำดับแถวเริ่มต้นจาก 1 และเพิ่มตาม pagination
-    }));
+  //   // เพิ่ม rowIndex ในข้อมูลแต่ละแถว
+  //   const categoriesWithIndex = categories.map((category, index) => ({
+  //     ...category,
+  //     rowIndex: skip + index + 1, // ลำดับแถวเริ่มต้นจาก 1 และเพิ่มตาม pagination
+  //   }));
 
-    return {
-      data: categoriesWithIndex,
-      pagination: {
-        page,
-        pageSize,
-        totalItems,
-        totalPages,
-      },
-    }
-  }
+  //   return {
+  //     data: categoriesWithIndex,
+  //     pagination: {
+  //       page,
+  //       pageSize,
+  //       totalItems,
+  //       totalPages,
+  //     },
+  //   }
+  // }
 
-  async createCategory(data: Omit<Category, "categoryId" | "createdAt" | "updatedAt" | "products">): Promise<Category> {
-    return await prisma.category.create({
-      data,
-    });
-  }
+  // async createCategory(data: Omit<Category, "categoryId" | "createdAt" | "updatedAt" | "products">): Promise<Category> {
+  //   return await prisma.category.create({
+  //     data,
+  //   });
+  // }
 
-  async updateCategory(categoryId: string, data: Partial<Category>): Promise<Category> {
-    return await prisma.category.update({
-      where: { categoryId },
-      data,
-    });
-  }
+  // async updateCategory(categoryId: string, data: Partial<Category>): Promise<Category> {
+  //   return await prisma.category.update({
+  //     where: { categoryId },
+  //     data,
+  //   });
+  // }
 
 
 }
 
-export default ProductService;
+export default ContactorServices;

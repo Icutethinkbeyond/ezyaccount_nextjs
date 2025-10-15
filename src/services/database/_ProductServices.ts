@@ -21,82 +21,82 @@ export interface Pagination {
 
 class ProductService {
   // 📌 ดึงข้อมูลสินค้า (พร้อม category และ aboutProduct)
-  // async getProducts(): Promise<Product[]> {
-  //   return await prisma.product.findMany({
-  //     include: {
-  //       category: true,
-  //       aboutProduct: true,
-  //     },
-  //   });
-  // }
+  async getProducts(): Promise<Product[]> {
+    return await prisma.product.findMany({
+      include: {
+        category: true,
+        aboutProduct: true,
+      },
+    });
+  }
 
   // 📌 ดึงข้อมูลสินค้าตาม ID
-  // async getProductById(productId: string): Promise<Product | null> {
-  //   return await prisma.product.findUnique({
-  //     where: { productId },
-  //     include: {
-  //       category: true,
-  //       aboutProduct: true,
-  //     },
-  //   });
-  // }
+  async getProductById(productId: string): Promise<Product | null> {
+    return await prisma.product.findUnique({
+      where: { productId },
+      include: {
+        category: true,
+        aboutProduct: true,
+      },
+    });
+  }
 
   // 📌 เพิ่มสินค้าใหม่
-  async createGroupProduct(data: Omit<Product, "productId" | "createdAt" | "updatedAt">): Promise<Product> {
+  async createProduct(data: Omit<Product, "productId" | "createdAt" | "updatedAt">): Promise<Product> {
     return await prisma.product.create({
       data,
     });
   }
 
   // 📌 อัปเดตข้อมูลสินค้า
-  // async updateProduct(productId: string, data: Partial<Product>): Promise<Product> {
-  //   return await prisma.product.update({
-  //     where: { productId },
-  //     data,
-  //   });
-  // }
+  async updateProduct(productId: string, data: Partial<Product>): Promise<Product> {
+    return await prisma.product.update({
+      where: { productId },
+      data,
+    });
+  }
 
   // 📌 ลบสินค้า
-  // async deleteProduct(productId: string): Promise<Product> {
-  //   return await prisma.product.delete({
-  //     where: { productId },
-  //   });
-  // }
+  async deleteProduct(productId: string): Promise<Product> {
+    return await prisma.product.delete({
+      where: { productId },
+    });
+  }
 
   // 📌 ดึงข้อมูล AboutProduct ตาม productId
-  // async getAboutProduct(productId: string): Promise<AboutProduct | null> {
-  //   return await prisma.aboutProduct.findUnique({
-  //     where: { productId },
-  //   });
-  // }
+  async getAboutProduct(productId: string): Promise<AboutProduct | null> {
+    return await prisma.aboutProduct.findUnique({
+      where: { productId },
+    });
+  }
 
   // 📌 อัปเดตข้อมูล AboutProduct
-  // async updateAboutProduct(
-  //   productId: string,
-  //   data: Partial<AboutProduct>
-  // ): Promise<AboutProduct> {
-  //   return await prisma.aboutProduct.update({
-  //     where: { productId },
-  //     data,
-  //   });
-  // }
+  async updateAboutProduct(
+    productId: string,
+    data: Partial<AboutProduct>
+  ): Promise<AboutProduct> {
+    return await prisma.aboutProduct.update({
+      where: { productId },
+      data,
+    });
+  }
 
-  // async getCategoryById(categoryId: string): Promise<Category | null> {
-  //   return await prisma.category.findUnique({
-  //     where: { categoryId },
-  //     // include: {
-  //     //   category: true,
-  //     //   aboutProduct: true,
-  //     // },
-  //   });
-  // }
+  async getCategoryById(categoryId: string): Promise<Category | null> {
+    return await prisma.category.findUnique({
+      where: { categoryId },
+      // include: {
+      //   category: true,
+      //   aboutProduct: true,
+      // },
+    });
+  }
 
-  // async deleteCategory(categoryId: string): Promise<Category> {
+  async deleteCategory(categoryId: string): Promise<Category> {
     
-  //   return await prisma.category.delete({
-  //     where: { categoryId },
-  //   });
-  // }
+    return await prisma.category.delete({
+      where: { categoryId },
+    });
+  }
 
 
   async getCategoryPagination(pageParam: null | string, pageSizeParam: null | string, categoryName?: string | null): Promise<Pagination> {
