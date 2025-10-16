@@ -62,6 +62,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
         // Format running number to 5 digits
         const runningNumberStr = newRunningNumber.toString().padStart(5, '0');
 
+        console.log(runningNumberStr)
+
         // Assemble the final ID
         // const documentCode = `${_docType}-${monthAbbr}-${year}-${runningNumberStr}`;
 
@@ -177,7 +179,6 @@ export async function POST(req: NextRequest, res: NextResponse) {
             // Create a new document
  
             const { total, discountPrice, includeVat, vatPrice, withholdingTax, withholdingTaxPrice,totalAmountDue } = _footerForm
-            // const { _docType } = _headForm
             const newDocument = await prisma.documentPaper.create({
                 data: {
                     documentType: eDocumentType.Quotation, // fix frist 
@@ -200,15 +201,51 @@ export async function POST(req: NextRequest, res: NextResponse) {
                 },
             });
 
-//               priceTotal    Float @default(0)
-//   discountTotal Float @default(0)
 
-//   includeVat Boolean @default(false)
-//   vatPrice   Float   @default(0)
+            const { companyName, taxId, branch, companyAddress, companyTel, contactorName, contactorTel, contactorAddress, contactorEmail } = _headForm
 
-//   withHolding        Boolean @default(false)
-//   withHoldingPercent Float   @default(0)
-//   withHoldingPrice   Float   @default(0)
+            const checkCompanyName = await prisma.customerCompany.findFirst({
+                where: {
+                    companyName
+                }
+            });
+
+            let _companyId = null
+            let _findCompantId = checkCompanyName?.customerCompanyId
+            let _contactorId = null
+
+            if(!_findCompantId){
+
+            const newCustomer = await prisma.customerCompany.create({
+                data: {
+                    companyName,
+                    companyTel,
+                    taxId ,
+                    branch ,
+                    companyAddress,     
+                },
+            });
+
+            _companyId = newCustomer.customerCompanyId
+
+            }
+
+            if(_companyId || _findCompantId){
+
+            const newContactor = await prisma.contactor.create({
+                data: {
+                   customerCompanyId: _findCompantId ? _findCompantId : _companyId,
+                   contactorName,
+                   contactorTel,
+                   contactorAddress,
+                   contactorEmail
+                },
+            });
+ 
+            }
+
+
+
 
             // return new NextResponse(JSON.stringify({
             //     message: "Created Success",

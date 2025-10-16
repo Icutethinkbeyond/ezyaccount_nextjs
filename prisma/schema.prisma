@@ -163,11 +163,14 @@ model Category {
 model CustomerCompany {
 
   customerCompanyId    String  @id @default(auto()) @map("_id") @db.ObjectId
-  customerCompanyEmail String  @unique
-  customerCompanyTaxId String? @unique
+  companyName String  @unique
+  companyTel String?
+  customerCompanyEmail String?  @unique
+  taxId String @unique
+  branch String?
 
   // address        Address[]
-  address        String?
+  companyAddress        String?
 
   companyProfile CompanyProfile? @relation(fields: [companyId], references: [companyId])
   companyId      String?         @db.ObjectId @unique
@@ -182,9 +185,10 @@ model CustomerCompany {
 model Contactor {
 
   contactorId         String  @id @default(auto()) @map("_id") @db.ObjectId
+  contactorName      String
   contactorEmail      String?  
   contactorTel        String?
-  contractorAddress   String?
+  contactorAddress   String?
   
   customerCompany      CustomerCompany? @relation(fields: [customerCompanyId], references: [customerCompanyId])
   customerCompanyId    String?         @db.ObjectId
@@ -269,7 +273,7 @@ model DocumentPaper {
 
   // files                DocumentFile[]
   // documentProductGroup DocumentProductGroup[]
-  documentProduct      DocumentProduct[]
+  // documentProduct      DocumentProduct[]
 
 
   createdAt DateTime @default(now()) // วันที่สร้าง
@@ -277,8 +281,54 @@ model DocumentPaper {
 
 }
 
-model DocumentProductGroup {
+model DocumentProduct {
+
+    subjectId String @id @default(auto()) @map("_id") @db.ObjectId
   
+    isSubjectItem Boolean @default(false)
+    productServiceNumber Int
+    productService String
+    description String?
+    price Float @default(0)
+    amount Int @default(0)
+    discount Float @default(0)
+    total Float @default(0)
+
+
+// subProductList
+
+    totalAmount Float @default(0)// summary of group
+    totalPrice Float @default(0)// summary of group
+    totalDiscount   Float @default(0)// summary of group
+    sumTotal Float @default(0) // summary of group
+    totalAmountDue Float @default(0)
+
+    subProductList DocumentSubProduct[]
+
+    createdAt DateTime @default(now()) // วันที่สร้าง
+    updatedAt DateTime @updatedAt // อัปเดตล่าสุด
+
+}
+
+model DocumentSubProduct {
+
+    subProductId String @id @default(auto()) @map("_id") @db.ObjectId
+
+    subProductServiceNumber Int
+    productService String
+    description String?
+    price Float @default(0)
+    amount Int @default(0)
+    discount Float @default(0)
+    total Float @default(0)
+    productServiceKey Int @default(0)
+
+    documentProduct      DocumentProduct     @relation(fields: [subjectId], references: [subjectId])
+    subjectId          String        @db.ObjectId 
+
+    createdAt DateTime @default(now()) // วันที่สร้าง
+    updatedAt DateTime @updatedAt // อัปเดตล่าสุด
+
 }
 
 // model DocumentProductGroup {
