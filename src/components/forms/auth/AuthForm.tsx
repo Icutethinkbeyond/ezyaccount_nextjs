@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 import { useNotifyContext } from "@/contexts/NotifyContext";
 import Button from '@mui/material/Button'; 
 import { Google } from "@mui/icons-material"; 
+import { useLocale } from "next-intl";
 
 
 const validationSchema = Yup.object().shape({
@@ -60,13 +61,14 @@ const AuthForm: React.FC<loginType> = ({
     setOpenBackdrop(true);
     setDisableLogin(true);
     const { email, password } = credential;
-
+    // const localActive = useLocale();
     if (email && password) {
       const result = await signIn("credentials", {
         email: email,
         password: password,
         redirect: false,
-        callbackUrl: "/protected/dashboard",
+        callbackUrl: `/th/protected/dashboard`,
+        // "/protected/dashboard"
       });
 
       if (result?.error) {
