@@ -21,25 +21,25 @@ export const useMenuItems = () => {
   return [
 
 
-    {
-      id: uniqueId(),
-      title: "แผงควบคุม",
-      icon: Dashboard,
-      href: `/${localActive}/protected/dashboard`,
-    },
+    // {
+    //   id: uniqueId(),
+    //   title: "แผงควบคุม",
+    //   icon: Dashboard,
+    //   href: `/${localActive}/protected/dashboard`,
+    // },
 
     {
       id: uniqueId(),
-      title: "รายรับ",
+      title: "ใบเสนอราคา",
       icon: IconReceipt2,
-      href: `/${localActive}/protected/income`,
+      href: `/${localActive}/protected/income/quotation`,
       // กรณีมีซัพเมนูให้ใส่ตาม format ด้านล่าง หากไม่มีดูตามเมนูที่ 1
       children: [
-        {
-          id: uniqueId(),
-          title: "ใบเสนอราคา",
-          href: `/${localActive}/protected/income/quotation`,
-        },
+        // {
+        //   id: uniqueId(),
+        //   title: "ใบเสนอราคา",
+        //   href: `/${localActive}/protected/income/quotation`,
+        // },
         // {
         //   id: uniqueId(),
         //   title: "ใบวางบิล/ใบแจ้งหนี้",

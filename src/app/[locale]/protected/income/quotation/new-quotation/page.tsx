@@ -13,24 +13,24 @@ import DocumentFooter from "@/components/forms/DocumentFooter";
 import CalculateItems from "@/components/forms/CalculateItems";
 import { useBreadcrumbContext } from "@/contexts/BreadcrumbContext";
 import { useLocale } from "next-intl";
+import PricingTable from "@/components/forms/pricing-table/PricingTable";
+import PricingSummary from "@/components/forms/pricing-table/PricingSummary";
 
 const NewQuotation = () => {
-
   const { setBreadcrumbs } = useBreadcrumbContext();
-    const localActive = useLocale();
+  const localActive = useLocale();
 
-    useEffect(() => {
-      setBreadcrumbs([
-        { name: "เพิ่มใบเสนอราคา",  href: `/${localActive}/protected/dashboard` },
-        { name: "ใบเสนอ", href: `/${localActive}/protected/income/quotation` },
-        { name: "เพิ่มใบเสนอราคาใหม่" },
-      ]);
-      return () => {
-        setBreadcrumbs([]);
-      };
-    }, []);
+  useEffect(() => {
+    setBreadcrumbs([
+      { name: "เพิ่มใบเสนอราคา", href: `/${localActive}/protected/dashboard` },
+      { name: "ใบเสนอ", href: `/${localActive}/protected/income/quotation` },
+      { name: "เพิ่มใบเสนอราคาใหม่" },
+    ]);
+    return () => {
+      setBreadcrumbs([]);
+    };
+  }, []);
 
-  
   // useEffect(() => {
   //   setBreadcrumbs([
   //     { name: "หน้าแรก", href: "/dashboard" },
@@ -43,29 +43,26 @@ const NewQuotation = () => {
   // }, []);
 
   return (
-     <PageContainer>
-        <Grid2 container spacing={3} sx={{ p: 3 }}>
+    <PageContainer>
+      <Grid2 container spacing={3} sx={{ p: 3 }}>
+        <Grid2 size={6}>
+          <CompanyInformation />
+        </Grid2>
+        <Grid2 size={6}>
+          <ContactotInformation />
+        </Grid2>
+        <Grid2 size={12}>
+          <PricingTable />
+        </Grid2>
+        <Grid2 container size={12}>
           <Grid2 size={6}>
-            <CompanyInformation />
+            {/* <DocumentFooter /> */}
           </Grid2>
           <Grid2 size={6}>
-            <ContactotInformation />
-          </Grid2>
-          <Grid2 size={12}>
-            <NewItems />
-          </Grid2>
-          <Grid2 size={12}>
-            <ItemsTable />
-          </Grid2>
-          <Grid2 container size={12}>
-            <Grid2 size={6}>
-              <DocumentFooter />
-            </Grid2>
-            <Grid2 size={6}>
-              <CalculateItems />
-            </Grid2>
+            <PricingSummary />
           </Grid2>
         </Grid2>
+      </Grid2>
     </PageContainer>
   );
 };
