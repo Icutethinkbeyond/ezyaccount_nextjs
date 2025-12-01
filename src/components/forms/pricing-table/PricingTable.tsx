@@ -21,6 +21,7 @@ import DeleteIcon from "@mui/icons-material/Delete"
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
 import ExpandLessIcon from "@mui/icons-material/ExpandLess"
 import { usePricingContext } from "@/contexts/PricingContext"
+import { calculateSubItemTotal } from "@/utils/utils"
 
 interface SubItem {
   id: string
@@ -82,9 +83,6 @@ const PricingTable: React.FC = () => {
     })
   }
 
-  const calculateSubItemTotal = (qty: number, pricePerUnit: number) => {
-    return qty * pricePerUnit
-  }
 
   return (
     <Box sx={{ p: 2 }}>
@@ -156,22 +154,22 @@ const PricingTable: React.FC = () => {
                       value={category.name}
                       onChange={(e) => handleUpdateCategoryName(category.id, e.target.value)}
                       variant="standard"
-                      sx={{
-                        input: {
-                          color: "white",
-                          fontWeight: "bold",
-                          fontSize: "1.1rem",
-                        },
-                        "& .MuiInput-underline:before": {
-                          borderBottomColor: "rgba(255, 255, 255, 0.5)",
-                        },
-                        "& .MuiInput-underline:hover:before": {
-                          borderBottomColor: "rgba(255, 255, 255, 0.8)",
-                        },
-                        "& .MuiInput-underline:after": {
-                          borderBottomColor: "white",
-                        },
-                      }}
+                      // sx={{
+                      //   input: {
+                      //     color: "white",
+                      //     fontWeight: "bold",
+                      //     fontSize: "1.1rem",
+                      //   },
+                      //   "& .MuiInput-underline:before": {
+                      //     borderBottomColor: "rgba(255, 255, 255, 0.5)",
+                      //   },
+                      //   "& .MuiInput-underline:hover:before": {
+                      //     borderBottomColor: "rgba(255, 255, 255, 0.8)",
+                      //   },
+                      //   "& .MuiInput-underline:after": {
+                      //     borderBottomColor: "white",
+                      //   },
+                      // }}
                     />
                   </TableCell>
                   <TableCell sx={{ textAlign: "right" }}>

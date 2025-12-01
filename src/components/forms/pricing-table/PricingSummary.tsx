@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import type React from "react"
-import { useState } from "react"
+import type React from "react";
+import { useState } from "react";
 import {
   Box,
   Typography,
@@ -14,24 +14,35 @@ import {
   Divider,
   FormControl,
   useTheme,
-} from "@mui/material"
-import { usePricingContext } from "@/contexts/PricingContext"
+  Button,
+} from "@mui/material";
+import { usePricingContext } from "@/contexts/PricingContext";
+import { Visibility } from "@mui/icons-material";
+import { useRouter } from "next/navigation";
+import { useLocale } from "next-intl";
 // import { usePricing } from "../contexts/PricingContext"
 
 const PricingSummary: React.FC = () => {
-  const theme = useTheme()
-  const { getTotalPrice } = usePricingContext()
+  const theme = useTheme();
+  const router = useRouter()
+  const localActive = useLocale();
 
-  const [discount, setDiscount] = useState<number>(0)
-  const [includeVat, setIncludeVat] = useState<boolean>(false)
-  const [withholdingTaxRate, setWithholdingTaxRate] = useState<number>(0)
+  const { getTotalPrice } = usePricingContext();
 
-  const subtotal = getTotalPrice()
-  const priceAfterDiscount = subtotal - discount
-  const vat = includeVat ? priceAfterDiscount * 0.07 : 0
-  const totalWithVat = priceAfterDiscount + vat
-  const withholdingTax = (totalWithVat * withholdingTaxRate) / 100
-  const finalTotal = totalWithVat - withholdingTax
+  const [discount, setDiscount] = useState<number>(0);
+  const [includeVat, setIncludeVat] = useState<boolean>(false);
+  const [withholdingTaxRate, setWithholdingTaxRate] = useState<number>(0);
+
+  const subtotal = getTotalPrice();
+  const priceAfterDiscount = subtotal - discount;
+  const vat = includeVat ? priceAfterDiscount * 0.07 : 0;
+  const totalWithVat = priceAfterDiscount + vat;
+  const withholdingTax = (totalWithVat * withholdingTaxRate) / 100;
+  const finalTotal = totalWithVat - withholdingTax;
+
+  const handlePreviewInvoice = () => {
+    router.push(`/${localActive}/protected/income/quotation/preview`)
+  }
 
   return (
     <Paper
@@ -115,7 +126,12 @@ const PricingSummary: React.FC = () => {
         }}
       >
         <FormControlLabel
-          control={<Checkbox checked={includeVat} onChange={(e) => setIncludeVat(e.target.checked)} />}
+          control={
+            <Checkbox
+              checked={includeVat}
+              onChange={(e) => setIncludeVat(e.target.checked)}
+            />
+          }
           label="ภาษีมูลค่าเพิ่ม 7%"
         />
         <Typography fontWeight="bold">
@@ -164,7 +180,7 @@ const PricingSummary: React.FC = () => {
             onChange={(e) => setWithholdingTaxRate(Number(e.target.value))}
             displayEmpty
           >
-            <MenuItem value={0}>คิด ณ ถิ่วย 0%</MenuItem>
+            <MenuItem value={0}>คิด ณ ที่จ่าย 0%</MenuItem>
             <MenuItem value={1}>1%</MenuItem>
             <MenuItem value={2}>2%</MenuItem>
             <MenuItem value={3}>3%</MenuItem>
@@ -203,8 +219,19 @@ const PricingSummary: React.FC = () => {
           })}
         </Typography>
       </Box>
+      <Box sx={{ mb: 3, mt: 3, display: "flex", justifyContent: "center" }}>
+        <Button
+          variant="contained"
+          color="primary"
+          startIcon={<Visibility />}
+          onClick={handlePreviewInvoice}
+          size="large"
+        >
+          ดูตัวอย่างใบเสนอราคา
+        </Button>
+      </Box>
     </Paper>
-  )
-}
+  );
+};
 
-export default PricingSummary
+export default PricingSummary;

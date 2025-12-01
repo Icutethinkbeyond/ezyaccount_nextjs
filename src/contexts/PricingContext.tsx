@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { createContext, useContext, useState, type ReactNode } from "react"
+import { createContext, useContext, useEffect, useState, type ReactNode } from "react"
 
 export interface SubItem {
   id: string
@@ -54,11 +54,130 @@ interface PricingProviderProps {
   children: ReactNode
 }
 
+export const interiorDesignMockupData: Category[] = [
+  // ----------------------------------------------------
+  // 1. หมวดหมู่: ค่าบริการออกแบบ
+  // ----------------------------------------------------
+  {
+    id: "CAT001",
+    name: "ค่าบริการออกแบบ (Design Fee)",
+    subItems: [
+      {
+        id: "ITEM001",
+        description: "ค่าออกแบบและเขียนแบบ 3D Perspective (พื้นที่ 60 ตร.ม.)",
+        unit: "ตร.ม.",
+        qty: 60,
+        pricePerUnit: 800, // 800 บาท/ตร.ม.
+        remark: "รวมค่าขึ้นแบบ 3D และแบบก่อสร้าง",
+      },
+      {
+        id: "ITEM002",
+        description: "ค่าที่ปรึกษาและประสานงานโครงการ",
+        unit: "โครงการ",
+        qty: 1,
+        pricePerUnit: 15000,
+        remark: "ครอบคลุมระยะเวลา 3 เดือน",
+      },
+    ],
+  },
+  
+  // ----------------------------------------------------
+  // 2. หมวดหมู่: งานโครงสร้างและงานผนังเบา
+  // ----------------------------------------------------
+  {
+    id: "CAT002",
+    name: "งานโครงสร้าง งานพื้น และงานผนัง",
+    subItems: [
+      {
+        id: "ITEM003",
+        description: "งานรื้อถอนผนังเดิมและขนเศษวัสดุ",
+        unit: "จุด",
+        qty: 2,
+        pricePerUnit: 3500,
+        remark: "ผนังอิฐมอญ 2 จุด",
+      },
+      {
+        id: "ITEM004",
+        description: "ติดตั้งผนังเบา (Drywall) กั้นห้องใหม่",
+        unit: "ตร.ม.",
+        qty: 15,
+        pricePerUnit: 950,
+        remark: "ผนังเบามาตรฐานพร้อมฉนวนกันเสียง",
+      },
+      {
+        id: "ITEM005",
+        description: "ปูกระเบื้องพื้นห้องน้ำใหม่",
+        unit: "ตร.ม.",
+        qty: 5,
+        pricePerUnit: 1200,
+        remark: "รวมค่ายาแนวและกาวซีเมนต์",
+      },
+    ],
+  },
+  
+  // ----------------------------------------------------
+  // 3. หมวดหมู่: งานเฟอร์นิเจอร์บิวท์อิน
+  // ----------------------------------------------------
+  {
+    id: "CAT003",
+    name: "งานเฟอร์นิเจอร์บิวท์อิน",
+    subItems: [
+      {
+        id: "ITEM006",
+        description: "ตู้เสื้อผ้าบิวท์อิน (หน้าบานไม้ MDF พ่นสี)",
+        unit: "เมตร",
+        qty: 3.5,
+        pricePerUnit: 18000,
+        remark: "ความสูง 2.5 ม., รวมรางลิ้นชัก Soft Close",
+      },
+      {
+        id: "ITEM007",
+        description: "เคาน์เตอร์ครัวปูน (โครงสร้างเบา)",
+        unit: "เมตร",
+        qty: 4,
+        pricePerUnit: 12500,
+        remark: "ไม่รวม Top เคาน์เตอร์หิน",
+      },
+    ],
+  },
+
+  // ----------------------------------------------------
+  // 4. หมวดหมู่: งานระบบไฟฟ้าและแสงสว่าง
+  // ----------------------------------------------------
+  {
+    id: "CAT004",
+    name: "งานระบบไฟฟ้าและแสงสว่าง",
+    subItems: [
+      {
+        id: "ITEM008",
+        description: "เพิ่มจุดติดตั้งสวิตช์และปลั๊กไฟ",
+        unit: "จุด",
+        qty: 12,
+        pricePerUnit: 850,
+        remark: "รวมสายไฟและบล็อกลอย/ฝังผนัง",
+      },
+      {
+        id: "ITEM009",
+        description: "ติดตั้งโคมไฟ Downlight LED",
+        unit: "ชุด",
+        qty: 10,
+        pricePerUnit: 1200,
+        remark: "โคมไฟขนาด 9W Warm White",
+      },
+    ],
+  },
+];
+
 export const PricingProvider: React.FC<PricingProviderProps> = ({ children }) => {
-  const [categories, setCategories] = useState<Category[]>([])
+  const [categories, setCategories] = useState<Category[]>(interiorDesignMockupData)
   const [discount, setDiscount] = useState<number>(0)
   const [taxRate, setTaxRate] = useState<number>(7)
   const [vatIncluded, setVatIncluded] = useState<boolean>(false)
+  
+
+  useEffect(() => {
+    console.log(categories)
+  }, [categories])
 
   const addCategory = (name: string) => {
     const newCategory: Category = {

@@ -34,7 +34,7 @@ export const useMenuItems = () => {
       icon: IconReceipt2,
       href: `/${localActive}/protected/income/quotation`,
       // กรณีมีซัพเมนูให้ใส่ตาม format ด้านล่าง หากไม่มีดูตามเมนูที่ 1
-      children: [
+      // children: [
         // {
         //   id: uniqueId(),
         //   title: "ใบเสนอราคา",
@@ -60,7 +60,7 @@ export const useMenuItems = () => {
         //   title: "ใบเพิ่มหนี้",
         //   href: `/${localActive}/protected/income/debit`,
         // },
-      ],
+      // ],
     },
     // {
     //   id: uniqueId(),

@@ -1,5 +1,9 @@
 import { Product } from "@/contexts/QuotationContext";
 
+export const calculateSubItemTotal = (qty: number, pricePerUnit: number) => {
+    return qty * pricePerUnit
+  }
+
 // Function to calculate Tax
 export const calculateTax = (totalPrice: number, vatRate: number, withholdingTaxPercent: number): { vatAmount: number; totalWithVAT: number; withholdingTaxAmount: number; totalAfterWithholdingTax: number } => {
 
