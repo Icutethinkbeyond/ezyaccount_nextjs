@@ -1,267 +1,134 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { DocumentStatus, eDocumentType, PrismaClient } from '@prisma/client';
-import ExcelJS from 'exceljs';
-import fs from 'fs';
-import path from 'path';
-import { promisify } from 'util';
-import { FormDataFooter, HeadForm, Product } from '@/contexts/QuotationContext';
-import { getMonthAbbreviation } from '@/utils/utils';
+import { PrismaClient } from '@prisma/client';
+import { revalidatePath } from "next/cache";
 
 const prisma = new PrismaClient();
 
-export async function POST(req: NextRequest, res: NextResponse) {
+// Define input types based on what we see in the contexts
+interface QuotationInput {
+    // Header Info
+    companyName: string;
+    companyTel: string;
+    taxId: string;
+    branch: string;
+    dateCreate: string;
+    companyAddress: string;
+
+    contactorName: string;
+    contactorTel: string;
+    contactorEmail: string;
+    contactorAddress: string;
+
+    // Footer/Calculation Info
+    includeVat: boolean;
+    taxRate: number;
+    globalDiscount: number;
+    withholdingTax: number;
+
+    // Items
+    categories: {
+        id: string;
+        name: string;
+        subItems: {
+            id: string;
+            description: string;
+            unit: string;
+            qty: number;
+            pricePerUnit: number;
+            remark: string;
+        }[];
+    }[];
+}
+
+export async function POST(req: NextRequest) {
     try {
+        const data: QuotationInput = await req.json();
+        console.log("Creating quotation with data:", JSON.stringify(data, null, 2));
 
-        const { footerForm, headForm, products } = await req.json();
-        let _footerForm = footerForm as FormDataFooter
-        let _headForm= headForm as HeadForm
-        let _products = products as Product[]
-
-        console.log(_footerForm)
-        console.log(_headForm)
-        console.log(_products)
-
-        let _docType = null;
-
-        // if (documentType === "Maintenance") {
-        //     _docType = "MA";
-        // } else {
-        //     _docType = "RT";
-        // }
-
-        // Get current month and year
-        const now = new Date();
-        const monthAbbr = getMonthAbbreviation(now.getMonth()); // getMonth() เริ่มที่ 0 = มกราคม
-        const year = now.getFullYear().toString();
-
-        // Find the latest document for current month/year/type
-        const latestDocument = await prisma.documentPaper.findFirst({
-            where: {
-                // docType: _docType,
-                docMonth: monthAbbr,
-                docYear: year,
-            },
-            orderBy: {
-                documentIdNo: 'desc', // เรียงจากมากไปน้อย
-            },
-            select: {
-                documentIdNo: true,
-            },
+        // Calculate summaries serverside for safety
+        let subTotal = 0;
+        data.categories.forEach(cat => {
+            cat.subItems.forEach(item => {
+                subTotal += (item.qty || 0) * (item.pricePerUnit || 0);
+            });
         });
 
-        // Get new running number
-        let newRunningNumber = 1;
+        const totalAfterDiscount = subTotal - (data.globalDiscount || 0);
+        const vatAmount = data.includeVat ? (totalAfterDiscount * (data.taxRate || 7) / 100) : 0;
+        const grandTotal = totalAfterDiscount + vatAmount;
 
-        if (latestDocument?.documentIdNo) {
-            const latestRunningNumber = parseInt(latestDocument.documentIdNo);
-            if (!isNaN(latestRunningNumber)) {
-                newRunningNumber = latestRunningNumber + 1;
+        // Generate a Document ID
+        const docIdNo = `QT-${Date.now()}`;
+
+        // Create Customer Company
+        const customer = await prisma.customerCompany.create({
+            data: {
+                companyName: data.companyName,
+                taxId: data.taxId,
+                companyTel: data.companyTel,
+                branch: data.branch,
+                companyAddress: data.companyAddress,
             }
-        }
+        });
 
-        // Format running number to 5 digits
-        const runningNumberStr = newRunningNumber.toString().padStart(5, '0');
+        // Create Contactor
+        const contactor = await prisma.contactor.create({
+            data: {
+                contactorName: data.contactorName,
+                contactorTel: data.contactorTel,
+                contactorEmail: data.contactorEmail,
+                contactorAddress: data.contactorAddress,
+                customerCompanyId: customer.customerCompanyId,
+            }
+        });
 
-        console.log(runningNumberStr)
+        // Create DocumentPaper
+        const document = await prisma.documentPaper.create({
+            data: {
+                documentIdNo: docIdNo,
+                docType: "Quotation",
+                documentDetials: "Generated from Web Form",
+                customerCompanyId: customer.customerCompanyId,
+                contactorId: contactor.contactorId,
 
-        // Assemble the final ID
-        // const documentCode = `${_docType}-${monthAbbr}-${year}-${runningNumberStr}`;
+                includeVat: data.includeVat,
+                taxRate: data.taxRate || 7,
+                globalDiscount: data.globalDiscount,
 
+                subTotal: subTotal,
+                totalAfterDiscount: totalAfterDiscount,
+                vatAmount: vatAmount,
+                grandTotal: grandTotal,
+                withholdingTax: data.withholdingTax,
 
-        // if (idNumberIsAlready) {
-
-        //     if (idNumberIsAlready.documentStatus === DocumentStatus.Close) {
-        //         return new NextResponse(JSON.stringify({ message: "เอกสารถูกปิดการเเก้ไขเเล้ว" }), { status: 400 });
-        //     }
-
-        //     if (idNumberIsAlready.documentStatus === DocumentStatus.Cancel) {
-        //         return new NextResponse(JSON.stringify({ message: "เอกสารถูกยกเลิกเเล้ว" }), { status: 400 });
-        //     }
-
-        //     const unEditStatus = [
-        //         "Approve",
-        //         "WithdrawPart",
-        //         "RepairStared",
-        //         "RepairComplete",
-        //     ];
-
-        //     if (unEditStatus.includes(idNumberIsAlready.documentStep.toString()) && idNumberIsAlready.documentStatus === DocumentStatus.Open) {
-        //         return new NextResponse(JSON.stringify({ message: "เอกสารได้รับการอนุมัติเเล้ว เเละอยู่ระหว่างดำเนินการ" }), { status: 400 });
-        //     }
-
-        //     try {
-
-        //         await prisma.document.update({
-        //             where: {
-        //                 documentIdNo: documentIdNo,
-        //                 AND: {
-        //                     documentType: documentType
-        //                 }
-        //             },
-        //             data: {
-        //                 documentDetials,
-        //             },
-        //         });
-
-        //         return new NextResponse(JSON.stringify({ message: "Updated Success", documentIdNo: idNumberIsAlready.documentIdNo, documentId: idNumberIsAlready.documentId }), { status: 200 });
-
-        //     } catch (e) {
-        //         return new NextResponse(JSON.stringify({ message: "Document Id Is Ready To Used", documentIdNo: idNumberIsAlready.documentIdNo, documentId: idNumberIsAlready.documentId }), { status: 400 });
-        //     }
-
-        // } else {
-
-        // console.log(documentCode)
-
-        // console.log('ไม่พบเอกสาร ระบบกำลังสร้างเอกสารใหม่')
-
-
-        // if (documentType === DocumentCategory.Maintenance) {
-        //     //สร้าง maintenance ด้วยยยย
-
-        //     const {
-        //         natureOfBreakdown,
-        //         causes,
-        //         repairingStart,
-        //         repairingEnd,
-        //         TOFstart,
-        //         TOFend,
-        //         maintenanceRamark,
-        //         technicianName,
-        //         plantEngineer,
-        //         plantApproval,
-        //         repairLocation,
-        //         maintenanceType } = maintenance as Maintenance
-
-
-        //     let documentAndMaintenance = await prisma.$transaction(async (tx) => {
-
-        //         // Create a new document
-        //         const newDocument = await prisma.document.create({
-        //             data: {
-        //                 docType: _docType,
-        //                 documentIdNo: runningNumberStr,
-        //                 docMonth: monthAbbr,
-        //                 docYear: year,
-        //                 documentDetials,
-        //                 documentType,
-        //                 documentStatus: DocumentStatus.Draft,
-        //                 documentStep: repairLocation === LocationType.OnPlant ? DocumentStep.Equipment : DocumentStep.Location
-        //             },
-        //         });
-
-        //         const newMaintenace = await tx.maintenance.create({
-        //             data: {
-        //                 natureOfBreakdown,
-        //                 causes,
-        //                 repairingStart: repairingStart ? dayjs(repairingStart).format() : null,
-        //                 TOFstart: TOFstart ? dayjs(TOFstart).format() : null,
-        //                 maintenanceRamark,
-        //                 repairLocation,
-        //                 maintenanceType,
-        //                 documentId: newDocument.documentId
-        //             },
-        //         });
-
-        //         return { newDocument, newMaintenace }
-
-        //     });
-
-        //     return new NextResponse(JSON.stringify({
-        //         message: "Created Success",
-        //         // documentIdNo: documentAndMaintenance.newDocument.documentIdNo,
-        //         documentIdNo: documentCode,
-        //         documentId: documentAndMaintenance.newDocument.documentId,
-        //         maintenanceId: documentAndMaintenance.newMaintenace.maintenanceId
-        //     }), { status: 201 });
-
-        // } else {
-            // Create a new document
- 
-            const { total, discountPrice, includeVat, vatPrice, withholdingTax, withholdingTaxPrice,totalAmountDue } = _footerForm
-            const newDocument = await prisma.documentPaper.create({
-                data: {
-                    documentType: eDocumentType.Quotation, // fix frist 
-                    documentIdNo: runningNumberStr,
-                    docMonth: monthAbbr,
-                    docType: "QT",
-                    docYear: year,
-                    documentDetials: null,
-                    documentCreateDate: null,
-                    documentExpire: null,
-                    // documentType,
-                    documentStatus: DocumentStatus.Draft,
-                    total,
-                    discountPrice,
-                    includeVat,
-                    vatPrice,
-                    withholdingTax,
-                    withholdingTaxPrice,
-                    totalAmountDue
-                },
-            });
-
-
-            const { companyName, taxId, branch, companyAddress, companyTel, contactorName, contactorTel, contactorAddress, contactorEmail } = _headForm
-
-            const checkCompanyName = await prisma.customerCompany.findFirst({
-                where: {
-                    companyName
+                // Items
+                categories: {
+                    create: data.categories.map((cat, index) => ({
+                        name: cat.name,
+                        orderIndex: index,
+                        items: {
+                            create: cat.subItems.map((item, iIndex) => ({
+                                description: item.description,
+                                unit: item.unit,
+                                qty: item.qty,
+                                pricePerUnit: item.pricePerUnit,
+                                remark: item.remark,
+                                totalPrice: (item.qty * item.pricePerUnit),
+                                orderIndex: iIndex
+                            }))
+                        }
+                    }))
                 }
-            });
-
-            let _companyId = null
-            let _findCompantId = checkCompanyName?.customerCompanyId
-            let _contactorId = null
-
-            if(!_findCompantId){
-
-            const newCustomer = await prisma.customerCompany.create({
-                data: {
-                    companyName,
-                    companyTel,
-                    taxId ,
-                    branch ,
-                    companyAddress,     
-                },
-            });
-
-            _companyId = newCustomer.customerCompanyId
-
             }
+        });
 
-            if(_companyId || _findCompantId){
+        // revalidatePath("/protected/income/quotation"); // Not strictly needed in API route unless we want to clear cache, but client will re-fetch
 
-            const newContactor = await prisma.contactor.create({
-                data: {
-                   customerCompanyId: _findCompantId ? _findCompantId : _companyId,
-                   contactorName,
-                   contactorTel,
-                   contactorAddress,
-                   contactorEmail
-                },
-            });
- 
-            }
-
-
-
-
-            // return new NextResponse(JSON.stringify({
-            //     message: "Created Success",
-            //     // documentIdNo: newDocument.documentIdNo,
-            //     documentIdNo: documentCode,
-            //     documentId: newDocument.documentId
-            // }),
-            //     { status: 201 });
-
-        // }
-
-        return new NextResponse(JSON.stringify('asd'), { status: 201 });
+        return NextResponse.json({ success: true, documentId: document.documentId });
 
     } catch (error) {
-        console.error('Error fetching categories:', error);
-        return new NextResponse(JSON.stringify({ error: 'Internal server error' }), { status: 500 });
+        console.error("Error creating quotation:", error);
+        return NextResponse.json({ success: false, error: String(error) }, { status: 500 });
     } finally {
         await prisma.$disconnect();
     }

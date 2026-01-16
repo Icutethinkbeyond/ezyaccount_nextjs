@@ -37,7 +37,7 @@ import {
 import { formatNumber } from "@/utils/utils";
 import FloatingButton from "@/components/shared/FloatingButton";
 import { useLocale } from "next-intl";
-import { getQuotations } from "@/actions/quotationActions";
+
 
 interface ProductTableProps {
   // data: [];
@@ -61,7 +61,8 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ }) => {
   const fetchQuotations = async () => {
     setLoading(true);
     try {
-      const data = await getQuotations();
+      const result = await fetch('/api/income/quotation');
+      const data = await result.json();
       // Map data to match DataGrid expectations
       const mappedData = data.map((item: any) => ({
         ...item,

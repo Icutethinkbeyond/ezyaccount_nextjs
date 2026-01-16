@@ -23,8 +23,6 @@ import { usePricingContext } from "@/contexts/PricingContext";
 // Context สำหรับข้อมูลหัวเอกสารใบเสนอราคา (บริษัท / ผู้ติดต่อ)
 import { useQuotationListContext } from "@/contexts/QuotationContext";
 
-// Action สำหรับบันทึกใบเสนอราคาไปที่ Backend
-import { createQuotation } from "@/actions/quotationActions";
 
 import { Visibility } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
@@ -131,7 +129,14 @@ const PricingSummary: React.FC = () => {
       };
 
       // เรียก Action เพื่อบันทึกข้อมูล
-      const result = await createQuotation(quotationData);
+      const res = await fetch('/api/income/quotation/new', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(quotationData),
+      });
+      const result = await res.json();
 
       if (result.success) {
         alert("บันทึกใบเสนอราคาสำเร็จ!");

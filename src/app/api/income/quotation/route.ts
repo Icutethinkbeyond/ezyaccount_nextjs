@@ -11,6 +11,28 @@ const exec = promisify(execCallback);
 
 const prisma = new PrismaClient();
 
+export async function GET() {
+    try {
+        const docs = await prisma.documentPaper.findMany({
+            where: {
+                docType: "Quotation"
+            },
+            include: {
+                customerCompany: true,
+                contactor: true,
+            },
+            orderBy: {
+                createdAt: 'desc'
+            }
+        });
+
+        return NextResponse.json(docs);
+    } catch (error) {
+        console.error("Error fetching quotations:", error);
+        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    }
+}
+
 export async function POST(req: NextRequest, res: NextResponse) {
     try {
 
@@ -143,7 +165,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
             fs.unlinkSync(tempExcelPath);
             fs.unlinkSync(tempPdfPath);
 
-            return new Response(fileBuffer, {
+            return new Response(fileBuffer as any, {
                 headers: {
                     'Content-Type': 'application/pdf',
                     'Content-Disposition': 'attachment; filename=example.pdf',
