@@ -80,7 +80,7 @@ export const interiorDesignMockupData: Category[] = [
       },
     ],
   },
-  
+
   // ----------------------------------------------------
   // 2. หมวดหมู่: งานโครงสร้างและงานผนังเบา
   // ----------------------------------------------------
@@ -114,7 +114,7 @@ export const interiorDesignMockupData: Category[] = [
       },
     ],
   },
-  
+
   // ----------------------------------------------------
   // 3. หมวดหมู่: งานเฟอร์นิเจอร์บิวท์อิน
   // ----------------------------------------------------
@@ -169,11 +169,11 @@ export const interiorDesignMockupData: Category[] = [
 ];
 
 export const PricingProvider: React.FC<PricingProviderProps> = ({ children }) => {
-  const [categories, setCategories] = useState<Category[]>(interiorDesignMockupData)
+  const [categories, setCategories] = useState<Category[]>([])
   const [discount, setDiscount] = useState<number>(0)
   const [taxRate, setTaxRate] = useState<number>(7)
   const [vatIncluded, setVatIncluded] = useState<boolean>(false)
-  
+
 
   useEffect(() => {
     console.log(categories)
@@ -201,9 +201,9 @@ export const PricingProvider: React.FC<PricingProviderProps> = ({ children }) =>
       categories.map((cat) =>
         cat.id === categoryId
           ? {
-              ...cat,
-              subItems: [...cat.subItems, { ...subItem, id: `item-${Date.now()}` }],
-            }
+            ...cat,
+            subItems: [...cat.subItems, { ...subItem, id: `item-${Date.now()}` }],
+          }
           : cat,
       ),
     )
@@ -214,9 +214,9 @@ export const PricingProvider: React.FC<PricingProviderProps> = ({ children }) =>
       categories.map((cat) =>
         cat.id === categoryId
           ? {
-              ...cat,
-              subItems: cat.subItems.filter((item) => item.id !== subItemId),
-            }
+            ...cat,
+            subItems: cat.subItems.filter((item) => item.id !== subItemId),
+          }
           : cat,
       ),
     )
@@ -227,9 +227,9 @@ export const PricingProvider: React.FC<PricingProviderProps> = ({ children }) =>
       categories.map((cat) =>
         cat.id === categoryId
           ? {
-              ...cat,
-              subItems: cat.subItems.map((item) => (item.id === subItemId ? { ...item, ...subItem } : item)),
-            }
+            ...cat,
+            subItems: cat.subItems.map((item) => (item.id === subItemId ? { ...item, ...subItem } : item)),
+          }
           : cat,
       ),
     )
