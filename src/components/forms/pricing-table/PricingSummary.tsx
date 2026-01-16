@@ -69,7 +69,7 @@ const PricingSummary: React.FC = () => {
     : 0;
 
   const totalWithVat = priceAfterDiscount + vat;       // รวม VAT
-  const withholdingTax = (totalWithVat * withholdingTaxRate) / 100; // ภาษี ณ ที่จ่าย
+  const withholdingTax = (priceAfterDiscount * withholdingTaxRate) / 100; // ภาษี ณ ที่จ่าย
   const finalTotal = totalWithVat - withholdingTax;    // ยอดสุทธิที่ต้องชำระ
 
   /**
@@ -220,7 +220,10 @@ const PricingSummary: React.FC = () => {
       >
         <Typography fontWeight="bold">จำนวนเงินรวมทั้งสิ้น</Typography>
         <Typography fontWeight="bold" variant="h6" color="primary">
-          {totalWithVat.toLocaleString("th-TH", { minimumFractionDigits: 2 })}
+          {totalWithVat.toLocaleString("th-TH", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          })}
         </Typography>
       </Box>
 
