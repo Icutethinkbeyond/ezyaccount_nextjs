@@ -130,7 +130,7 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ }) => {
           <IconButton
             size="small"
             color="secondary"
-          // onClick={() => handleEdit(params.row.id)}
+            onClick={() => router.push(`/${localActive}/protected/income/quotation/edit-quotation/${params.row.documentId}`)}
           >
             <EditCalendar />
           </IconButton>
@@ -138,14 +138,12 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ }) => {
           <IconButton
             size="small"
             color="info"
-          // onClick={() => handleDeleteItem(params.row.id)}
           >
             <CloudDownload />
           </IconButton>
           <IconButton
             size="small"
             color="success"
-          // onClick={() => handleRemove(params.row.id)}
           >
             <ForwardToInbox />
           </IconButton>

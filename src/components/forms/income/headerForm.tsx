@@ -1,11 +1,11 @@
-import React, { ChangeEvent } from "react";
+import React, { ChangeEvent, useEffect } from "react";
 import { Box, Typography, Grid, TextField, Grid2 } from "@mui/material";
-import { useProductServiceListContext } from "@/contexts/QuotationContext";
+import { useQuotationListContext } from "@/contexts/QuotationContext";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
 const HeaderForm: React.FC = () => {
-  const { headForm, setHeadForm } = useProductServiceListContext();
+  const { headForm, setHeadForm } = useQuotationListContext();
 
   // Validation Schema with Yup
   const validationSchema = Yup.object({
@@ -37,12 +37,18 @@ const HeaderForm: React.FC = () => {
   return (
     <Formik
       initialValues={headForm}
+      enableReinitialize={true}
       validationSchema={validationSchema}
       onSubmit={handleSubmit}
     >
-      {({ values, handleChange, handleBlur, errors, touched }) => (
-        <Form>
-          <Box component="form" noValidate autoComplete="off">
+      {({ values, handleChange, handleBlur, errors, touched, setFieldValue }) => {
+        // Sync Formik values กลับไป QuotationContext
+        useEffect(() => {
+          setHeadForm(values);
+        }, [values, setHeadForm]);
+
+        return (
+          <Form>
             <Grid2 container spacing={2}>
               <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
                 <Field
@@ -268,14 +274,15 @@ const HeaderForm: React.FC = () => {
             </Typography>
             <Grid2 container spacing={2}>
               <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
-                <Field
-                  name="companyTel"
-                  as={TextField}
+                <TextField
                   type="file"
                   variant="outlined"
                   fullWidth
-                  required
                   disabled
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  helperText="ฟีเจอร์แนบไฟล์ยังไม่เปิดใช้งาน"
                 />
               </Grid2>
               <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
@@ -294,11 +301,9 @@ const HeaderForm: React.FC = () => {
                 />
               </Grid2>
             </Grid2>
-
-            <button type="submit">Submit</button>
-          </Box>
-        </Form>
-      )}
+          </Form>
+        );
+      }}
     </Formik>
   );
 };

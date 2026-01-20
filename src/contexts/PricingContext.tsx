@@ -38,6 +38,7 @@ interface PricingContextType {
   getTotalAfterDiscount: () => number
   getTaxAmount: () => number
   getGrandTotal: () => number
+  loadData: (categories: Category[], discount: number, vatIncluded: boolean) => void
 }
 
 const PricingContext = createContext<PricingContextType | undefined>(undefined)
@@ -265,6 +266,12 @@ export const PricingProvider: React.FC<PricingProviderProps> = ({ children }) =>
     return totalAfterDiscount + taxAmount
   }
 
+  const loadData = (categories: Category[], discount: number, vatIncluded: boolean) => {
+    setCategories(categories)
+    setDiscount(discount)
+    setVatIncluded(vatIncluded)
+  }
+
   return (
     <PricingContext.Provider
       value={{
@@ -287,6 +294,7 @@ export const PricingProvider: React.FC<PricingProviderProps> = ({ children }) =>
         getTotalAfterDiscount,
         getTaxAmount,
         getGrandTotal,
+        loadData,
       }}
     >
       {children}

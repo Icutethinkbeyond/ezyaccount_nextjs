@@ -16,7 +16,7 @@ import {
 import {
   Product,
   SubProduct,
-  useProductServiceListContext,
+  useQuotationListContext,
 } from "@/contexts/QuotationContext";
 import { formatNumber } from "@/utils/utils";
 
@@ -33,7 +33,7 @@ const ProductsServicesList: React.FC<TableProps> = () => {
     setSubProductEdit,
     setIsProductEdit,
     setIsSubProductEdit,
-  } = useProductServiceListContext();
+  } = useQuotationListContext();
 
   const handleRemoveProduct = (productServiceNumber: number) => {
     removeProduct(productServiceNumber);
@@ -58,7 +58,7 @@ const ProductsServicesList: React.FC<TableProps> = () => {
 
   return (
     <>
-    {/* // <BaseCard title="รายการ สินค้า/บริการ"> */}
+      {/* // <BaseCard title="รายการ สินค้า/บริการ"> */}
       <TableContainer
         sx={{
           width: {
@@ -234,7 +234,7 @@ const ProductsServicesList: React.FC<TableProps> = () => {
           </TableBody>
         </Table>
       </TableContainer>
-    {/* </BaseCard> */}
+      {/* </BaseCard> */}
     </>
   );
 };

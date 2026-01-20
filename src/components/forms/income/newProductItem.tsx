@@ -74,6 +74,19 @@ const NewProductItem: React.FC<NewProductProps> = ({ isEdit = false }) => {
     }
   }, [newSubProduct]);
 
+  // Auto-select first product when products change
+  useEffect(() => {
+    if (products.length > 0 && newSubProduct.productServiceKey === 0) {
+      const firstProduct = products.find(p => p.isSubjectItem);
+      if (firstProduct) {
+        setnewSubProduct({
+          ...newSubProduct,
+          productServiceKey: firstProduct.productServiceNumber,
+        });
+      }
+    }
+  }, [products]);
+
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -124,7 +137,7 @@ const NewProductItem: React.FC<NewProductProps> = ({ isEdit = false }) => {
   const addSubItem = () => {
     addSubProduct(newSubProduct.productServiceKey, newSubProduct);
     setnewSubProduct(subProductClean);
-    setIsProductEdit(false);
+    setIsSubProductEdit(false);
   };
 
   const unEditProduct = () => {
@@ -256,7 +269,7 @@ const NewProductItem: React.FC<NewProductProps> = ({ isEdit = false }) => {
               variant="contained"
               color="success"
               sx={{ marginBottom: "5px" }}
-              onClick={() => !isEdit ? addItem() : handleEditProduct()}
+              onClick={() => !isProductEdit ? addItem() : handleEditProduct()}
             >
               {!isProductEdit
                 ? "Add Item"
@@ -402,7 +415,7 @@ const NewProductItem: React.FC<NewProductProps> = ({ isEdit = false }) => {
               variant="contained"
               color="success"
               sx={{ marginBottom: "5px" }}
-              onClick={() => !isEdit ? addSubItem() : handleEditSubProduct()}
+              onClick={() => !isSubProductEdit ? addSubItem() : handleEditSubProduct()}
             >
               {!isSubProductEdit
                 ? "Add Sub-Item"

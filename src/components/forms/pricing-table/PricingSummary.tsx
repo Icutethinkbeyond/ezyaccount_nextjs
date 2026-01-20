@@ -28,7 +28,12 @@ import { Visibility } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
 
-const PricingSummary: React.FC = () => {
+interface PricingSummaryProps {
+  isEdit?: boolean;
+  quotationId?: string;
+}
+
+const PricingSummary: React.FC<PricingSummaryProps> = ({ isEdit = false, quotationId }) => {
   const theme = useTheme();
   const router = useRouter();
   const localActive = useLocale();
@@ -128,9 +133,15 @@ const PricingSummary: React.FC = () => {
         })),
       };
 
-      // เรียก Action เพื่อบันทึกข้อมูล
-      const res = await fetch('/api/income/quotation/new', {
-        method: 'POST',
+      // เรียก Action เพื่อบันทึกหรืออัพเดทข้อมูล
+      const url = isEdit && quotationId
+        ? `/api/income/quotation/${quotationId}`
+        : '/api/income/quotation/new';
+
+      const method = isEdit ? 'PATCH' : 'POST';
+
+      const res = await fetch(url, {
+        method: method,
         headers: {
           'Content-Type': 'application/json',
         },
@@ -139,7 +150,7 @@ const PricingSummary: React.FC = () => {
       const result = await res.json();
 
       if (result.success) {
-        alert("บันทึกใบเสนอราคาสำเร็จ!");
+        alert(isEdit ? "อัพเดทใบเสนอราคาสำเร็จ!" : "บันทึกใบเสนอราคาสำเร็จ!");
         router.push(`/${localActive}/protected/income/quotation`);
       } else {
         alert("เกิดข้อผิดพลาด: " + result.error);

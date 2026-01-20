@@ -159,10 +159,11 @@ interface QuotationListContextProps {
   //ส่วนท้ายเอกสาร
   footerForm: FormDataFooter;
   setFooterForm: React.Dispatch<React.SetStateAction<FormDataFooter>>;
-  
+
   //ส่วนหัวเอกสาร
   headForm: HeadForm;
   setHeadForm: React.Dispatch<React.SetStateAction<HeadForm>>;
+  loadHeadForm: (data: Partial<HeadForm>) => void;
 }
 
 // สร้าง Context
@@ -287,8 +288,13 @@ export const QuotationProvider = ({ children }: { children: ReactNode }) => {
 
   // ฟังก์ชันสำหรับเพิ่มสินค้า
   const addProduct = (product: Product) => {
-    console.log(product)
-    setProducts((prevProducts) => [...prevProducts, product]);
+    console.log("🎯 addProduct() called with:", product);
+    setProducts((prevProducts) => {
+      console.log("📦 Products BEFORE adding:", prevProducts.length, prevProducts);
+      const newProducts = [...prevProducts, product];
+      console.log("📦 Products AFTER adding:", newProducts.length, newProducts);
+      return newProducts;
+    });
   };
 
   // ฟังก์ชันสำหรับลบสินค้า
@@ -321,9 +327,9 @@ export const QuotationProvider = ({ children }: { children: ReactNode }) => {
       prevProducts.map((product) =>
         toNumber(product.productServiceNumber) === productServiceNumber
           ? {
-              ...product,
-              subProductList: [...product.subProductList, subProduct],
-            }
+            ...product,
+            subProductList: [...product.subProductList, subProduct],
+          }
           : product
       )
     );
@@ -339,12 +345,12 @@ export const QuotationProvider = ({ children }: { children: ReactNode }) => {
       prevProducts.map((product) =>
         product.productServiceNumber === productServiceNumber
           ? {
-              ...product,
-              subProductList: product.subProductList.filter(
-                (subProduct) =>
-                  subProduct.subProductServiceNumber !== subProductServiceNumber
-              ),
-            }
+            ...product,
+            subProductList: product.subProductList.filter(
+              (subProduct) =>
+                subProduct.subProductServiceNumber !== subProductServiceNumber
+            ),
+          }
           : product
       )
     );
@@ -359,14 +365,14 @@ export const QuotationProvider = ({ children }: { children: ReactNode }) => {
       prevProducts.map((product) =>
         product.productServiceNumber === productServiceNumber
           ? {
-              ...product,
-              subProductList: product.subProductList.map((subProduct) =>
-                subProduct.subProductServiceNumber ===
+            ...product,
+            subProductList: product.subProductList.map((subProduct) =>
+              subProduct.subProductServiceNumber ===
                 updatedSubProduct.subProductServiceNumber
-                  ? updatedSubProduct
-                  : subProduct
-              ),
-            }
+                ? updatedSubProduct
+                : subProduct
+            ),
+          }
           : product
       )
     );
@@ -394,7 +400,10 @@ export const QuotationProvider = ({ children }: { children: ReactNode }) => {
         footerForm,
         setFooterForm,
         headForm,
-        setHeadForm
+        setHeadForm,
+        loadHeadForm: (data: Partial<HeadForm>) => {
+          setHeadForm(prev => ({ ...prev, ...data }));
+        }
       }}
     >
       {children}
