@@ -1,469 +1,3 @@
-// import type React from "react";
-// import {
-//   Box,
-//   Typography,
-//   Table,
-//   TableBody,
-//   TableCell,
-//   TableContainer,
-//   TableHead,
-//   TableRow,
-//   Paper,
-//   Divider,
-//   Grid,
-// } from "@mui/material";
-// import { usePricingContext } from "@/contexts/PricingContext";
-// import { calculateSubItemTotal } from "@/utils/utils";
-// import { useEffect } from "react";
-
-// interface InvoiceProps {
-//   invoiceNumber?: string;
-//   invoiceDate?: string;
-//   billTo?: {
-//     name: string;
-//     position: string;
-//     company: string;
-//     phone: string;
-//     email: string;
-//   };
-//   companyInfo?: {
-//     name: string;
-//     tagline: string;
-//     phone: string;
-//     email: string;
-//     location: string;
-//   };
-//   paymentMethod?: {
-//     accountNo: string;
-//     accountName: string;
-//     branchName: string;
-//   };
-//   termsAndConditions?: string;
-// }
-
-// const InvoicePrintPage: React.FC<InvoiceProps> = ({
-//   invoiceNumber = "#123456",
-//   invoiceDate = new Date().toLocaleDateString("th-TH", {
-//     year: "numeric",
-//     month: "long",
-//     day: "numeric",
-//   }),
-//   billTo = {
-//     name: "Jhone Doe",
-//     position: "Managing Director",
-//     company: "Company ltd.",
-//     phone: "+123-4567 8910",
-//     email: "example@mail.com",
-//   },
-//   companyInfo = {
-//     name: "COMPANY",
-//     tagline: "COMPANY TAGLINE HERE",
-//     phone: "+123 4567 8910",
-//     email: "example@mail.com",
-//     location: "Your location here",
-//   },
-//   paymentMethod = {
-//     accountNo: "1234 5678 910",
-//     accountName: "Jhone Doe",
-//     branchName: "XYZ",
-//   },
-//   termsAndConditions = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed dip nonumy eiusmod incididunt ut labore et dolore magna aliqua.",
-// }) => {
-//   // const { categories, subtotal, discount, taxRate, totalAfterDiscount, taxAmount, grandTotal } = usePricingContext()
-
-//   const { categories, discount, taxRate } = usePricingContext();
-
-//   // Flatten all items with their category information
-//   const allItems = categories.flatMap((category) =>
-//     // เปลี่ยน category.items เป็น category.subItems
-//     category.subItems.map((item, index) => ({
-//       ...item,
-//       categoryName: category.name,
-//       itemNumber: `${category.id}.${index + 1}`,
-//     }))
-//   );
-
-//   useEffect(() => {
-//     console.log(categories);
-//   }, [categories]);
-
-//   return (
-//     <Box
-//       sx={{
-//         width: "210mm",
-//         minHeight: "297mm",
-//         padding: "20mm",
-//         margin: "0 auto",
-//         backgroundColor: "white",
-//         boxShadow: "0 0 10px rgba(0,0,0,0.1)",
-//         "@media print": {
-//           boxShadow: "none",
-//           margin: 0,
-//           padding: "15mm",
-//         },
-//       }}
-//     >
-//       {/* Header with blue diagonal design */}
-//       <Box
-//         sx={{
-//           position: "relative",
-//           backgroundColor: "#1565c0",
-//           height: "60px",
-//           mb: 3,
-//           "&::before": {
-//             content: '""',
-//             position: "absolute",
-//             left: 0,
-//             top: 0,
-//             width: "150px",
-//             height: "100%",
-//             backgroundColor: "#0d47a1",
-//             clipPath: "polygon(0 0, 100% 0, 80% 100%, 0 100%)",
-//           },
-//         }}
-//       />
-
-//       {/* Company Info and Invoice Title */}
-//       <Grid container justifyContent="space-between" sx={{ mb: 4 }}>
-//         <Grid item xs={6}>
-//           <Typography variant="h6" sx={{ fontWeight: "bold", mb: 0.5 }}>
-//             Bill To:
-//           </Typography>
-//           <Typography variant="h5" sx={{ fontWeight: "bold", mb: 1 }}>
-//             {billTo.name}
-//           </Typography>
-//           <Typography variant="body2" color="text.secondary">
-//             {billTo.position}, {billTo.company}
-//           </Typography>
-//           <Typography variant="body2" color="text.secondary">
-//             Phone: {billTo.phone}
-//           </Typography>
-//           <Typography variant="body2" color="text.secondary">
-//             Email: {billTo.email}
-//           </Typography>
-//         </Grid>
-//         <Grid item xs={6} sx={{ textAlign: "right" }}>
-//           <Box
-//             sx={{
-//               display: "flex",
-//               alignItems: "center",
-//               justifyContent: "flex-end",
-//               mb: 2,
-//             }}
-//           >
-//             <Box
-//               sx={{
-//                 width: 40,
-//                 height: 40,
-//                 backgroundColor: "#1565c0",
-//                 borderRadius: "50%",
-//                 display: "flex",
-//                 alignItems: "center",
-//                 justifyContent: "center",
-//                 mr: 1,
-//               }}
-//             >
-//               <Typography
-//                 sx={{ color: "white", fontWeight: "bold", fontSize: "20px" }}
-//               >
-//                 C
-//               </Typography>
-//             </Box>
-//             <Box>
-//               <Typography
-//                 variant="h6"
-//                 sx={{ fontWeight: "bold", lineHeight: 1 }}
-//               >
-//                 {companyInfo.name}
-//               </Typography>
-//               <Typography variant="caption" color="text.secondary">
-//                 {companyInfo.tagline}
-//               </Typography>
-//             </Box>
-//           </Box>
-//           <Typography variant="h3" sx={{ fontWeight: "bold", mb: 1 }}>
-//             INVOICE
-//           </Typography>
-//           <Typography variant="body2">
-//             <strong>Invoice Number:</strong> {invoiceNumber}
-//           </Typography>
-//           <Typography variant="body2">
-//             <strong>Invoice Date:</strong> {invoiceDate}
-//           </Typography>
-//         </Grid>
-//       </Grid>
-
-//       {/* Table */}
-//       <TableContainer component={Paper} elevation={0} sx={{ mb: 3 }}>
-//         <Table>
-//           <TableHead>
-//             <TableRow sx={{ backgroundColor: "#1565c0" }}>
-//               <TableCell
-//                 sx={{ color: "white", fontWeight: "bold", width: "80px" }}
-//               >
-//                 NO.
-//               </TableCell>
-//               <TableCell sx={{ color: "white", fontWeight: "bold" }}>
-//                 PRODUCT DESCRIPTION
-//               </TableCell>
-//               <TableCell
-//                 sx={{ color: "white", fontWeight: "bold", textAlign: "center" }}
-//               >
-//                 PRICE
-//               </TableCell>
-//               <TableCell
-//                 sx={{ color: "white", fontWeight: "bold", textAlign: "center" }}
-//               >
-//                 QTY.
-//               </TableCell>
-//               <TableCell
-//                 sx={{
-//                   color: "white",
-//                   fontWeight: "bold",
-//                   textAlign: "right",
-//                   width: "120px",
-//                 }}
-//               >
-//                 TOTAL
-//               </TableCell>
-//             </TableRow>
-//           </TableHead>
-//           <TableBody>
-//             {allItems.map((item, index) => (
-//               <TableRow key={item.id}>
-//                 <TableCell>{item.itemNumber}</TableCell>
-//                 <TableCell>
-//                   <Typography variant="body2" sx={{ fontWeight: "bold" }}>
-//                     {item.description}
-//                   </Typography>
-//                   {item.unit && (
-//                     <Typography variant="caption" color="text.secondary">
-//                       หน่วย: {item.unit}
-//                     </Typography>
-//                   )}
-//                 </TableCell>
-//                 <TableCell sx={{ textAlign: "center" }}>
-//                   ฿{item.pricePerUnit.toFixed(2)}
-//                 </TableCell>
-//                 <TableCell sx={{ textAlign: "center" }}>{item.qty}</TableCell>
-//                 <TableCell sx={{ textAlign: "right" }}>
-//                   ฿{/* {item.total.toFixed(2)} */}
-//                   {calculateSubItemTotal(
-//                     item.qty,
-//                     item.pricePerUnit
-//                   ).toLocaleString("th-TH", {
-//                     minimumFractionDigits: 2,
-//                     maximumFractionDigits: 2,
-//                   })}
-//                 </TableCell>
-//               </TableRow>
-//             ))}
-//           </TableBody>
-//         </Table>
-//       </TableContainer>
-
-//       {/* Summary Section */}
-//       <Grid container spacing={3} sx={{ mb: 3 }}>
-//         <Grid item xs={7}>
-//           <Typography variant="h6" sx={{ fontWeight: "bold", mb: 2 }}>
-//             Thank You For Your Business
-//           </Typography>
-
-//           <Typography variant="subtitle2" sx={{ fontWeight: "bold", mb: 1 }}>
-//             Payment Method:
-//           </Typography>
-//           <Box sx={{ display: "flex", mb: 0.5 }}>
-//             <Typography variant="body2" sx={{ width: "120px" }}>
-//               Account No:
-//             </Typography>
-//             <Typography variant="body2">{paymentMethod.accountNo}</Typography>
-//           </Box>
-//           <Box sx={{ display: "flex", mb: 0.5 }}>
-//             <Typography variant="body2" sx={{ width: "120px" }}>
-//               Account Name:
-//             </Typography>
-//             <Typography variant="body2">{paymentMethod.accountName}</Typography>
-//           </Box>
-//           <Box sx={{ display: "flex", mb: 2 }}>
-//             <Typography variant="body2" sx={{ width: "120px" }}>
-//               Branch Name:
-//             </Typography>
-//             <Typography variant="body2">{paymentMethod.branchName}</Typography>
-//           </Box>
-
-//           <Typography variant="subtitle2" sx={{ fontWeight: "bold", mb: 1 }}>
-//             Terms & Conditions:
-//           </Typography>
-//           <Typography variant="body2" color="text.secondary">
-//             {termsAndConditions}
-//           </Typography>
-//         </Grid>
-//         <Grid item xs={5}>
-//           <Box sx={{ backgroundColor: "#f5f5f5", p: 2, borderRadius: 1 }}>
-//             <Box
-//               sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}
-//             >
-//               <Typography variant="body2">Subtotal:</Typography>
-//               {/* <Typography variant="body2">฿{subtotal.toFixed(2)}</Typography> */}
-//             </Box>
-//             <Box
-//               sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}
-//             >
-//               <Typography variant="body2">Discount:</Typography>
-//               {/* <Typography variant="body2">฿{discount.toFixed(2)}</Typography> */}
-//             </Box>
-//             <Box
-//               sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}
-//             >
-//               {/* <Typography variant="body2">Tax ({taxRate}%):</Typography> */}
-//               {/* <Typography variant="body2">฿{taxAmount.toFixed(2)}</Typography> */}
-//             </Box>
-//             <Divider sx={{ mb: 2 }} />
-//             <Box
-//               sx={{
-//                 display: "flex",
-//                 justifyContent: "space-between",
-//                 backgroundColor: "#1565c0",
-//                 p: 2,
-//                 borderRadius: 1,
-//               }}
-//             >
-//               <Typography
-//                 variant="h6"
-//                 sx={{ color: "white", fontWeight: "bold" }}
-//               >
-//                 Total:
-//               </Typography>
-//               <Typography
-//                 variant="h6"
-//                 sx={{ color: "white", fontWeight: "bold" }}
-//               >
-//                 {/* ฿{grandTotal.toFixed(2)} */}
-//               </Typography>
-//             </Box>
-//           </Box>
-//           <Box sx={{ mt: 3, textAlign: "right" }}>
-//             <Box
-//               sx={{
-//                 borderBottom: "1px solid black",
-//                 width: "200px",
-//                 ml: "auto",
-//                 mb: 1,
-//               }}
-//             >
-//               <Typography
-//                 variant="h4"
-//                 sx={{
-//                   fontFamily: "cursive",
-//                   mb: 1,
-//                   fontStyle: "italic",
-//                 }}
-//               >
-//                 Signature
-//               </Typography>
-//             </Box>
-//             <Typography variant="body2" sx={{ fontWeight: "bold" }}>
-//               Authorised sign
-//             </Typography>
-//           </Box>
-//         </Grid>
-//       </Grid>
-
-//       {/* Footer */}
-//       <Box
-//         sx={{
-//           position: "relative",
-//           mt: "auto",
-//           pt: 3,
-//         }}
-//       >
-//         <Grid container spacing={2} sx={{ mb: 2 }}>
-//           <Grid item xs={4} sx={{ display: "flex", alignItems: "center" }}>
-//             <Box
-//               sx={{
-//                 width: 32,
-//                 height: 32,
-//                 backgroundColor: "#1565c0",
-//                 borderRadius: "4px",
-//                 display: "flex",
-//                 alignItems: "center",
-//                 justifyContent: "center",
-//                 mr: 1,
-//               }}
-//             >
-//               <Typography sx={{ color: "white", fontSize: "14px" }}>
-//                 📞
-//               </Typography>
-//             </Box>
-//             <Typography variant="body2">{companyInfo.phone}</Typography>
-//           </Grid>
-//           <Grid item xs={4} sx={{ display: "flex", alignItems: "center" }}>
-//             <Box
-//               sx={{
-//                 width: 32,
-//                 height: 32,
-//                 backgroundColor: "#1565c0",
-//                 borderRadius: "4px",
-//                 display: "flex",
-//                 alignItems: "center",
-//                 justifyContent: "center",
-//                 mr: 1,
-//               }}
-//             >
-//               <Typography sx={{ color: "white", fontSize: "14px" }}>
-//                 ✉️
-//               </Typography>
-//             </Box>
-//             <Typography variant="body2">{companyInfo.email}</Typography>
-//           </Grid>
-//           <Grid item xs={4} sx={{ display: "flex", alignItems: "center" }}>
-//             <Box
-//               sx={{
-//                 width: 32,
-//                 height: 32,
-//                 backgroundColor: "#1565c0",
-//                 borderRadius: "4px",
-//                 display: "flex",
-//                 alignItems: "center",
-//                 justifyContent: "center",
-//                 mr: 1,
-//               }}
-//             >
-//               <Typography sx={{ color: "white", fontSize: "14px" }}>
-//                 📍
-//               </Typography>
-//             </Box>
-//             <Typography variant="body2">{companyInfo.location}</Typography>
-//           </Grid>
-//         </Grid>
-
-//         {/* Blue footer with diagonal design */}
-//         <Box
-//           sx={{
-//             position: "relative",
-//             backgroundColor: "#1565c0",
-//             height: "40px",
-//             mt: 2,
-//             "&::after": {
-//               content: '""',
-//               position: "absolute",
-//               right: 0,
-//               bottom: 0,
-//               width: "150px",
-//               height: "100%",
-//               backgroundColor: "#0d47a1",
-//               clipPath: "polygon(20% 0, 100% 0, 100% 100%, 0 100%)",
-//             },
-//           }}
-//         />
-//       </Box>
-//     </Box>
-//   );
-// };
-
-// export default InvoicePrintPage;
-
-
 import type React from "react"
 import {
   Box,
@@ -479,6 +13,7 @@ import {
   Grid,
 } from "@mui/material"
 import { usePricingContext } from "@/contexts/PricingContext"
+import { useMemo } from "react"
 
 interface InvoiceProps {
   invoiceNumber?: string
@@ -504,6 +39,9 @@ interface InvoiceProps {
   }
   termsAndConditions?: string
 }
+
+const ITEMS_PER_PAGE_FIRST = 10
+const ITEMS_PER_PAGE_OTHER = 16
 
 const InvoicePrint: React.FC<InvoiceProps> = ({
   invoiceNumber = "#123456",
@@ -536,152 +74,412 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
   const { categories, getSubtotal, getTotalAfterDiscount, getTaxAmount, getGrandTotal, discount, taxRate, getCategoryTotal } =
     usePricingContext()
 
-  // const { categories, discount, taxRate } = usePricingContext();
-
   const subtotal = getSubtotal()
-  const totalAfterDiscount = getTotalAfterDiscount()
   const taxAmount = getTaxAmount()
   const grandTotal = getGrandTotal()
 
-return (
+  // Flatten logic to handle pagination
+  const pages = useMemo(() => {
+    const flattenedRows: Array<{ type: "header" | "item" | "subtotal"; data?: any }> = []
+
+    categories.forEach((category, catIndex) => {
+      // Add Category Header
+      flattenedRows.push({
+        type: "header",
+        data: { name: category.name, index: catIndex + 1, id: category.id },
+      })
+
+      // Add Items
+      category.subItems.forEach((item, itemIndex) => {
+        flattenedRows.push({
+          type: "item",
+          data: { ...item, displayIndex: `${catIndex + 1}.${itemIndex + 1}` },
+        })
+      })
+
+      // Add Category Subtotal
+      flattenedRows.push({
+        type: "subtotal",
+        data: { total: getCategoryTotal(category.id) },
+      })
+    })
+
+    const resultPages: Array<typeof flattenedRows> = []
+    let currentPage: typeof flattenedRows = []
+    let currentLimit = ITEMS_PER_PAGE_FIRST
+
+    flattenedRows.forEach((row, index) => {
+      if (currentPage.length >= currentLimit) {
+        resultPages.push(currentPage)
+        currentPage = []
+        currentLimit = ITEMS_PER_PAGE_OTHER
+      }
+      currentPage.push(row)
+    })
+
+    if (currentPage.length > 0) {
+      resultPages.push(currentPage)
+    }
+
+    return resultPages
+  }, [categories, getCategoryTotal])
+
+  const renderPageHeader = (pageIndex: number) => {
+    if (pageIndex === 0) {
+      return (
+        <>
+          {/* Header with blue diagonal design */}
+          <Box
+            sx={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              backgroundColor: "#1565c0",
+              height: "60px",
+              width: "100%",
+              "&::before": {
+                content: '""',
+                position: "absolute",
+                left: 0,
+                top: 0,
+                width: "150px",
+                height: "100%",
+                backgroundColor: "#0d47a1",
+                clipPath: "polygon(0 0, 100% 0, 80% 100%, 0 100%)",
+              },
+            }}
+          />
+
+          {/* Company Info and Invoice Title */}
+          <Grid container justifyContent="space-between" sx={{ mb: 4, mt: 4, position: 'relative', zIndex: 1 }}>
+            <Grid item xs={6}>
+              <Typography variant="h6" sx={{ fontWeight: "bold", mb: 0.5 }}>
+                Bill To:
+              </Typography>
+              <Typography variant="h5" sx={{ fontWeight: "bold", mb: 1 }}>
+                {billTo.name}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                {billTo.position}, {billTo.company}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Phone: {billTo.phone}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Email: {billTo.email}
+              </Typography>
+            </Grid>
+            <Grid item xs={6} sx={{ textAlign: "right" }}>
+              <Box sx={{ display: "flex", alignItems: "center", justifyContent: "flex-end", mb: 2 }}>
+                <Box
+                  sx={{
+                    width: 40,
+                    height: 40,
+                    backgroundColor: "#1565c0",
+                    borderRadius: "50%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    mr: 1,
+                  }}
+                >
+                  <Typography sx={{ color: "white", fontWeight: "bold", fontSize: "20px" }}>C</Typography>
+                </Box>
+                <Box>
+                  <Typography variant="h6" sx={{ fontWeight: "bold", lineHeight: 1 }}>
+                    {companyInfo.name}
+                  </Typography>
+                  <Typography variant="caption" color="text.secondary">
+                    {companyInfo.tagline}
+                  </Typography>
+                </Box>
+              </Box>
+              <Typography variant="h3" sx={{ fontWeight: "bold", mb: 1 }}>
+                INVOICE
+              </Typography>
+              <Typography variant="body2">
+                <strong>Invoice Number:</strong> {invoiceNumber}
+              </Typography>
+              <Typography variant="body2">
+                <strong>Invoice Date:</strong> {invoiceDate}
+              </Typography>
+            </Grid>
+          </Grid>
+        </>
+      )
+    } else {
+      // Simplified header for subsequent pages
+      return (
+        <Box sx={{ mb: 2, mt: 4, display: "flex", justifyContent: "space-between", borderBottom: '1px solid #eee', pb: 2 }}>
+          <Box>
+            <Typography variant="h6" sx={{ fontWeight: "bold" }}>INVOICE (Cont.)</Typography>
+            <Typography variant="body2">
+              <strong>No:</strong> {invoiceNumber}
+            </Typography>
+          </Box>
+          <Box sx={{ textAlign: 'right' }}>
+            <Typography variant="body2">
+              Page {pageIndex + 1}
+            </Typography>
+          </Box>
+        </Box>
+      )
+    }
+  }
+
+  const renderSummarySection = () => (
+    <Grid container spacing={3} sx={{ mt: 'auto', mb: 3 }}>
+      <Grid item xs={7}>
+        <Typography variant="h6" sx={{ fontWeight: "bold", mb: 2 }}>
+          Thank You For Your Business
+        </Typography>
+
+        <Typography variant="subtitle2" sx={{ fontWeight: "bold", mb: 1 }}>
+          Payment Method:
+        </Typography>
+        <Box sx={{ display: "flex", mb: 0.5 }}>
+          <Typography variant="body2" sx={{ width: "120px" }}>
+            Account No:
+          </Typography>
+          <Typography variant="body2">{paymentMethod.accountNo}</Typography>
+        </Box>
+        <Box sx={{ display: "flex", mb: 0.5 }}>
+          <Typography variant="body2" sx={{ width: "120px" }}>
+            Account Name:
+          </Typography>
+          <Typography variant="body2">{paymentMethod.accountName}</Typography>
+        </Box>
+        <Box sx={{ display: "flex", mb: 2 }}>
+          <Typography variant="body2" sx={{ width: "120px" }}>
+            Branch Name:
+          </Typography>
+          <Typography variant="body2">{paymentMethod.branchName}</Typography>
+        </Box>
+
+        <Typography variant="subtitle2" sx={{ fontWeight: "bold", mb: 1 }}>
+          Terms & Conditions:
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          {termsAndConditions}
+        </Typography>
+      </Grid>
+      <Grid item xs={5}>
+        <Box sx={{ backgroundColor: "#f5f5f5", p: 2, borderRadius: 1 }}>
+          <Box sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}>
+            <Typography variant="body2">Subtotal:</Typography>
+            <Typography variant="body2">฿{subtotal.toFixed(2)}</Typography>
+          </Box>
+          <Box sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}>
+            <Typography variant="body2">Discount:</Typography>
+            <Typography variant="body2">฿{discount.toFixed(2)}</Typography>
+          </Box>
+          <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
+            <Typography variant="body2">Tax ({taxRate}%):</Typography>
+            <Typography variant="body2">฿{taxAmount.toFixed(2)}</Typography>
+          </Box>
+          <Divider sx={{ mb: 2 }} />
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              backgroundColor: "#1565c0",
+              p: 2,
+              borderRadius: 1,
+            }}
+          >
+            <Typography variant="h6" sx={{ color: "white", fontWeight: "bold" }}>
+              Total:
+            </Typography>
+            <Typography variant="h6" sx={{ color: "white", fontWeight: "bold" }}>
+              ฿{grandTotal.toFixed(2)}
+            </Typography>
+          </Box>
+        </Box>
+        <Box sx={{ mt: 3, textAlign: "right" }}>
+          <Box
+            sx={{
+              borderBottom: "1px solid black",
+              width: "200px",
+              ml: "auto",
+              mb: 1,
+            }}
+          >
+            <Typography
+              variant="h4"
+              sx={{
+                fontFamily: "cursive",
+                mb: 1,
+                fontStyle: "italic",
+              }}
+            >
+              Signature
+            </Typography>
+          </Box>
+          <Typography variant="body2" sx={{ fontWeight: "bold" }}>
+            Authorised sign
+          </Typography>
+        </Box>
+      </Grid>
+    </Grid>
+  )
+
+  const renderFooter = () => (
     <Box
       sx={{
-        width: "210mm",
-        minHeight: "297mm",
-        padding: "20mm",
-        margin: "0 auto",
-        backgroundColor: "white",
-        boxShadow: "0 0 10px rgba(0,0,0,0.1)",
-        "@media print": {
-          boxShadow: "none",
-          margin: 0,
-          padding: "15mm",
-        },
+        position: "absolute",
+        bottom: 0,
+        left: 0,
+        width: "100%",
+        pt: 1,
       }}
     >
-      {/* Header with blue diagonal design */}
+      <Grid container spacing={2} sx={{ mb: 2, px: "15mm" }}>
+        <Grid item xs={4} sx={{ display: "flex", alignItems: "center" }}>
+          <Box
+            sx={{
+              width: 32,
+              height: 32,
+              backgroundColor: "#1565c0",
+              borderRadius: "4px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              mr: 1,
+            }}
+          >
+            <Typography sx={{ color: "white", fontSize: "14px" }}>📞</Typography>
+          </Box>
+          <Typography variant="body2">{companyInfo.phone}</Typography>
+        </Grid>
+        <Grid item xs={4} sx={{ display: "flex", alignItems: "center" }}>
+          <Box
+            sx={{
+              width: 32,
+              height: 32,
+              backgroundColor: "#1565c0",
+              borderRadius: "4px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              mr: 1,
+            }}
+          >
+            <Typography sx={{ color: "white", fontSize: "14px" }}>✉️</Typography>
+          </Box>
+          <Typography variant="body2">{companyInfo.email}</Typography>
+        </Grid>
+        <Grid item xs={4} sx={{ display: "flex", alignItems: "center" }}>
+          <Box
+            sx={{
+              width: 32,
+              height: 32,
+              backgroundColor: "#1565c0",
+              borderRadius: "4px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              mr: 1,
+            }}
+          >
+            <Typography sx={{ color: "white", fontSize: "14px" }}>📍</Typography>
+          </Box>
+          <Typography variant="body2">{companyInfo.location}</Typography>
+        </Grid>
+      </Grid>
+
+      {/* Blue footer with diagonal design */}
       <Box
         sx={{
           position: "relative",
           backgroundColor: "#1565c0",
-          height: "60px",
-          mb: 3,
-          "&::before": {
+          height: "40px",
+          width: "100%",
+          "&::after": {
             content: '""',
             position: "absolute",
-            left: 0,
-            top: 0,
+            right: 0,
+            bottom: 0,
             width: "150px",
             height: "100%",
             backgroundColor: "#0d47a1",
-            clipPath: "polygon(0 0, 100% 0, 80% 100%, 0 100%)",
+            clipPath: "polygon(20% 0, 100% 0, 100% 100%, 0 100%)",
           },
         }}
       />
+    </Box>
+  )
 
-      {/* Company Info and Invoice Title */}
-      <Grid container justifyContent="space-between" sx={{ mb: 4 }}>
-        <Grid item xs={6}>
-          <Typography variant="h6" sx={{ fontWeight: "bold", mb: 0.5 }}>
-            Bill To:
-          </Typography>
-          <Typography variant="h5" sx={{ fontWeight: "bold", mb: 1 }}>
-            {billTo.name}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            {billTo.position}, {billTo.company}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Phone: {billTo.phone}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Email: {billTo.email}
-          </Typography>
-        </Grid>
-        <Grid item xs={6} sx={{ textAlign: "right" }}>
-          <Box sx={{ display: "flex", alignItems: "center", justifyContent: "flex-end", mb: 2 }}>
-            <Box
-              sx={{
-                width: 40,
-                height: 40,
-                backgroundColor: "#1565c0",
-                borderRadius: "50%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                mr: 1,
-              }}
-            >
-              <Typography sx={{ color: "white", fontWeight: "bold", fontSize: "20px" }}>C</Typography>
-            </Box>
-            <Box>
-              <Typography variant="h6" sx={{ fontWeight: "bold", lineHeight: 1 }}>
-                {companyInfo.name}
-              </Typography>
-              <Typography variant="caption" color="text.secondary">
-                {companyInfo.tagline}
-              </Typography>
-            </Box>
-          </Box>
-          <Typography variant="h3" sx={{ fontWeight: "bold", mb: 1 }}>
-            INVOICE
-          </Typography>
-          <Typography variant="body2">
-            <strong>Invoice Number:</strong> {invoiceNumber}
-          </Typography>
-          <Typography variant="body2">
-            <strong>Invoice Date:</strong> {invoiceDate}
-          </Typography>
-        </Grid>
-      </Grid>
+  return (
+    <div>
+      {pages.map((pageRows, pageIndex) => (
+        <Box
+          key={pageIndex}
+          sx={{
+            width: "210mm",
+            minHeight: "297mm",
+            position: "relative",
+            padding: "20mm",
+            margin: "0 auto",
+            marginBottom: "10mm",
+            backgroundColor: "white",
+            boxShadow: "0 0 10px rgba(0,0,0,0.1)",
+            display: "flex",
+            flexDirection: "column",
+            "@media print": {
+              boxShadow: "none",
+              margin: 0,
+              padding: "15mm",
+              pageBreakAfter: pageIndex === pages.length - 1 ? "auto" : "always",
+              height: "100vh", // Force full height for footer positioning
+            },
+          }}
+        >
+          {renderPageHeader(pageIndex)}
 
-      {/* Table */}
-      <TableContainer component={Paper} elevation={0} sx={{ mb: 3 }}>
-        <Table>
-          <TableHead>
-            <TableRow sx={{ backgroundColor: "#1565c0" }}>
-              <TableCell sx={{ color: "white", fontWeight: "bold", width: "80px" }}>NO.</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold" }}>PRODUCT DESCRIPTION</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold", textAlign: "center", width: "80px" }}>
-                UNIT
-              </TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold", textAlign: "center", width: "80px" }}>QTY</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold", textAlign: "right", width: "120px" }}>
-                PRICE/UNIT
-              </TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold", textAlign: "right", width: "120px" }}>
-                PRICE
-              </TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold", width: "150px" }}>REMARK</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {categories.map((category, categoryIndex) => {
-              const categoryTotal = getCategoryTotal(category.id)
-              return (
-                <>
-                  {/* Category Header Row */}
-                  <TableRow key={`category-${category.id}`}>
-                    <TableCell
-                      colSpan={7}
-                      sx={{
-                        backgroundColor: "#1565c0",
-                        color: "white",
-                        fontWeight: "bold",
-                        py: 1,
-                      }}
-                    >
-                      {categoryIndex + 1}. {category.name}
-                    </TableCell>
-                  </TableRow>
-
-                  {/* Category Items */}
-                  {category.subItems.map((item, index) => {
+          <TableContainer component={Paper} elevation={0} sx={{ mb: 3, flexGrow: 1 }}>
+            <Table>
+              <TableHead>
+                <TableRow sx={{ backgroundColor: "#1565c0" }}>
+                  <TableCell sx={{ color: "white", fontWeight: "bold", width: "80px" }}>NO.</TableCell>
+                  <TableCell sx={{ color: "white", fontWeight: "bold" }}>PRODUCT DESCRIPTION</TableCell>
+                  <TableCell sx={{ color: "white", fontWeight: "bold", textAlign: "center", width: "80px" }}>
+                    UNIT
+                  </TableCell>
+                  <TableCell sx={{ color: "white", fontWeight: "bold", textAlign: "center", width: "80px" }}>QTY</TableCell>
+                  <TableCell sx={{ color: "white", fontWeight: "bold", textAlign: "right", width: "120px" }}>
+                    PRICE/UNIT
+                  </TableCell>
+                  <TableCell sx={{ color: "white", fontWeight: "bold", textAlign: "right", width: "120px" }}>
+                    PRICE
+                  </TableCell>
+                  <TableCell sx={{ color: "white", fontWeight: "bold", width: "150px" }}>REMARK</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {pageRows.map((row, rowIndex) => {
+                  if (row.type === "header") {
+                    return (
+                      <TableRow key={`header-${pageIndex}-${rowIndex}`}>
+                        <TableCell
+                          colSpan={7}
+                          sx={{
+                            backgroundColor: "#1565c0",
+                            color: "white",
+                            fontWeight: "bold",
+                            py: 1,
+                          }}
+                        >
+                          {row.data.index}. {row.data.name}
+                        </TableCell>
+                      </TableRow>
+                    )
+                  } else if (row.type === "item") {
+                    const item = row.data;
                     const itemTotal = item.qty * item.pricePerUnit
                     return (
-                      <TableRow key={item.id}>
+                      <TableRow key={`item-${pageIndex}-${rowIndex}`}>
                         <TableCell>
-                          {categoryIndex + 1}.{index + 1}
+                          {item.displayIndex}
                         </TableCell>
                         <TableCell>
                           <Typography variant="body2">{item.description}</Typography>
@@ -693,203 +491,35 @@ return (
                         <TableCell>{item.remark}</TableCell>
                       </TableRow>
                     )
-                  })}
+                  } else if (row.type === "subtotal") {
+                    return (
+                      <TableRow key={`subtotal-${pageIndex}-${rowIndex}`}>
+                        <TableCell colSpan={5} />
+                        <TableCell sx={{ textAlign: "right", fontWeight: "bold", backgroundColor: "#f5f5f5" }}>
+                          รวม
+                        </TableCell>
+                        <TableCell sx={{ textAlign: "right", fontWeight: "bold", backgroundColor: "#f5f5f5" }}>
+                          ฿{row.data.total.toLocaleString()}
+                        </TableCell>
+                      </TableRow>
+                    )
+                  }
+                  return null
+                })}
+              </TableBody>
+            </Table>
+          </TableContainer>
 
-                  {/* Category Subtotal Row */}
-                  <TableRow>
-                    <TableCell colSpan={5} />
-                    <TableCell sx={{ textAlign: "right", fontWeight: "bold", backgroundColor: "#f5f5f5" }}>
-                      รวม
-                    </TableCell>
-                    <TableCell sx={{ textAlign: "right", fontWeight: "bold", backgroundColor: "#f5f5f5" }}>
-                      ฿{categoryTotal.toLocaleString()}
-                    </TableCell>
-                  </TableRow>
-                </>
-              )
-            })}
-          </TableBody>
-        </Table>
-      </TableContainer>
+          {/* Render Summary only on the last page */}
+          {pageIndex === pages.length - 1 && renderSummarySection()}
 
-      {/* Summary Section */}
-      <Grid container spacing={3} sx={{ mb: 3 }}>
-        <Grid item xs={7}>
-          <Typography variant="h6" sx={{ fontWeight: "bold", mb: 2 }}>
-            Thank You For Your Business
-          </Typography>
+          {/* Add a spacer to push footer to bottom if not last page or if summary doesn't fill */}
+          {/* {pageIndex !== pages.length -1 && <Box sx={{ flexGrow: 1 }} />} */}
 
-          <Typography variant="subtitle2" sx={{ fontWeight: "bold", mb: 1 }}>
-            Payment Method:
-          </Typography>
-          <Box sx={{ display: "flex", mb: 0.5 }}>
-            <Typography variant="body2" sx={{ width: "120px" }}>
-              Account No:
-            </Typography>
-            <Typography variant="body2">{paymentMethod.accountNo}</Typography>
-          </Box>
-          <Box sx={{ display: "flex", mb: 0.5 }}>
-            <Typography variant="body2" sx={{ width: "120px" }}>
-              Account Name:
-            </Typography>
-            <Typography variant="body2">{paymentMethod.accountName}</Typography>
-          </Box>
-          <Box sx={{ display: "flex", mb: 2 }}>
-            <Typography variant="body2" sx={{ width: "120px" }}>
-              Branch Name:
-            </Typography>
-            <Typography variant="body2">{paymentMethod.branchName}</Typography>
-          </Box>
-
-          <Typography variant="subtitle2" sx={{ fontWeight: "bold", mb: 1 }}>
-            Terms & Conditions:
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            {termsAndConditions}
-          </Typography>
-        </Grid>
-        <Grid item xs={5}>
-          <Box sx={{ backgroundColor: "#f5f5f5", p: 2, borderRadius: 1 }}>
-            <Box sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}>
-              <Typography variant="body2">Subtotal:</Typography>
-              <Typography variant="body2">฿{subtotal.toFixed(2)}</Typography>
-            </Box>
-            <Box sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}>
-              <Typography variant="body2">Discount:</Typography>
-              <Typography variant="body2">฿{discount.toFixed(2)}</Typography>
-            </Box>
-            <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
-              <Typography variant="body2">Tax ({taxRate}%):</Typography>
-              <Typography variant="body2">฿{taxAmount.toFixed(2)}</Typography>
-            </Box>
-            <Divider sx={{ mb: 2 }} />
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                backgroundColor: "#1565c0",
-                p: 2,
-                borderRadius: 1,
-              }}
-            >
-              <Typography variant="h6" sx={{ color: "white", fontWeight: "bold" }}>
-                Total:
-              </Typography>
-              <Typography variant="h6" sx={{ color: "white", fontWeight: "bold" }}>
-                ฿{grandTotal.toFixed(2)}
-              </Typography>
-            </Box>
-          </Box>
-          <Box sx={{ mt: 3, textAlign: "right" }}>
-            <Box
-              sx={{
-                borderBottom: "1px solid black",
-                width: "200px",
-                ml: "auto",
-                mb: 1,
-              }}
-            >
-              <Typography
-                variant="h4"
-                sx={{
-                  fontFamily: "cursive",
-                  mb: 1,
-                  fontStyle: "italic",
-                }}
-              >
-                Signature
-              </Typography>
-            </Box>
-            <Typography variant="body2" sx={{ fontWeight: "bold" }}>
-              Authorised sign
-            </Typography>
-          </Box>
-        </Grid>
-      </Grid>
-
-      {/* Footer */}
-      <Box
-        sx={{
-          position: "relative",
-          mt: "auto",
-          pt: 3,
-        }}
-      >
-        <Grid container spacing={2} sx={{ mb: 2 }}>
-          <Grid item xs={4} sx={{ display: "flex", alignItems: "center" }}>
-            <Box
-              sx={{
-                width: 32,
-                height: 32,
-                backgroundColor: "#1565c0",
-                borderRadius: "4px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                mr: 1,
-              }}
-            >
-              <Typography sx={{ color: "white", fontSize: "14px" }}>📞</Typography>
-            </Box>
-            <Typography variant="body2">{companyInfo.phone}</Typography>
-          </Grid>
-          <Grid item xs={4} sx={{ display: "flex", alignItems: "center" }}>
-            <Box
-              sx={{
-                width: 32,
-                height: 32,
-                backgroundColor: "#1565c0",
-                borderRadius: "4px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                mr: 1,
-              }}
-            >
-              <Typography sx={{ color: "white", fontSize: "14px" }}>✉️</Typography>
-            </Box>
-            <Typography variant="body2">{companyInfo.email}</Typography>
-          </Grid>
-          <Grid item xs={4} sx={{ display: "flex", alignItems: "center" }}>
-            <Box
-              sx={{
-                width: 32,
-                height: 32,
-                backgroundColor: "#1565c0",
-                borderRadius: "4px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                mr: 1,
-              }}
-            >
-              <Typography sx={{ color: "white", fontSize: "14px" }}>📍</Typography>
-            </Box>
-            <Typography variant="body2">{companyInfo.location}</Typography>
-          </Grid>
-        </Grid>
-
-        {/* Blue footer with diagonal design */}
-        <Box
-          sx={{
-            position: "relative",
-            backgroundColor: "#1565c0",
-            height: "40px",
-            mt: 2,
-            "&::after": {
-              content: '""',
-              position: "absolute",
-              right: 0,
-              bottom: 0,
-              width: "150px",
-              height: "100%",
-              backgroundColor: "#0d47a1",
-              clipPath: "polygon(20% 0, 100% 0, 100% 100%, 0 100%)",
-            },
-          }}
-        />
-      </Box>
-    </Box>
+          {renderFooter()}
+        </Box>
+      ))}
+    </div>
   )
 }
 
