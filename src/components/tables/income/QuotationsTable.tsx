@@ -33,6 +33,7 @@ import {
   ForwardToInbox,
   ManageSearch,
   Add,
+  Visibility,
 } from "@mui/icons-material";
 import { formatNumber } from "@/utils/utils";
 import FloatingButton from "@/components/shared/FloatingButton";
@@ -133,6 +134,14 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ }) => {
             onClick={() => router.push(`/${localActive}/protected/income/quotation/edit-quotation/${params.row.documentId}`)}
           >
             <EditCalendar />
+          </IconButton>
+
+          <IconButton
+            size="small"
+            color="primary"
+            onClick={() => router.push(`/${localActive}/protected/income/quotation/preview/${params.row.documentId}`)}
+          >
+            <Visibility />
           </IconButton>
 
           <IconButton

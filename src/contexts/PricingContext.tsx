@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react"
+import { createContext, useContext, useEffect, useState, useCallback, type ReactNode } from "react"
 
 export interface SubItem {
   id: string
@@ -180,26 +180,26 @@ export const PricingProvider: React.FC<PricingProviderProps> = ({ children }) =>
     console.log(categories)
   }, [categories])
 
-  const addCategory = (name: string) => {
+  const addCategory = useCallback((name: string) => {
     const newCategory: Category = {
       id: `cat-${Date.now()}`,
       name,
       subItems: [],
     }
-    setCategories([...categories, newCategory])
-  }
+    setCategories((prev) => [...prev, newCategory])
+  }, [])
 
-  const removeCategory = (categoryId: string) => {
-    setCategories(categories.filter((cat) => cat.id !== categoryId))
-  }
+  const removeCategory = useCallback((categoryId: string) => {
+    setCategories((prev) => prev.filter((cat) => cat.id !== categoryId))
+  }, [])
 
-  const updateCategoryName = (categoryId: string, name: string) => {
-    setCategories(categories.map((cat) => (cat.id === categoryId ? { ...cat, name } : cat)))
-  }
+  const updateCategoryName = useCallback((categoryId: string, name: string) => {
+    setCategories((prev) => prev.map((cat) => (cat.id === categoryId ? { ...cat, name } : cat)))
+  }, [])
 
-  const addSubItem = (categoryId: string, subItem: Omit<SubItem, "id">) => {
-    setCategories(
-      categories.map((cat) =>
+  const addSubItem = useCallback((categoryId: string, subItem: Omit<SubItem, "id">) => {
+    setCategories((prev) =>
+      prev.map((cat) =>
         cat.id === categoryId
           ? {
             ...cat,
@@ -208,11 +208,11 @@ export const PricingProvider: React.FC<PricingProviderProps> = ({ children }) =>
           : cat,
       ),
     )
-  }
+  }, [])
 
-  const removeSubItem = (categoryId: string, subItemId: string) => {
-    setCategories(
-      categories.map((cat) =>
+  const removeSubItem = useCallback((categoryId: string, subItemId: string) => {
+    setCategories((prev) =>
+      prev.map((cat) =>
         cat.id === categoryId
           ? {
             ...cat,
@@ -221,11 +221,11 @@ export const PricingProvider: React.FC<PricingProviderProps> = ({ children }) =>
           : cat,
       ),
     )
-  }
+  }, [])
 
-  const updateSubItem = (categoryId: string, subItemId: string, subItem: Partial<SubItem>) => {
-    setCategories(
-      categories.map((cat) =>
+  const updateSubItem = useCallback((categoryId: string, subItemId: string, subItem: Partial<SubItem>) => {
+    setCategories((prev) =>
+      prev.map((cat) =>
         cat.id === categoryId
           ? {
             ...cat,
@@ -234,43 +234,46 @@ export const PricingProvider: React.FC<PricingProviderProps> = ({ children }) =>
           : cat,
       ),
     )
-  }
+  }, [])
 
-  const getCategoryTotal = (categoryId: string): number => {
+  const getCategoryTotal = useCallback((categoryId: string): number => {
     const category = categories.find((cat) => cat.id === categoryId)
     if (!category) return 0
     return category.subItems.reduce((sum, item) => sum + item.qty * item.pricePerUnit, 0)
-  }
+  }, [categories])
 
-  const getTotalPrice = (): number => {
-    return categories.reduce((sum, cat) => sum + getCategoryTotal(cat.id), 0)
-  }
+  const getTotalPrice = useCallback(() => {
+    return categories.reduce((sum, cat) => {
+      const categoryTotal = cat.subItems.reduce((s, item) => s + (item.qty * item.pricePerUnit), 0)
+      return sum + categoryTotal
+    }, 0)
+  }, [categories])
 
-  const getSubtotal = (): number => {
+  const getSubtotal = useCallback(() => {
     return getTotalPrice()
-  }
+  }, [getTotalPrice])
 
-  const getTotalAfterDiscount = (): number => {
+  const getTotalAfterDiscount = useCallback(() => {
     const subtotal = getSubtotal()
     return subtotal - discount
-  }
+  }, [getSubtotal, discount])
 
-  const getTaxAmount = (): number => {
+  const getTaxAmount = useCallback(() => {
     const totalAfterDiscount = getTotalAfterDiscount()
     return vatIncluded ? (totalAfterDiscount * taxRate) / 100 : 0
-  }
+  }, [getTotalAfterDiscount, vatIncluded, taxRate])
 
-  const getGrandTotal = (): number => {
+  const getGrandTotal = useCallback(() => {
     const totalAfterDiscount = getTotalAfterDiscount()
     const taxAmount = getTaxAmount()
     return totalAfterDiscount + taxAmount
-  }
+  }, [getTotalAfterDiscount, getTaxAmount])
 
-  const loadData = (categories: Category[], discount: number, vatIncluded: boolean) => {
+  const loadData = useCallback((categories: Category[], discount: number, vatIncluded: boolean) => {
     setCategories(categories)
     setDiscount(discount)
     setVatIncluded(vatIncluded)
-  }
+  }, [])
 
   return (
     <PricingContext.Provider

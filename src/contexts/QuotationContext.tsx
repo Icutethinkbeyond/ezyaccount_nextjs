@@ -6,6 +6,7 @@ import React, {
   createContext,
   useContext,
   useState,
+  useCallback,
   ReactNode,
   useEffect,
 } from "react";
@@ -401,9 +402,9 @@ export const QuotationProvider = ({ children }: { children: ReactNode }) => {
         setFooterForm,
         headForm,
         setHeadForm,
-        loadHeadForm: (data: Partial<HeadForm>) => {
+        loadHeadForm: useCallback((data: Partial<HeadForm>) => {
           setHeadForm(prev => ({ ...prev, ...data }));
-        }
+        }, [])
       }}
     >
       {children}
