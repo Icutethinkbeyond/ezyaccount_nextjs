@@ -131,9 +131,7 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
           {/* Header with blue diagonal design */}
           <Box
             sx={{
-              position: "absolute",
-              top: 0,
-              left: 0,
+              position: "relative",
               backgroundColor: "#1565c0",
               height: "60px",
               width: "100%",
@@ -326,14 +324,11 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
   const renderFooter = () => (
     <Box
       sx={{
-        position: "absolute",
-        bottom: 0,
-        left: 0,
-        width: "100%",
+        marginTop: "auto",
         pt: 1,
       }}
     >
-      <Grid container spacing={2} sx={{ mb: 2, px: "15mm" }}>
+      <Grid container spacing={2} sx={{ mb: 2 }}>
         <Grid item xs={4} sx={{ display: "flex", alignItems: "center" }}>
           <Box
             sx={{
@@ -410,116 +405,229 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
   )
 
   return (
-    <div>
-      {pages.map((pageRows, pageIndex) => (
-        <Box
-          key={pageIndex}
-          sx={{
-            width: "210mm",
-            minHeight: "297mm",
-            position: "relative",
-            padding: "20mm",
-            margin: "0 auto",
-            marginBottom: "10mm",
-            backgroundColor: "white",
-            boxShadow: "0 0 10px rgba(0,0,0,0.1)",
-            display: "flex",
-            flexDirection: "column",
-            "@media print": {
-              boxShadow: "none",
-              margin: 0,
+    <>
+      {/* Global print styles */}
+      <style jsx global>{`
+        @media print {
+          /* Hide navigation and sidebar elements */
+          .MuiDrawer-root,
+          .MuiAppBar-root,
+          nav,
+          aside,
+          .no-print,
+          [class*="Sidebar"],
+          [class*="sidebar"],
+          [class*="Drawer"],
+          [class*="drawer"],
+          [class*="Navigation"],
+          [class*="navigation"] {
+            display: none !important;
+            width: 0 !important;
+            height: 0 !important;
+            visibility: hidden !important;
+            position: absolute !important;
+            left: -9999px !important;
+          }
+          
+          /* Reset body and html for print */
+          html, body {
+            margin: 0 !important;
+            padding: 0 !important;
+            width: 210mm !important;
+            height: 297mm !important;
+            background: white !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+            overflow: visible !important;
+          }
+          
+          /* Make all parent containers visible */
+          body *, 
+          body *::before, 
+          body *::after {
+            visibility: visible !important;
+          }
+          
+          /* Reset ALL parent wrappers to not interfere */
+          #__next,
+          main, 
+          [role="main"],
+          .MuiContainer-root,
+          .MuiBox-root:not(.print-page) {
+            margin: 0 !important;
+            padding: 0 !important;
+            width: 100% !important;
+            max-width: none !important;
+            min-height: auto !important;
+            margin-left: 0 !important;
+            transform: none !important;
+          }
+          
+          /* Print container styles */
+          .print-container {
+            display: block !important;
+            visibility: visible !important;
+            position: absolute !important;
+            left: 0 !important;
+            top: 0 !important;
+            width: 210mm !important;
+            background: white !important;
+            margin: 0 !important;
+            padding: 0 !important;
+          }
+          
+          /* A4 page settings - force exact size */
+          @page {
+            size: 210mm 297mm;
+            margin: 0;
+          }
+          
+          /* Each print page - exact A4 dimensions */
+          .print-page {
+            width: 210mm !important;
+            height: 297mm !important;
+            min-height: 297mm !important;
+            max-height: 297mm !important;
+            padding: 10mm !important;
+            margin: 0 !important;
+            page-break-after: always !important;
+            page-break-inside: avoid !important;
+            box-shadow: none !important;
+            box-sizing: border-box !important;
+            overflow: hidden !important;
+            position: relative !important;
+          }
+          
+          .print-page:last-child {
+            page-break-after: auto !important;
+          }
+        }
+        
+        /* Screen styles - show A4 preview */
+        @media screen {
+          .print-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #f0f0f0;
+            padding: 20px;
+            min-height: 100vh;
+          }
+          
+          .print-page {
+            background: white;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            margin-bottom: 20px;
+          }
+        }
+      `}</style>
+      <div className="print-container">
+        {pages.map((pageRows, pageIndex) => (
+          <Box
+            key={pageIndex}
+            className="print-page"
+            sx={{
+              width: "210mm",
+              height: "297mm",
+              position: "relative",
               padding: "15mm",
-              pageBreakAfter: pageIndex === pages.length - 1 ? "auto" : "always",
-              height: "100vh", // Force full height for footer positioning
-            },
-          }}
-        >
-          {renderPageHeader(pageIndex)}
+              margin: "0 auto",
+              marginBottom: "20px",
+              backgroundColor: "white",
+              boxShadow: "0 4px 20px rgba(0,0,0,0.15)",
+              display: "flex",
+              flexDirection: "column",
+              boxSizing: "border-box",
+              overflow: "hidden",
+            }}
+          >
+            {renderPageHeader(pageIndex)}
 
-          <TableContainer component={Paper} elevation={0} sx={{ mb: 3, flexGrow: 1 }}>
-            <Table>
-              <TableHead>
-                <TableRow sx={{ backgroundColor: "#1565c0" }}>
-                  <TableCell sx={{ color: "white", fontWeight: "bold", width: "80px" }}>NO.</TableCell>
-                  <TableCell sx={{ color: "white", fontWeight: "bold" }}>PRODUCT DESCRIPTION</TableCell>
-                  <TableCell sx={{ color: "white", fontWeight: "bold", textAlign: "center", width: "80px" }}>
-                    UNIT
-                  </TableCell>
-                  <TableCell sx={{ color: "white", fontWeight: "bold", textAlign: "center", width: "80px" }}>QTY</TableCell>
-                  <TableCell sx={{ color: "white", fontWeight: "bold", textAlign: "right", width: "120px" }}>
-                    PRICE/UNIT
-                  </TableCell>
-                  <TableCell sx={{ color: "white", fontWeight: "bold", textAlign: "right", width: "120px" }}>
-                    PRICE
-                  </TableCell>
-                  <TableCell sx={{ color: "white", fontWeight: "bold", width: "150px" }}>REMARK</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {pageRows.map((row, rowIndex) => {
-                  if (row.type === "header") {
-                    return (
-                      <TableRow key={`header-${pageIndex}-${rowIndex}`}>
-                        <TableCell
-                          colSpan={7}
-                          sx={{
-                            backgroundColor: "#1565c0",
-                            color: "white",
-                            fontWeight: "bold",
-                            py: 1,
-                          }}
-                        >
-                          {row.data.index}. {row.data.name}
-                        </TableCell>
-                      </TableRow>
-                    )
-                  } else if (row.type === "item") {
-                    const item = row.data;
-                    const itemTotal = item.qty * item.pricePerUnit
-                    return (
-                      <TableRow key={`item-${pageIndex}-${rowIndex}`}>
-                        <TableCell>
-                          {item.displayIndex}
-                        </TableCell>
-                        <TableCell>
-                          <Typography variant="body2">{item.description}</Typography>
-                        </TableCell>
-                        <TableCell sx={{ textAlign: "center" }}>{item.unit}</TableCell>
-                        <TableCell sx={{ textAlign: "center" }}>{item.qty}</TableCell>
-                        <TableCell sx={{ textAlign: "right" }}>฿{item.pricePerUnit.toLocaleString()}</TableCell>
-                        <TableCell sx={{ textAlign: "right" }}>฿{itemTotal.toLocaleString()}</TableCell>
-                        <TableCell>{item.remark}</TableCell>
-                      </TableRow>
-                    )
-                  } else if (row.type === "subtotal") {
-                    return (
-                      <TableRow key={`subtotal-${pageIndex}-${rowIndex}`}>
-                        <TableCell colSpan={5} />
-                        <TableCell sx={{ textAlign: "right", fontWeight: "bold", backgroundColor: "#f5f5f5" }}>
-                          รวม
-                        </TableCell>
-                        <TableCell sx={{ textAlign: "right", fontWeight: "bold", backgroundColor: "#f5f5f5" }}>
-                          ฿{row.data.total.toLocaleString()}
-                        </TableCell>
-                      </TableRow>
-                    )
-                  }
-                  return null
-                })}
-              </TableBody>
-            </Table>
-          </TableContainer>
+            <TableContainer component={Paper} elevation={0} sx={{ mb: 3, flexGrow: 1 }}>
+              <Table>
+                <TableHead>
+                  <TableRow sx={{ backgroundColor: "#1565c0" }}>
+                    <TableCell sx={{ color: "white", fontWeight: "bold", width: "80px" }}>NO.</TableCell>
+                    <TableCell sx={{ color: "white", fontWeight: "bold" }}>PRODUCT DESCRIPTION</TableCell>
+                    <TableCell sx={{ color: "white", fontWeight: "bold", textAlign: "center", width: "80px" }}>
+                      UNIT
+                    </TableCell>
+                    <TableCell sx={{ color: "white", fontWeight: "bold", textAlign: "center", width: "80px" }}>QTY</TableCell>
+                    <TableCell sx={{ color: "white", fontWeight: "bold", textAlign: "right", width: "120px" }}>
+                      PRICE/UNIT
+                    </TableCell>
+                    <TableCell sx={{ color: "white", fontWeight: "bold", textAlign: "right", width: "120px" }}>
+                      PRICE
+                    </TableCell>
+                    <TableCell sx={{ color: "white", fontWeight: "bold", width: "150px" }}>REMARK</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {pageRows.map((row, rowIndex) => {
+                    if (row.type === "header") {
+                      return (
+                        <TableRow key={`header-${pageIndex}-${rowIndex}`}>
+                          <TableCell
+                            colSpan={7}
+                            sx={{
+                              backgroundColor: "#1565c0",
+                              color: "white",
+                              fontWeight: "bold",
+                              py: 1,
+                            }}
+                          >
+                            {row.data.index}. {row.data.name}
+                          </TableCell>
+                        </TableRow>
+                      )
+                    } else if (row.type === "item") {
+                      const item = row.data;
+                      const itemTotal = item.qty * item.pricePerUnit
+                      return (
+                        <TableRow key={`item-${pageIndex}-${rowIndex}`}>
+                          <TableCell>
+                            {item.displayIndex}
+                          </TableCell>
+                          <TableCell>
+                            <Typography variant="body2">{item.description}</Typography>
+                          </TableCell>
+                          <TableCell sx={{ textAlign: "center" }}>{item.unit}</TableCell>
+                          <TableCell sx={{ textAlign: "center" }}>{item.qty}</TableCell>
+                          <TableCell sx={{ textAlign: "right" }}>฿{item.pricePerUnit.toLocaleString()}</TableCell>
+                          <TableCell sx={{ textAlign: "right" }}>฿{itemTotal.toLocaleString()}</TableCell>
+                          <TableCell>{item.remark}</TableCell>
+                        </TableRow>
+                      )
+                    } else if (row.type === "subtotal") {
+                      return (
+                        <TableRow key={`subtotal-${pageIndex}-${rowIndex}`}>
+                          <TableCell colSpan={5} />
+                          <TableCell sx={{ textAlign: "right", fontWeight: "bold", backgroundColor: "#f5f5f5" }}>
+                            รวม
+                          </TableCell>
+                          <TableCell sx={{ textAlign: "right", fontWeight: "bold", backgroundColor: "#f5f5f5" }}>
+                            ฿{row.data.total.toLocaleString()}
+                          </TableCell>
+                        </TableRow>
+                      )
+                    }
+                    return null
+                  })}
+                </TableBody>
+              </Table>
+            </TableContainer>
 
-          {/* Render Summary only on the last page */}
-          {pageIndex === pages.length - 1 && renderSummarySection()}
+            {/* Render Summary only on the last page */}
+            {pageIndex === pages.length - 1 && renderSummarySection()}
 
-          {/* Add a spacer to push footer to bottom if not last page or if summary doesn't fill */}
-          {/* {pageIndex !== pages.length -1 && <Box sx={{ flexGrow: 1 }} />} */}
+            {/* Add a spacer to push footer to bottom if not last page or if summary doesn't fill */}
+            {/* {pageIndex !== pages.length -1 && <Box sx={{ flexGrow: 1 }} />} */}
 
-          {renderFooter()}
-        </Box>
-      ))}
-    </div>
+            {renderFooter()}
+          </Box>
+        ))}
+      </div>
+    </>
   )
 }
 
