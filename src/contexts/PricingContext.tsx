@@ -37,8 +37,11 @@ interface PricingContextType {
   getSubtotal: () => number
   getTotalAfterDiscount: () => number
   getTaxAmount: () => number
+  withholdingTaxRate: number
+  setWithholdingTaxRate: (rate: number) => void
+  getWithholdingTaxAmount: () => number
   getGrandTotal: () => number
-  loadData: (categories: Category[], discount: number, vatIncluded: boolean) => void
+  loadData: (categories: Category[], discount: number, vatIncluded: boolean, withholdingTaxRate?: number) => void
 }
 
 const PricingContext = createContext<PricingContextType | undefined>(undefined)
@@ -174,6 +177,7 @@ export const PricingProvider: React.FC<PricingProviderProps> = ({ children }) =>
   const [discount, setDiscount] = useState<number>(0)
   const [taxRate, setTaxRate] = useState<number>(7)
   const [vatIncluded, setVatIncluded] = useState<boolean>(false)
+  const [withholdingTaxRate, setWithholdingTaxRate] = useState<number>(0)
 
 
   useEffect(() => {
@@ -263,16 +267,23 @@ export const PricingProvider: React.FC<PricingProviderProps> = ({ children }) =>
     return vatIncluded ? (totalAfterDiscount * taxRate) / 100 : 0
   }, [getTotalAfterDiscount, vatIncluded, taxRate])
 
+  const getWithholdingTaxAmount = useCallback(() => {
+    const totalAfterDiscount = getTotalAfterDiscount()
+    return (totalAfterDiscount * withholdingTaxRate) / 100
+  }, [getTotalAfterDiscount, withholdingTaxRate])
+
   const getGrandTotal = useCallback(() => {
     const totalAfterDiscount = getTotalAfterDiscount()
     const taxAmount = getTaxAmount()
-    return totalAfterDiscount + taxAmount
-  }, [getTotalAfterDiscount, getTaxAmount])
+    const withholdingTaxAmount = getWithholdingTaxAmount()
+    return totalAfterDiscount + taxAmount - withholdingTaxAmount
+  }, [getTotalAfterDiscount, getTaxAmount, getWithholdingTaxAmount])
 
-  const loadData = useCallback((categories: Category[], discount: number, vatIncluded: boolean) => {
+  const loadData = useCallback((categories: Category[], discount: number, vatIncluded: boolean, withholdingTaxRate: number = 0) => {
     setCategories(categories)
     setDiscount(discount)
     setVatIncluded(vatIncluded)
+    setWithholdingTaxRate(withholdingTaxRate)
   }, [])
 
   return (
@@ -293,6 +304,9 @@ export const PricingProvider: React.FC<PricingProviderProps> = ({ children }) =>
         setDiscount,
         setTaxRate,
         setVatIncluded,
+        withholdingTaxRate,
+        setWithholdingTaxRate,
+        getWithholdingTaxAmount,
         getSubtotal,
         getTotalAfterDiscount,
         getTaxAmount,

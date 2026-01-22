@@ -154,22 +154,22 @@ const PricingTable: React.FC = () => {
                       value={category.name}
                       onChange={(e) => handleUpdateCategoryName(category.id, e.target.value)}
                       variant="standard"
-                      // sx={{
-                      //   input: {
-                      //     color: "white",
-                      //     fontWeight: "bold",
-                      //     fontSize: "1.1rem",
-                      //   },
-                      //   "& .MuiInput-underline:before": {
-                      //     borderBottomColor: "rgba(255, 255, 255, 0.5)",
-                      //   },
-                      //   "& .MuiInput-underline:hover:before": {
-                      //     borderBottomColor: "rgba(255, 255, 255, 0.8)",
-                      //   },
-                      //   "& .MuiInput-underline:after": {
-                      //     borderBottomColor: "white",
-                      //   },
-                      // }}
+                    // sx={{
+                    //   input: {
+                    //     color: "white",
+                    //     fontWeight: "bold",
+                    //     fontSize: "1.1rem",
+                    //   },
+                    //   "& .MuiInput-underline:before": {
+                    //     borderBottomColor: "rgba(255, 255, 255, 0.5)",
+                    //   },
+                    //   "& .MuiInput-underline:hover:before": {
+                    //     borderBottomColor: "rgba(255, 255, 255, 0.8)",
+                    //   },
+                    //   "& .MuiInput-underline:after": {
+                    //     borderBottomColor: "white",
+                    //   },
+                    // }}
                     />
                   </TableCell>
                   <TableCell sx={{ textAlign: "right" }}>
@@ -192,11 +192,19 @@ const PricingTable: React.FC = () => {
                       <TableCell>
                         <TextField
                           fullWidth
+                          multiline
+                          minRows={2}
                           placeholder="รายละเอียดสินค้า"
                           value={item.description}
                           onChange={(e) => updateSubItem(category.id, item.id, { description: e.target.value })}
-                          variant="standard"
+                          variant="outlined"
                           size="small"
+                          sx={{
+                            '& .MuiInputBase-root': {
+                              fontSize: '0.875rem',
+                              lineHeight: 1.5,
+                            }
+                          }}
                         />
                       </TableCell>
                       <TableCell>

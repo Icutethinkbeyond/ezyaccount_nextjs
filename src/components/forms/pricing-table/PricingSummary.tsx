@@ -46,19 +46,18 @@ const PricingSummary: React.FC<PricingSummaryProps> = ({ isEdit = false, quotati
     vatIncluded,     // คิด VAT หรือไม่
     setVatIncluded,  // setter VAT
     taxRate,         // อัตราภาษี (%)
+    withholdingTaxRate,
+    setWithholdingTaxRate,
+    getWithholdingTaxAmount,
   } = usePricingContext();
 
   // ข้อมูลหัวเอกสาร (บริษัท / ผู้ติดต่อ)
-  const { headForm } = useQuotationListContext();
+  const { headForm, setHeadForm } = useQuotationListContext();
 
   // หมวดสินค้าและรายการย่อย (ใช้สำหรับบันทึกลง DB)
   const { categories } = usePricingContext();
 
-  /**
-   * ภาษีหัก ณ ที่จ่าย
-   * ใช้แค่ในหน้านี้ (ยังไม่จำเป็นต้องอยู่ใน Context)
-   */
-  const [withholdingTaxRate, setWithholdingTaxRate] = useState<number>(0);
+
 
   /**
    * ======================
@@ -72,7 +71,7 @@ const PricingSummary: React.FC<PricingSummaryProps> = ({ isEdit = false, quotati
     : 0;
 
   const totalWithVat = priceAfterDiscount + vat;       // รวม VAT
-  const withholdingTax = (priceAfterDiscount * withholdingTaxRate) / 100; // ภาษี ณ ที่จ่าย
+  const withholdingTax = getWithholdingTaxAmount(); // ภาษี ณ ที่จ่าย
   const finalTotal = totalWithVat - withholdingTax;    // ยอดสุทธิที่ต้องชำระ
 
   /**
@@ -111,12 +110,14 @@ const PricingSummary: React.FC<PricingSummaryProps> = ({ isEdit = false, quotati
         contactorTel: headForm.contactorTel,
         contactorEmail: headForm.contactorEmail,
         contactorAddress: headForm.contactorAddress,
+        note: headForm.note, // บันทึกหมายเหตุลง DB
 
         // ข้อมูลการเงิน
         includeVat: vatIncluded,
         taxRate: 7,                  // อัตรา VAT (ปัจจุบันใช้ 7%)
         globalDiscount: discount,    // ส่วนลดรวม
         withholdingTax: withholdingTax, // ภาษีหัก ณ ที่จ่าย
+        withholdingTaxRate: withholdingTaxRate, // อัตราภาษีหัก ณ ที่จ่าย
 
         // รายการสินค้า / บริการ
         categories: categories.map((cat) => ({
@@ -265,6 +266,26 @@ const PricingSummary: React.FC<PricingSummaryProps> = ({ isEdit = false, quotati
         </Typography>
       </Box>
 
+      <Divider sx={{ my: 2 }} />
+
+      {/* หมายเหตุ */}
+      <Box sx={{ mb: 2 }}>
+        <Typography variant="subtitle2" fontWeight="bold" gutterBottom>
+          หมายเหตุ (Notes)
+        </Typography>
+        <TextField
+          fullWidth
+          multiline
+          minRows={3}
+          placeholder="ระบุหมายเหตุที่ต้องการให้แสดงในใบเสนอราคา..."
+          value={headForm.note || ""}
+          onChange={(e) => setHeadForm({ ...headForm, note: e.target.value })}
+          variant="outlined"
+          size="small"
+          sx={{ bgcolor: "white" }}
+        />
+      </Box>
+
       {/* ยอดสุทธิ */}
       <Box
         sx={{
@@ -304,7 +325,7 @@ const PricingSummary: React.FC<PricingSummaryProps> = ({ isEdit = false, quotati
           บันทึกใบเสนอราคา
         </Button>
       </Box>
-    </Paper>
+    </Paper >
   );
 };
 
