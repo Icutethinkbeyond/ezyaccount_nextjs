@@ -10,7 +10,7 @@ import { usePricingContext } from "@/contexts/PricingContext";
 import { useQuotationListContext } from "@/contexts/QuotationContext";
 import { useBreadcrumbContext } from "@/contexts/BreadcrumbContext";
 import { useRouter } from "next/navigation";
-import HeaderEditForm from "@/components/forms/income/HeaderForm";
+import HeaderEditForm from "@/components/forms/income/HeaderEditForm";
 
 function EditQuotation({ params }: { params: { id: string } }) {
   const { loadData } = usePricingContext();
