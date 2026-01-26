@@ -267,6 +267,7 @@ model DocumentCategory {
 model DocumentItem {
   itemId String @id @default(auto()) @map("_id") @db.ObjectId
   
+  name         String? // ชื่อสินค้า
   description  String  // รายละเอียด
   unit         String  // หน่วย
   qty          Float   @default(1)

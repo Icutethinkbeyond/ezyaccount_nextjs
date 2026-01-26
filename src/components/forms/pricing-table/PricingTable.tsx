@@ -25,6 +25,7 @@ import { calculateSubItemTotal } from "@/utils/utils"
 
 interface SubItem {
   id: string
+  name: string
   description: string
   unit: string
   qty: number
@@ -75,6 +76,7 @@ const PricingTable: React.FC = () => {
 
   const handleAddSubItem = (categoryId: string) => {
     addSubItem(categoryId, {
+      name: "",
       description: "",
       unit: "",
       qty: 0,
@@ -154,22 +156,26 @@ const PricingTable: React.FC = () => {
                       value={category.name}
                       onChange={(e) => handleUpdateCategoryName(category.id, e.target.value)}
                       variant="standard"
-                    // sx={{
-                    //   input: {
-                    //     color: "white",
-                    //     fontWeight: "bold",
-                    //     fontSize: "1.1rem",
-                    //   },
-                    //   "& .MuiInput-underline:before": {
-                    //     borderBottomColor: "rgba(255, 255, 255, 0.5)",
-                    //   },
-                    //   "& .MuiInput-underline:hover:before": {
-                    //     borderBottomColor: "rgba(255, 255, 255, 0.8)",
-                    //   },
-                    //   "& .MuiInput-underline:after": {
-                    //     borderBottomColor: "white",
-                    //   },
-                    // }}
+                      sx={{
+                        '& .MuiInputBase-input': {
+                          color: "white",
+                          fontWeight: "bold",
+                          fontSize: "1.1rem",
+                        },
+                        '& .MuiInput-underline:before': {
+                          borderBottomColor: "rgba(255, 255, 255, 0.5)",
+                        },
+                        '& .MuiInput-underline:hover:before': {
+                          borderBottomColor: "rgba(255, 255, 255, 0.8)",
+                        },
+                        '& .MuiInput-underline:after': {
+                          borderBottomColor: "white",
+                        },
+                        '& .MuiInputBase-input::placeholder': {
+                          color: "rgba(255, 255, 255, 0.7)",
+                          opacity: 1,
+                        },
+                      }}
                     />
                   </TableCell>
                   <TableCell sx={{ textAlign: "right" }}>
@@ -185,84 +191,107 @@ const PricingTable: React.FC = () => {
                 {/* Sub Items */}
                 {isCategoryExpanded(category.id) &&
                   category.subItems.map((item, itemIndex) => (
-                    <TableRow key={item.id} hover>
-                      <TableCell sx={{ fontSize: "0.9rem" }}>
-                        {catIndex + 1}.{itemIndex + 1}
-                      </TableCell>
-                      <TableCell>
-                        <TextField
-                          fullWidth
-                          multiline
-                          minRows={2}
-                          placeholder="รายละเอียดสินค้า"
-                          value={item.description}
-                          onChange={(e) => updateSubItem(category.id, item.id, { description: e.target.value })}
-                          variant="outlined"
-                          size="small"
-                          sx={{
-                            '& .MuiInputBase-root': {
-                              fontSize: '0.875rem',
-                              lineHeight: 1.5,
+                    <React.Fragment key={item.id}>
+                      {/* Product Name Row */}
+                      <TableRow sx={{ bgcolor: "#f0f7ff" }}>
+                        <TableCell sx={{ fontWeight: "bold", fontSize: "1.1rem" }}>
+                          {catIndex + 1}.{itemIndex + 1}
+                        </TableCell>
+                        <TableCell colSpan={6}>
+                          <TextField
+                            fullWidth
+                            placeholder="ชื่อสินค้า"
+                            value={item.name}
+                            onChange={(e) => updateSubItem(category.id, item.id, { name: e.target.value })}
+                            variant="standard"
+                            sx={{
+                              '& .MuiInputBase-input': {
+                                fontWeight: "bold",
+                                fontSize: "1.1rem",
+                              },
+                            }}
+                          />
+                        </TableCell>
+                        <TableCell>
+                          <IconButton size="small" onClick={() => removeSubItem(category.id, item.id)} color="error">
+                            <DeleteIcon fontSize="small" />
+                          </IconButton>
+                        </TableCell>
+                      </TableRow>
+                      {/* Product Details Row */}
+                      <TableRow hover>
+                        <TableCell />
+                        <TableCell>
+                          <TextField
+                            fullWidth
+                            multiline
+                            minRows={2}
+                            placeholder="รายละเอียดสินค้า"
+                            value={item.description}
+                            onChange={(e) => updateSubItem(category.id, item.id, { description: e.target.value })}
+                            variant="outlined"
+                            size="small"
+                            sx={{
+                              '& .MuiInputBase-root': {
+                                fontSize: '0.875rem',
+                                lineHeight: 1.5,
+                              }
+                            }}
+                          />
+                        </TableCell>
+                        <TableCell>
+                          <TextField
+                            fullWidth
+                            placeholder="หน่วย"
+                            value={item.unit}
+                            onChange={(e) => updateSubItem(category.id, item.id, { unit: e.target.value })}
+                            variant="standard"
+                            size="small"
+                          />
+                        </TableCell>
+                        <TableCell>
+                          <TextField
+                            fullWidth
+                            type="number"
+                            value={item.qty || ""}
+                            onChange={(e) => updateSubItem(category.id, item.id, { qty: Number(e.target.value) })}
+                            variant="standard"
+                            size="small"
+                          />
+                        </TableCell>
+                        <TableCell>
+                          <TextField
+                            fullWidth
+                            type="number"
+                            value={item.pricePerUnit || ""}
+                            onChange={(e) =>
+                              updateSubItem(category.id, item.id, { pricePerUnit: Number(e.target.value) })
                             }
-                          }}
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <TextField
-                          fullWidth
-                          placeholder="หน่วย"
-                          value={item.unit}
-                          onChange={(e) => updateSubItem(category.id, item.id, { unit: e.target.value })}
-                          variant="standard"
-                          size="small"
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <TextField
-                          fullWidth
-                          type="number"
-                          value={item.qty || ""}
-                          onChange={(e) => updateSubItem(category.id, item.id, { qty: Number(e.target.value) })}
-                          variant="standard"
-                          size="small"
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <TextField
-                          fullWidth
-                          type="number"
-                          value={item.pricePerUnit || ""}
-                          onChange={(e) =>
-                            updateSubItem(category.id, item.id, { pricePerUnit: Number(e.target.value) })
-                          }
-                          variant="standard"
-                          size="small"
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <Typography variant="body2">
-                          {calculateSubItemTotal(item.qty, item.pricePerUnit).toLocaleString("th-TH", {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2,
-                          })}
-                        </Typography>
-                      </TableCell>
-                      <TableCell>
-                        <TextField
-                          fullWidth
-                          placeholder="หมายเหตุ"
-                          value={item.remark}
-                          onChange={(e) => updateSubItem(category.id, item.id, { remark: e.target.value })}
-                          variant="standard"
-                          size="small"
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <IconButton size="small" onClick={() => removeSubItem(category.id, item.id)} color="error">
-                          <DeleteIcon fontSize="small" />
-                        </IconButton>
-                      </TableCell>
-                    </TableRow>
+                            variant="standard"
+                            size="small"
+                          />
+                        </TableCell>
+                        <TableCell>
+                          <Typography variant="body2">
+                            {calculateSubItemTotal(item.qty, item.pricePerUnit).toLocaleString("th-TH", {
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2,
+                            })}
+                          </Typography>
+                        </TableCell>
+                        <TableCell>
+                          <TextField
+                            fullWidth
+                            placeholder="หมายเหตุ"
+                            value={item.remark}
+                            onChange={(e) => updateSubItem(category.id, item.id, { remark: e.target.value })}
+                            variant="standard"
+                            size="small"
+                          />
+                        </TableCell>
+                        <TableCell />
+                      </TableRow>
+                    </React.Fragment>
                   ))}
 
                 {/* Add Sub Item Button */}
