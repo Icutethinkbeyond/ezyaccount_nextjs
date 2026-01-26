@@ -50,6 +50,7 @@ export default function QuotationPreviewPage({ params }: { params: { id: string 
                         name: cat.name,
                         subItems: cat.items?.map((item: any, itemIndex: number) => ({
                             id: `item-${catIndex + 1}-${itemIndex + 1}`,
+                            name: item.name || "",
                             description: item.description,
                             unit: item.unit || "ชิ้น",
                             qty: item.qty,

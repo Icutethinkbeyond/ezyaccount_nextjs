@@ -40,8 +40,9 @@ interface InvoiceProps {
   termsAndConditions?: string
 }
 
-const ITEMS_PER_PAGE_FIRST = 10
-const ITEMS_PER_PAGE_OTHER = 16
+// Adjusted for new layout where each item takes 2 rows (name + details)
+const ROWS_PER_PAGE_FIRST = 8
+const ROWS_PER_PAGE_OTHER = 14
 
 const InvoicePrint: React.FC<InvoiceProps> = ({
   invoiceNumber = "#123456",
@@ -80,7 +81,7 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
 
   // Flatten logic to handle pagination
   const pages = useMemo(() => {
-    const flattenedRows: Array<{ type: "header" | "item" | "subtotal"; data?: any }> = []
+    const flattenedRows: Array<{ type: "header" | "item_name" | "item_details" | "subtotal"; data?: any }> = []
 
     categories.forEach((category, catIndex) => {
       // Add Category Header
@@ -89,11 +90,17 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
         data: { name: category.name, index: catIndex + 1, id: category.id },
       })
 
-      // Add Items
+      // Add Items - now creates two rows per item: name row and details row
       category.subItems.forEach((item, itemIndex) => {
+        // Name row
         flattenedRows.push({
-          type: "item",
+          type: "item_name",
           data: { ...item, displayIndex: `${catIndex + 1}.${itemIndex + 1}` },
+        })
+        // Details row
+        flattenedRows.push({
+          type: "item_details",
+          data: { ...item },
         })
       })
 
@@ -106,13 +113,13 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
 
     const resultPages: Array<typeof flattenedRows> = []
     let currentPage: typeof flattenedRows = []
-    let currentLimit = ITEMS_PER_PAGE_FIRST
+    let currentLimit = ROWS_PER_PAGE_FIRST
 
     flattenedRows.forEach((row, index) => {
       if (currentPage.length >= currentLimit) {
         resultPages.push(currentPage)
         currentPage = []
-        currentLimit = ITEMS_PER_PAGE_OTHER
+        currentLimit = ROWS_PER_PAGE_OTHER
       }
       currentPage.push(row)
     })
@@ -612,16 +619,31 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
                           </TableCell>
                         </TableRow>
                       )
-                    } else if (row.type === "item") {
+                    } else if (row.type === "item_name") {
+                      const item = row.data;
+                      return (
+                        <TableRow key={`item-name-${pageIndex}-${rowIndex}`} sx={{ bgcolor: "#f8f9fa" }}>
+                          <TableCell sx={{ fontWeight: "bold" }}>
+                            {item.displayIndex}
+                          </TableCell>
+                          <TableCell colSpan={5} sx={{ fontWeight: "bold" }}>
+                            <Typography variant="body2" sx={{ fontWeight: "bold" }}>
+                              {item.name}
+                            </Typography>
+                          </TableCell>
+                          <TableCell />
+                        </TableRow>
+                      )
+                    } else if (row.type === "item_details") {
                       const item = row.data;
                       const itemTotal = item.qty * item.pricePerUnit
                       return (
-                        <TableRow key={`item-${pageIndex}-${rowIndex}`}>
+                        <TableRow key={`item-details-${pageIndex}-${rowIndex}`}>
+                          <TableCell />
                           <TableCell>
-                            {item.displayIndex}
-                          </TableCell>
-                          <TableCell>
-                            <Typography variant="body2">{item.description}</Typography>
+                            <Typography variant="body2" color="text.secondary" sx={{ pl: 2 }}>
+                              {item.description}
+                            </Typography>
                           </TableCell>
                           <TableCell sx={{ textAlign: "center" }}>{item.unit}</TableCell>
                           <TableCell sx={{ textAlign: "center" }}>{item.qty}</TableCell>
@@ -655,7 +677,7 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
             {/* Add a spacer to push footer to bottom if not last page or if summary doesn't fill */}
             {/* {pageIndex !== pages.length -1 && <Box sx={{ flexGrow: 1 }} />} */}
 
-            {renderFooter()}
+            {pageIndex === pages.length - 1 && renderFooter()}
           </Box>
         ))}
       </div>

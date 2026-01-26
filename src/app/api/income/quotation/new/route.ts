@@ -31,6 +31,7 @@ interface QuotationInput {
         name: string;
         subItems: {
             id: string;
+            name: string;
             description: string;
             unit: string;
             qty: number;
@@ -108,6 +109,7 @@ export async function POST(req: NextRequest) {
                         orderIndex: index,
                         items: {
                             create: cat.subItems.map((item, iIndex) => ({
+                                name: item.name,
                                 description: item.description,
                                 unit: item.unit,
                                 qty: item.qty,

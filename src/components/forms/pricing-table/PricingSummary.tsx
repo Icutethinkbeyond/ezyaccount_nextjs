@@ -125,6 +125,7 @@ const PricingSummary: React.FC<PricingSummaryProps> = ({ isEdit = false, quotati
           name: cat.name,
           subItems: cat.subItems.map((item) => ({
             id: item.id,
+            name: item.name,
             description: item.description,
             unit: item.unit,
             qty: item.qty,
