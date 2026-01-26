@@ -16,6 +16,7 @@ const CompanyInformationSchema = Yup.object({
 });
 
 const CompanyInformation: React.FC = () => {
+  
   const { footerForm, setFooterForm, headForm, products, setHeadForm } =
     useQuotationListContext();
 

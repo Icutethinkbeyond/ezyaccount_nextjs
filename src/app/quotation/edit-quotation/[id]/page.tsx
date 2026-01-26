@@ -1,4 +1,5 @@
 "use client";
+
 import { Grid2, Box } from "@mui/material";
 import PageContainer from "@/components/shared/PageContainer";
 import DashboardCard from "@/components/shared/DashboardCard";
@@ -9,7 +10,7 @@ import { usePricingContext } from "@/contexts/PricingContext";
 import { useQuotationListContext } from "@/contexts/QuotationContext";
 import { useBreadcrumbContext } from "@/contexts/BreadcrumbContext";
 import { useRouter } from "next/navigation";
-import HeaderForm from "@/components/forms/income/HeaderForm";
+import HeaderEditForm from "@/components/forms/income/HeaderForm";
 
 function EditQuotation({ params }: { params: { id: string } }) {
   const { loadData } = usePricingContext();
@@ -118,7 +119,7 @@ function EditQuotation({ params }: { params: { id: string } }) {
       <DashboardCard title="แก้ไขใบเสนอราคา">
         <Grid2 container spacing={3} sx={{ p: 3 }}>
           <Grid2 size={12}>
-            <HeaderForm />
+            <HeaderEditForm />
           </Grid2>
           <Grid2 size={12}>
             <PricingTable />

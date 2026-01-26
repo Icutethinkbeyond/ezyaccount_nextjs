@@ -1,10 +1,10 @@
-import React, { ChangeEvent, useEffect } from "react";
-import { Box, Typography, Grid, TextField, Grid2 } from "@mui/material";
+import React, { useEffect } from "react";
+import {  Typography, TextField, Grid2 } from "@mui/material";
 import { useQuotationListContext } from "@/contexts/QuotationContext";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
-const HeaderForm: React.FC = () => {
+const HeaderEditForm = () => {
   const { headForm, setHeadForm } = useQuotationListContext();
 
   // Validation Schema with Yup
@@ -265,7 +265,7 @@ const HeaderForm: React.FC = () => {
               </Grid2>
             </Grid2>
 
-            <Typography
+            {/* <Typography
               variant="h5"
               component="h2"
               sx={{ mb: 2, mt: 4, textAlign: "left" }}
@@ -286,7 +286,7 @@ const HeaderForm: React.FC = () => {
                 />
               </Grid2>
 
-            </Grid2>
+            </Grid2> */}
           </Form>
         );
       }}
@@ -294,4 +294,4 @@ const HeaderForm: React.FC = () => {
   );
 };
 
-export default HeaderForm;
+export default HeaderEditForm;
