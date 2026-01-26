@@ -276,15 +276,15 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
         <Box sx={{ backgroundColor: "#f5f5f5", p: 2, borderRadius: 1 }}>
           <Box sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}>
             <Typography variant="body2">Subtotal:</Typography>
-            <Typography variant="body2">฿{subtotal.toFixed(2)}</Typography>
+            <Typography variant="body2">฿{subtotal.toLocaleString("th-TH", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Typography>
           </Box>
           <Box sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}>
             <Typography variant="body2">Discount:</Typography>
-            <Typography variant="body2">฿{discount.toFixed(2)}</Typography>
+            <Typography variant="body2">฿{discount.toLocaleString("th-TH", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Typography>
           </Box>
           <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
             <Typography variant="body2">Tax ({taxRate}%):</Typography>
-            <Typography variant="body2">฿{taxAmount.toFixed(2)}</Typography>
+            <Typography variant="body2">฿{taxAmount.toLocaleString("th-TH", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Typography>
           </Box>
           <Divider sx={{ mb: 2 }} />
           <Box
@@ -300,7 +300,7 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
               Total:
             </Typography>
             <Typography variant="h6" sx={{ color: "white", fontWeight: "bold" }}>
-              ฿{grandTotal.toFixed(2)}
+              ฿{grandTotal.toLocaleString("th-TH", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </Typography>
           </Box>
         </Box>
