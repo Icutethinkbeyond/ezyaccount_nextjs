@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { Grid2 } from "@mui/material";
+import { Box, Grid2, Typography } from "@mui/material";
 
 // components
 import CompanyInformation from "@/components/forms/CompanyInformations";
@@ -10,6 +10,7 @@ import { useBreadcrumbContext } from "@/contexts/BreadcrumbContext";
 import PageContainer from "@/components/shared/PageContainer";
 import PricingTable from "@/components/forms/pricing-table/PricingTable";
 import PricingSummary from "@/components/forms/pricing-table/PricingSummary";
+import DashboardCard from "@/components/shared/DashboardCard";
 
 const NewQuotation = () => {
   const { setBreadcrumbs } = useBreadcrumbContext();
@@ -25,10 +26,10 @@ const NewQuotation = () => {
     };
   }, []);
 
-
   return (
     <PageContainer>
-      <Grid2 container spacing={3} sx={{ p: 3 }}>
+      <DashboardCard title="เพิ่มใบเสนอราคาใหม่">
+      <Grid2 container spacing={3}>
         <Grid2 size={6}>
           <CompanyInformation />
         </Grid2>
@@ -39,14 +40,13 @@ const NewQuotation = () => {
           <PricingTable />
         </Grid2>
         <Grid2 container size={12}>
-          <Grid2 size={6}>
-            {/* <DocumentFooter /> */}
-          </Grid2>
+          <Grid2 size={6}>{/* <DocumentFooter /> */}</Grid2>
           <Grid2 size={6}>
             <PricingSummary />
           </Grid2>
         </Grid2>
       </Grid2>
+      </DashboardCard>
     </PageContainer>
   );
 };

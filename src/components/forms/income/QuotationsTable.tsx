@@ -83,7 +83,7 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ }) => {
     {
       field: "keyId",
       headerName: "เลขที่เอกสาร",
-      width: 150,
+      width: 200,
       valueGetter: (value, row) => row.documentIdNo,
     },
     {
@@ -98,21 +98,21 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ }) => {
     {
       field: "contactorName",
       headerName: "ชื่อลูกค้า",
-      width: 200,
+      width: 250,
       valueGetter: (value, row) => row.contactor?.contactorName || "-",
     },
     {
       field: "repirePrice",
       headerName: "ยอดรวมสุทธิ",
-      width: 150,
+      width: 200,
       valueGetter: (value, row) => row.grandTotal?.toLocaleString(),
     },
-    {
-      field: "status",
-      headerName: "สถานะ",
-      width: 150,
-      valueGetter: (value, row) => row.documentStatus,
-    },
+    // {
+    //   field: "status",
+    //   headerName: "สถานะ",
+    //   width: 150,
+    //   valueGetter: (value, row) => row.documentStatus,
+    // },
     {
       field: "Actions",
       headerName: "",
@@ -158,10 +158,10 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ }) => {
       {/*  ใบเสนอราคา*/}
 
       <Grid2 container mb={1}>
-        <Grid2 size={6}>
-          <Box display="flex" alignItems="center" gap={2}>
-            <Typography variant="h4" component="div">
-              ใบเสนอราคา
+        <Grid2 size={12}>
+          <Box display="flex" alignItems="center" justifyContent="space-between" gap={2}>
+            <Typography variant="h3" component="div">
+              ใบเสนอราคาทั้งหมด
             </Typography>
             <Button
               variant="contained"
@@ -178,71 +178,10 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ }) => {
             </Button>
           </Box>
         </Grid2>
-        <Grid2 container size={6} justifyContent="flex-end">
-          <Button variant="contained" color="success" sx={{ height: "100%" }}>
-            Search
-          </Button>
-          <Button
-            variant="contained"
-            color="warning"
-            sx={{ ml: 1, height: "100%" }}
-          >
-            Clear All
-          </Button>
-        </Grid2>
       </Grid2>
-      <Divider />
-      <Grid2 mt={3} mb={3}>
-        <Grid2
-          direction="row"
-          container
-          spacing={3}
-          sx={{ background: "#fff" }}
-        >
-          <Grid2 size={3}>
-            <TextField
-              label="เลขเอกสาร (optional)"
-              type="text"
-              fullWidth
-              size="small"
-            />
-          </Grid2>
-          <Grid2 size={3}>
-            <TextField
-              label="ชื่อลูกค้า (optional)"
-              type="text"
-              fullWidth
-              size="small"
-            />
-          </Grid2>
+      {/* <Divider /> */}
 
-          <Grid2 size={3}>
-            <TextField
-              label="ยอดรวมสุทธิ (optional)"
-              type="text"
-              fullWidth
-              size="small"
-            />
-          </Grid2>
-          <Grid2 size={3}>
-            <FormControl fullWidth size="small">
-              <InputLabel id="demo-simple-select-label">Status</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                // value={statusBorrow}
-                label="Status"
-              >
-                <MenuItem value={"all-status"}>All Status</MenuItem>
-                <MenuItem value={"borrowed"}>Active</MenuItem>
-                <MenuItem value={"returned"}>InActive</MenuItem>
-                <MenuItem value={"damaged"}>Waiting</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid2>
-        </Grid2>
-      </Grid2>
-      <Box p={3} border="1px solid #ccc" borderRadius="8px" mb={2}>
+      <Box p={3} border="1px solid #ccc" borderRadius="8px" mb={2} mt={2}>
         <DataGrid
           initialState={{ pagination: { paginationModel } }}
           pageSizeOptions={[5, 10, 20]}
