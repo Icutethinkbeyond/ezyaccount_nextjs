@@ -655,7 +655,7 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
             {/* Add a spacer to push footer to bottom if not last page or if summary doesn't fill */}
             {/* {pageIndex !== pages.length -1 && <Box sx={{ flexGrow: 1 }} />} */}
 
-            {renderFooter()}
+            {pageIndex === pages.length - 1 && renderFooter()}
           </Box>
         ))}
       </div>
