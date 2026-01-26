@@ -456,11 +456,11 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
           }
           
           /* Reset ALL parent wrappers to not interfere */
+          /* Reset parent wrappers - removed MuiBox-root to prevent internal layout breakage */
           #__next,
           main, 
           [role="main"],
-          .MuiContainer-root,
-          .MuiBox-root:not(.print-page):not(.icon-box):not(.company-logo) {
+          .MuiContainer-root {
             margin: 0 !important;
             padding: 0 !important;
             width: 100% !important;
