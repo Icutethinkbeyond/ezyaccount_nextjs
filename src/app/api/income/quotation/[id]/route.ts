@@ -20,6 +20,7 @@ interface QuotationInput {
     taxRate: number;
     globalDiscount: number;
     withholdingTax: number;
+    note?: string;
 
     categories: {
         id: string;
@@ -161,6 +162,7 @@ export async function PATCH(
                 vatAmount: vatAmount,
                 grandTotal: grandTotal,
                 withholdingTax: data.withholdingTax,
+                note: data.note || null,
 
                 categories: {
                     create: data.categories.map((cat, index) => ({

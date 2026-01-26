@@ -285,21 +285,7 @@ const HeaderForm: React.FC = () => {
                   helperText="ฟีเจอร์แนบไฟล์ยังไม่เปิดใช้งาน"
                 />
               </Grid2>
-              <Grid2 size={{ xs: 12, sm: 6, lg: 4 }}>
-                <Field
-                  name="note"
-                  as={TextField}
-                  label="หมายเหตุ"
-                  variant="outlined"
-                  size="small"
-                  value={values.note}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  fullWidth
-                  multiline
-                  rows={3}
-                />
-              </Grid2>
+
             </Grid2>
           </Form>
         );

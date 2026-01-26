@@ -13,6 +13,7 @@ import {
   Grid,
 } from "@mui/material"
 import { usePricingContext } from "@/contexts/PricingContext"
+import { useQuotationListContext } from "@/contexts/QuotationContext"
 import { useMemo } from "react"
 
 interface InvoiceProps {
@@ -32,12 +33,7 @@ interface InvoiceProps {
     email: string
     location: string
   }
-  paymentMethod?: {
-    accountNo: string
-    accountName: string
-    branchName: string
-  }
-  termsAndConditions?: string
+  note?: string
 }
 
 // Adjusted for new layout where each item takes 2 rows (name + details)
@@ -65,15 +61,14 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
     email: "example@mail.com",
     location: "Your location here",
   },
-  paymentMethod = {
-    accountNo: "1234 5678 910",
-    accountName: "Jhone Doe",
-    branchName: "XYZ",
-  },
-  termsAndConditions = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed dip nonumy eiusmod incididunt ut labore et dolore magna aliqua.",
+  note,
 }) => {
   const { categories, getSubtotal, getTotalAfterDiscount, getTaxAmount, getGrandTotal, discount, taxRate, getCategoryTotal } =
     usePricingContext()
+
+  // Get note from QuotationContext if not passed as prop
+  const { headForm } = useQuotationListContext()
+  const displayNote = note ?? headForm.note
 
   const subtotal = getSubtotal()
   const taxAmount = getTaxAmount()
@@ -239,37 +234,11 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
   const renderSummarySection = () => (
     <Grid container spacing={3} sx={{ mt: 'auto', mb: 3 }}>
       <Grid item xs={7}>
-        <Typography variant="h6" sx={{ fontWeight: "bold", mb: 2 }}>
-          Thank You For Your Business
-        </Typography>
-
         <Typography variant="subtitle2" sx={{ fontWeight: "bold", mb: 1 }}>
-          Payment Method:
+          Notes:
         </Typography>
-        <Box sx={{ display: "flex", mb: 0.5 }}>
-          <Typography variant="body2" sx={{ width: "120px" }}>
-            Account No:
-          </Typography>
-          <Typography variant="body2">{paymentMethod.accountNo}</Typography>
-        </Box>
-        <Box sx={{ display: "flex", mb: 0.5 }}>
-          <Typography variant="body2" sx={{ width: "120px" }}>
-            Account Name:
-          </Typography>
-          <Typography variant="body2">{paymentMethod.accountName}</Typography>
-        </Box>
-        <Box sx={{ display: "flex", mb: 2 }}>
-          <Typography variant="body2" sx={{ width: "120px" }}>
-            Branch Name:
-          </Typography>
-          <Typography variant="body2">{paymentMethod.branchName}</Typography>
-        </Box>
-
-        <Typography variant="subtitle2" sx={{ fontWeight: "bold", mb: 1 }}>
-          Terms & Conditions:
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          {termsAndConditions}
+        <Typography variant="body2" color="text.secondary" sx={{ whiteSpace: 'pre-wrap' }}>
+          {displayNote || "-"}
         </Typography>
       </Grid>
       <Grid item xs={5}>

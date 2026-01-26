@@ -86,7 +86,7 @@ function EditQuotation({ params }: { params: { id: string } }) {
             ? new Date(quotation.documentCreateDate).toISOString().split('T')[0]
             : "",
           includeTax: quotation.includeVat || false,
-          note: quotation.documentDetials || "",
+          note: quotation.note || "",
         });
 
         console.log("✅ Data loaded successfully!");

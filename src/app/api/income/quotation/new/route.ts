@@ -24,6 +24,7 @@ interface QuotationInput {
     taxRate: number;
     globalDiscount: number;
     withholdingTax: number;
+    note?: string;
 
     // Items
     categories: {
@@ -101,6 +102,7 @@ export async function POST(req: NextRequest) {
                 vatAmount: vatAmount,
                 grandTotal: grandTotal,
                 withholdingTax: data.withholdingTax,
+                note: data.note || null,
 
                 // Items
                 categories: {

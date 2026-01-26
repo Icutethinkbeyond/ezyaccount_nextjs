@@ -233,6 +233,9 @@ model DocumentPaper {
   vatAmount          Float @default(0) // มูลค่าภาษี
   grandTotal         Float @default(0) // ราคาสุทธิ (Net Total)
   withholdingTax     Float @default(0) // หัก ณ ที่จ่าย (เผื่อไว้)
+  
+  // ✅ Notes field
+  note               String? // หมายเหตุ
 
   // ------------------------------------------------------------------
   // ✅ Relation to Categories (Structure from Context)
