@@ -25,7 +25,7 @@ function EditQuotation({ params }: { params: { id: string } }) {
     data: Quotation[],
     keyId: string
   ): Quotation | undefined => {
-    let _quotation = data.find((item) => item.keyId === keyId);
+    let _quotation = data.find((item) => item.keyId === parseInt(keyId));
 
     if (_quotation) {
       return _quotation;

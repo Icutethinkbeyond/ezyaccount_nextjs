@@ -58,17 +58,17 @@ const FooterForm: React.FC<FooterProps> = ({ isEdit = false }) => {
   };
 
   const handleSavePost = (status: string) => {
-    addQuotation({
-      keyId: uniqueId(),
-      ownerId: "1",
-      status: status,
-      headForm: headForm,
-      products: products,
-      summary: footerForm,
-      createDate: new Date(),
-      updateDate: new Date(),
-    });
-    router.push("/income/quotation");
+    // addQuotation({
+    //   keyId: uniqueId(),
+    //   ownerId: "1",
+    //   status: status,
+    //   headForm: headForm,
+    //   products: products,
+    //   summary: footerForm,
+    //   createDate: new Date(),
+    //   updateDate: new Date(),
+    // });
+    // router.push("/income/quotation");
   };
 
   const handleUpdatePost = () => {

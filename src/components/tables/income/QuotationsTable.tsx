@@ -35,8 +35,6 @@ import {
   ManageSearch,
   Add,
 } from "@mui/icons-material";
-import StatusChip from "@/components/shared/StatusChipCustom";
-import { formatNumber } from "@/utils/utils";
 
 interface ProductTableProps {
   data: Quotation[];

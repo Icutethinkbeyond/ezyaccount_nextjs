@@ -125,7 +125,7 @@ export const headerClean = {
   dateCreate: "",
   includeTax: false,
   note: "",
-}
+};
 
 // กำหนดประเภทของ Context
 interface ProductServiceListContextProps {
@@ -158,7 +158,7 @@ interface ProductServiceListContextProps {
   //ส่วนท้ายเอกสาร
   footerForm: FormDataFooter;
   setFooterForm: React.Dispatch<React.SetStateAction<FormDataFooter>>;
-  
+
   //ส่วนหัวเอกสาร
   headForm: HeadForm;
   setHeadForm: React.Dispatch<React.SetStateAction<HeadForm>>;
@@ -170,7 +170,6 @@ const ProductServiceListContext = createContext<
 >(undefined);
 
 export const ProductsProvider = ({ children }: { children: ReactNode }) => {
-
   const [products, setProducts] = useState<Product[]>([]);
   const [footerForm, setFooterForm] = useState<FormDataFooter>(footerFormClean);
   const [productEdit, setProductEdit] = useState<Product>(productClean);
@@ -180,10 +179,8 @@ export const ProductsProvider = ({ children }: { children: ReactNode }) => {
   const [isProductEdit, setIsProductEdit] = useState<boolean>(false);
   const [isSubProductEdit, setIsSubProductEdit] = useState<boolean>(false);
 
-
   // Function to calculate totals
   const calculateTotals = (products: Product[]): Product[] => {
-
     return products.map((product) => {
       const totalAmount = product.subProductList.reduce(
         (sum, subProduct) => sum + subProduct.amount,
@@ -234,12 +231,12 @@ export const ProductsProvider = ({ children }: { children: ReactNode }) => {
     const { totalPrice, totalDiscount, priceAfterDiscount } =
       calculateFooterTotals(products);
 
-    setFooterForm({
-      ...footerForm,
+    setFooterForm((prev) => ({
+      ...prev,
       total: totalPrice,
       discountPrice: totalDiscount,
       priceAfterDiscount: priceAfterDiscount,
-    });
+    }));
 
     // Check if there are any differences before setting the state
     if (JSON.stringify(products) !== JSON.stringify(updatedProducts)) {
@@ -270,8 +267,8 @@ export const ProductsProvider = ({ children }: { children: ReactNode }) => {
       withholdingTaxAmount !== footerForm.withholdingTaxPrice ||
       totalAfterWithholdingTax !== footerForm.withholdingTaxPrice
     ) {
-      setFooterForm((prevForm) => ({
-        ...prevForm,
+      setFooterForm((prev) => ({
+        ...prev,
         vatPrice: vatAmount,
         totalAmount: totalWithVAT,
         withholdingTaxPrice: withholdingTaxAmount,
@@ -279,9 +276,7 @@ export const ProductsProvider = ({ children }: { children: ReactNode }) => {
       }));
     }
   }, [
-    footerForm.includeVat,
-    footerForm.priceAfterDiscount,
-    footerForm.withholdingTax,
+    footerForm
   ]);
 
   // ฟังก์ชันสำหรับเพิ่มสินค้า
@@ -391,7 +386,7 @@ export const ProductsProvider = ({ children }: { children: ReactNode }) => {
         footerForm,
         setFooterForm,
         headForm,
-        setHeadForm
+        setHeadForm,
       }}
     >
       {children}

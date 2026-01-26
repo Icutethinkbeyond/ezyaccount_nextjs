@@ -2,7 +2,7 @@ import React from "react";
 import { useTheme } from "@mui/material/styles";
 import dynamic from "next/dynamic";
 import BaseCard from "../shared/DashboardCard";
-const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
+// const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 const SalesOverview = () => {
   const theme = useTheme();
@@ -109,12 +109,12 @@ const SalesOverview = () => {
   ];
   return (
     <BaseCard title="Sales Overview">
-      <Chart
+      {/* <Chart
         options={optionssalesoverview}
         series={seriessalesoverview}
         type="bar"
         height="295px"
-      />
+      /> */}
     </BaseCard>
   );
 };

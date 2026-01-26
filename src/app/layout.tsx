@@ -4,8 +4,6 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { SessionProviders } from "@/../lib/SessionProviders";
 import { ProductsProvider } from "@/contexts/productServiceListContext";
 import { Prompt } from "next/font/google";
-import { NextIntlClientProvider } from "next-intl";
-import { getLocale, getMessages } from "next-intl/server";
 
 const prompt = Prompt({
   subsets: ["thai", "latin"], // Specify subsets if needed
@@ -18,8 +16,6 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   
-  const locale = await getLocale();
-  const messages = await getMessages();
 
   return (
     <html lang="en">
@@ -28,9 +24,7 @@ export default async function RootLayout({
           <CssBaseline />
           <ProductsProvider>
             <SessionProviders>
-                  <NextIntlClientProvider messages={messages}>
                     {children}
-                  </NextIntlClientProvider>
                 </SessionProviders>
           </ProductsProvider>
         </ThemeProvider>
