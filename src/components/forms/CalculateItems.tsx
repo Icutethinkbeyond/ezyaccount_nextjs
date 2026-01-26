@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -17,22 +17,32 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import { useProductServiceListContext } from "@/contexts/productServiceListContext";
+import axios from "axios";
+import { useQuotationListContext } from "@/contexts/QuotationContext";
 import { toNumber, uniqueId } from "lodash";
-import { Quotation, useDatabaseContext } from "@/contexts/dbContext";
+// import { Quotation, useDatabaseContext } from "@/contexts/dbContext";
 import { useRouter } from "next/navigation";
 import { formatNumber } from "@/utils/utils";
+import { useNotifyContext } from "@/contexts/NotifyContext";
 
 interface CalculateItemsProps {
   isEdit?: boolean | null | undefined;
 }
 
 const CalculateItems: React.FC<CalculateItemsProps> = ({ isEdit = false }) => {
+
   const router = useRouter();
-  const { footerForm, setFooterForm, headForm, products } =
-    useProductServiceListContext();
-  const { addQuotation, qoutationState, updateQuotation, editQuotation } =
-    useDatabaseContext();
+  const { setNotify, notify } = useNotifyContext();
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const { footerForm, setFooterForm, headForm, products } = useQuotationListContext();
+
+  useEffect(() => {
+     console.log(headForm)
+  }, [headForm])
+
+  // const { addQuotation, qoutationState, updateQuotation, editQuotation } =
+  //   useDatabaseContext();
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | any>
@@ -57,32 +67,40 @@ const CalculateItems: React.FC<CalculateItemsProps> = ({ isEdit = false }) => {
     }
   };
 
-  const handleSavePost = (status: string) => {
-    addQuotation({
-      keyId: 1,
-      ownerId: "1",
-      status: status,
-      headForm: headForm,
-      products: products,
-      summary: footerForm,
-      createDate: new Date(),
-      updateDate: new Date(),
-    });
-    router.push("/income/quotation");
-  };
+const updateDocument = () => {
 
-  const handleUpdatePost = () => {
-    updateQuotation({
-      keyId: editQuotation.keyId,
-      ownerId: editQuotation.ownerId,
-      status: editQuotation.status,
-      headForm: headForm,
-      products: products,
-      summary: footerForm,
-      createDate: editQuotation.createDate,
-      updateDate: new Date(),
-    });
-    router.push("/income/quotation");
+}
+
+const approveDocument = () => {
+
+    setOpen(false);
+
+    setLoading(true);
+
+    axios
+      .post("/api/income/quotation/new", { footerForm, headForm, products })
+      .then(({ data }) => {
+
+        setNotify({
+          ...notify,
+          open: true,
+          message: "การดำเนินการสำเร็จ",
+          color: "success",
+        });
+
+        setLoading(false);
+
+      })
+      .catch((error) => { 
+        console.error("Fetch error:", error);
+        setNotify({
+          ...notify,
+          open: true,
+          message: "พบปัญหาบางอย่างโปรดติดต่อผู้พัฒนา",
+          color: "error",
+        });
+      })
+      .finally(() => {});
   };
 
   const handlePreview = () => {};
@@ -235,28 +253,18 @@ const CalculateItems: React.FC<CalculateItemsProps> = ({ isEdit = false }) => {
               sx={{ marginBottom: "5px" }}
               onClick={() => handlePreview()}
             >
-              Preview
+              ดูตัวอย่าง
             </Button>
-            {!isEdit && (
-              <Button
-                variant="contained"
-                color="secondary"
-                sx={{ marginBottom: "5px" }}
-                onClick={() => handleSavePost("draft")}
-              >
-                Save Draft
-              </Button>
-            )}
 
             <Button
               variant="contained"
               color="success"
               sx={{ marginBottom: "5px" }}
               onClick={() =>
-                !isEdit ? handleSavePost("approve") : handleUpdatePost()
+                !isEdit ? approveDocument() : updateDocument()
               }
             >
-              {isEdit ? "Edit" : "Save and Approve"}
+              {isEdit ? "แก้ไข" : "บันทึก"}
             </Button>
           </Box>
         </Grid>

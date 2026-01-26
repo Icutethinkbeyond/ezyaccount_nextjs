@@ -1,9 +1,11 @@
+"use client"
+
 import { createTheme } from "@mui/material/styles";
-import { DM_Sans } from "next/font/google";
+import { Prompt } from "next/font/google";
 import theme from "../theme";
 
 
-export const dm = DM_Sans({
+export const dm = Prompt({
   weight: ["400", "500", "700"],
   subsets: ["latin"],
   display: "swap",

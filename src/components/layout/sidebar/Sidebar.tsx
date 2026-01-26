@@ -1,4 +1,4 @@
-import { useMediaQuery, Box, Drawer } from "@mui/material";
+import { useMediaQuery, Box, Drawer, useTheme } from "@mui/material";
 import Logo from "@/components/shared/Logo";
 import SidebarItems from "./SidebarItems";
 
@@ -13,7 +13,8 @@ const Sidebar = ({
   onSidebarClose,
   isSidebarOpen,
 }: ItemType) => {
-  const lgUp = useMediaQuery((theme: any) => theme.breakpoints.up("lg"));
+  const theme = useTheme();
+  const lgUp = useMediaQuery(theme.breakpoints.up("lg"));
 
   const sidebarWidth = "270px";
 
@@ -53,14 +54,16 @@ const Sidebar = ({
             {/* ------------------------------------------- */}
             {/* Logo */}
             {/* ------------------------------------------- */}
-            <Box px={2}>
+            {/* <Box px={2}>
               <Logo />
-            </Box>
+            </Box> */}
             <Box>
               {/* ------------------------------------------- */}
               {/* Sidebar Items */}
               {/* ------------------------------------------- */}
-              <Box mt={3}><SidebarItems /></Box>
+              <Box mt={3}>
+                <SidebarItems />
+              </Box>
             </Box>
           </Box>
         </Drawer>

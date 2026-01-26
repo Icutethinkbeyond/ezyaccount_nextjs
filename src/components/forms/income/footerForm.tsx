@@ -17,22 +17,22 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import { useProductServiceListContext } from "@/contexts/productServiceListContext";
+import { useQuotationListContext, type Product } from "@/contexts/QuotationContext";
 import { toNumber, uniqueId } from "lodash";
-import { Quotation, useDatabaseContext } from "@/contexts/dbContext";
 import { useRouter } from "next/navigation";
+import { useLocale } from "next-intl";
 import { formatNumber } from "@/utils/utils";
 
 interface FooterProps {
   isEdit?: boolean | null | undefined;
+  documentId?: string;
 }
 
-const FooterForm: React.FC<FooterProps> = ({ isEdit = false }) => {
+const FooterForm: React.FC<FooterProps> = ({ isEdit = false, documentId }) => {
   const router = useRouter();
+  const localActive = useLocale();
   const { footerForm, setFooterForm, headForm, products } =
-    useProductServiceListContext();
-  const { addQuotation, qoutationState, updateQuotation, editQuotation } =
-    useDatabaseContext();
+    useQuotationListContext();
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | any>
@@ -57,35 +57,154 @@ const FooterForm: React.FC<FooterProps> = ({ isEdit = false }) => {
     }
   };
 
-  const handleSavePost = (status: string) => {
-    // addQuotation({
-    //   keyId: uniqueId(),
-    //   ownerId: "1",
-    //   status: status,
-    //   headForm: headForm,
-    //   products: products,
-    //   summary: footerForm,
-    //   createDate: new Date(),
-    //   updateDate: new Date(),
-    // });
-    // router.push("/income/quotation");
+  const handleSavePost = async (status: string) => {
+    try {
+      // แปลง products เป็น categories format
+      const categories: any[] = [];
+
+      products.forEach((product: Product) => {
+        if (product.isSubjectItem) {
+          // สร้างหมวดหมู่จาก Product ที่เป็นหัวหมวด
+          const category = {
+            id: `cat-${Date.now()}-${Math.random()}`,
+            name: product.productService,
+            subItems: [] as any[],
+          };
+
+          // เพิ่มรายการย่อยจาก subProductList
+          if (product.subProductList && product.subProductList.length > 0) {
+            product.subProductList.forEach((subProduct) => {
+              category.subItems.push({
+                id: `item-${Date.now()}-${Math.random()}`,
+                description: subProduct.productService,
+                unit: "ชิ้น",
+                qty: subProduct.amount,
+                pricePerUnit: subProduct.price,
+                remark: subProduct.description,
+              });
+            });
+          }
+
+          categories.push(category);
+        }
+      });
+
+      const quotationData = {
+        companyName: headForm.companyName,
+        companyTel: headForm.companyTel,
+        taxId: headForm.taxId,
+        branch: headForm.branch,
+        dateCreate: headForm.dateCreate,
+        companyAddress: headForm.companyAddress,
+        contactorName: headForm.contactorName,
+        contactorTel: headForm.contactorTel,
+        contactorEmail: headForm.contactorEmail,
+        contactorAddress: headForm.contactorAddress,
+        includeVat: footerForm.includeVat,
+        taxRate: 7,
+        globalDiscount: footerForm.discountPrice,
+        withholdingTax: footerForm.withholdingTaxPrice,
+        categories: categories,
+      };
+
+      const res = await fetch('/api/income/quotation/new', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(quotationData),
+      });
+
+      const result = await res.json();
+      if (result.success) {
+        alert("บันทึกใบเสนอราคาสำเร็จ!");
+        router.push(`/${localActive}/protected/income/quotation`);
+      } else {
+        alert("เกิดข้อผิดพลาด: " + result.error);
+      }
+    } catch (error) {
+      console.error(error);
+      alert("เกิดข้อผิดพลาดในการบันทึก");
+    }
   };
 
-  const handleUpdatePost = () => {
-    updateQuotation({
-      keyId: editQuotation.keyId,
-      ownerId: editQuotation.ownerId,
-      status: editQuotation.status,
-      headForm: headForm,
-      products: products,
-      summary: footerForm,
-      createDate: editQuotation.createDate,
-      updateDate: new Date(),
-    });
-    router.push("/income/quotation");
+  const handleUpdatePost = async () => {
+    try {
+      if (!documentId) {
+        alert("ไม่พบ documentId");
+        return;
+      }
+
+      // แปลง products เป็น categories format
+      const categories: any[] = [];
+
+      products.forEach((product: Product) => {
+        if (product.isSubjectItem) {
+          // สร้างหมวดหมู่จาก Product ที่เป็นหัวหมวด
+          const category = {
+            id: `cat-${Date.now()}-${Math.random()}`,
+            name: product.productService,
+            subItems: [] as any[],
+          };
+
+          // เพิ่มรายการย่อยจาก subProductList
+          if (product.subProductList && product.subProductList.length > 0) {
+            product.subProductList.forEach((subProduct) => {
+              category.subItems.push({
+                id: `item-${Date.now()}-${Math.random()}`,
+                description: subProduct.productService,
+                unit: "ชิ้น",
+                qty: subProduct.amount,
+                pricePerUnit: subProduct.price,
+                remark: subProduct.description,
+              });
+            });
+          }
+
+          categories.push(category);
+        }
+      });
+
+      const quotationData = {
+        companyName: headForm.companyName,
+        companyTel: headForm.companyTel,
+        taxId: headForm.taxId,
+        branch: headForm.branch,
+        dateCreate: headForm.dateCreate,
+        companyAddress: headForm.companyAddress,
+        contactorName: headForm.contactorName,
+        contactorTel: headForm.contactorTel,
+        contactorEmail: headForm.contactorEmail,
+        contactorAddress: headForm.contactorAddress,
+        includeVat: footerForm.includeVat,
+        taxRate: 7,
+        globalDiscount: footerForm.discountPrice,
+        withholdingTax: footerForm.withholdingTaxPrice,
+        categories: categories,
+      };
+
+      console.log("📤 PATCH Request - Products:", products);
+      console.log("📤 PATCH Request - Categories:", categories);
+      console.log("📤 PATCH Request - Full Data:", quotationData);
+
+      const res = await fetch(`/api/income/quotation/${documentId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(quotationData),
+      });
+
+      const result = await res.json();
+      if (result.success) {
+        alert("อัพเดทใบเสนอราคาสำเร็จ!");
+        router.push(`/${localActive}/protected/income/quotation`);
+      } else {
+        alert("เกิดข้อผิดพลาด: " + result.error);
+      }
+    } catch (error) {
+      console.error(error);
+      alert("เกิดข้อผิดพลาดในการอัพเดท");
+    }
   };
 
-  const handlePreview = () => {};
+  const handlePreview = () => { };
 
   return (
     <Box component="form" noValidate autoComplete="off">

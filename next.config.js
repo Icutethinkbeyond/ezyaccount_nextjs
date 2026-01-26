@@ -1,10 +1,6 @@
-
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'standalone', // เปิดใช้งานโหมด standalone
+  output: "standalone",
 };
-
-
 
 module.exports = nextConfig;

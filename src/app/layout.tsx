@@ -1,9 +1,15 @@
 import { baselightTheme } from "@/utils/theme/DefaultColors";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import { SessionProviders } from "@/../lib/SessionProviders";
-import { ProductsProvider } from "@/contexts/productServiceListContext";
 import { Prompt } from "next/font/google";
+
+import { SessionProviders } from "../../lib/SessionProviders";
+import { NotifyProvider } from "@/contexts/NotifyContext";
+import { BreadcrumbProvider } from "@/contexts/BreadcrumbContext";
+import { QuotationProvider } from "@/contexts/QuotationContext";
+import { PricingProvider } from "@/contexts/PricingContext";
+
+export const dynamic = "force-dynamic";
 
 const prompt = Prompt({
   subsets: ["thai", "latin"], // Specify subsets if needed
@@ -15,18 +21,20 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  
-
   return (
-    <html lang="en">
+    <html>
       <body className={prompt.className}>
         <ThemeProvider theme={baselightTheme}>
-          <CssBaseline />
-          <ProductsProvider>
-            <SessionProviders>
-                    {children}
-                </SessionProviders>
-          </ProductsProvider>
+          <SessionProviders>
+            <CssBaseline />
+            <BreadcrumbProvider>
+              <QuotationProvider>
+                <PricingProvider>
+                  <NotifyProvider>{children}</NotifyProvider>
+                </PricingProvider>
+              </QuotationProvider>
+            </BreadcrumbProvider>
+          </SessionProviders>
         </ThemeProvider>
       </body>
     </html>

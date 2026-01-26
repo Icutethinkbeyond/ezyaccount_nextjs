@@ -1,4 +1,8 @@
-import { Product } from "@/contexts/productServiceListContext";
+import { Product } from "@/contexts/QuotationContext";
+
+export const calculateSubItemTotal = (qty: number, pricePerUnit: number) => {
+    return qty * pricePerUnit
+  }
 
 // Function to calculate Tax
 export const calculateTax = (totalPrice: number, vatRate: number, withholdingTaxPercent: number): { vatAmount: number; totalWithVAT: number; withholdingTaxAmount: number; totalAfterWithholdingTax: number } => {
@@ -76,6 +80,14 @@ export function makeDateMonth(utcDateString?: string): string {
 
     return `${month}-${year}`;
 }
+
+export const getMonthAbbreviation = (month: number): string => {
+  const monthAbbrs = [
+    "JAN", "FEB", "MAR", "APR", "MAY", "JUN",
+    "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"
+  ];
+  return monthAbbrs[month];
+};
 
 export function formatNumber(number: number | null | undefined, needDecimal: boolean | null = true): string | null | undefined {
     if (number !== null && number !== undefined) {

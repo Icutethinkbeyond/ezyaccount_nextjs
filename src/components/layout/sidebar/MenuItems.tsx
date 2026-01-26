@@ -11,7 +11,7 @@ export const useMenuItems = () => {
       id: uniqueId(),
       title: "ใบเสนอราคา",
       icon: IconReceipt2,
-      href: `/`,
+      href: `/quotation`,
     },
   ];
 };

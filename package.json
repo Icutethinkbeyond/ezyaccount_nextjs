@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "clean-metadata": "find . -name '._*' -delete",
-    "dev": "npx prisma generate --no-engine && next dev",
-    "build": "npm run clean-metadata && npx prisma generate --no-engine && next build",
+    "dev": "npx prisma generate --no-engine && npx prisma db push && next dev",
+    "build": "npm run clean-metadata && next build",
     "start": "next start",
     "production": "next build && next start",
     "lint": "next lint"
@@ -17,14 +17,17 @@
     "@mui/lab": "^6.0.0-beta.12",
     "@mui/material": "^6.1.9",
     "@mui/x-data-grid": "^7.21.0",
-    "@prisma/client": "^5.22.0",
+    "@mui/x-date-pickers": "^8.0.0",
+    "@prisma/client": "6.17.1",
     "@tabler/icons-react": "2.30.0",
     "@types/react": "18.2.18",
     "@types/react-dom": "18.2.7",
     "axios": "^1.7.7",
     "bcryptjs": "^2.4.3",
+    "dayjs": "^1.11.19",
     "eslint": "8.46.0",
     "eslint-config-next": "^14.2.7",
+    "exceljs": "^4.4.0",
     "file-saver": "^2.0.5",
     "formik": "^2.4.6",
     "formik-mui": "^5.0.0-alpha.1",
@@ -43,8 +46,8 @@
     "uuid": "^11.0.3",
     "yup": "^1.4.0"
   },
-  "prisma": {
-    "seed": "tsx prisma/seed.ts"
+    "prisma": {
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   },
   "devDependencies": {
     "@faker-js/faker": "^9.0.3",
@@ -52,7 +55,7 @@
     "@types/file-saver": "^2.0.7",
     "@types/lodash": "4.14.196",
     "@types/node": "^22.10.0",
-    "prisma": "^5.22.0",
+    "prisma": "6.17.1",
     "tsx": "^4.19.2",
     "typescript": "5.7.2"
   }
