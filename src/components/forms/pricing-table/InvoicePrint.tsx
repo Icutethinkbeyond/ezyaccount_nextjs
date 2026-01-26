@@ -158,7 +158,7 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
                 {billTo.name}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                {billTo.position}, {billTo.company}
+                {billTo.position}{billTo.company}
               </Typography>
               <Typography variant="body2" color="text.secondary">
                 Phone: {billTo.phone}
@@ -170,24 +170,28 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
             <Grid item xs={6} sx={{ textAlign: "right" }}>
               <Box sx={{ display: "flex", alignItems: "center", justifyContent: "flex-end", mb: 2 }}>
                 <Box
+                  className="company-logo"
                   sx={{
-                    width: 40,
-                    height: 40,
+                    width: 50,
+                    height: 50,
+                    minWidth: 50,
+                    minHeight: 50,
+                    flexShrink: 0,
                     backgroundColor: "#1565c0",
                     borderRadius: "50%",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    mr: 1,
+                    mr: 1.5,
                   }}
                 >
-                  <Typography sx={{ color: "white", fontWeight: "bold", fontSize: "20px" }}>C</Typography>
+                  <Typography sx={{ color: "white", fontWeight: "bold", fontSize: "24px" }}>C</Typography>
                 </Box>
-                <Box>
-                  <Typography variant="h6" sx={{ fontWeight: "bold", lineHeight: 1 }}>
+                <Box sx={{ textAlign: "left" }}>
+                  <Typography variant="h6" sx={{ fontWeight: "bold", lineHeight: 1.2 }}>
                     {companyInfo.name}
                   </Typography>
-                  <Typography variant="caption" color="text.secondary">
+                  <Typography variant="caption" color="text.secondary" sx={{ lineHeight: 1 }}>
                     {companyInfo.tagline}
                   </Typography>
                 </Box>
@@ -331,9 +335,10 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
       <Grid container spacing={2} sx={{ mb: 2 }}>
         <Grid item xs={4} sx={{ display: "flex", alignItems: "center" }}>
           <Box
+            className="icon-box"
             sx={{
-              width: 32,
-              height: 32,
+              width: "32px",
+              height: "32px",
               backgroundColor: "#1565c0",
               borderRadius: "4px",
               display: "flex",
@@ -348,9 +353,10 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
         </Grid>
         <Grid item xs={4} sx={{ display: "flex", alignItems: "center" }}>
           <Box
+            className="icon-box"
             sx={{
-              width: 32,
-              height: 32,
+              width: "32px",
+              height: "32px",
               backgroundColor: "#1565c0",
               borderRadius: "4px",
               display: "flex",
@@ -365,9 +371,10 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
         </Grid>
         <Grid item xs={4} sx={{ display: "flex", alignItems: "center" }}>
           <Box
+            className="icon-box"
             sx={{
-              width: 32,
-              height: 32,
+              width: "32px",
+              height: "32px",
               backgroundColor: "#1565c0",
               borderRadius: "4px",
               display: "flex",
@@ -453,7 +460,7 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
           main, 
           [role="main"],
           .MuiContainer-root,
-          .MuiBox-root:not(.print-page) {
+          .MuiBox-root:not(.print-page):not(.icon-box):not(.company-logo) {
             margin: 0 !important;
             padding: 0 !important;
             width: 100% !important;
@@ -461,6 +468,31 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
             min-height: auto !important;
             margin-left: 0 !important;
             transform: none !important;
+          }
+          
+          /* Fix company logo size in print */
+          .company-logo {
+            width: 50px !important;
+            height: 50px !important;
+            min-width: 50px !important;
+            max-width: 50px !important;
+            min-height: 50px !important;
+            max-height: 50px !important;
+            flex-shrink: 0 !important;
+            margin-right: 12px !important;
+            border-radius: 50% !important;
+          }
+
+          /* Fix icon boxes size in print */
+          .icon-box {
+            width: 32px !important;
+            height: 32px !important;
+            min-width: 32px !important;
+            max-width: 32px !important;
+            min-height: 32px !important;
+            max-height: 32px !important;
+            flex-shrink: 0 !important;
+            margin-right: 8px !important;
           }
           
           /* Print container styles */
