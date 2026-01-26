@@ -13,7 +13,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Cancel, Delete, RemoveCircle } from "@mui/icons-material";
-import { useSnackbarContext } from "@/contexts/NotifyContext";
+// import { useSnackbarContext } from "@/contexts/NotifyContext";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DocumentStatus } from "@prisma/client";
@@ -50,7 +50,7 @@ const ConfirmInput: React.FC<ConfirmInputProps> = ({
   lastItem = false,
 }) => {
   const [open, setOpen] = useState(false);
-  const { setOpenDialog, setNoti, noti } = useSnackbarContext();
+  // const { setOpenDialog, setNoti, noti } = useSnackbarContext();
   const [dismantlingDatePlan, setDismantlingDatePlan] = useState<DatePlan>({
     erentionDatePlan: dayjs(new Date()),
     dismantlingDatePlan: dayjs(new Date()),

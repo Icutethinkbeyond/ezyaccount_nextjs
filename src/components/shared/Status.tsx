@@ -1,9 +1,6 @@
 import { Chip } from "@mui/material";
 import {
   DocumentStatus,
-  EquipmentOwner,
-  EquipmentStatus,
-  RepairStatus,
   RoleName,
   UserStatus,
 } from "@prisma/client";
@@ -21,11 +18,7 @@ const Status: React.FC<StatusProps> = ({ status, message }) => {
       {(status === "active" ||
         status === "returned" ||
         status === "completed" ||
-        status === EquipmentStatus.InStock ||
-        status === UserStatus.Active ||
-        status === DocumentStatus.Open ||
-        status === EquipmentOwner.Plant ||
-        status === RepairStatus.Completed) && (
+        status === UserStatus.Active) && (
         <Chip
           sx={{
             pl: "4px",
@@ -56,9 +49,8 @@ const Status: React.FC<StatusProps> = ({ status, message }) => {
         ></Chip>
       )}
 
-      {(status === EquipmentStatus.CurrentlyRenting ||
+      {(
         status === "" ||
-        status === RepairStatus.Cancel ||
         status === DocumentStatus.Cancel) && (
         <Chip
           sx={{
@@ -78,12 +70,7 @@ const Status: React.FC<StatusProps> = ({ status, message }) => {
       {(status === "waiting" ||
         status === "overdue" ||
         status === "cancelled" ||
-        status === EquipmentStatus.Broken ||
-        status === EquipmentStatus.Damaged ||
-        status === EquipmentStatus.InActive ||
-        status === UserStatus.InActice ||
-        status === EquipmentOwner.Site ||
-        status === RepairStatus.Unrepairable) && (
+        status === UserStatus.InActice) && (
         <Chip
           sx={{
             pl: "4px",
@@ -92,17 +79,15 @@ const Status: React.FC<StatusProps> = ({ status, message }) => {
             color: "#fff",
           }}
           size="small"
-          label={
-            message ? message : status.charAt(0).toUpperCase() + status.slice(1)
-          }
+          // label={
+          //   message ? message : status.charAt(0).toUpperCase() + status.slice(1)
+          // }
         ></Chip>
       )}
 
       {/* Yellow (Damaged, On Hold) */}
       {(status === "damaged" ||
         status === "on-hold" ||
-        status === EquipmentStatus.RepairingAtSupplier ||
-        status === RoleName.Employee ||
         status === DocumentStatus.Draft) && (
         <Chip
           sx={{
@@ -121,10 +106,7 @@ const Status: React.FC<StatusProps> = ({ status, message }) => {
       {/* Light Blue (Returned Partially, Parts Ordered) */}
       {(status === "returned-partially" ||
         status === "parts-ordered" ||
-        status === EquipmentStatus.WillBeSold ||
-        status === RoleName.Developer ||
-        status === RoleName.Admin ||
-        status === DocumentStatus.Close) && (
+        status === RoleName.Developer) && (
         <Chip
           sx={{
             pl: "4px",

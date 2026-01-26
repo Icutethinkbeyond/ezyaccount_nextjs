@@ -1,11 +1,11 @@
 import ExcelJS from 'exceljs';
-import { useDatabaseContext } from "@/contexts/dbContext";
+// import { useDatabaseContext } from "@/contexts/dbContext";
 const workbook = new ExcelJS.Workbook();
 const worksheet = workbook.addWorksheet("Quotation");
 
 const excelHead= () => {
 
-    const { quotationState } = useDatabaseContext();
+    // const { quotationState } = useDatabaseContext();
     // Example: Write data into specific cells
         //เลขเอกสารหรือเลขอ้างอิง
         worksheet.getCell("I5").value = "#1234567";

@@ -44,7 +44,7 @@ const authOptions: NextAuthOptions = {
             userId: true,
             role: { select: { name: true } },
             profile: { select: { profileName: true, profileSurname: true } },
-            customerId: true,
+            // customerId: true,
           },
           where: {
             userEmail: email,
@@ -63,7 +63,7 @@ const authOptions: NextAuthOptions = {
             email: user.userEmail,
             role: user.role?.name,
             name: user.profile?.profileName,
-            customerId: user.customerId?.toString(),
+            // customerId: user.customerId?.toString(),
           };
         } else {
           throw new Error("โปรดตรวจสอบชื่อผู้ใช้งานเเละรหัสผ่าน");
@@ -91,16 +91,16 @@ const authOptions: NextAuthOptions = {
                   profileSurname: user.name?.split(" ")[1] || "",
                 },
               },
-              customerId: user.email!,  
+              // customerId: user.email!,  
             },
             include: { role: true, profile: true },
           });
 
           user.id = newUser.userId.toString();
-          user.customerId = newUser.customerId || ""; 
+          // user.customerId = newUser.customerId || ""; 
         } else {
           user.id = existingUser.userId.toString();
-          user.customerId = existingUser.customerId || ""; 
+          // user.customerId = existingUser.customerId || ""; 
         }
       }
       return true;

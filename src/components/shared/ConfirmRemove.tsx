@@ -15,18 +15,12 @@ import { Cancel, Delete, RemoveCircle } from "@mui/icons-material";
 import { useNotifyContext } from "@/contexts/NotifyContext";
 import { DocumentStatus } from "@prisma/client";
 import { AlertOctagon, BookDown } from "lucide-react";
-import {
-  Additional,
-  BrokenItems,
-  Part,
-  Repairman,
-} from "@/interfaces/Maintenance";
 
 interface ConfirmRemoveProps {
   massage?: string; // Name of the item to be deleted
   onDelete: (value: any, subvalue?: any) => void; // Callback for deletion action
-  itemId: string | null | BrokenItems | Repairman | Additional;
-  subItemId?: string | null | BrokenItems | Part;
+  itemId: string | null;
+  subItemId?: string | null;
   dialogTitle?: string;
   buttonName?: string;
   iconButton?: JSX.Element | null;

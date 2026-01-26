@@ -19,7 +19,7 @@ import { useNotifyContext } from "@/contexts/NotifyContext";
 import { AlertOctagon } from "lucide-react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { DocumentStatus, DocumentStep } from "@prisma/client";
+import { DocumentStatus, } from "@prisma/client";
 
 interface TypeToConfirmRemoveProps {
   massage?: string;
@@ -27,11 +27,11 @@ interface TypeToConfirmRemoveProps {
     documentId: string,
     documentIdNo: string,
     documentStatus: DocumentStatus,
-    documentStep?: DocumentStep
+    documentStep?: any
   ) => void;
   documentIdNo: string;
   documentStatus: DocumentStatus;
-  documentStep?: DocumentStep;
+  documentStep?: any;
   documentId: string; // ID ที่ต้องตรงกัน
   dialogTitle?: string;
   buttonName?: string;
@@ -59,14 +59,14 @@ const TypeToConfirmRemove: React.FC<TypeToConfirmRemoveProps> = ({
   const { setNotify, notify, setOpenBackdrop, openBackdrop } = useNotifyContext()
   // เปิด Dialog
   const handleClickOpen = () => {
-    if (
-      documentStatus === DocumentStatus.Close ||
-      documentStatus === DocumentStatus.Cancel
-    ) {
-      onDelete(documentId, documentIdNo, documentStatus, documentStep);
-    } else {
-      setOpen(true);
-    }
+    // if (
+    //   documentStatus === DocumentStatus.Close ||
+    //   documentStatus === DocumentStatus.Cancel
+    // ) {
+    //   onDelete(documentId, documentIdNo, documentStatus, documentStep);
+    // } else {
+    //   setOpen(true);
+    // }
   };
 
   // ปิด Dialog

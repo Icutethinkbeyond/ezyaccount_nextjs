@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import ExcelJS from 'exceljs';
 import excelhead from '@/template/excelfile/excelhead';
-import { Quotation,useDatabaseContext } from "@/contexts/dbContext";
+// import { Quotation,useDatabaseContext } from "@/contexts/dbContext";
 const workbook = new ExcelJS.Workbook();
 const worksheet = workbook.addWorksheet("Quotation");
 
 interface ProductTableProps {
-  data: Quotation[];
+  // data: Quotation[];
   tableName: string | null;
   newDocumentHref: string | null;
   newDocumentName: string | null;
@@ -15,7 +15,7 @@ interface ProductTableProps {
 
 const excelBody = () =>  {
 
-  const [rows, setRows] = useState<Quotation[]>([]);
+  // const [rows, setRows] = useState<Quotation[]>([]);
  
   const exportExcelBody = async () => {
     // เพิ่มข้อมูลสินค้า
