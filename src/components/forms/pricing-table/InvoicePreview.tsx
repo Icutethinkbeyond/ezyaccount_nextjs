@@ -748,7 +748,6 @@ const InvoicePreview: React.FC<InvoiceProps> = ({
                             {itemTotal.toLocaleString()}
                           </TableCell>
                           {/* <TableCell>{item.remark}</TableCell> */}
-                          <TableCell />
                         </TableRow>
                       );
                     } else if (row.type === "item_details") {
