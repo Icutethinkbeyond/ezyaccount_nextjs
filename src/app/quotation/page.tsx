@@ -1,7 +1,7 @@
 "use client";
 
 import { Grid2, Box } from "@mui/material";
-import QuotationsTable from "@/components/forms/income/QuotationsTable";
+import QuotationsTable from "@/components/forms/quotation/QuotationsTable";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useBreadcrumbContext } from "@/contexts/BreadcrumbContext";

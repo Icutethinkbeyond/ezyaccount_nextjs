@@ -1,7 +1,7 @@
 "use client"
 import { Box, Button, Container } from "@mui/material"
 import PrintIcon from "@mui/icons-material/Print"
-import InvoicePrintPage from "@/components/forms/pricing-table/InvoicePrint"
+import InvoicePrintPage from "@/components/forms/pricing-table/InvoicePreview"
 
 export default function InvoicePage() {
   const handlePrint = () => {

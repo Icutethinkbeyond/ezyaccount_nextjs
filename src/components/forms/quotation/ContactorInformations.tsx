@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Grid2, TextField, Box, Typography } from "@mui/material";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import BaseCard from "../shared/BaseCard";
+import BaseCard from "../../shared/BaseCard";
 import { HeadForm, useQuotationListContext } from "@/contexts/QuotationContext";
 
 // Validation Schema with Yup

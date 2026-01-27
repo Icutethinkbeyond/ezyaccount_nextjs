@@ -11,6 +11,7 @@ import {
   Paper,
   Divider,
   Grid,
+  Grid2,
 } from "@mui/material";
 import { usePricingContext } from "@/contexts/PricingContext";
 import { useQuotationListContext } from "@/contexts/QuotationContext";
@@ -40,7 +41,7 @@ interface InvoiceProps {
 const ROWS_PER_PAGE_FIRST = 8;
 const ROWS_PER_PAGE_OTHER = 14;
 
-const InvoicePrint: React.FC<InvoiceProps> = ({
+const InvoicePreview: React.FC<InvoiceProps> = ({
   invoiceNumber = "#123456",
   invoiceDate = new Date().toLocaleDateString("th-TH", {
     year: "numeric",
@@ -267,8 +268,8 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
   };
 
   const renderSummarySection = () => (
-    <Grid container spacing={3} sx={{ mt: "auto", mb: 3 }}>
-      <Grid item xs={7}>
+    <Grid2 container spacing={3} sx={{ mt: "auto", mb: 3 }}>
+      <Grid2 size={{ xs: 5 }}>
         <Typography variant="subtitle2" sx={{ fontWeight: "bold", mb: 1 }}>
           หมายเหตุ:
         </Typography>
@@ -279,10 +280,10 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
         >
           {displayNote || "-"}
         </Typography>
-      </Grid>
-      <Grid item xs={5}>
+      </Grid2>
+      <Grid2 size={{ xs: 7 }}>
         <Box sx={{ backgroundColor: "#f5f5f5", p: 2, borderRadius: 1 }}>
-          <Box sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}>
+          <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
             <Typography variant="body2">ยอดรวมย่อย:</Typography>
             <Typography variant="body2">
               {subtotal.toLocaleString("th-TH", {
@@ -292,7 +293,7 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
               บาท
             </Typography>
           </Box>
-          <Box sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}>
+          <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
             <Typography variant="body2">ส่วนลด:</Typography>
             <Typography variant="body2">
               {discount.toLocaleString("th-TH", {
@@ -306,6 +307,16 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
             <Typography variant="body2">
               ภาษีมูลค่าเพิ่ม ({taxRate}%):
             </Typography>
+            <Typography variant="body2">
+              {taxAmount.toLocaleString("th-TH", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}{" "}
+              บาท
+            </Typography>
+          </Box>
+          <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
+            <Typography variant="body2">หัก ฯ ที่จ่าย ({taxRate}%):</Typography>
             <Typography variant="body2">
               {taxAmount.toLocaleString("th-TH", {
                 minimumFractionDigits: 2,
@@ -331,8 +342,7 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
               รวมทั้งสิ้น:
             </Typography>
             <Typography
-              variant="h6"
-              sx={{ color: "white", fontWeight: "bold" }}
+              sx={{ color: "white", fontSize: 18, letterSpacing: 0.5 }}
             >
               {grandTotal.toLocaleString("th-TH", {
                 minimumFractionDigits: 2,
@@ -364,10 +374,10 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
             </Typography>
           </Box>
 
-          <Typography variant="body2" sx={{ fontWeight: "bold" }}></Typography>
+          <Typography variant="body2">ลงลายมือชื่อ</Typography>
         </Box>
-      </Grid>
-    </Grid>
+      </Grid2>
+    </Grid2>
   );
 
   const renderFooter = () => (
@@ -715,7 +725,7 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
                       return (
                         <TableRow
                           key={`item-name-${pageIndex}-${rowIndex}`}
-                          sx={{ bgcolor: "#d6e9ff" }} 
+                          sx={{ bgcolor: "#d6e9ff" }}
                         >
                           <TableCell sx={{ fontSize: 12 }}>
                             {item.displayIndex}
@@ -829,4 +839,4 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
   );
 };
 
-export default InvoicePrint;
+export default InvoicePreview;

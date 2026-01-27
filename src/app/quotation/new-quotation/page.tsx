@@ -4,8 +4,8 @@ import React, { useEffect } from "react";
 import { Box, Grid2, Typography } from "@mui/material";
 
 // components
-import CompanyInformation from "@/components/forms/CompanyInformations";
-import ContactotInformation from "@/components/forms/ContactorInformations";
+import CompanyInformation from "@/components/forms/quotation/CompanyInformations";
+import ContactotInformation from "@/components/forms/quotation/ContactorInformations";
 import { useBreadcrumbContext } from "@/contexts/BreadcrumbContext";
 import PageContainer from "@/components/shared/PageContainer";
 import PricingTable from "@/components/forms/pricing-table/PricingTable";

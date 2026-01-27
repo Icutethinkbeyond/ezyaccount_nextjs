@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Box, Button, Container, CircularProgress, Typography } from "@mui/material";
 import PrintIcon from "@mui/icons-material/Print";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import InvoicePrintPage from "@/components/forms/pricing-table/InvoicePrint";
+import InvoicePrintPage from "@/components/forms/pricing-table/InvoicePreview";
 import { usePricingContext } from "@/contexts/PricingContext";
 import { useQuotationListContext } from "@/contexts/QuotationContext";
 import { useBreadcrumbContext } from "@/contexts/BreadcrumbContext";
