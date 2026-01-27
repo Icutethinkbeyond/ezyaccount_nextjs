@@ -1,4 +1,4 @@
-import type React from "react"
+import type React from "react";
 import {
   Box,
   Typography,
@@ -11,34 +11,34 @@ import {
   Paper,
   Divider,
   Grid,
-} from "@mui/material"
-import { usePricingContext } from "@/contexts/PricingContext"
-import { useQuotationListContext } from "@/contexts/QuotationContext"
-import { useMemo } from "react"
+} from "@mui/material";
+import { usePricingContext } from "@/contexts/PricingContext";
+import { useQuotationListContext } from "@/contexts/QuotationContext";
+import { useMemo } from "react";
 
 interface InvoiceProps {
-  invoiceNumber?: string
-  invoiceDate?: string
+  invoiceNumber?: string;
+  invoiceDate?: string;
   billTo?: {
-    name: string
-    position: string
-    company: string
-    phone: string
-    email: string
-  }
+    name: string;
+    position: string;
+    company: string;
+    phone: string;
+    email: string;
+  };
   companyInfo?: {
-    name: string
-    tagline: string
-    phone: string
-    email: string
-    location: string
-  }
-  note?: string
+    name: string;
+    tagline: string;
+    phone: string;
+    email: string;
+    location: string;
+  };
+  note?: string;
 }
 
 // Adjusted for new layout where each item takes 2 rows (name + details)
-const ROWS_PER_PAGE_FIRST = 8
-const ROWS_PER_PAGE_OTHER = 14
+const ROWS_PER_PAGE_FIRST = 8;
+const ROWS_PER_PAGE_OTHER = 14;
 
 const InvoicePrint: React.FC<InvoiceProps> = ({
   invoiceNumber = "#123456",
@@ -63,27 +63,38 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
   },
   note,
 }) => {
-  const { categories, getSubtotal, getTotalAfterDiscount, getTaxAmount, getGrandTotal, discount, taxRate, getCategoryTotal } =
-    usePricingContext()
+  const {
+    categories,
+    getSubtotal,
+    getTotalAfterDiscount,
+    getTaxAmount,
+    getGrandTotal,
+    discount,
+    taxRate,
+    getCategoryTotal,
+  } = usePricingContext();
 
   // Get note from QuotationContext if not passed as prop
-  const { headForm } = useQuotationListContext()
-  const displayNote = note ?? headForm.note
+  const { headForm } = useQuotationListContext();
+  const displayNote = note ?? headForm.note;
 
-  const subtotal = getSubtotal()
-  const taxAmount = getTaxAmount()
-  const grandTotal = getGrandTotal()
+  const subtotal = getSubtotal();
+  const taxAmount = getTaxAmount();
+  const grandTotal = getGrandTotal();
 
   // Flatten logic to handle pagination
   const pages = useMemo(() => {
-    const flattenedRows: Array<{ type: "header" | "item_name" | "item_details" | "subtotal"; data?: any }> = []
+    const flattenedRows: Array<{
+      type: "header" | "item_name" | "item_details" | "subtotal";
+      data?: any;
+    }> = [];
 
     categories.forEach((category, catIndex) => {
       // Add Category Header
       flattenedRows.push({
         type: "header",
         data: { name: category.name, index: catIndex + 1, id: category.id },
-      })
+      });
 
       // Add Items - now creates two rows per item: name row and details row
       category.subItems.forEach((item, itemIndex) => {
@@ -91,40 +102,40 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
         flattenedRows.push({
           type: "item_name",
           data: { ...item, displayIndex: `${catIndex + 1}.${itemIndex + 1}` },
-        })
+        });
         // Details row
         flattenedRows.push({
           type: "item_details",
           data: { ...item },
-        })
-      })
+        });
+      });
 
       // Add Category Subtotal
       flattenedRows.push({
         type: "subtotal",
         data: { total: getCategoryTotal(category.id) },
-      })
-    })
+      });
+    });
 
-    const resultPages: Array<typeof flattenedRows> = []
-    let currentPage: typeof flattenedRows = []
-    let currentLimit = ROWS_PER_PAGE_FIRST
+    const resultPages: Array<typeof flattenedRows> = [];
+    let currentPage: typeof flattenedRows = [];
+    let currentLimit = ROWS_PER_PAGE_FIRST;
 
     flattenedRows.forEach((row, index) => {
       if (currentPage.length >= currentLimit) {
-        resultPages.push(currentPage)
-        currentPage = []
-        currentLimit = ROWS_PER_PAGE_OTHER
+        resultPages.push(currentPage);
+        currentPage = [];
+        currentLimit = ROWS_PER_PAGE_OTHER;
       }
-      currentPage.push(row)
-    })
+      currentPage.push(row);
+    });
 
     if (currentPage.length > 0) {
-      resultPages.push(currentPage)
+      resultPages.push(currentPage);
     }
 
-    return resultPages
-  }, [categories, getCategoryTotal])
+    return resultPages;
+  }, [categories, getCategoryTotal]);
 
   const renderPageHeader = (pageIndex: number) => {
     if (pageIndex === 0) {
@@ -151,27 +162,35 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
           />
 
           {/* Company Info and Invoice Title */}
-          <Grid container justifyContent="space-between" sx={{ mb: 4, mt: 4, position: 'relative', zIndex: 1 }}>
+          <Grid
+            container
+            justifyContent="space-between"
+            sx={{ mb: 4, mt: 4, position: "relative", zIndex: 1 }}
+          >
             <Grid item xs={6}>
-              <Typography variant="h6" sx={{ fontWeight: "bold", mb: 0.5 }}>
-                Bill To:
-              </Typography>
-              <Typography variant="h5" sx={{ fontWeight: "bold", mb: 1 }}>
-                {billTo.name}
+              <Typography variant="h6" sx={{ mb: 0.5, fontSize: 18 }}>
+                ลูกค้า: {billTo.name}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                {billTo.position}{billTo.company}
+                {billTo.position}-{billTo.company}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Phone: {billTo.phone}
+                เบอร์โทรศัพท์: {billTo.phone}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Email: {billTo.email}
+                อีเมล: {billTo.email}
               </Typography>
             </Grid>
             <Grid item xs={6} sx={{ textAlign: "right" }}>
-              <Box sx={{ display: "flex", alignItems: "center", justifyContent: "flex-end", mb: 2 }}>
-                <Box
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "flex-end",
+                  mb: 2,
+                }}
+              >
+                {/* <Box
                   className="company-logo"
                   sx={{
                     width: 50,
@@ -188,72 +207,112 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
                   }}
                 >
                   <Typography sx={{ color: "white", fontWeight: "bold", fontSize: "24px" }}>C</Typography>
-                </Box>
+                </Box> */}
                 <Box sx={{ textAlign: "left" }}>
-                  <Typography variant="h6" sx={{ fontWeight: "bold", lineHeight: 1.2 }}>
+                  <Typography
+                    variant="h6"
+                    sx={{ fontWeight: "bold", lineHeight: 1.2 }}
+                  >
                     {companyInfo.name}
                   </Typography>
-                  <Typography variant="caption" color="text.secondary" sx={{ lineHeight: 1 }}>
+                  <Typography
+                    variant="caption"
+                    color="text.secondary"
+                    sx={{ lineHeight: 1 }}
+                  >
                     {companyInfo.tagline}
                   </Typography>
                 </Box>
               </Box>
               <Typography variant="h3" sx={{ fontWeight: "bold", mb: 1 }}>
-                INVOICE
+                ใบเสนอราคา
               </Typography>
               <Typography variant="body2">
-                <strong>Invoice Number:</strong> {invoiceNumber}
+                <strong>เลขที่:</strong> {invoiceNumber}
               </Typography>
               <Typography variant="body2">
-                <strong>Invoice Date:</strong> {invoiceDate}
+                <strong>วันที่:</strong> {invoiceDate}
               </Typography>
             </Grid>
           </Grid>
         </>
-      )
+      );
     } else {
       // Simplified header for subsequent pages
       return (
-        <Box sx={{ mb: 2, mt: 4, display: "flex", justifyContent: "space-between", borderBottom: '1px solid #eee', pb: 2 }}>
+        <Box
+          sx={{
+            mb: 2,
+            mt: 4,
+            display: "flex",
+            justifyContent: "space-between",
+            borderBottom: "1px solid #eee",
+            pb: 2,
+          }}
+        >
           <Box>
-            <Typography variant="h6" sx={{ fontWeight: "bold" }}>INVOICE (Cont.)</Typography>
+            <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+              ใบเสนอราคา
+            </Typography>
             <Typography variant="body2">
-              <strong>No:</strong> {invoiceNumber}
+              <strong>เลขที่:</strong> {invoiceNumber}
             </Typography>
           </Box>
-          <Box sx={{ textAlign: 'right' }}>
-            <Typography variant="body2">
-              Page {pageIndex + 1}
-            </Typography>
+          <Box sx={{ textAlign: "right" }}>
+            <Typography variant="body2">หน้าที่ {pageIndex + 1}</Typography>
           </Box>
         </Box>
-      )
+      );
     }
-  }
+  };
 
   const renderSummarySection = () => (
-    <Grid container spacing={3} sx={{ mt: 'auto', mb: 3 }}>
+    <Grid container spacing={3} sx={{ mt: "auto", mb: 3 }}>
       <Grid item xs={7}>
         <Typography variant="subtitle2" sx={{ fontWeight: "bold", mb: 1 }}>
-          Notes:
+          หมายเหตุ:
         </Typography>
-        <Typography variant="body2" color="text.secondary" sx={{ whiteSpace: 'pre-wrap' }}>
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          sx={{ whiteSpace: "pre-wrap" }}
+        >
           {displayNote || "-"}
         </Typography>
       </Grid>
       <Grid item xs={5}>
         <Box sx={{ backgroundColor: "#f5f5f5", p: 2, borderRadius: 1 }}>
           <Box sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}>
-            <Typography variant="body2">Subtotal:</Typography>
-            <Typography variant="body2">฿{subtotal.toLocaleString("th-TH", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Typography>
+            <Typography variant="body2">ยอดรวมย่อย:</Typography>
+            <Typography variant="body2">
+              {subtotal.toLocaleString("th-TH", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}{" "}
+              บาท
+            </Typography>
           </Box>
           <Box sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}>
-            <Typography variant="body2">Discount:</Typography>
-            <Typography variant="body2">฿{discount.toLocaleString("th-TH", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Typography>
+            <Typography variant="body2">ส่วนลด:</Typography>
+            <Typography variant="body2">
+              {discount.toLocaleString("th-TH", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}{" "}
+              บาท
+            </Typography>
           </Box>
           <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
-            <Typography variant="body2">Tax ({taxRate}%):</Typography>
-            <Typography variant="body2">฿{taxAmount.toLocaleString("th-TH", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Typography>
+            <Typography variant="body2">
+              ภาษีมูลค่าเพิ่ม ({taxRate}%):
+            </Typography>
+            <Typography variant="body2">
+              {taxAmount.toLocaleString("th-TH", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}{" "}
+              บาท
+            </Typography>
           </Box>
           <Divider sx={{ mb: 2 }} />
           <Box
@@ -265,11 +324,21 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
               borderRadius: 1,
             }}
           >
-            <Typography variant="h6" sx={{ color: "white", fontWeight: "bold" }}>
-              Total:
+            <Typography
+              variant="h6"
+              sx={{ color: "white", fontWeight: "bold" }}
+            >
+              รวมทั้งสิ้น:
             </Typography>
-            <Typography variant="h6" sx={{ color: "white", fontWeight: "bold" }}>
-              ฿{grandTotal.toLocaleString("th-TH", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            <Typography
+              variant="h6"
+              sx={{ color: "white", fontWeight: "bold" }}
+            >
+              {grandTotal.toLocaleString("th-TH", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}{" "}
+              บาท
             </Typography>
           </Box>
         </Box>
@@ -279,7 +348,8 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
               borderBottom: "1px solid black",
               width: "200px",
               ml: "auto",
-              mb: 1,
+              mb: 5,
+              mt: 5,
             }}
           >
             <Typography
@@ -290,16 +360,15 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
                 fontStyle: "italic",
               }}
             >
-              Signature
+              {/* Signature */}
             </Typography>
           </Box>
-          <Typography variant="body2" sx={{ fontWeight: "bold" }}>
-            Authorised sign
-          </Typography>
+
+          <Typography variant="body2" sx={{ fontWeight: "bold" }}></Typography>
         </Box>
       </Grid>
     </Grid>
-  )
+  );
 
   const renderFooter = () => (
     <Box
@@ -308,7 +377,7 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
         pt: 1,
       }}
     >
-      <Grid container spacing={2} sx={{ mb: 2 }}>
+      {/* <Grid container spacing={2} sx={{ mb: 2 }}>
         <Grid item xs={4} sx={{ display: "flex", alignItems: "center" }}>
           <Box
             className="icon-box"
@@ -363,7 +432,7 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
           </Box>
           <Typography variant="body2">{companyInfo.location}</Typography>
         </Grid>
-      </Grid>
+      </Grid> */}
 
       {/* Blue footer with diagonal design */}
       <Box
@@ -385,7 +454,7 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
         }}
       />
     </Box>
-  )
+  );
 
   return (
     <>
@@ -411,9 +480,10 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
             position: absolute !important;
             left: -9999px !important;
           }
-          
+
           /* Reset body and html for print */
-          html, body {
+          html,
+          body {
             margin: 0 !important;
             padding: 0 !important;
             width: 210mm !important;
@@ -423,18 +493,18 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
             print-color-adjust: exact !important;
             overflow: visible !important;
           }
-          
+
           /* Make all parent containers visible */
-          body *, 
-          body *::before, 
+          body *,
+          body *::before,
           body *::after {
             visibility: visible !important;
           }
-          
+
           /* Reset ALL parent wrappers to not interfere */
           /* Reset parent wrappers - removed MuiBox-root to prevent internal layout breakage */
           #__next,
-          main, 
+          main,
           [role="main"],
           .MuiContainer-root {
             margin: 0 !important;
@@ -445,7 +515,7 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
             margin-left: 0 !important;
             transform: none !important;
           }
-          
+
           /* Fix company logo size in print */
           .company-logo {
             width: 50px !important;
@@ -470,7 +540,7 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
             flex-shrink: 0 !important;
             margin-right: 8px !important;
           }
-          
+
           /* Print container styles */
           .print-container {
             display: block !important;
@@ -483,13 +553,13 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
             margin: 0 !important;
             padding: 0 !important;
           }
-          
+
           /* A4 page settings - force exact size */
           @page {
             size: 210mm 297mm;
             margin: 0;
           }
-          
+
           /* Each print page - exact A4 dimensions */
           .print-page {
             width: 210mm !important;
@@ -505,12 +575,12 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
             overflow: hidden !important;
             position: relative !important;
           }
-          
+
           .print-page:last-child {
             page-break-after: auto !important;
           }
         }
-        
+
         /* Screen styles - show A4 preview */
         @media screen {
           .print-container {
@@ -521,10 +591,10 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
             padding: 20px;
             min-height: 100vh;
           }
-          
+
           .print-page {
             background: white;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
             margin-bottom: 20px;
           }
         }
@@ -551,23 +621,73 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
           >
             {renderPageHeader(pageIndex)}
 
-            <TableContainer component={Paper} elevation={0} sx={{ mb: 3, flexGrow: 1 }}>
-              <Table>
+            <TableContainer
+              component={Paper}
+              elevation={0}
+              sx={{ mb: 3, flexGrow: 1 }}
+            >
+              <Table sx={{ width: '100%'}}>
                 <TableHead>
                   <TableRow sx={{ backgroundColor: "#1565c0" }}>
-                    <TableCell sx={{ color: "white", fontWeight: "bold", width: "80px" }}>NO.</TableCell>
-                    <TableCell sx={{ color: "white", fontWeight: "bold" }}>PRODUCT DESCRIPTION</TableCell>
-                    <TableCell sx={{ color: "white", fontWeight: "bold", textAlign: "center", width: "80px" }}>
-                      UNIT
+                    <TableCell
+                      sx={{ color: "white", fontSize: 12, width: "30px" }}
+                    >
+                      NO.
                     </TableCell>
-                    <TableCell sx={{ color: "white", fontWeight: "bold", textAlign: "center", width: "80px" }}>QTY</TableCell>
-                    <TableCell sx={{ color: "white", fontWeight: "bold", textAlign: "right", width: "120px" }}>
-                      PRICE/UNIT
+                    <TableCell
+                      sx={{ color: "white", width: "500px", fontSize: 12 }}
+                    >
+                      สินค้า
                     </TableCell>
-                    <TableCell sx={{ color: "white", fontWeight: "bold", textAlign: "right", width: "120px" }}>
-                      PRICE
+                    <TableCell
+                      sx={{
+                        color: "white",
+                        fontSize: 12,
+                        textAlign: "center",
+                        width: "80px",
+                      }}
+                    >
+                      จำนวน
                     </TableCell>
-                    <TableCell sx={{ color: "white", fontWeight: "bold", width: "150px" }}>REMARK</TableCell>
+                    <TableCell
+                      sx={{
+                        color: "white",
+                        fontSize: 12,
+                        textAlign: "center",
+                        width: "80px",
+                      }}
+                    >
+                      หน่วย
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        color: "white",
+                        fontSize: 12,
+                        textAlign: "right",
+                        width: "120px",
+                      }}
+                    >
+                      ราคา/หน่วย
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        color: "white",
+                        fontSize: 12,
+                        textAlign: "right",
+                        width: "150px",
+                      }}
+                    >
+                      ราคา
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        color: "white",
+                        width: "150px",
+                        fontSize: 12,
+                      }}
+                    >
+                      หมายเหตุ
+                    </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -580,61 +700,106 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
                             sx={{
                               backgroundColor: "#1565c0",
                               color: "white",
-                              fontWeight: "bold",
+                              // fontWeight: "bold",
                               py: 1,
+                              fontSize: 14,
                             }}
                           >
                             {row.data.index}. {row.data.name}
                           </TableCell>
                         </TableRow>
-                      )
+                      );
                     } else if (row.type === "item_name") {
                       const item = row.data;
+                      const itemTotal = item.qty * item.pricePerUnit;
                       return (
-                        <TableRow key={`item-name-${pageIndex}-${rowIndex}`} sx={{ bgcolor: "#f8f9fa" }}>
-                          <TableCell sx={{ fontWeight: "bold" }}>
+                        <TableRow
+                          key={`item-name-${pageIndex}-${rowIndex}`}
+                          sx={{ bgcolor: "#f8f9fa" }}
+                        >
+                          <TableCell sx={{ fontSize: 12 }}>
                             {item.displayIndex}
                           </TableCell>
-                          <TableCell colSpan={5} sx={{ fontWeight: "bold" }}>
-                            <Typography variant="body2" sx={{ fontWeight: "bold" }}>
+                          <TableCell>
+                            <Typography variant="body2" sx={{ fontSize: 12 }}>
                               {item.name}
                             </Typography>
                           </TableCell>
+                          <TableCell sx={{ textAlign: "center", fontSize: 12 }}>
+                            {item.qty}
+                          </TableCell>
+                          <TableCell sx={{ textAlign: "center", fontSize: 12 }}>
+                            {item.unit}
+                          </TableCell>
+                          <TableCell sx={{ textAlign: "right", fontSize: 12 }}>
+                            {item.pricePerUnit.toLocaleString()}
+                          </TableCell>
+                          <TableCell sx={{ textAlign: "right", fontSize: 12 }}>
+                            {itemTotal.toLocaleString()}
+                          </TableCell>
+                          <TableCell>{item.remark}</TableCell>
                           <TableCell />
                         </TableRow>
-                      )
+                      );
                     } else if (row.type === "item_details") {
                       const item = row.data;
-                      const itemTotal = item.qty * item.pricePerUnit
+                      // const itemTotal = item.qty * item.pricePerUnit;
                       return (
                         <TableRow key={`item-details-${pageIndex}-${rowIndex}`}>
                           <TableCell />
                           <TableCell>
-                            <Typography variant="body2" color="text.secondary" sx={{ pl: 2 }}>
+                            <Typography
+                              variant="body2"
+                              color="text.secondary"
+                              sx={{ pl: 2, fontSize: 12 }}
+                            >
                               {item.description}
                             </Typography>
                           </TableCell>
-                          <TableCell sx={{ textAlign: "center" }}>{item.unit}</TableCell>
-                          <TableCell sx={{ textAlign: "center" }}>{item.qty}</TableCell>
-                          <TableCell sx={{ textAlign: "right" }}>฿{item.pricePerUnit.toLocaleString()}</TableCell>
-                          <TableCell sx={{ textAlign: "right" }}>฿{itemTotal.toLocaleString()}</TableCell>
-                          <TableCell>{item.remark}</TableCell>
+                          {/* <TableCell sx={{ textAlign: "center", fontSize: 12  }}>
+                            {item.qty}
+                          </TableCell>
+                          <TableCell sx={{ textAlign: "center", fontSize: 12  }}>
+                            {item.unit}
+                          </TableCell>
+                          <TableCell sx={{ textAlign: "right", fontSize: 12  }}>
+                            {item.pricePerUnit.toLocaleString()}
+                          </TableCell>
+                          <TableCell sx={{ textAlign: "right", fontSize: 12  }}>
+                            {itemTotal.toLocaleString()}
+                          </TableCell>
+                          <TableCell>{item.remark}</TableCell> */}
                         </TableRow>
-                      )
+                      );
                     } else if (row.type === "subtotal") {
                       return (
                         <TableRow key={`subtotal-${pageIndex}-${rowIndex}`}>
-                          <TableCell colSpan={5} />
-                          <TableCell sx={{ textAlign: "right", fontWeight: "bold", backgroundColor: "#f5f5f5" }}>
-                            รวม
+                          {/* <TableCell colSpan={5} /> */}
+                          <TableCell
+                            colSpan={5}
+                            sx={{
+                              textAlign: "right",
+                              fontWeight: "bold",
+                              backgroundColor: "#f5f5f5",
+                            }}
+                          >
+                            รวมทั้งสิ้น
                           </TableCell>
-                          <TableCell sx={{ textAlign: "right", fontWeight: "bold", backgroundColor: "#f5f5f5" }}>
-                            ฿{row.data.total.toLocaleString()}
+                          <TableCell
+                            colSpan={2}
+                            sx={{
+                              textAlign: "right",
+                              fontWeight: "bold",
+                              backgroundColor: "#f5f5f5",
+                              fontSize: 16,
+                            }}
+                          >
+                            {row.data.total.toLocaleString()} บาท
                           </TableCell>
                         </TableRow>
-                      )
+                      );
                     }
-                    return null
+                    return null;
                   })}
                 </TableBody>
               </Table>
@@ -651,7 +816,7 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
         ))}
       </div>
     </>
-  )
-}
+  );
+};
 
-export default InvoicePrint
+export default InvoicePrint;
