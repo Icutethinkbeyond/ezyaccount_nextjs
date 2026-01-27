@@ -14,17 +14,16 @@ export default function InvoicePage() {
     window.print();
   };
 
-  useEffect(() => {
-    return () => {
-      setCategories([]);
-      setWithholdingTaxRate(0);
-      setDiscount(0);
-      setVatIncluded(false);
-      // โหลดข้อมูลบริษัทและผู้ติดต่อ
-      setHeadForm(headerClean);
-      setIsPreview(false)
-    };
-  }, []);
+  // useEffect(() => {
+  //   return () => {
+  //     setCategories([]);
+  //     setWithholdingTaxRate(0);
+  //     setDiscount(0);
+  //     setVatIncluded(false);
+  //     // โหลดข้อมูลบริษัทและผู้ติดต่อ
+  //     setHeadForm(headerClean);
+  //   };
+  // }, []);
 
   return (
     <Box
@@ -33,18 +32,10 @@ export default function InvoicePage() {
           "& .no-print": {
             display: "none",
           },
-<<<<<<< Updated upstream
-        }}
-      >
-        <InvoicePrintPage />
-      </Box>
-  )
-=======
         },
       }}
     >
       <InvoicePrintPage />
     </Box>
   );
->>>>>>> Stashed changes
 }

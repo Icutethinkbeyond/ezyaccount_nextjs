@@ -93,7 +93,7 @@ export default function QuotationPreviewPage({
       // โหลดข้อมูลบริษัทและผู้ติดต่อ
       setHeadForm(headerClean);
     };
-  }, [setBreadcrumbs]);
+  }, []);
 
   useEffect(() => {
     const fetchQuotationData = async () => {

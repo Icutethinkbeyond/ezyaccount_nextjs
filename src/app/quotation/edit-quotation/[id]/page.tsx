@@ -24,24 +24,6 @@ function EditQuotation({ params }: { params: { id: string } }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setBreadcrumbs([
-      { name: "หน้าแรก", href: `/` },
-      { name: "ใบเสนอ", href: `/quotation` },
-      { name: "แก้ไขใบเสนอราคา" },
-    ]);
-    return () => {
-      setBreadcrumbs([]);
-      setBreadcrumbs([]);
-      setCategories([]);
-      setWithholdingTaxRate(0);
-      setDiscount(0);
-      setVatIncluded(false);
-      // โหลดข้อมูลบริษัทและผู้ติดต่อ
-      setHeadForm(headerClean);
-    };
-  }, []);
-
-  useEffect(() => {
     const fetchQuotationData = async () => {
       try {
         setLoading(true);
@@ -115,16 +97,6 @@ function EditQuotation({ params }: { params: { id: string } }) {
     }
   }, [params.id]);
 
-  useEffect(() => {
-    return () => {
-      setCategories([]);
-      setWithholdingTaxRate(0);
-      setDiscount(0);
-      setVatIncluded(false);
-      // โหลดข้อมูลบริษัทและผู้ติดต่อ
-      setHeadForm(headerClean);
-    };
-  }, []);
 
   if (loading) {
     return (

@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import { usePricingContext } from "@/contexts/PricingContext";
 import { HeadForm, useQuotationListContext } from "@/contexts/QuotationContext";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { formatThaiDate } from "@/utils/utils";
 
 interface InvoiceProps {
@@ -30,17 +30,19 @@ const InvoicePreview: React.FC<InvoiceProps> = ({
   const {
     categories,
     getSubtotal,
-    getTotalAfterDiscount,
     getTaxAmount,
     getGrandTotal,
     discount,
-    taxRate,
     getCategoryTotal,
     withholdingTaxRate,
     vatIncluded,
     getWithholdingTaxAmount
   } = usePricingContext();
   const { headForm, isPreview } = useQuotationListContext();
+
+  useEffect(() => {
+console.log(headForm, categories)
+  }, [])
 
   // Get note from QuotationContext if not passed as prop
   // const { headForm } = useQuotationListContext();
@@ -103,7 +105,8 @@ const InvoicePreview: React.FC<InvoiceProps> = ({
     }
 
     return resultPages;
-  }, [categories, getCategoryTotal]);
+  }, [categories, getCategoryTotal, headForm]);
+  
 
   const renderPageHeader = (pageIndex: number) => {
     if (pageIndex === 0) {

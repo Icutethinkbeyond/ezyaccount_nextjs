@@ -23,19 +23,6 @@ const NewQuotation = () => {
     usePricingContext();
   const { setHeadForm, isPreview } = useQuotationListContext();
 
-  useEffect(() => {
-    setBreadcrumbs([
-      { name: "เพิ่มใบเสนอราคา", href: `/protected/dashboard` },
-      { name: "ใบเสนอ", href: `/protected/income/quotation` },
-      { name: "เพิ่มใบเสนอราคาใหม่" },
-    ]);
-    return () => {
-      if (!isPreview) {
-        setBreadcrumbs([]);
-      }
-    };
-  }, []);
-
   return (
     <PageContainer>
       <DashboardCard title="เพิ่มใบเสนอราคาใหม่">

@@ -69,7 +69,6 @@ export const PricingProvider: React.FC<PricingProviderProps> = ({ children }) =>
   const [vatIncluded, setVatIncluded] = useState<boolean>(false)
   const [withholdingTaxRate, setWithholdingTaxRate] = useState<number>(0)
 
-
   useEffect(() => {
     console.log(categories)
   }, [categories])
