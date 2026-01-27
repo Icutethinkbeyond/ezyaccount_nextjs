@@ -233,8 +233,8 @@ export default function QuotationPreviewPage({
           พิมพ์ใบเสนอราคา
         </Button>
       </Container>
-      <div id="invoice-print-area">
-        <InvoicePrintPage />
+      <div id="invoice-print-area" style={{ width: isPrint ? '210mm' : '100%' }}>
+        <InvoicePrintPage isPrint={isPrint} />
       </div>
     </Box>
   );
