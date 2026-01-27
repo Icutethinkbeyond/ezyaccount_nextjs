@@ -4,14 +4,21 @@ import InvoicePrintPage from "@/components/forms/pricing-table/InvoicePreview";
 import { useEffect } from "react";
 import { headerClean, useQuotationListContext } from "@/contexts/QuotationContext";
 import { usePricingContext } from "@/contexts/PricingContext";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { useRouter } from "next/navigation";
 
 export default function InvoicePage() {
   const { setCategories, setDiscount, setVatIncluded, setWithholdingTaxRate } =
     usePricingContext();
   const { setHeadForm, setIsPreview } = useQuotationListContext();
+  const router = useRouter();
 
   const handlePrint = () => {
     window.print();
+  };
+
+  const handleBack = () => {
+    router.back();
   };
 
   // useEffect(() => {
@@ -35,6 +42,21 @@ export default function InvoicePage() {
         },
       }}
     >
+      <Container
+        maxWidth="md"
+        className="no-print"
+        sx={{ py: 3, display: "flex", justifyContent: "flex-start", gap: 2 }}
+      >
+        <Button
+          variant="contained"
+          color="primary"
+          startIcon={<ArrowBackIcon />}
+          onClick={handleBack}
+          sx={{ textTransform: "none" }}
+        >
+          กลับ
+        </Button>
+      </Container>
       <InvoicePrintPage />
     </Box>
   );
