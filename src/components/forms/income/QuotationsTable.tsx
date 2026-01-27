@@ -21,6 +21,7 @@ import {
   Typography,
   Card,
   CardContent,
+  CircularProgress,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 import {
@@ -46,6 +47,7 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ }) => {
   const [rows, setRows] = useState<any[]>([]);
   // const [rowCount, setRowCount] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
+  const [downloadingId, setDownloadingId] = useState<string | null>(null);
   const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
     page: 0,
     pageSize: 10,
@@ -77,6 +79,28 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ }) => {
   const handleAddClick = () => {
     console.log("Add button clicked!");
     router.push(`/quotation/new-quotation`);
+  };
+
+  const handlePDFDownload = (documentId: string) => {
+    setDownloadingId(documentId);
+
+    // สร้าง iframe ลับเพื่อโหลดหน้า preview ในเบื้องหลัง
+    const iframe = document.createElement('iframe');
+    iframe.style.position = 'fixed';
+    iframe.style.top = '-10000px';
+    iframe.style.left = '-10000px';
+    iframe.style.width = '1024px';
+    iframe.style.height = '1000px';
+    iframe.src = `/quotation/preview/${documentId}?print=true`;
+    document.body.appendChild(iframe);
+
+    // ลบ iframe ออกหลังจากดาวน์โหลดเสร็จ (ประมาณ 10 วินาทีเผื่อเวลาโหลด data และรัน html2pdf)
+    setTimeout(() => {
+      if (document.body.contains(iframe)) {
+        document.body.removeChild(iframe);
+      }
+      setDownloadingId(null);
+    }, 10000);
   };
 
   const columns: GridColDef[] = [
@@ -139,8 +163,14 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ }) => {
           <IconButton
             size="small"
             color="info"
+            disabled={downloadingId === params.row.documentId}
+            onClick={() => handlePDFDownload(params.row.documentId)}
           >
-            <PictureAsPdf />
+            {downloadingId === params.row.documentId ? (
+              <CircularProgress size={20} color="info" />
+            ) : (
+              <PictureAsPdf />
+            )}
           </IconButton>
         </>
       ),

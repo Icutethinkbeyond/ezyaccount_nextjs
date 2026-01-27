@@ -7,15 +7,58 @@ import InvoicePrintPage from "@/components/forms/pricing-table/InvoicePrint";
 import { usePricingContext } from "@/contexts/PricingContext";
 import { useQuotationListContext } from "@/contexts/QuotationContext";
 import { useBreadcrumbContext } from "@/contexts/BreadcrumbContext";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import PageContainer from "@/components/shared/PageContainer";
+
 
 export default function QuotationPreviewPage({ params }: { params: { id: string } }) {
     const { loadData } = usePricingContext();
     const { headForm, setHeadForm } = useQuotationListContext();
     const { setBreadcrumbs } = useBreadcrumbContext();
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const isPrint = searchParams.get("print") === "true";
     const [loading, setLoading] = useState(true);
+
+    const handleDownloadPDF = async () => {
+        const element = document.getElementById('invoice-print-area');
+        if (!element) return;
+
+        // Dynamic import to avoid SSR issues with html2pdf.js
+        const html2pdf = (await import('html2pdf.js')).default;
+
+        const opt = {
+            margin: 0,
+            filename: `Quotation-${headForm.quotationNumber || 'document'}.pdf`,
+            image: { type: 'jpeg' as const, quality: 0.98 },
+            html2canvas: {
+                scale: 2,
+                useCORS: true,
+                letterRendering: true
+            },
+            jsPDF: { unit: 'mm' as const, format: 'a4' as const, orientation: 'portrait' as const },
+            pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+        };
+
+        const doc = html2pdf().set(opt).from(element);
+
+        if (isPrint) {
+            // ถ้าเป็นโหมด auto-print ให้ดาวน์โหลด (iframe จะถูกจัดการโดยต้นทาง)
+            await doc.save();
+        } else {
+            // ถ้ากดเองให้ดาวน์โหลดเฉยๆ
+            doc.save();
+        }
+    };
+
+    useEffect(() => {
+        if (!loading && isPrint) {
+            const timer = setTimeout(() => {
+                handleDownloadPDF();
+            }, 1500);
+            return () => clearTimeout(timer);
+        }
+    }, [loading, isPrint]);
 
     useEffect(() => {
         setBreadcrumbs([
@@ -26,7 +69,7 @@ export default function QuotationPreviewPage({ params }: { params: { id: string 
         return () => {
             setBreadcrumbs([]);
         };
-    }, [ setBreadcrumbs]);
+    }, [setBreadcrumbs]);
 
     useEffect(() => {
         const fetchQuotationData = async () => {
@@ -127,14 +170,14 @@ export default function QuotationPreviewPage({ params }: { params: { id: string 
                 },
             }}
         >
-            <Container maxWidth="md" className="no-print" sx={{ py: 3, display: 'flex', gap: 2 }}>
-                <Button
+            <Container maxWidth="md" className="no-print" sx={{ py: 3, display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
+                {/* <Button
                     variant="outlined"
                     startIcon={<ArrowBackIcon />}
                     onClick={handleBack}
                 >
                     กลับ
-                </Button>
+                </Button> */}
                 <Button
                     variant="contained"
                     color="primary"
@@ -143,18 +186,28 @@ export default function QuotationPreviewPage({ params }: { params: { id: string 
                 >
                     พิมพ์ใบเสนอราคา
                 </Button>
+                {/* <Button
+                    variant="contained"
+                    color="info"
+                    startIcon={<PrintIcon />}
+                    onClick={handleDownloadPDF}
+                >
+                    โหลด PDF
+                </Button> */}
             </Container>
-            <InvoicePrintPage
-                invoiceNumber={headForm.quotationNumber}
-                invoiceDate={headForm.dateCreate}
-                billTo={{
-                    name: headForm.contactorName,
-                    position: "",
-                    company: headForm.companyName,
-                    phone: headForm.contactorTel,
-                    email: headForm.contactorEmail,
-                }}
-            />
+            <div id="invoice-print-area">
+                <InvoicePrintPage
+                    invoiceNumber={headForm.quotationNumber}
+                    invoiceDate={headForm.dateCreate}
+                    billTo={{
+                        name: headForm.contactorName,
+                        position: "",
+                        company: headForm.companyName,
+                        phone: headForm.contactorTel,
+                        email: headForm.contactorEmail,
+                    }}
+                />
+            </div>
         </Box>
     );
 }
