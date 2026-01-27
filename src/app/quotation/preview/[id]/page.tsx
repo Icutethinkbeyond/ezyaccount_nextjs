@@ -212,24 +212,26 @@ export default function QuotationPreviewPage({
       <Container
         maxWidth="md"
         className="no-print"
-        sx={{ py: 3, display: "flex", justifyContent: "flex-end", gap: 2 }}
+        sx={{ py: 3, display: "flex", justifyContent: "flex-start", gap: 2 }}
       >
+        <Button
+          variant="contained"
+          color="primary"
+          startIcon={<ArrowBackIcon />}
+          onClick={handleBack}
+          sx={{ textTransform: "none" }}
+        >
+          กลับ
+        </Button>
         <Button
           variant="contained"
           color="primary"
           startIcon={<PrintIcon />}
           onClick={handlePrint}
+          sx={{ textTransform: "none" }}
         >
           พิมพ์ใบเสนอราคา
         </Button>
-        {/* <Button
-                    variant="contained"
-                    color="info"
-                    startIcon={<PrintIcon />}
-                    onClick={handleDownloadPDF}
-                >
-                    โหลด PDF
-                </Button> */}
       </Container>
       <div id="invoice-print-area">
         <InvoicePrintPage />
