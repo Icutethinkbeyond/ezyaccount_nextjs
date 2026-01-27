@@ -21,18 +21,8 @@ const ContactotInformation: React.FC = () => {
 
   
   return (
-    <BaseCard>
+    <>
       <Formik<HeadForm>
-        // initialValues={{
-        //   contactorName: "",
-        //   contactorTel: "",
-        //   contactorEmail: "",
-        //   contactorAddress: "",
-        // }}
-        // validationSchema={ContactotInformationSchema}
-        // onSubmit={(values) => {
-        //   console.log(values); // Handle form submission
-        // }}
         initialValues={headForm}
         validationSchema={ContactotInformationSchema}
         enableReinitialize
@@ -50,18 +40,10 @@ const ContactotInformation: React.FC = () => {
           return (
           <Form>
             <Box p={3} border="1px solid #ccc" borderRadius="8px">
-              <Typography variant="h6" gutterBottom>
-                ผู้ติดต่อ
+              <Typography variant="h3" gutterBottom>
+                ข้อมูลลูกค้า
               </Typography>
-              <Typography
-                style={{ marginBottom: 20 }}
-                variant="body2"
-                color="text.secondary"
-                gutterBottom
-              >
-                กรอกข้อมูลให้ครบถ้วน
-              </Typography>
-              <Grid2 container spacing={2}>
+              <Grid2 container spacing={2} mt={5}>
                 <Grid2 size={12}>
                   <Field
                     name="contactorName"
@@ -130,7 +112,7 @@ const ContactotInformation: React.FC = () => {
         )
         } }
       </Formik>
-    </BaseCard>
+    </>
   );
 };
 

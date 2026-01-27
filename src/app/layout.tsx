@@ -3,7 +3,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { Prompt } from "next/font/google";
 
-import { SessionProviders } from "../../lib/SessionProviders";
+// import { SessionProviders } from "../../lib/SessionProviders";
 import { NotifyProvider } from "@/contexts/NotifyContext";
 import { BreadcrumbProvider } from "@/contexts/BreadcrumbContext";
 import { QuotationProvider } from "@/contexts/QuotationContext";
@@ -25,7 +25,7 @@ export default async function RootLayout({
     <html>
       <body className={prompt.className}>
         <ThemeProvider theme={baselightTheme}>
-          <SessionProviders>
+          {/* <SessionProviders> */}
             <CssBaseline />
             <BreadcrumbProvider>
               <QuotationProvider>
@@ -34,7 +34,7 @@ export default async function RootLayout({
                 </PricingProvider>
               </QuotationProvider>
             </BreadcrumbProvider>
-          </SessionProviders>
+          {/* </SessionProviders> */}
         </ThemeProvider>
       </body>
     </html>

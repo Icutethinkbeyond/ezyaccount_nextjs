@@ -120,12 +120,12 @@ const PricingTable: React.FC = () => {
             <TableRow sx={{ bgcolor: "#e0e0e0" }}>
               <TableCell sx={{ fontWeight: "bold", width: "5%" }}>#</TableCell>
               <TableCell sx={{ fontWeight: "bold", width: "35%" }}>รายการ</TableCell>
-              <TableCell sx={{ fontWeight: "bold", width: "10%" }}>Unit</TableCell>
-              <TableCell sx={{ fontWeight: "bold", width: "10%" }}>Qty</TableCell>
-              <TableCell sx={{ fontWeight: "bold", width: "12%" }}>price/Unit</TableCell>
-              <TableCell sx={{ fontWeight: "bold", width: "12%" }}>price</TableCell>
-              <TableCell sx={{ fontWeight: "bold", width: "12%" }}>remark</TableCell>
-              <TableCell sx={{ fontWeight: "bold", width: "4%" }}>Actions</TableCell>
+              <TableCell sx={{ fontWeight: "bold", width: "10%" }}>หน่วย</TableCell>
+              <TableCell sx={{ fontWeight: "bold", width: "10%" }}>จำนวน</TableCell>
+              <TableCell sx={{ fontWeight: "bold", width: "12%" }}>ราคา/หน่วย</TableCell>
+              <TableCell sx={{ fontWeight: "bold", width: "12%" }}>ราคา</TableCell>
+              <TableCell sx={{ fontWeight: "bold", width: "12%" }}>หมายเหตุ</TableCell>
+              <TableCell sx={{ fontWeight: "bold", width: "4%" }}>ลบ</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
