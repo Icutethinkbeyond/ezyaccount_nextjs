@@ -14,27 +14,11 @@ import {
   Grid2,
 } from "@mui/material";
 import { usePricingContext } from "@/contexts/PricingContext";
-import { useQuotationListContext } from "@/contexts/QuotationContext";
+import { HeadForm, useQuotationListContext } from "@/contexts/QuotationContext";
 import { useMemo } from "react";
+import { formatThaiDate } from "@/utils/utils";
 
 interface InvoiceProps {
-  invoiceNumber?: string;
-  invoiceDate?: string;
-  billTo?: {
-    name: string;
-    position: string;
-    company: string;
-    phone: string;
-    email: string;
-  };
-  companyInfo?: {
-    name: string;
-    tagline: string;
-    phone: string;
-    email: string;
-    location: string;
-  };
-  note?: string;
 }
 
 // Adjusted for new layout where each item takes 2 rows (name + details)
@@ -42,27 +26,6 @@ const ROWS_PER_PAGE_FIRST = 8;
 const ROWS_PER_PAGE_OTHER = 14;
 
 const InvoicePreview: React.FC<InvoiceProps> = ({
-  invoiceNumber = "#123456",
-  invoiceDate = new Date().toLocaleDateString("th-TH", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  }),
-  billTo = {
-    name: "Jhone Doe",
-    position: "Managing Director",
-    company: "Company ltd.",
-    phone: "+123-4567 8910",
-    email: "example@mail.com",
-  },
-  companyInfo = {
-    name: "COMPANY",
-    tagline: "COMPANY TAGLINE HERE",
-    phone: "+123 4567 8910",
-    email: "example@mail.com",
-    location: "Your location here",
-  },
-  note,
 }) => {
   const {
     categories,
@@ -73,11 +36,15 @@ const InvoicePreview: React.FC<InvoiceProps> = ({
     discount,
     taxRate,
     getCategoryTotal,
+    withholdingTaxRate,
+    vatIncluded,
+    getWithholdingTaxAmount
   } = usePricingContext();
+  const { headForm, isPreview } = useQuotationListContext();
 
   // Get note from QuotationContext if not passed as prop
-  const { headForm } = useQuotationListContext();
-  const displayNote = note ?? headForm.note;
+  // const { headForm } = useQuotationListContext();
+  const displayNote = headForm?.note;
 
   const subtotal = getSubtotal();
   const taxAmount = getTaxAmount();
@@ -169,70 +136,77 @@ const InvoicePreview: React.FC<InvoiceProps> = ({
             sx={{ mb: 4, mt: 4, position: "relative", zIndex: 1 }}
           >
             <Grid item xs={6}>
-              <Typography variant="h6" sx={{ mb: 0.5, fontSize: 18 }}>
-                ลูกค้า: {billTo.name}
+              <Typography variant="h6" sx={{ fontSize: 20, mb: 2 }}>
+                ลูกค้า: คุณ{headForm.contactorName}
               </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {billTo.position}-{billTo.company}
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                sx={{ mb: 0.5 }}
+              >
+                เบอร์โทรศัพท์: {headForm.companyTel}
               </Typography>
-              <Typography variant="body2" color="text.secondary">
-                เบอร์โทรศัพท์: {billTo.phone}
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                sx={{ mb: 0.5 }}
+              >
+                อีเมล: {headForm.contactorEmail}
               </Typography>
-              <Typography variant="body2" color="text.secondary">
-                อีเมล: {billTo.email}
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                sx={{ mb: 0.5 }}
+              >
+                ที่อยู่ {headForm.contactorAddress}
               </Typography>
             </Grid>
             <Grid item xs={6} sx={{ textAlign: "right" }}>
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "flex-end",
-                  mb: 2,
-                }}
+              <Typography
+                variant="h3"
+                sx={{ fontWeight: "bold", mb: 2, fontSize: 25 }}
               >
-                {/* <Box
-                  className="company-logo"
-                  sx={{
-                    width: 50,
-                    height: 50,
-                    minWidth: 50,
-                    minHeight: 50,
-                    flexShrink: 0,
-                    backgroundColor: "#1565c0",
-                    borderRadius: "50%",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    mr: 1.5,
-                  }}
-                >
-                  <Typography sx={{ color: "white", fontWeight: "bold", fontSize: "24px" }}>C</Typography>
-                </Box> */}
-                <Box sx={{ textAlign: "left" }}>
-                  <Typography
-                    variant="h6"
-                    sx={{ fontWeight: "bold", lineHeight: 1.2 }}
-                  >
-                    {companyInfo.name}
-                  </Typography>
-                  <Typography
-                    variant="caption"
-                    color="text.secondary"
-                    sx={{ lineHeight: 1 }}
-                  >
-                    {companyInfo.tagline}
-                  </Typography>
-                </Box>
-              </Box>
-              <Typography variant="h3" sx={{ fontWeight: "bold", mb: 1 }}>
                 ใบเสนอราคา
               </Typography>
               <Typography variant="body2">
-                <strong>เลขที่:</strong> {invoiceNumber}
+                <strong>เลขที่:</strong> {headForm.quotationNumber}
               </Typography>
-              <Typography variant="body2">
-                <strong>วันที่:</strong> {invoiceDate}
+              <Typography variant="body2" sx={{ mt: 1 }}>
+                <strong>ออกเมื่อวันที่:</strong>{" "}
+                {formatThaiDate(headForm.dateCreate)}
+              </Typography>
+
+              <Typography
+                variant="h6"
+                sx={{
+                  fontWeight: "bold",
+                  lineHeight: 1.2,
+                  mt: 3,
+                  fontSize: 16,
+                }}
+              >
+                {headForm.companyName} สาขา {headForm.branch}
+              </Typography>
+              <Typography
+                variant="h6"
+                sx={{ lineHeight: 1.2, mt: 1, fontSize: 12 }}
+              >
+                {headForm.taxId &&
+                  `เลขประจำตัวผู้เสียภาษี ${headForm.taxId}`}
+              </Typography>
+              <Typography
+                variant="caption"
+                color="text.secondary"
+                sx={{ lineHeight: 1, mr: 1, fontSize: 12 }}
+              >
+                {headForm.companyAddress}
+              </Typography>
+              <Typography
+                variant="caption"
+                color="text.secondary"
+                sx={{ lineHeight: 1, fontSize: 12 }}
+              >
+                {headForm.contactorTel}
               </Typography>
             </Grid>
           </Grid>
@@ -255,12 +229,14 @@ const InvoicePreview: React.FC<InvoiceProps> = ({
             <Typography variant="h6" sx={{ fontWeight: "bold" }}>
               ใบเสนอราคา
             </Typography>
-            <Typography variant="body2">
-              <strong>เลขที่:</strong> {invoiceNumber}
+            <Typography variant="body2" sx={{ fontSize: 12 }}>
+              <strong>เลขที่:</strong> {headForm.quotationNumber}
             </Typography>
           </Box>
           <Box sx={{ textAlign: "right" }}>
-            <Typography variant="body2">หน้าที่ {pageIndex + 1}</Typography>
+            <Typography variant="body2" sx={{ fontSize: 10 }}>
+              หน้าที่ {pageIndex + 1}
+            </Typography>
           </Box>
         </Box>
       );
@@ -303,22 +279,23 @@ const InvoicePreview: React.FC<InvoiceProps> = ({
               บาท
             </Typography>
           </Box>
+            <Box
+              sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}
+            >
+              <Typography variant="body2">{!vatIncluded && 'ไม่มี'}ภาษีมูลค่าเพิ่ม {vatIncluded && '(7%)'}:</Typography>
+              <Typography variant="body2">
+                {taxAmount.toLocaleString("th-TH", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}{" "}
+                บาท
+              </Typography>
+            </Box>
+
           <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
+            <Typography variant="body2">หัก ฯ ที่จ่าย {withholdingTaxRate && `(${withholdingTaxRate}%)`}:</Typography>
             <Typography variant="body2">
-              ภาษีมูลค่าเพิ่ม ({taxRate}%):
-            </Typography>
-            <Typography variant="body2">
-              {taxAmount.toLocaleString("th-TH", {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })}{" "}
-              บาท
-            </Typography>
-          </Box>
-          <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
-            <Typography variant="body2">หัก ฯ ที่จ่าย ({taxRate}%):</Typography>
-            <Typography variant="body2">
-              {taxAmount.toLocaleString("th-TH", {
+              {getWithholdingTaxAmount().toLocaleString("th-TH", {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,
               })}{" "}
@@ -344,7 +321,7 @@ const InvoicePreview: React.FC<InvoiceProps> = ({
             <Typography
               sx={{ color: "white", fontSize: 18, letterSpacing: 0.5 }}
             >
-              {grandTotal.toLocaleString("th-TH", {
+              {getGrandTotal().toLocaleString("th-TH", {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,
               })}{" "}

@@ -104,3 +104,17 @@ export function formatNumber(number: number | null | undefined, needDecimal: boo
 
     return null;
 }
+
+export function formatThaiDate(
+  date: Date | string,
+  options?: Intl.DateTimeFormatOptions
+): string {
+  const d = typeof date === "string" ? new Date(date) : date
+
+  return new Intl.DateTimeFormat("th-TH", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    ...options,
+  }).format(d)
+}

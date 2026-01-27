@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { createContext, useContext, useEffect, useState, useCallback, type ReactNode } from "react"
+import { createContext, useContext, useEffect, useState, useCallback, type ReactNode, Dispatch } from "react"
 
 export interface SubItem {
   id: string
@@ -21,6 +21,7 @@ export interface Category {
 
 interface PricingContextType {
   categories: Category[]
+  setCategories: Dispatch<React.SetStateAction<Category[]>>;
   addCategory: (name: string) => void
   removeCategory: (categoryId: string) => void
   updateCategoryName: (categoryId: string, name: string) => void
@@ -42,7 +43,7 @@ interface PricingContextType {
   setWithholdingTaxRate: (rate: number) => void
   getWithholdingTaxAmount: () => number
   getGrandTotal: () => number
-  loadData: (categories: Category[], discount: number, vatIncluded: boolean, withholdingTaxRate?: number) => void
+  // loadData: (categories: Category[]) => void
 }
 
 const PricingContext = createContext<PricingContextType | undefined>(undefined)
@@ -168,16 +169,17 @@ export const PricingProvider: React.FC<PricingProviderProps> = ({ children }) =>
     return totalAfterDiscount + taxAmount - withholdingTaxAmount
   }, [getTotalAfterDiscount, getTaxAmount, getWithholdingTaxAmount])
 
-  const loadData = useCallback((categories: Category[], discount: number, vatIncluded: boolean, withholdingTaxRate: number = 0) => {
-    setCategories(categories)
-    setDiscount(discount)
-    setVatIncluded(vatIncluded)
-    setWithholdingTaxRate(withholdingTaxRate)
-  }, [])
+  // const loadData = useCallback((categories: Category[], discount: number, vatIncluded: boolean, withholdingTaxRate: number = 0) => {
+  //   setCategories(categories)
+  //   setDiscount(discount)
+  //   setVatIncluded(vatIncluded)
+  //   setWithholdingTaxRate(withholdingTaxRate)
+  // }, [])
 
   return (
     <PricingContext.Provider
       value={{
+        setCategories,
         categories,
         addCategory,
         removeCategory,
@@ -200,7 +202,7 @@ export const PricingProvider: React.FC<PricingProviderProps> = ({ children }) =>
         getTotalAfterDiscount,
         getTaxAmount,
         getGrandTotal,
-        loadData,
+        // loadData,
       }}
     >
       {children}

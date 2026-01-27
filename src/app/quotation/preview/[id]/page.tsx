@@ -1,192 +1,228 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Box, Button, Container, CircularProgress, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  CircularProgress,
+  Typography,
+} from "@mui/material";
 import PrintIcon from "@mui/icons-material/Print";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import InvoicePrintPage from "@/components/forms/pricing-table/InvoicePreview";
 import { usePricingContext } from "@/contexts/PricingContext";
-import { useQuotationListContext } from "@/contexts/QuotationContext";
+import {
+  headerClean,
+  useQuotationListContext,
+} from "@/contexts/QuotationContext";
 import { useBreadcrumbContext } from "@/contexts/BreadcrumbContext";
 import { useRouter, useSearchParams } from "next/navigation";
 import PageContainer from "@/components/shared/PageContainer";
 
+export default function QuotationPreviewPage({
+  params,
+}: {
+  params: { id: string };
+}) {
+  const { setCategories, setDiscount, setVatIncluded, setWithholdingTaxRate } =
+    usePricingContext();
+  const { headForm, setHeadForm } = useQuotationListContext();
+  const { setBreadcrumbs } = useBreadcrumbContext();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const isPrint = searchParams.get("print") === "true";
+  const [loading, setLoading] = useState(true);
 
-export default function QuotationPreviewPage({ params }: { params: { id: string } }) {
-    const { loadData } = usePricingContext();
-    const { headForm, setHeadForm } = useQuotationListContext();
-    const { setBreadcrumbs } = useBreadcrumbContext();
-    const router = useRouter();
-    const searchParams = useSearchParams();
-    const isPrint = searchParams.get("print") === "true";
-    const [loading, setLoading] = useState(true);
+  const handleDownloadPDF = async () => {
+    const element = document.getElementById("invoice-print-area");
+    if (!element) return;
 
-    const handleDownloadPDF = async () => {
-        const element = document.getElementById('invoice-print-area');
-        if (!element) return;
+    // Dynamic import to avoid SSR issues with html2pdf.js
+    const html2pdf = (await import("html2pdf.js")).default;
 
-        // Dynamic import to avoid SSR issues with html2pdf.js
-        const html2pdf = (await import('html2pdf.js')).default;
-
-        const opt = {
-            margin: 0,
-            filename: `Quotation-${headForm.quotationNumber || 'document'}.pdf`,
-            image: { type: 'jpeg' as const, quality: 0.98 },
-            html2canvas: {
-                scale: 2,
-                useCORS: true,
-                letterRendering: true
-            },
-            jsPDF: { unit: 'mm' as const, format: 'a4' as const, orientation: 'portrait' as const },
-            pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
-        };
-
-        const doc = html2pdf().set(opt).from(element);
-
-        if (isPrint) {
-            // ถ้าเป็นโหมด auto-print ให้ดาวน์โหลด (iframe จะถูกจัดการโดยต้นทาง)
-            await doc.save();
-        } else {
-            // ถ้ากดเองให้ดาวน์โหลดเฉยๆ
-            doc.save();
-        }
+    const opt = {
+      margin: 0,
+      filename: `Quotation-${headForm.quotationNumber || "document"}.pdf`,
+      image: { type: "jpeg" as const, quality: 0.98 },
+      html2canvas: {
+        scale: 2,
+        useCORS: true,
+        letterRendering: true,
+      },
+      jsPDF: {
+        unit: "mm" as const,
+        format: "a4" as const,
+        orientation: "portrait" as const,
+      },
+      pagebreak: { mode: ["avoid-all", "css", "legacy"] },
     };
 
-    useEffect(() => {
-        if (!loading && isPrint) {
-            const timer = setTimeout(() => {
-                handleDownloadPDF();
-            }, 1500);
-            return () => clearTimeout(timer);
-        }
-    }, [loading, isPrint]);
+    const doc = html2pdf().set(opt).from(element);
 
-    useEffect(() => {
-        setBreadcrumbs([
-            { name: "หน้าแรก", href: `/` },
-            { name: "ใบเสนอ", href: `/quotation` },
-            { name: "ตัวอย่างใบเสนอราคา" },
-        ]);
-        return () => {
-            setBreadcrumbs([]);
-        };
-    }, [setBreadcrumbs]);
-
-    useEffect(() => {
-        const fetchQuotationData = async () => {
-            try {
-                setLoading(true);
-                const response = await fetch(`/api/income/quotation/${params.id}`);
-
-                if (!response.ok) {
-                    throw new Error('Failed to fetch quotation');
-                }
-
-                const quotation = await response.json();
-                console.log("✅ Loaded quotation data for preview:", quotation);
-
-                // แปลงข้อมูล categories เป็น format ของ PricingContext
-                const categories = quotation.categories?.map((cat: any, catIndex: number) => {
-                    return {
-                        id: `category-${catIndex + 1}`,
-                        name: cat.name,
-                        subItems: cat.items?.map((item: any, itemIndex: number) => ({
-                            id: `item-${catIndex + 1}-${itemIndex + 1}`,
-                            name: item.name || "",
-                            description: item.description,
-                            unit: item.unit || "ชิ้น",
-                            qty: item.qty,
-                            pricePerUnit: item.pricePerUnit,
-                            remark: item.remark || "",
-                        })) || [],
-                    };
-                }) || [];
-
-                // โหลดข้อมูลเข้า PricingContext
-                loadData(
-                    categories,
-                    quotation.globalDiscount || 0,
-                    quotation.includeVat || false
-                );
-
-                // โหลดข้อมูลบริษัทและผู้ติดต่อ
-                setHeadForm({
-                    quotationNumber: quotation.documentIdNo || "",
-                    companyName: quotation.customerCompany?.companyName || "",
-                    companyTel: quotation.customerCompany?.companyTel || "",
-                    contactorName: quotation.contactor?.contactorName || "",
-                    contactorTel: quotation.contactor?.contactorTel || "",
-                    companyAddress: quotation.customerCompany?.companyAddress || "",
-                    contactorAddress: quotation.contactor?.contactorAddress || "",
-                    contactorEmail: quotation.contactor?.contactorEmail || "",
-                    taxId: quotation.customerCompany?.taxId || "",
-                    branch: quotation.customerCompany?.branch || "",
-                    dateCreate: quotation.documentCreateDate
-                        ? new Date(quotation.documentCreateDate).toISOString().split('T')[0]
-                        : "",
-                    includeTax: quotation.includeVat || false,
-                    note: quotation.note || "",
-                });
-
-            } catch (error) {
-                console.error("❌ Error loading quotation:", error);
-                alert("ไม่สามารถโหลดข้อมูลใบเสนอราคาได้");
-                router.push(`/quotation`);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        if (params.id) {
-            fetchQuotationData();
-        }
-    }, [params.id, router]); // Reduced dependencies to prevent infinite loop
-
-    const handlePrint = () => {
-        window.print();
-    };
-
-    const handleBack = () => {
-        router.back();
-    };
-
-    if (loading) {
-        return (
-            <PageContainer title="กำลังโหลด..." description="">
-                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '50vh', gap: 2 }}>
-                    <CircularProgress />
-                    <Typography>กำลังโหลดข้อมูล...</Typography>
-                </Box>
-            </PageContainer>
-        );
+    if (isPrint) {
+      // ถ้าเป็นโหมด auto-print ให้ดาวน์โหลด (iframe จะถูกจัดการโดยต้นทาง)
+      await doc.save();
+    } else {
+      // ถ้ากดเองให้ดาวน์โหลดเฉยๆ
+      doc.save();
     }
+  };
 
+  useEffect(() => {
+    if (!loading && isPrint) {
+      const timer = setTimeout(() => {
+        handleDownloadPDF();
+      }, 1500);
+      return () => clearTimeout(timer);
+    }
+  }, [loading, isPrint]);
+
+  useEffect(() => {
+    setBreadcrumbs([
+      { name: "หน้าแรก", href: `/` },
+      { name: "ใบเสนอ", href: `/quotation` },
+      { name: "ตัวอย่างใบเสนอราคา" },
+    ]);
+    return () => {
+      setBreadcrumbs([]);
+      setBreadcrumbs([]);
+      setCategories([]);
+      setWithholdingTaxRate(0);
+      setDiscount(0);
+      setVatIncluded(false);
+      // โหลดข้อมูลบริษัทและผู้ติดต่อ
+      setHeadForm(headerClean);
+    };
+  }, [setBreadcrumbs]);
+
+  useEffect(() => {
+    const fetchQuotationData = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(`/api/income/quotation/${params.id}`);
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch quotation");
+        }
+
+        const quotation = await response.json();
+        console.log("✅ Loaded quotation data for preview:", quotation);
+
+        // แปลงข้อมูล categories เป็น format ของ PricingContext
+        const categories =
+          quotation.categories?.map((cat: any, catIndex: number) => {
+            return {
+              id: `category-${catIndex + 1}`,
+              name: cat.name,
+              subItems:
+                cat.items?.map((item: any, itemIndex: number) => ({
+                  id: `item-${catIndex + 1}-${itemIndex + 1}`,
+                  name: item.name || "",
+                  description: item.description,
+                  unit: item.unit || "ชิ้น",
+                  qty: item.qty,
+                  pricePerUnit: item.pricePerUnit,
+                  remark: item.remark || "",
+                })) || [],
+            };
+          }) || [];
+
+        // โหลดข้อมูลเข้า PricingContext
+        setCategories(categories);
+        // loadData(
+        //   categories,
+        //   quotation.globalDiscount || 0,
+        //   quotation.includeVat || false,
+        //   quotation.taxRate || 0
+        // );
+        setWithholdingTaxRate(quotation.withholdingTax);
+        setDiscount(quotation.globalDiscount);
+        setVatIncluded(quotation.includeVat);
+
+        // โหลดข้อมูลบริษัทและผู้ติดต่อ
+        setHeadForm({
+          quotationNumber: quotation.documentIdNo || "",
+          companyName: quotation.customerCompany?.companyName || "",
+          companyTel: quotation.customerCompany?.companyTel || "",
+          contactorName: quotation.contactor?.contactorName || "",
+          contactorTel: quotation.contactor?.contactorTel || "",
+          companyAddress: quotation.customerCompany?.companyAddress || "",
+          contactorAddress: quotation.contactor?.contactorAddress || "",
+          contactorEmail: quotation.contactor?.contactorEmail || "",
+          taxId: quotation.customerCompany?.taxId || "",
+          branch: quotation.customerCompany?.branch || "",
+          dateCreate: quotation.documentCreateDate
+            ? new Date(quotation.documentCreateDate).toISOString().split("T")[0]
+            : "",
+          includeTax: quotation.includeVat || false,
+          note: quotation.note || "",
+        });
+      } catch (error) {
+        console.error("❌ Error loading quotation:", error);
+        alert("ไม่สามารถโหลดข้อมูลใบเสนอราคาได้");
+        router.push(`/quotation`);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (params.id) {
+      fetchQuotationData();
+    }
+  }, [params.id, router]); // Reduced dependencies to prevent infinite loop
+
+  const handlePrint = () => {
+    window.print();
+  };
+
+  const handleBack = () => {
+    router.back();
+  };
+
+  if (loading) {
     return (
+      <PageContainer title="กำลังโหลด..." description="">
         <Box
-            sx={{
-                "@media print": {
-                    "& .no-print": {
-                        display: "none",
-                    },
-                },
-            }}
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            height: "50vh",
+            gap: 2,
+          }}
         >
-            <Container maxWidth="md" className="no-print" sx={{ py: 3, display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
-                {/* <Button
-                    variant="outlined"
-                    startIcon={<ArrowBackIcon />}
-                    onClick={handleBack}
-                >
-                    กลับ
-                </Button> */}
-                <Button
-                    variant="contained"
-                    color="primary"
-                    startIcon={<PrintIcon />}
-                    onClick={handlePrint}
-                >
-                    พิมพ์ใบเสนอราคา
-                </Button>
-                {/* <Button
+          <CircularProgress />
+          <Typography>กำลังโหลดข้อมูล...</Typography>
+        </Box>
+      </PageContainer>
+    );
+  }
+
+  return (
+    <Box
+      sx={{
+        "@media print": {
+          "& .no-print": {
+            display: "none",
+          },
+        },
+      }}
+    >
+      <Container
+        maxWidth="md"
+        className="no-print"
+        sx={{ py: 3, display: "flex", justifyContent: "flex-end", gap: 2 }}
+      >
+        <Button
+          variant="contained"
+          color="primary"
+          startIcon={<PrintIcon />}
+          onClick={handlePrint}
+        >
+          พิมพ์ใบเสนอราคา
+        </Button>
+        {/* <Button
                     variant="contained"
                     color="info"
                     startIcon={<PrintIcon />}
@@ -194,20 +230,10 @@ export default function QuotationPreviewPage({ params }: { params: { id: string 
                 >
                     โหลด PDF
                 </Button> */}
-            </Container>
-            <div id="invoice-print-area">
-                <InvoicePrintPage
-                    invoiceNumber={headForm.quotationNumber}
-                    invoiceDate={headForm.dateCreate}
-                    billTo={{
-                        name: headForm.contactorName,
-                        position: "",
-                        company: headForm.companyName,
-                        phone: headForm.contactorTel,
-                        email: headForm.contactorEmail,
-                    }}
-                />
-            </div>
-        </Box>
-    );
+      </Container>
+      <div id="invoice-print-area">
+        <InvoicePrintPage />
+      </div>
+    </Box>
+  );
 }

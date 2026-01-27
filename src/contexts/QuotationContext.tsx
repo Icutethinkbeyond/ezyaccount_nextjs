@@ -165,6 +165,9 @@ interface QuotationListContextProps {
   headForm: HeadForm;
   setHeadForm: React.Dispatch<React.SetStateAction<HeadForm>>;
   loadHeadForm: (data: Partial<HeadForm>) => void;
+
+  isPreview: boolean;
+  setIsPreview: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 // สร้าง Context
@@ -182,6 +185,8 @@ export const QuotationProvider = ({ children }: { children: ReactNode }) => {
     useState<SubProduct>(subProductClean);
   const [isProductEdit, setIsProductEdit] = useState<boolean>(false);
   const [isSubProductEdit, setIsSubProductEdit] = useState<boolean>(false);
+
+  const [isPreview, setIsPreview] = useState<boolean>(false);
 
 
   // Function to calculate totals
@@ -404,7 +409,9 @@ export const QuotationProvider = ({ children }: { children: ReactNode }) => {
         setHeadForm,
         loadHeadForm: useCallback((data: Partial<HeadForm>) => {
           setHeadForm(prev => ({ ...prev, ...data }));
-        }, [])
+        }, []),
+        setIsPreview,
+        isPreview
       }}
     >
       {children}

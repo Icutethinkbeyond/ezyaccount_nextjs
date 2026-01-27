@@ -14,14 +14,15 @@ import {
   FormControl,
   useTheme,
   Button,
+  InputLabel,
+  OutlinedInput,
 } from "@mui/material";
 
 // Context สำหรับคำนวณราคา (หมวดสินค้า, VAT, ส่วนลด ฯลฯ)
 import { usePricingContext } from "@/contexts/PricingContext";
 
 // Context สำหรับข้อมูลหัวเอกสารใบเสนอราคา (บริษัท / ผู้ติดต่อ)
-import { useQuotationListContext } from "@/contexts/QuotationContext";
-
+import { headerClean, useQuotationListContext } from "@/contexts/QuotationContext";
 
 import { Visibility } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
@@ -31,21 +32,25 @@ interface PricingSummaryProps {
   quotationId?: string;
 }
 
-const PricingSummary: React.FC<PricingSummaryProps> = ({ isEdit = false, quotationId }) => {
+const PricingSummary: React.FC<PricingSummaryProps> = ({
+  isEdit = false,
+  quotationId,
+}) => {
   const theme = useTheme();
   const router = useRouter();
 
   // ดึงข้อมูลและฟังก์ชันที่เกี่ยวกับการคำนวณราคาจาก PricingContext
   const {
-    getTotalPrice,   // รวมราคาสินค้าทั้งหมด
-    discount,        // ส่วนลดรวม
-    setDiscount,     // setter ส่วนลด
-    vatIncluded,     // คิด VAT หรือไม่
-    setVatIncluded,  // setter VAT
-    taxRate,         // อัตราภาษี (%)
+    getTotalPrice, // รวมราคาสินค้าทั้งหมด
+    discount, // ส่วนลดรวม
+    setDiscount, // setter ส่วนลด
+    vatIncluded, // คิด VAT หรือไม่
+    setVatIncluded, // setter VAT
+    taxRate, // อัตราภาษี (%)
     withholdingTaxRate,
     setWithholdingTaxRate,
     getWithholdingTaxAmount,
+    setCategories
   } = usePricingContext();
 
   // ข้อมูลหัวเอกสาร (บริษัท / ผู้ติดต่อ)
@@ -54,22 +59,20 @@ const PricingSummary: React.FC<PricingSummaryProps> = ({ isEdit = false, quotati
   // หมวดสินค้าและรายการย่อย (ใช้สำหรับบันทึกลง DB)
   const { categories } = usePricingContext();
 
-
-
   /**
    * ======================
    * ส่วนคำนวณราคา
    * ======================
    */
-  const subtotal = getTotalPrice();                    // ราคารวมก่อนหักส่วนลด
-  const priceAfterDiscount = subtotal - discount;     // ราคาหลังหักส่วนลด
+  const subtotal = getTotalPrice(); // ราคารวมก่อนหักส่วนลด
+  const priceAfterDiscount = subtotal - discount; // ราคาหลังหักส่วนลด
   const vat = vatIncluded
-    ? priceAfterDiscount * (taxRate / 100)            // คำนวณ VAT
+    ? priceAfterDiscount * (taxRate / 100) // คำนวณ VAT
     : 0;
 
-  const totalWithVat = priceAfterDiscount + vat;       // รวม VAT
+  const totalWithVat = priceAfterDiscount + vat; // รวม VAT
   const withholdingTax = getWithholdingTaxAmount(); // ภาษี ณ ที่จ่าย
-  const finalTotal = totalWithVat - withholdingTax;    // ยอดสุทธิที่ต้องชำระ
+  const finalTotal = totalWithVat - withholdingTax; // ยอดสุทธิที่ต้องชำระ
 
   /**
    * เปิดหน้า Preview ใบเสนอราคา
@@ -111,8 +114,8 @@ const PricingSummary: React.FC<PricingSummaryProps> = ({ isEdit = false, quotati
 
         // ข้อมูลการเงิน
         includeVat: vatIncluded,
-        taxRate: 7,                  // อัตรา VAT (ปัจจุบันใช้ 7%)
-        globalDiscount: discount,    // ส่วนลดรวม
+        taxRate: 7, // อัตรา VAT (ปัจจุบันใช้ 7%)
+        globalDiscount: discount, // ส่วนลดรวม
         withholdingTax: withholdingTax, // ภาษีหัก ณ ที่จ่าย
         withholdingTaxRate: withholdingTaxRate, // อัตราภาษีหัก ณ ที่จ่าย
 
@@ -133,16 +136,17 @@ const PricingSummary: React.FC<PricingSummaryProps> = ({ isEdit = false, quotati
       };
 
       // เรียก Action เพื่อบันทึกหรืออัพเดทข้อมูล
-      const url = isEdit && quotationId
-        ? `/api/income/quotation/${quotationId}`
-        : '/api/income/quotation/new';
+      const url =
+        isEdit && quotationId
+          ? `/api/income/quotation/${quotationId}`
+          : "/api/income/quotation/new";
 
-      const method = isEdit ? 'PATCH' : 'POST';
+      const method = isEdit ? "PATCH" : "POST";
 
       const res = await fetch(url, {
         method: method,
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(quotationData),
       });
@@ -151,6 +155,12 @@ const PricingSummary: React.FC<PricingSummaryProps> = ({ isEdit = false, quotati
       if (result.success) {
         alert(isEdit ? "อัพเดทใบเสนอราคาสำเร็จ!" : "บันทึกใบเสนอราคาสำเร็จ!");
         router.push(`/quotation`);
+        setCategories([]);
+        setWithholdingTaxRate(0);
+        setDiscount(0);
+        setVatIncluded(false);
+        // โหลดข้อมูลบริษัทและผู้ติดต่อ
+        setHeadForm(headerClean);
       } else {
         alert("เกิดข้อผิดพลาด: " + result.error);
       }
@@ -200,7 +210,9 @@ const PricingSummary: React.FC<PricingSummaryProps> = ({ isEdit = false, quotati
       <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
         <Typography>ราคาหลังหักส่วนลด</Typography>
         <Typography fontWeight="bold">
-          {priceAfterDiscount.toLocaleString("th-TH", { minimumFractionDigits: 2 })}
+          {priceAfterDiscount.toLocaleString("th-TH", {
+            minimumFractionDigits: 2,
+          })}
         </Typography>
       </Box>
 
@@ -244,10 +256,17 @@ const PricingSummary: React.FC<PricingSummaryProps> = ({ isEdit = false, quotati
 
       <Divider sx={{ my: 2 }} />
 
-      {/* ภาษีหัก ณ ที่จ่าย */}
+            {/* ภาษีหัก ณ ที่จ่าย */}
       <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
         <FormControl size="small" sx={{ minWidth: 150 }}>
+          <InputLabel id="select-serviceIds-label">หัก ณ ที่จ่าย</InputLabel>
           <Select
+            input={
+              <OutlinedInput
+                id="select-serviceIds-label"
+                label="ภาษี ณ ที่จ่าย<"
+              />
+            }
             value={withholdingTaxRate}
             onChange={(e) => setWithholdingTaxRate(Number(e.target.value))}
           >
@@ -255,7 +274,12 @@ const PricingSummary: React.FC<PricingSummaryProps> = ({ isEdit = false, quotati
             <MenuItem value={1}>1%</MenuItem>
             <MenuItem value={2}>2%</MenuItem>
             <MenuItem value={3}>3%</MenuItem>
+            <MenuItem value={4}>4%</MenuItem>
             <MenuItem value={5}>5%</MenuItem>
+            <MenuItem value={6}>6%</MenuItem>
+            <MenuItem value={7}>7%</MenuItem>
+            <MenuItem value={8}>8%</MenuItem>
+            <MenuItem value={9}>9%</MenuItem>
             <MenuItem value={10}>10%</MenuItem>
           </Select>
         </FormControl>
@@ -323,7 +347,7 @@ const PricingSummary: React.FC<PricingSummaryProps> = ({ isEdit = false, quotati
           บันทึกใบเสนอราคา
         </Button>
       </Box>
-    </Paper >
+    </Paper>
   );
 };
 

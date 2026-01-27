@@ -11,9 +11,17 @@ import PageContainer from "@/components/shared/PageContainer";
 import PricingTable from "@/components/forms/pricing-table/PricingTable";
 import PricingSummary from "@/components/forms/pricing-table/PricingSummary";
 import DashboardCard from "@/components/shared/DashboardCard";
+import { usePricingContext } from "@/contexts/PricingContext";
+import {
+  headerClean,
+  useQuotationListContext,
+} from "@/contexts/QuotationContext";
 
 const NewQuotation = () => {
   const { setBreadcrumbs } = useBreadcrumbContext();
+  const { setCategories, setDiscount, setVatIncluded, setWithholdingTaxRate } =
+    usePricingContext();
+  const { setHeadForm, isPreview } = useQuotationListContext();
 
   useEffect(() => {
     setBreadcrumbs([
@@ -22,30 +30,32 @@ const NewQuotation = () => {
       { name: "เพิ่มใบเสนอราคาใหม่" },
     ]);
     return () => {
-      setBreadcrumbs([]);
+      if (!isPreview) {
+        setBreadcrumbs([]);
+      }
     };
   }, []);
 
   return (
     <PageContainer>
       <DashboardCard title="เพิ่มใบเสนอราคาใหม่">
-      <Grid2 container spacing={3}>
-        <Grid2 size={6}>
-          <CompanyInformation />
-        </Grid2>
-        <Grid2 size={6}>
-          <ContactotInformation />
-        </Grid2>
-        <Grid2 size={12}>
-          <PricingTable />
-        </Grid2>
-        <Grid2 container size={12}>
-          <Grid2 size={6}>{/* <DocumentFooter /> */}</Grid2>
+        <Grid2 container spacing={3}>
           <Grid2 size={6}>
-            <PricingSummary />
+            <CompanyInformation />
+          </Grid2>
+          <Grid2 size={6}>
+            <ContactotInformation />
+          </Grid2>
+          <Grid2 size={12}>
+            <PricingTable />
+          </Grid2>
+          <Grid2 container size={12}>
+            <Grid2 size={6}>{/* <DocumentFooter /> */}</Grid2>
+            <Grid2 size={6}>
+              <PricingSummary />
+            </Grid2>
           </Grid2>
         </Grid2>
-      </Grid2>
       </DashboardCard>
     </PageContainer>
   );
