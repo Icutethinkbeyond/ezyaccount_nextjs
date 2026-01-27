@@ -8,11 +8,11 @@ import { HeadForm, useQuotationListContext } from "@/contexts/QuotationContext";
 // Validation Schema with Yup
 const ContactotInformationSchema = Yup.object({
   contactorName: Yup.string().required("ชื่อผู้ติดต่อจำเป็นต้องกรอก"),
-  contactorTel: Yup.string().required("เบอร์โทรจำเป็นต้องกรอก"),
-  contactorEmail: Yup.string()
-    .email("อีเมล์ไม่ถูกต้อง")
-    .required("อีเมล์จำเป็นต้องกรอก"),
-  contactorAddress: Yup.string().required("ที่อยู่จำเป็นต้องกรอก"),
+  // contactorTel: Yup.string().required("เบอร์โทรจำเป็นต้องกรอก"),
+  // contactorEmail: Yup.string()
+  //   .email("อีเมล์ไม่ถูกต้อง")
+  //   .required("อีเมล์จำเป็นต้องกรอก"),
+  // contactorAddress: Yup.string().required("ที่อยู่จำเป็นต้องกรอก"),
 });
 
 const ContactotInformation: React.FC = () => {
@@ -67,7 +67,6 @@ const ContactotInformation: React.FC = () => {
                     variant="outlined"
                     size="small"
                     fullWidth
-                    required
                     error={touched.contactorTel && Boolean(errors.contactorTel)}
                     helperText={<ErrorMessage name="contactorTel" />}
                   />
@@ -81,7 +80,6 @@ const ContactotInformation: React.FC = () => {
                     size="small"
                     type="email"
                     fullWidth
-                    required
                     error={
                       touched.contactorEmail && Boolean(errors.contactorEmail)
                     }
@@ -96,7 +94,6 @@ const ContactotInformation: React.FC = () => {
                     variant="outlined"
                     size="small"
                     fullWidth
-                    required
                     multiline
                     rows={3}
                     error={

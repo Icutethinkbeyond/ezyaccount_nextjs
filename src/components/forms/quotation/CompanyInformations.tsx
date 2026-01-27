@@ -52,7 +52,6 @@ const CompanyInformation: React.FC = () => {
                       variant="outlined"
                       size="small"
                       fullWidth
-                      required
                       error={touched.companyName && Boolean(errors.companyName)}
                       helperText={<ErrorMessage name="companyName" />}
                     />
@@ -65,7 +64,6 @@ const CompanyInformation: React.FC = () => {
                       variant="outlined"
                       size="small"
                       fullWidth
-                      required
                       error={touched.companyTel && Boolean(errors.companyTel)}
                       helperText={<ErrorMessage name="companyTel" />}
                     />
@@ -78,7 +76,6 @@ const CompanyInformation: React.FC = () => {
                       variant="outlined"
                       size="small"
                       fullWidth
-                      required
                       error={touched.taxId && Boolean(errors.taxId)}
                       helperText={<ErrorMessage name="taxId" />}
                     />
@@ -91,7 +88,6 @@ const CompanyInformation: React.FC = () => {
                       variant="outlined"
                       size="small"
                       fullWidth
-                      required
                       error={touched.branch && Boolean(errors.branch)}
                       helperText={<ErrorMessage name="branch" />}
                     />
@@ -104,7 +100,6 @@ const CompanyInformation: React.FC = () => {
                       variant="outlined"
                       size="small"
                       fullWidth
-                      required
                       type="date"
                       InputLabelProps={{
                         shrink: true,
@@ -121,7 +116,6 @@ const CompanyInformation: React.FC = () => {
                       variant="outlined"
                       size="small"
                       fullWidth
-                      required
                       multiline
                       rows={3}
                       error={

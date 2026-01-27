@@ -32,6 +32,8 @@ import {
   Visibility,
   PictureAsPdf,
 } from "@mui/icons-material";
+import { CustomNoRowsOverlay } from "@/components/shared/NoData";
+import { CustomToolbar } from "@/components/shared/CustomToolbar";
 
 
 interface ProductTableProps {
@@ -214,7 +216,7 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ }) => {
       <Box p={3} border="1px solid #ccc" borderRadius="8px" mb={2} mt={2}>
         <DataGrid
           initialState={{ pagination: { paginationModel } }}
-          pageSizeOptions={[5, 10, 20]}
+          pageSizeOptions={[5, 10, 20, 50, 100]}
           checkboxSelection
           sx={{ border: 0 }}
           getRowId={(row) => row.keyId} // ระบุ keyId เป็นค่า id ของแต่ละ row
@@ -224,6 +226,10 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ }) => {
           // rowCount={rowCount}
           onPaginationModelChange={setPaginationModel}
           loading={loading}
+          slots={{
+              noRowsOverlay: CustomNoRowsOverlay,
+              toolbar: CustomToolbar,
+            }}
         />
       </Box>
     </Box>
