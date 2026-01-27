@@ -19,7 +19,6 @@ import { useEffect, useMemo } from "react";
 import { formatThaiDate } from "@/utils/utils";
 
 interface InvoiceProps {
-  isPrint?: boolean;
 }
 
 // Adjusted for new layout where each item takes 2 rows (name + details)
@@ -27,7 +26,6 @@ const ROWS_PER_PAGE_FIRST = 8;
 const ROWS_PER_PAGE_OTHER = 14;
 
 const InvoicePreview: React.FC<InvoiceProps> = ({
-  isPrint = false,
 }) => {
   const {
     categories,
@@ -43,7 +41,7 @@ const InvoicePreview: React.FC<InvoiceProps> = ({
   const { headForm, isPreview } = useQuotationListContext();
 
   useEffect(() => {
-    console.log(headForm, categories)
+console.log(headForm, categories)
   }, [])
 
   // Get note from QuotationContext if not passed as prop
@@ -108,7 +106,7 @@ const InvoicePreview: React.FC<InvoiceProps> = ({
 
     return resultPages;
   }, [categories, getCategoryTotal, headForm]);
-
+  
 
   const renderPageHeader = (pageIndex: number) => {
     if (pageIndex === 0) {
@@ -284,18 +282,18 @@ const InvoicePreview: React.FC<InvoiceProps> = ({
               บาท
             </Typography>
           </Box>
-          <Box
-            sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}
-          >
-            <Typography variant="body2">{!vatIncluded && 'ไม่มี'}ภาษีมูลค่าเพิ่ม {vatIncluded && '(7%)'}:</Typography>
-            <Typography variant="body2">
-              {taxAmount.toLocaleString("th-TH", {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })}{" "}
-              บาท
-            </Typography>
-          </Box>
+            <Box
+              sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}
+            >
+              <Typography variant="body2">{!vatIncluded && 'ไม่มี'}ภาษีมูลค่าเพิ่ม {vatIncluded && '(7%)'}:</Typography>
+              <Typography variant="body2">
+                {taxAmount.toLocaleString("th-TH", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}{" "}
+                บาท
+              </Typography>
+            </Box>
 
           <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
             <Typography variant="body2">หัก ฯ ที่จ่าย {withholdingTaxRate && `(${withholdingTaxRate}%)`}:</Typography>
@@ -528,7 +526,7 @@ const InvoicePreview: React.FC<InvoiceProps> = ({
             min-width: 32px !important;
             max-width: 32px !important;
             min-height: 32px !important;
-            max-width: 32px !important;
+            max-height: 32px !important;
             flex-shrink: 0 !important;
             margin-right: 8px !important;
           }
@@ -579,22 +577,15 @@ const InvoicePreview: React.FC<InvoiceProps> = ({
             display: flex;
             flex-direction: column;
             align-items: center;
-            background: ${isPrint ? "white" : "#f0f0f0"};
-            padding: ${isPrint ? "0" : "20px"};
+            background: #f0f0f0;
+            padding: 20px;
             min-height: 100vh;
           }
 
           .print-page {
             background: white;
-            box-shadow: ${isPrint ? "none" : "0 4px 20px rgba(0, 0, 0, 0.15)"};
-            margin-bottom: ${isPrint ? "0" : "20px"};
-          }
-
-          /* Force remove scrollbars for PDF generation */
-          .print-page .MuiTableContainer-root {
-            overflow: visible !important;
-            height: auto !important;
-            max-height: none !important;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            margin-bottom: 20px;
           }
         }
       `}</style>
@@ -609,9 +600,9 @@ const InvoicePreview: React.FC<InvoiceProps> = ({
               position: "relative",
               padding: "15mm",
               margin: "0 auto",
-              marginBottom: isPrint ? "0" : "20px",
+              marginBottom: "20px",
               backgroundColor: "white",
-              boxShadow: isPrint ? "none" : "0 4px 20px rgba(0,0,0,0.15)",
+              boxShadow: "0 4px 20px rgba(0,0,0,0.15)",
               display: "flex",
               flexDirection: "column",
               boxSizing: "border-box",
