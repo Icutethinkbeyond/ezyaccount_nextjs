@@ -18,11 +18,6 @@ export default function InvoicePage() {
           },
         }}
       >
-        {/* <Container maxWidth="md" className="no-print" sx={{ py: 3 }}>
-          <Button variant="contained" startIcon={<PrintIcon />} onClick={handlePrint} sx={{ mb: 2 }}>
-            พิมพ์ใบแจ้งหนี้
-          </Button>
-        </Container> */}
         <InvoicePrintPage />
       </Box>
   )
