@@ -626,7 +626,7 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
               elevation={0}
               sx={{ mb: 3, flexGrow: 1 }}
             >
-              <Table sx={{ width: '100%'}}>
+              <Table sx={{ width: "100%" }}>
                 <TableHead>
                   <TableRow sx={{ backgroundColor: "#1565c0" }}>
                     <TableCell
@@ -664,7 +664,7 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
                         color: "white",
                         fontSize: 12,
                         textAlign: "right",
-                        width: "120px",
+                        width: "200px",
                       }}
                     >
                       ราคา/หน่วย
@@ -679,7 +679,7 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
                     >
                       ราคา
                     </TableCell>
-                    <TableCell
+                    {/* <TableCell
                       sx={{
                         color: "white",
                         width: "150px",
@@ -687,7 +687,7 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
                       }}
                     >
                       หมายเหตุ
-                    </TableCell>
+                    </TableCell> */}
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -696,7 +696,7 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
                       return (
                         <TableRow key={`header-${pageIndex}-${rowIndex}`}>
                           <TableCell
-                            colSpan={7}
+                            colSpan={6}
                             sx={{
                               backgroundColor: "#1565c0",
                               color: "white",
@@ -715,7 +715,7 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
                       return (
                         <TableRow
                           key={`item-name-${pageIndex}-${rowIndex}`}
-                          sx={{ bgcolor: "#f8f9fa" }}
+                          sx={{ bgcolor: "#d6e9ff" }} 
                         >
                           <TableCell sx={{ fontSize: 12 }}>
                             {item.displayIndex}
@@ -737,7 +737,7 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
                           <TableCell sx={{ textAlign: "right", fontSize: 12 }}>
                             {itemTotal.toLocaleString()}
                           </TableCell>
-                          <TableCell>{item.remark}</TableCell>
+                          {/* <TableCell>{item.remark}</TableCell> */}
                           <TableCell />
                         </TableRow>
                       );
@@ -747,28 +747,38 @@ const InvoicePrint: React.FC<InvoiceProps> = ({
                       return (
                         <TableRow key={`item-details-${pageIndex}-${rowIndex}`}>
                           <TableCell />
-                          <TableCell>
+                          <TableCell colSpan={3}>
                             <Typography
                               variant="body2"
                               color="text.secondary"
-                              sx={{ pl: 2, fontSize: 12 }}
+                              sx={{ fontSize: 12 }}
+                            >
+                              <strong>รายละเอียด:</strong>
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              color="text.secondary"
+                              sx={{ fontSize: 12 }}
                             >
                               {item.description}
                             </Typography>
                           </TableCell>
-                          {/* <TableCell sx={{ textAlign: "center", fontSize: 12  }}>
-                            {item.qty}
+                          <TableCell colSpan={2}>
+                            <Typography
+                              variant="body2"
+                              color="text.secondary"
+                              sx={{ fontSize: 12 }}
+                            >
+                              <strong>หมายเหตุ:</strong>
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              color="text.secondary"
+                              sx={{ fontSize: 12 }}
+                            >
+                              {item.remark}
+                            </Typography>
                           </TableCell>
-                          <TableCell sx={{ textAlign: "center", fontSize: 12  }}>
-                            {item.unit}
-                          </TableCell>
-                          <TableCell sx={{ textAlign: "right", fontSize: 12  }}>
-                            {item.pricePerUnit.toLocaleString()}
-                          </TableCell>
-                          <TableCell sx={{ textAlign: "right", fontSize: 12  }}>
-                            {itemTotal.toLocaleString()}
-                          </TableCell>
-                          <TableCell>{item.remark}</TableCell> */}
                         </TableRow>
                       );
                     } else if (row.type === "subtotal") {

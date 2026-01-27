@@ -7,12 +7,12 @@ import { HeadForm, useQuotationListContext } from "@/contexts/QuotationContext";
 
 // Validation Schema with Yup
 const CompanyInformationSchema = Yup.object({
-  companyName: Yup.string().required("ชื่อบริษัทจำเป็นต้องกรอก"),
-  companyTel: Yup.string().required("เบอร์โทรจำเป็นต้องกรอก"),
-  taxId: Yup.string().required("เลขที่เสียภาษีจำเป็นต้องกรอก"),
-  // branch: Yup.string().required("สาขาจำเป็นต้องกรอก"),
-  dateCreate: Yup.date().required("วันที่สร้างจำเป็นต้องกรอก"),
-  companyAddress: Yup.string().required("ที่อยู่จำเป็นต้องกรอก"),
+  // companyName: Yup.string().required("ชื่อบริษัทจำเป็นต้องกรอก"),
+  // companyTel: Yup.string().required("เบอร์โทรจำเป็นต้องกรอก"),
+  // taxId: Yup.string().required("เลขที่เสียภาษีจำเป็นต้องกรอก"),
+  // // branch: Yup.string().required("สาขาจำเป็นต้องกรอก"),
+  // dateCreate: Yup.date().required("วันที่สร้างจำเป็นต้องกรอก"),
+  // companyAddress: Yup.string().required("ที่อยู่จำเป็นต้องกรอก"),
 });
 
 const CompanyInformation: React.FC = () => {
