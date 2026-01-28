@@ -21,13 +21,13 @@ import QuotationSummary from "./QuotationSummary";
 import QuotationFooter from "./QuotationFooter";
 import QuotationTable from "./QuotationTable";
 
-interface InvoiceProps {}
+interface InvoiceProps { }
 
 // Adjusted for new layout where each item takes 2 rows (name + details)
 const ROWS_PER_PAGE_FIRST = 8;
 const ROWS_PER_PAGE_OTHER = 14;
 
-const InvoicePreview: React.FC<InvoiceProps> = ({}) => {
+const InvoicePreview: React.FC<InvoiceProps> = ({ }) => {
   const {
     categories,
     getSubtotal,
@@ -193,9 +193,9 @@ const InvoicePreview: React.FC<InvoiceProps> = ({}) => {
             className="print-page"
             sx={{
               width: "210mm",
-              height: "297mm",
-              minHeight: "297mm", // เพิ่มเพื่อให้มั่นใจว่าไม่หด
-              maxHeight: "297mm", // เพิ่มเพื่อให้มั่นใจว่าไม่ยืด
+              height: "296.5mm",
+              minHeight: "296.5mm",
+              maxHeight: "296.5mm",
               position: "relative",
               padding: "15mm",
               margin: "0 auto",
@@ -205,7 +205,7 @@ const InvoicePreview: React.FC<InvoiceProps> = ({}) => {
               display: "flex",
               flexDirection: "column",
               boxSizing: "border-box",
-              overflow: "hidden", // สำคัญมาก: เพื่อไม่ให้ Content ทะลุหน้า
+              overflow: "hidden",
             }}
           >
             {/* ส่วน QuotationHeader */}

@@ -48,6 +48,8 @@ export default function QuotationPreviewPage({
         scale: 2,
         useCORS: true,
         letterRendering: true,
+        scrollY: 0,
+        scrollX: 0,
       },
       jsPDF: {
         unit: "mm" as const,
@@ -233,7 +235,7 @@ export default function QuotationPreviewPage({
           พิมพ์ใบเสนอราคา
         </Button>
       </Container>
-      <div id="invoice-print-area">
+      <div id="invoice-print-area" className={isPrint ? "pdf-capture-mode" : ""}>
         <InvoicePrintPage />
       </div>
     </Box>
