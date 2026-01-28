@@ -33,6 +33,7 @@ import {
   PictureAsPdf,
   Delete,
   DeleteSweep,
+  Search,
 } from "@mui/icons-material";
 import { CustomNoRowsOverlay } from "@/components/shared/NoData";
 import { CustomToolbar } from "@/components/shared/CustomToolbar";
@@ -50,6 +51,8 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ }) => {
 
   const router = useRouter();
   const [rows, setRows] = useState<any[]>([]);
+  const [filteredRows, setFilteredRows] = useState<any[]>([]);
+  const [searchQuery, setSearchQuery] = useState<string>("");
   // const [rowCount, setRowCount] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
@@ -72,6 +75,7 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ }) => {
           id: item.documentIdNo,
         }));
         setRows(mappedData);
+        setFilteredRows(mappedData);
       } else {
         console.error("Data received is not an array:", data);
         setRows([]);
@@ -91,6 +95,37 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ }) => {
     console.log("Add button clicked!");
     router.push(`/quotation/new-quotation`);
   };
+
+  // Real-time search with debounce - รอ 2 วินาที หลังหยุดพิมพ์แล้วค่อยค้นหา
+  useEffect(() => {
+    if (!searchQuery.trim()) {
+      setFilteredRows(rows);
+      return;
+    }
+
+    // Debounce: รอ 2 วินาที หลังจากหยุดพิมพ์แล้วค่อยค้นหา
+    const timeoutId = setTimeout(() => {
+      const query = searchQuery.toLowerCase().trim();
+      const filtered = rows.filter((row: any) => {
+        const documentIdNo = row.documentIdNo?.toLowerCase() || "";
+        const contactorName = row.contactor?.contactorName?.toLowerCase() || "";
+        const companyName = row.customerCompany?.companyName?.toLowerCase() || "";
+        const grandTotal = row.grandTotal?.toString() || "";
+
+        return (
+          documentIdNo.includes(query) ||
+          contactorName.includes(query) ||
+          companyName.includes(query) ||
+          grandTotal.includes(query)
+        );
+      });
+
+      setFilteredRows(filtered);
+    }, 1000);
+
+    // Cleanup function: ยกเลิก timeout เก่าถ้ามีการพิมพ์ใหม่
+    return () => clearTimeout(timeoutId);
+  }, [searchQuery, rows]);
 
   const handleDelete = async (documentId: string) => {
     try {
@@ -222,7 +257,7 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ }) => {
 
       {/*  ใบเสนอราคา*/}
 
-      <Grid2 container mb={1}>
+      <Grid2 container mb={1} spacing={2}>
         <Grid2 size={12}>
           <Box display="flex" alignItems="center" justifyContent="space-between" gap={2}>
             <Typography variant="h3" component="div">
@@ -258,6 +293,22 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ }) => {
             </Box>
           </Box>
         </Grid2>
+
+        <Grid2 size={12}>
+          <TextField
+            fullWidth
+            variant="outlined"
+            placeholder="ค้นหาด้วย เลขที่เอกสาร, ชื่อลูกค้า, ชื่อบริษัท หรือ ยอดเงิน..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            InputProps={{
+              startAdornment: (
+                <Search sx={{ color: "action.active", mr: 1 }} />
+              ),
+            }}
+            sx={{ mb: 1 }}
+          />
+        </Grid2>
       </Grid2>
       {/* <Divider /> */}
 
@@ -268,7 +319,7 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ }) => {
           checkboxSelection
           sx={{ border: 0 }}
           getRowId={(row) => row.keyId} // ระบุ keyId เป็นค่า id ของแต่ละ row
-          rows={rows}
+          rows={filteredRows}
           columns={columns}
           // paginationMode="server"
           // rowCount={rowCount}

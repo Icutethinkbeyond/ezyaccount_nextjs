@@ -12,12 +12,14 @@ import {
     IconButton,
     Typography,
     CircularProgress,
+    TextField,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 import {
     Restore,
     DeleteForever,
     ArrowBack,
+    Search,
 } from "@mui/icons-material";
 import { CustomNoRowsOverlay } from "@/components/shared/NoData";
 import { CustomToolbar } from "@/components/shared/CustomToolbar";
@@ -26,6 +28,8 @@ import { CustomToolbar } from "@/components/shared/CustomToolbar";
 const TrashTable: React.FC = () => {
     const router = useRouter();
     const [rows, setRows] = useState<any[]>([]);
+    const [filteredRows, setFilteredRows] = useState<any[]>([]);
+    const [searchQuery, setSearchQuery] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(true);
     const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
         page: 0,
@@ -45,6 +49,7 @@ const TrashTable: React.FC = () => {
                     id: item.documentIdNo,
                 }));
                 setRows(mappedData);
+                setFilteredRows(mappedData);
             } else {
                 console.error("Data received is not an array:", data);
                 setRows([]);
@@ -59,6 +64,37 @@ const TrashTable: React.FC = () => {
     useEffect(() => {
         fetchDeletedQuotations();
     }, []);
+
+    // Real-time search with debounce - รอ 2 วินาที หลังหยุดพิมพ์แล้วค่อยค้นหา
+    useEffect(() => {
+        if (!searchQuery.trim()) {
+            setFilteredRows(rows);
+            return;
+        }
+
+        // Debounce: รอ 2 วินาที หลังจากหยุดพิมพ์แล้วค่อยค้นหา
+        const timeoutId = setTimeout(() => {
+            const query = searchQuery.toLowerCase().trim();
+            const filtered = rows.filter((row: any) => {
+                const documentIdNo = row.documentIdNo?.toLowerCase() || "";
+                const contactorName = row.contactor?.contactorName?.toLowerCase() || "";
+                const companyName = row.customerCompany?.companyName?.toLowerCase() || "";
+                const grandTotal = row.grandTotal?.toString() || "";
+
+                return (
+                    documentIdNo.includes(query) ||
+                    contactorName.includes(query) ||
+                    companyName.includes(query) ||
+                    grandTotal.includes(query)
+                );
+            });
+
+            setFilteredRows(filtered);
+        }, 1000);
+
+        // Cleanup function: ยกเลิก timeout เก่าถ้ามีการพิมพ์ใหม่
+        return () => clearTimeout(timeoutId);
+    }, [searchQuery, rows]);
 
     const handleRestore = async (documentId: string) => {
         try {
@@ -160,9 +196,24 @@ const TrashTable: React.FC = () => {
                 </Box>
             </Box>
 
+            <Box mb={2}>
+                <TextField
+                    fullWidth
+                    variant="outlined"
+                    placeholder="ค้นหาด้วย เลขที่เอกสาร, ชื่อลูกค้า, ชื่อบริษัท หรือ ยอดเงิน..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    InputProps={{
+                        startAdornment: (
+                            <Search sx={{ color: "action.active", mr: 1 }} />
+                        ),
+                    }}
+                />
+            </Box>
+
             <Box p={3} border="1px solid #ccc" borderRadius="8px">
                 <DataGrid
-                    rows={rows}
+                    rows={filteredRows}
                     columns={columns}
                     getRowId={(row) => row.keyId}
                     paginationModel={paginationModel}
