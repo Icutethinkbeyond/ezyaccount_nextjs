@@ -22,8 +22,8 @@ model User {
 
   // Relations
   account Account?
-  role    Role?   @relation(fields: [roleId], references: [roleId])
-  roleId  String? @db.ObjectId
+  role    Role?    @relation(fields: [roleId], references: [roleId])
+  roleId  String?  @db.ObjectId
 
   profile        Profile?
   companyProfile CompanyProfile?
@@ -199,7 +199,7 @@ model AboutProduct {
 model DocumentPaper {
   documentId   String @id @default(auto()) @map("_id") @db.ObjectId
   documentIdNo String @unique
-  
+
   // Details
   docType         String // เช่น "Quotation"
   docMonth        String?
@@ -216,32 +216,35 @@ model DocumentPaper {
   // Status & Dates
   documentType   eDocumentType  @default(Quotation)
   documentStatus DocumentStatus @default(Draft)
-  
+
   documentCreateDate DateTime? @default(now())
   documentExpire     DateTime?
 
   // ------------------------------------------------------------------
   // ✅ Fields for PricingContext Global State
   // ------------------------------------------------------------------
-  includeVat      Boolean @default(false) // ตรงกับ state: vatIncluded
-  taxRate         Float   @default(7)     // ตรงกับ state: taxRate
-  globalDiscount  Float   @default(0)     // ตรงกับ state: discount (ส่วนลดท้ายบิล)
-  
+  includeVat     Boolean @default(false) // ตรงกับ state: vatIncluded
+  taxRate        Float   @default(7) // ตรงกับ state: taxRate
+  globalDiscount Float   @default(0) // ตรงกับ state: discount (ส่วนลดท้ายบิล)
+
   // ✅ Summary Fields (Calculated values)
   subTotal           Float @default(0) // ราคารวมก่อนลด
   totalAfterDiscount Float @default(0) // ราคาหลังหักส่วนลด
   vatAmount          Float @default(0) // มูลค่าภาษี
   grandTotal         Float @default(0) // ราคาสุทธิ (Net Total)
   withholdingTax     Float @default(0) // หัก ณ ที่จ่าย (เผื่อไว้)
-  
+
   // ✅ Notes field
-  note               String? // หมายเหตุ
+  note String? // หมายเหตุ
 
   // ------------------------------------------------------------------
   // ✅ Relation to Categories (Structure from Context)
   // ------------------------------------------------------------------
   // เปลี่ยนจาก items เดิมที่เป็น DocumentProduct มาเป็น structure ใหม่
   categories DocumentCategory[]
+
+  isDeleted Boolean   @default(false)
+  deletedAt DateTime?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -251,7 +254,7 @@ model DocumentPaper {
 model DocumentCategory {
   categoryId String @id @default(auto()) @map("_id") @db.ObjectId
   name       String // ชื่อหมวดหมู่ (เช่น "งานโครงสร้าง")
-  
+
   // Relation back to Paper
   documentPaper   DocumentPaper @relation(fields: [documentPaperId], references: [documentId], onDelete: Cascade)
   documentPaperId String        @db.ObjectId
@@ -269,16 +272,16 @@ model DocumentCategory {
 // ✅ Model นี้เปรียบเสมือน interface SubItem ใน PricingContext
 model DocumentItem {
   itemId String @id @default(auto()) @map("_id") @db.ObjectId
-  
+
   name         String? // ชื่อสินค้า
-  description  String  // รายละเอียด
-  unit         String  // หน่วย
+  description  String // รายละเอียด
+  unit         String // หน่วย
   qty          Float   @default(1)
   pricePerUnit Float   @default(0)
   remark       String? // หมายเหตุ
-  
+
   // Calculation helper (Optional: เก็บผลคูณ qty * price เพื่อ query ง่ายขึ้น)
-  totalPrice Float @default(0) 
+  totalPrice Float @default(0)
 
   // Relation back to Category
   category   DocumentCategory @relation(fields: [categoryId], references: [categoryId], onDelete: Cascade)

@@ -203,3 +203,58 @@ export async function PATCH(
         await prisma.$disconnect();
     }
 }
+
+export async function DELETE(
+    req: NextRequest,
+    { params }: { params: { id: string } }
+) {
+    try {
+        const documentId = params.id;
+        const { searchParams } = new URL(req.url);
+        const permanent = searchParams.get('permanent') === 'true';
+
+        if (permanent) {
+            await prisma.documentPaper.delete({
+                where: { documentId }
+            });
+            return NextResponse.json({ success: true, message: 'Deleted permanently' });
+        } else {
+            await prisma.documentPaper.update({
+                where: { documentId },
+                data: {
+                    isDeleted: true,
+                    deletedAt: new Date()
+                }
+            });
+            return NextResponse.json({ success: true, message: 'Moved to trash' });
+        }
+    } catch (error) {
+        console.error("Error deleting quotation:", error);
+        return NextResponse.json({ success: false, error: String(error) }, { status: 500 });
+    } finally {
+        await prisma.$disconnect();
+    }
+}
+
+export async function PUT(
+    req: NextRequest,
+    { params }: { params: { id: string } }
+) {
+    try {
+        const documentId = params.id;
+        // Restore from trash
+        await prisma.documentPaper.update({
+            where: { documentId },
+            data: {
+                isDeleted: false,
+                deletedAt: null
+            }
+        });
+        return NextResponse.json({ success: true, message: 'Restored from trash' });
+    } catch (error) {
+        console.error("Error restoring quotation:", error);
+        return NextResponse.json({ success: false, error: String(error) }, { status: 500 });
+    } finally {
+        await prisma.$disconnect();
+    }
+}

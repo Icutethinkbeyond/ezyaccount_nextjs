@@ -11,9 +11,12 @@ const exec = promisify(execCallback);
 
 const prisma = new PrismaClient();
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+    const { searchParams } = new URL(req.url);
+    const showDeleted = searchParams.get('trash') === 'true';
+
     try {
-        const docs = await prisma.documentPaper.findMany({
+        const allDocs = await prisma.documentPaper.findMany({
             where: {
                 docType: "Quotation"
             },
@@ -26,10 +29,16 @@ export async function GET() {
             }
         });
 
-        return NextResponse.json(docs);
+        // กรองข้อมูลใน JS เพื่อรองรับข้อมูลเก่าที่ฟิลด์ isDeleted ยังไม่มีค่า
+        const filteredDocs = allDocs.filter((doc: any) =>
+            showDeleted ? doc.isDeleted === true : doc.isDeleted !== true
+        );
+
+        console.log(`Fetched ${filteredDocs.length} quotations (trash=${showDeleted})`);
+        return NextResponse.json(filteredDocs);
     } catch (error) {
         console.error("Error fetching quotations:", error);
-        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+        return NextResponse.json({ error: 'Internal Server Error', details: String(error) }, { status: 500 });
     }
 }
 

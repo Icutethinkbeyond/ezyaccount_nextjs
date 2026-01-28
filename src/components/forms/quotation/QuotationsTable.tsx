@@ -31,9 +31,12 @@ import {
   Add,
   Visibility,
   PictureAsPdf,
+  Delete,
+  DeleteSweep,
 } from "@mui/icons-material";
 import { CustomNoRowsOverlay } from "@/components/shared/NoData";
 import { CustomToolbar } from "@/components/shared/CustomToolbar";
+import Swal from 'sweetalert2';
 
 
 interface ProductTableProps {
@@ -60,13 +63,19 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ }) => {
     try {
       const result = await fetch('/api/income/quotation');
       const data = await result.json();
-      // Map data to match DataGrid expectations
-      const mappedData = data.map((item: any) => ({
-        ...item,
-        keyId: item.documentIdNo, // Use documentIdNo as key
-        id: item.documentIdNo, // DataGrid needs 'id'
-      }));
-      setRows(mappedData);
+
+      // Check if data is an array before mapping
+      if (Array.isArray(data)) {
+        const mappedData = data.map((item: any) => ({
+          ...item,
+          keyId: item.documentIdNo,
+          id: item.documentIdNo,
+        }));
+        setRows(mappedData);
+      } else {
+        console.error("Data received is not an array:", data);
+        setRows([]);
+      }
     } catch (error) {
       console.error("Failed to fetch quotations", error);
     } finally {
@@ -81,6 +90,49 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ }) => {
   const handleAddClick = () => {
     console.log("Add button clicked!");
     router.push(`/quotation/new-quotation`);
+  };
+
+  const handleDelete = async (documentId: string) => {
+    const result = await Swal.fire({
+      title: 'คุณแน่ใจหรือไม่?',
+      text: "คุณต้องการย้ายรายการนี้ไปที่ถังขยะใช่หรือไม่?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'ใช่, ย้ายไปถังขยะ!',
+      cancelButtonText: 'ยกเลิก'
+    });
+
+    if (result.isConfirmed) {
+      try {
+        const response = await fetch(`/api/income/quotation/${documentId}`, {
+          method: 'DELETE',
+        });
+
+        if (response.ok) {
+          Swal.fire(
+            'ย้ายสำเร็จ!',
+            'รายการของคุณถูกย้ายไปที่ถังขยะแล้ว',
+            'success'
+          );
+          fetchQuotations();
+        } else {
+          Swal.fire(
+            'เกิดข้อผิดพลาด!',
+            'ไม่สามารถย้ายรายการได้',
+            'error'
+          );
+        }
+      } catch (error) {
+        console.error("Error deleting quotation:", error);
+        Swal.fire(
+          'เกิดข้อผิดพลาด!',
+          'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้',
+          'error'
+        );
+      }
+    }
   };
 
   const handlePDFDownload = (documentId: string) => {
@@ -174,6 +226,14 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ }) => {
               <PictureAsPdf />
             )}
           </IconButton>
+
+          <IconButton
+            size="small"
+            sx={{ color: '#d33' }}
+            onClick={() => handleDelete(params.row.documentId)}
+          >
+            <Delete />
+          </IconButton>
         </>
       ),
     },
@@ -195,19 +255,34 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ }) => {
             <Typography variant="h3" component="div">
               ใบเสนอราคาทั้งหมด
             </Typography>
-            <Button
-              variant="contained"
-              startIcon={<Add />}
-              onClick={handleAddClick}
-              sx={{
-                backgroundColor: "#33CC99",
-                color: "#fff",
-                "&:hover": { backgroundColor: "#009933" },
-                textTransform: "none",
-              }}
-            >
-              สร้างใบเสนอราคา
-            </Button>
+            <Box display="flex" gap={1}>
+              <Button
+                variant="outlined"
+                startIcon={<DeleteSweep />}
+                onClick={() => router.push('/quotation/trash')}
+                sx={{
+                  color: "#d33",
+                  borderColor: "#d33",
+                  "&:hover": { borderColor: "#b22", backgroundColor: "rgba(211, 51, 51, 0.04)" },
+                  textTransform: "none",
+                }}
+              >
+                ถังขยะ
+              </Button>
+              <Button
+                variant="contained"
+                startIcon={<Add />}
+                onClick={handleAddClick}
+                sx={{
+                  backgroundColor: "#33CC99",
+                  color: "#fff",
+                  "&:hover": { backgroundColor: "#009933" },
+                  textTransform: "none",
+                }}
+              >
+                สร้างใบเสนอราคา
+              </Button>
+            </Box>
           </Box>
         </Grid2>
       </Grid2>
@@ -227,9 +302,9 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ }) => {
           onPaginationModelChange={setPaginationModel}
           loading={loading}
           slots={{
-              noRowsOverlay: CustomNoRowsOverlay,
-              toolbar: CustomToolbar,
-            }}
+            noRowsOverlay: CustomNoRowsOverlay,
+            toolbar: CustomToolbar,
+          }}
         />
       </Box>
     </Box>
