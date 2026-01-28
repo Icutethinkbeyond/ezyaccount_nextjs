@@ -367,63 +367,6 @@ console.log(headForm, categories)
         pt: 1,
       }}
     >
-      {/* <Grid container spacing={2} sx={{ mb: 2 }}>
-        <Grid item xs={4} sx={{ display: "flex", alignItems: "center" }}>
-          <Box
-            className="icon-box"
-            sx={{
-              width: "32px",
-              height: "32px",
-              backgroundColor: "#1565c0",
-              borderRadius: "4px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              mr: 1,
-            }}
-          >
-            <Typography sx={{ color: "white", fontSize: "14px" }}>📞</Typography>
-          </Box>
-          <Typography variant="body2">{companyInfo.phone}</Typography>
-        </Grid>
-        <Grid item xs={4} sx={{ display: "flex", alignItems: "center" }}>
-          <Box
-            className="icon-box"
-            sx={{
-              width: "32px",
-              height: "32px",
-              backgroundColor: "#1565c0",
-              borderRadius: "4px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              mr: 1,
-            }}
-          >
-            <Typography sx={{ color: "white", fontSize: "14px" }}>✉️</Typography>
-          </Box>
-          <Typography variant="body2">{companyInfo.email}</Typography>
-        </Grid>
-        <Grid item xs={4} sx={{ display: "flex", alignItems: "center" }}>
-          <Box
-            className="icon-box"
-            sx={{
-              width: "32px",
-              height: "32px",
-              backgroundColor: "#1565c0",
-              borderRadius: "4px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              mr: 1,
-            }}
-          >
-            <Typography sx={{ color: "white", fontSize: "14px" }}>📍</Typography>
-          </Box>
-          <Typography variant="body2">{companyInfo.location}</Typography>
-        </Grid>
-      </Grid> */}
-
       {/* Blue footer with diagonal design */}
       <Box
         sx={{
@@ -669,15 +612,6 @@ console.log(headForm, categories)
                     >
                       ราคา
                     </TableCell>
-                    {/* <TableCell
-                      sx={{
-                        color: "white",
-                        width: "150px",
-                        fontSize: 12,
-                      }}
-                    >
-                      หมายเหตุ
-                    </TableCell> */}
                   </TableRow>
                 </TableHead>
                 <TableBody>
