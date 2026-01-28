@@ -217,7 +217,7 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ }) => {
           <IconButton
             size="small"
             color="primary"
-            onClick={() => router.push(`/quotation/preview/${params.row.documentId}`)}
+            onClick={() => window.open(`/quotation/preview/${params.row.documentId}`, '_blank')}
           >
             <Visibility />
           </IconButton>

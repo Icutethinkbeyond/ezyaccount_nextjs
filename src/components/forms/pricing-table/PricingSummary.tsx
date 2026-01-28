@@ -78,7 +78,8 @@ const PricingSummary: React.FC<PricingSummaryProps> = ({
    * เปิดหน้า Preview ใบเสนอราคา
    */
   const handlePreviewInvoice = () => {
-    router.push(`/quotation/preview`);
+    const url = quotationId ? `/quotation/preview/${quotationId}` : `/quotation/preview`;
+    window.open(url, '_blank');
   };
 
   /**
@@ -256,7 +257,7 @@ const PricingSummary: React.FC<PricingSummaryProps> = ({
 
       <Divider sx={{ my: 2 }} />
 
-            {/* ภาษีหัก ณ ที่จ่าย */}
+      {/* ภาษีหัก ณ ที่จ่าย */}
       <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
         <FormControl size="small" sx={{ minWidth: 150 }}>
           <InputLabel id="select-serviceIds-label">หัก ณ ที่จ่าย</InputLabel>

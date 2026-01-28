@@ -204,7 +204,10 @@ const FooterForm: React.FC<FooterProps> = ({ isEdit = false, documentId }) => {
     }
   };
 
-  const handlePreview = () => { };
+  const handlePreview = () => {
+    const url = documentId ? `/quotation/preview/${documentId}` : `/quotation/preview`;
+    window.open(url, '_blank');
+  };
 
   return (
     <Box component="form" noValidate autoComplete="off">
