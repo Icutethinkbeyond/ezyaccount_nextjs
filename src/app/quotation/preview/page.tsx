@@ -8,7 +8,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useRouter } from "next/navigation";
 
 export default function InvoicePage() {
-  
+
   const router = useRouter();
 
   const handleBack = () => {
@@ -40,7 +40,7 @@ export default function InvoicePage() {
           กลับ
         </Button>
       </Container>
-      <InvoicePrintPage />
+      {/* <InvoicePrintPage /> */}
     </Box>
   );
 }

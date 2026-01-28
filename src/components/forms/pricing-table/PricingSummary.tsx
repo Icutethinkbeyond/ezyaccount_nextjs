@@ -85,12 +85,11 @@ const PricingSummary: React.FC<PricingSummaryProps> = ({
    * เปิดหน้า Preview ใบเสนอราคา
    */
   const handlePreviewInvoice = () => {
-    if(quotationId){
+    if (quotationId) {
       window.open(`/quotation/preview/${quotationId}`, "_blank");
-    }else{
-      setOnOpen(true)
+    } else {
+      setOnOpen(true);
     }
-
   };
 
   /**
@@ -363,7 +362,7 @@ const PricingSummary: React.FC<PricingSummaryProps> = ({
           </Button>
         </Box>
       </Paper>
-      <PreviewDialog open={onOpen} onClose={() => setOnOpen(false)} headForm={headForm}/>
+      <PreviewDialog open={onOpen} onClose={() => setOnOpen(false)} />
     </>
   );
 };

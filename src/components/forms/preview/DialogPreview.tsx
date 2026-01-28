@@ -7,24 +7,21 @@ import {
   Button,
 } from "@mui/material";
 import InvoicePreview from "./InvoicePreview";
-import { HeadForm } from "@/contexts/QuotationContext";
+import { HeadForm, useQuotationListContext } from "@/contexts/QuotationContext";
 
 interface PreviewDialogProps {
   open: boolean;
   onClose?: () => void;
-  headForm: HeadForm;
 }
 
-const PreviewDialog: React.FC<PreviewDialogProps> = ({
-  open,
-  onClose,
-  headForm,
-}) => {
+const PreviewDialog: React.FC<PreviewDialogProps> = ({ open, onClose }) => {
+  const { headForm } = useQuotationListContext();
+
   return (
     <Dialog open={open} onClose={onClose} maxWidth="lg" fullWidth>
       <DialogTitle>ดูตัวอย่าง {headForm?.quotationNumber}</DialogTitle>
       <DialogContent>
-        <InvoicePreview headData={headForm} />
+        <InvoicePreview />
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} color="primary">

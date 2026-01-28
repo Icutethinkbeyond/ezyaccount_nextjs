@@ -11,14 +11,13 @@ import QuotationTable from "./QuotationTable";
 import { ContactSupportOutlined } from "@mui/icons-material";
 
 interface InvoiceProps {
-  headData: HeadForm;
 }
 
 // Adjusted for new layout where each item takes 2 rows (name + details)
 const ROWS_PER_PAGE_FIRST = 8;
 const ROWS_PER_PAGE_OTHER = 14;
 
-const InvoicePreview: React.FC<InvoiceProps> = ({ headData: headForm }) => {
+const InvoicePreview: React.FC<InvoiceProps> = ({ }) => {
   const {
     categories,
     getSubtotal,
@@ -30,11 +29,8 @@ const InvoicePreview: React.FC<InvoiceProps> = ({ headData: headForm }) => {
     getCategoryTotal,
     getWithholdingTaxAmount,
   } = usePricingContext();
-  // const { headForm } = useQuotationListContext();
+  const { headForm } = useQuotationListContext();
 
-  useEffect(() => {
-    console.log(headForm);
-  }, [headForm]);
 
   const displayNote = headForm?.note;
 
