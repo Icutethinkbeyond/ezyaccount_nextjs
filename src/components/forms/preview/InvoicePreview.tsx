@@ -20,7 +20,6 @@ import "./preview.css";
 import QuotationSummary from "./QuotationSummary";
 import QuotationFooter from "./QuotationFooter";
 import QuotationTable from "./QuotationTable";
-import { formatNum } from "@/utils/utils";
 
 interface InvoiceProps {}
 
