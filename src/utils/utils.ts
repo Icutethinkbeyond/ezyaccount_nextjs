@@ -2,7 +2,7 @@ import { Product } from "@/contexts/QuotationContext";
 
 export const calculateSubItemTotal = (qty: number, pricePerUnit: number) => {
     return qty * pricePerUnit
-  }
+}
 
 // Function to calculate Tax
 export const calculateTax = (totalPrice: number, vatRate: number, withholdingTaxPercent: number): { vatAmount: number; totalWithVAT: number; withholdingTaxAmount: number; totalAfterWithholdingTax: number } => {
@@ -82,11 +82,11 @@ export function makeDateMonth(utcDateString?: string): string {
 }
 
 export const getMonthAbbreviation = (month: number): string => {
-  const monthAbbrs = [
-    "JAN", "FEB", "MAR", "APR", "MAY", "JUN",
-    "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"
-  ];
-  return monthAbbrs[month];
+    const monthAbbrs = [
+        "JAN", "FEB", "MAR", "APR", "MAY", "JUN",
+        "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"
+    ];
+    return monthAbbrs[month];
 };
 
 export function formatNumber(number: number | null | undefined, needDecimal: boolean | null = true): string | null | undefined {
@@ -106,15 +106,18 @@ export function formatNumber(number: number | null | undefined, needDecimal: boo
 }
 
 export function formatThaiDate(
-  date: Date | string,
-  options?: Intl.DateTimeFormatOptions
+    date: Date | string,
+    options?: Intl.DateTimeFormatOptions
 ): string {
-  const d = typeof date === "string" ? new Date(date) : date
+    const d = typeof date === "string" ? new Date(date) : date
 
-  return new Intl.DateTimeFormat("th-TH", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    ...options,
-  }).format(d)
+    return new Intl.DateTimeFormat("th-TH", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        ...options,
+    }).format(d)
 }
+
+export const formatNum = (num: number) =>
+    num?.toLocaleString("th-TH", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) || "0.00";

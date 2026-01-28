@@ -1,6 +1,6 @@
 "use client";
 import { Box, Button, Container } from "@mui/material";
-import InvoicePrintPage from "@/components/forms/pricing-table/InvoicePreview";
+import InvoicePrintPage from "@/components/forms/preview/InvoicePreview";
 import { useEffect } from "react";
 import { headerClean, useQuotationListContext } from "@/contexts/QuotationContext";
 import { usePricingContext } from "@/contexts/PricingContext";
