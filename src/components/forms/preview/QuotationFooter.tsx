@@ -9,7 +9,7 @@ const QuotationFooter: React.FC = () => {
         sx={{
           position: "relative",
           backgroundColor: "#1565c0",
-          height: "20px",
+          height: "30px",
           width: "100%",
           overflow: "hidden", // กันส่วนเกินของ pseudo-element
           "&::after": {
@@ -17,7 +17,7 @@ const QuotationFooter: React.FC = () => {
             position: "absolute",
             right: 0,
             bottom: 0,
-            width: "150px",
+            width: "120px",
             height: "100%",
             backgroundColor: "#0d47a1",
             clipPath: "polygon(20% 0, 100% 0, 100% 100%, 0 100%)",

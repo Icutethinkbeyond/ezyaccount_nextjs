@@ -5,7 +5,7 @@ import { formatThaiDate } from "@/utils/utils";
 
 interface QuotationHeaderProps {
   pageIndex: number;
-  headForm: HeadForm; 
+  headForm: HeadForm;
 }
 
 const QuotationHeader: React.FC<QuotationHeaderProps> = ({
@@ -15,20 +15,20 @@ const QuotationHeader: React.FC<QuotationHeaderProps> = ({
   // --- หน้าแรก (Full Header) ---
   if (pageIndex === 0) {
     return (
-      <Box sx={{ width: "100%", mb: 4 }}>
+      <Box sx={{ width: "100%", mb: 2 }}>
         {/* Header with blue diagonal design */}
         <Box
           sx={{
             position: "relative",
             backgroundColor: "#1565c0",
-            height: "30px",
+            height: "40px",
             width: "100%",
             "&::before": {
               content: '""',
               position: "absolute",
               left: 0,
               top: 0,
-              width: "150px",
+              width: "120px",
               height: "100%",
               backgroundColor: "#0d47a1",
               clipPath: "polygon(0 0, 100% 0, 80% 100%, 0 100%)",
@@ -40,20 +40,20 @@ const QuotationHeader: React.FC<QuotationHeaderProps> = ({
         <Grid2
           container
           justifyContent="space-between"
-          sx={{ mt: 4, position: "relative", zIndex: 1 }}
+          sx={{ mt: 2, position: "relative", zIndex: 1 }}
         >
           {/* ข้อมูลลูกค้า (ฝั่งซ้าย) */}
           <Grid2 size={6}>
-            <Typography variant="h6" sx={{ fontSize: 20, mb: 2 }}>
+            <Typography variant="h6" sx={{ fontSize: 16, mb: 1, fontWeight: "bold" }}>
               ลูกค้า: คุณ{headForm.contactorName}
             </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5, fontSize: 12 }}>
               เบอร์โทรศัพท์: {headForm.companyTel}
             </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5, fontSize: 12 }}>
               อีเมล: {headForm.contactorEmail}
             </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5, fontSize: 12 }}>
               ที่อยู่ {headForm.contactorAddress}
             </Typography>
           </Grid2>
@@ -62,14 +62,14 @@ const QuotationHeader: React.FC<QuotationHeaderProps> = ({
           <Grid2 size={6} sx={{ textAlign: "right" }}>
             <Typography
               variant="h3"
-              sx={{ fontWeight: "bold", mb: 2, fontSize: 25 }}
+              sx={{ fontWeight: "bold", mb: 1, fontSize: 20 }}
             >
               ใบเสนอราคา
             </Typography>
-            <Typography variant="body2">
+            <Typography variant="body2" sx={{ fontSize: 12 }}>
               <strong>เลขที่:</strong> {headForm.quotationNumber}
             </Typography>
-            <Typography variant="body2" sx={{ mt: 1 }}>
+            <Typography variant="body2" sx={{ mt: 0.5, fontSize: 12 }}>
               <strong>ออกเมื่อวันที่:</strong>{" "}
               {formatThaiDate(headForm.dateCreate)}
             </Typography>
@@ -79,17 +79,17 @@ const QuotationHeader: React.FC<QuotationHeaderProps> = ({
               sx={{
                 fontWeight: "bold",
                 lineHeight: 1.2,
-                mt: 3,
-                fontSize: 16,
+                mt: 1.5,
+                fontSize: 14,
               }}
             >
               {headForm.companyName} สาขา {headForm.branch}
             </Typography>
-            
+
             {headForm.taxId && (
               <Typography
                 variant="h6"
-                sx={{ lineHeight: 1.2, mt: 1, fontSize: 12 }}
+                sx={{ lineHeight: 1.2, mt: 0.5, fontSize: 11 }}
               >
                 เลขประจำตัวผู้เสียภาษี {headForm.taxId}
               </Typography>
@@ -98,14 +98,14 @@ const QuotationHeader: React.FC<QuotationHeaderProps> = ({
             <Typography
               variant="caption"
               color="text.secondary"
-              sx={{ display: "block", lineHeight: 1.4, mt: 1, fontSize: 12 }}
+              sx={{ display: "block", lineHeight: 1.4, mt: 0.5, fontSize: 11 }}
             >
               {headForm.companyAddress}
             </Typography>
             <Typography
               variant="caption"
               color="text.secondary"
-              sx={{ lineHeight: 1, fontSize: 12 }}
+              sx={{ lineHeight: 1, fontSize: 11 }}
             >
               โทร: {headForm.contactorTel}
             </Typography>
@@ -120,12 +120,12 @@ const QuotationHeader: React.FC<QuotationHeaderProps> = ({
     <Box
       sx={{
         mb: 2,
-        mt: 4,
+        mt: 2,
         display: "flex",
         justifyContent: "space-between",
         alignItems: "flex-end",
         borderBottom: "1px solid #eee",
-        pb: 2,
+        pb: 1,
       }}
     >
       <Box>
