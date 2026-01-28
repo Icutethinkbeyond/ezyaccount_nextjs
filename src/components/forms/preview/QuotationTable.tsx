@@ -24,7 +24,7 @@ const QuotationTable: React.FC<QuotationTableProps> = ({
     <TableContainer
       component={Paper}
       elevation={0}
-      sx={{ mb: 3, flexGrow: 1, borderRadius: 0 }}
+      sx={{ mb: 3, flexGrow: 1, borderRadius: 0, overflow: "hidden" }}
     >
       <Table sx={{ width: "100%", tableLayout: "fixed" }}>
         {/* ส่วนหัวตาราง */}
