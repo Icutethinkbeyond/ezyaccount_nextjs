@@ -21,7 +21,7 @@ const QuotationHeader: React.FC<QuotationHeaderProps> = ({
           sx={{
             position: "relative",
             backgroundColor: "#1565c0",
-            height: "60px",
+            height: "30px",
             width: "100%",
             "&::before": {
               content: '""',
