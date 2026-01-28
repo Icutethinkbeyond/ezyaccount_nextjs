@@ -36,7 +36,7 @@ import {
 } from "@mui/icons-material";
 import { CustomNoRowsOverlay } from "@/components/shared/NoData";
 import { CustomToolbar } from "@/components/shared/CustomToolbar";
-import Swal from 'sweetalert2';
+
 
 
 interface ProductTableProps {
@@ -93,45 +93,18 @@ const QuotationsTable: React.FC<ProductTableProps> = ({ }) => {
   };
 
   const handleDelete = async (documentId: string) => {
-    const result = await Swal.fire({
-      title: 'คุณแน่ใจหรือไม่?',
-      text: "คุณต้องการย้ายรายการนี้ไปที่ถังขยะใช่หรือไม่?",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'ใช่, ย้ายไปถังขยะ!',
-      cancelButtonText: 'ยกเลิก'
-    });
+    try {
+      const response = await fetch(`/api/income/quotation/${documentId}`, {
+        method: 'DELETE',
+      });
 
-    if (result.isConfirmed) {
-      try {
-        const response = await fetch(`/api/income/quotation/${documentId}`, {
-          method: 'DELETE',
-        });
-
-        if (response.ok) {
-          Swal.fire(
-            'ย้ายสำเร็จ!',
-            'รายการของคุณถูกย้ายไปที่ถังขยะแล้ว',
-            'success'
-          );
-          fetchQuotations();
-        } else {
-          Swal.fire(
-            'เกิดข้อผิดพลาด!',
-            'ไม่สามารถย้ายรายการได้',
-            'error'
-          );
-        }
-      } catch (error) {
-        console.error("Error deleting quotation:", error);
-        Swal.fire(
-          'เกิดข้อผิดพลาด!',
-          'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้',
-          'error'
-        );
+      if (response.ok) {
+        fetchQuotations();
+      } else {
+        console.error("Failed to delete quotation");
       }
+    } catch (error) {
+      console.error("Error deleting quotation:", error);
     }
   };
 

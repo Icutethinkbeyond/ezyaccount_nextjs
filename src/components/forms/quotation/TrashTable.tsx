@@ -21,7 +21,7 @@ import {
 } from "@mui/icons-material";
 import { CustomNoRowsOverlay } from "@/components/shared/NoData";
 import { CustomToolbar } from "@/components/shared/CustomToolbar";
-import Swal from 'sweetalert2';
+
 
 const TrashTable: React.FC = () => {
     const router = useRouter();
@@ -67,45 +67,28 @@ const TrashTable: React.FC = () => {
             });
 
             if (response.ok) {
-                Swal.fire('สำเร็จ!', 'กู้คืนรายการสำเร็จ', 'success');
                 fetchDeletedQuotations();
             } else {
-                Swal.fire('ผิดพลาด!', 'กู้คืนไม่สำเร็จ', 'error');
+                console.error("Failed to restore quotation");
             }
         } catch (error) {
             console.error("Error restoring quotation:", error);
-            Swal.fire('ผิดพลาด!', 'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์', 'error');
         }
     };
 
     const handlePermanentDelete = async (documentId: string) => {
-        const result = await Swal.fire({
-            title: 'ลบถาวร?',
-            text: "การดำเนินการนี้ไม่สามารถย้อนกลับได้!",
-            icon: 'error',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'ลบทันที!',
-            cancelButtonText: 'ยกเลิก'
-        });
+        try {
+            const response = await fetch(`/api/income/quotation/${documentId}?permanent=true`, {
+                method: 'DELETE',
+            });
 
-        if (result.isConfirmed) {
-            try {
-                const response = await fetch(`/api/income/quotation/${documentId}?permanent=true`, {
-                    method: 'DELETE',
-                });
-
-                if (response.ok) {
-                    Swal.fire('ลบแล้ว!', 'ลบข้อมูลถาวรสำเร็จ', 'success');
-                    fetchDeletedQuotations();
-                } else {
-                    Swal.fire('ผิดพลาด!', 'ลบไม่สำเร็จ', 'error');
-                }
-            } catch (error) {
-                console.error("Error permanently deleting quotation:", error);
-                Swal.fire('ผิดพลาด!', 'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์', 'error');
+            if (response.ok) {
+                fetchDeletedQuotations();
+            } else {
+                console.error("Failed to permanently delete quotation");
             }
+        } catch (error) {
+            console.error("Error permanently deleting quotation:", error);
         }
     };
 
