@@ -22,10 +22,15 @@ import {
 import { usePricingContext } from "@/contexts/PricingContext";
 
 // Context สำหรับข้อมูลหัวเอกสารใบเสนอราคา (บริษัท / ผู้ติดต่อ)
-import { headerClean, useQuotationListContext } from "@/contexts/QuotationContext";
+import {
+  headerClean,
+  useQuotationListContext,
+} from "@/contexts/QuotationContext";
 
 import { Visibility } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
+import PreviewDialog from "../preview/DialogPreview";
+import { useEffect, useState } from "react";
 
 interface PricingSummaryProps {
   isEdit?: boolean;
@@ -39,6 +44,8 @@ const PricingSummary: React.FC<PricingSummaryProps> = ({
   const theme = useTheme();
   const router = useRouter();
 
+  const [onOpen, setOnOpen] = useState<boolean>(false);
+
   // ดึงข้อมูลและฟังก์ชันที่เกี่ยวกับการคำนวณราคาจาก PricingContext
   const {
     getTotalPrice, // รวมราคาสินค้าทั้งหมด
@@ -50,7 +57,7 @@ const PricingSummary: React.FC<PricingSummaryProps> = ({
     withholdingTaxRate,
     setWithholdingTaxRate,
     getWithholdingTaxAmount,
-    setCategories
+    setCategories,
   } = usePricingContext();
 
   // ข้อมูลหัวเอกสาร (บริษัท / ผู้ติดต่อ)
@@ -78,8 +85,12 @@ const PricingSummary: React.FC<PricingSummaryProps> = ({
    * เปิดหน้า Preview ใบเสนอราคา
    */
   const handlePreviewInvoice = () => {
-    const url = quotationId ? `/quotation/preview/${quotationId}` : `/quotation/preview`;
-    window.open(url, '_blank');
+    if(quotationId){
+      window.open(`/quotation/preview/${quotationId}`, "_blank");
+    }else{
+      setOnOpen(true)
+    }
+
   };
 
   /**
@@ -172,183 +183,188 @@ const PricingSummary: React.FC<PricingSummaryProps> = ({
   };
 
   return (
-    <Paper
-      elevation={3}
-      sx={{
-        p: 3,
-        backgroundColor: "#f9f9f9",
-        borderRadius: 2,
-      }}
-    >
-      {/* หัวข้อสรุปราคา */}
-      <Typography variant="h6" gutterBottom fontWeight="bold">
-        สรุปราคา
-      </Typography>
-
-      <Divider sx={{ mb: 2 }} />
-
-      {/* รวมเป็นเงิน */}
-      <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
-        <Typography>รวมเป็นเงิน</Typography>
-        <Typography fontWeight="bold">
-          {subtotal.toLocaleString("th-TH", { minimumFractionDigits: 2 })}
-        </Typography>
-      </Box>
-
-      {/* ส่วนลด */}
-      <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
-        <Typography>ส่วนลดรวม</Typography>
-        <TextField
-          type="number"
-          value={discount}
-          onChange={(e) => setDiscount(Number(e.target.value))}
-          size="small"
-          sx={{ width: 120 }}
-        />
-      </Box>
-
-      {/* ราคาหลังหักส่วนลด */}
-      <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
-        <Typography>ราคาหลังหักส่วนลด</Typography>
-        <Typography fontWeight="bold">
-          {priceAfterDiscount.toLocaleString("th-TH", {
-            minimumFractionDigits: 2,
-          })}
-        </Typography>
-      </Box>
-
-      <Divider sx={{ my: 2 }} />
-
-      {/* VAT */}
-      <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={vatIncluded}
-              onChange={(e) => setVatIncluded(e.target.checked)}
-            />
-          }
-          label="ภาษีมูลค่าเพิ่ม 7%"
-        />
-        <Typography fontWeight="bold">
-          {vat.toLocaleString("th-TH", { minimumFractionDigits: 2 })}
-        </Typography>
-      </Box>
-
-      {/* ยอดรวม VAT */}
-      <Box
+    <>
+      <Paper
+        elevation={3}
         sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          mb: 2,
-          backgroundColor: theme.palette.primary.light,
-          p: 1.5,
-          borderRadius: 1,
+          p: 3,
+          backgroundColor: "#f9f9f9",
+          borderRadius: 2,
         }}
       >
-        <Typography fontWeight="bold">จำนวนเงินรวมทั้งสิ้น</Typography>
-        <Typography fontWeight="bold" variant="h6" color="primary">
-          {totalWithVat.toLocaleString("th-TH", {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-          })}
+        {/* หัวข้อสรุปราคา */}
+        <Typography variant="h6" gutterBottom fontWeight="bold">
+          สรุปราคา
         </Typography>
-      </Box>
 
-      <Divider sx={{ my: 2 }} />
+        <Divider sx={{ mb: 2 }} />
 
-      {/* ภาษีหัก ณ ที่จ่าย */}
-      <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
-        <FormControl size="small" sx={{ minWidth: 150 }}>
-          <InputLabel id="select-serviceIds-label">หัก ณ ที่จ่าย</InputLabel>
-          <Select
-            input={
-              <OutlinedInput
-                id="select-serviceIds-label"
-                label="ภาษี ณ ที่จ่าย<"
+        {/* รวมเป็นเงิน */}
+        <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
+          <Typography>รวมเป็นเงิน</Typography>
+          <Typography fontWeight="bold">
+            {subtotal.toLocaleString("th-TH", { minimumFractionDigits: 2 })}
+          </Typography>
+        </Box>
+
+        {/* ส่วนลด */}
+        <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
+          <Typography>ส่วนลดรวม</Typography>
+          <TextField
+            type="number"
+            value={discount}
+            onChange={(e) => setDiscount(Number(e.target.value))}
+            size="small"
+            sx={{ width: 120 }}
+          />
+        </Box>
+
+        {/* ราคาหลังหักส่วนลด */}
+        <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
+          <Typography>ราคาหลังหักส่วนลด</Typography>
+          <Typography fontWeight="bold">
+            {priceAfterDiscount.toLocaleString("th-TH", {
+              minimumFractionDigits: 2,
+            })}
+          </Typography>
+        </Box>
+
+        <Divider sx={{ my: 2 }} />
+
+        {/* VAT */}
+        <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={vatIncluded}
+                onChange={(e) => setVatIncluded(e.target.checked)}
               />
             }
-            value={withholdingTaxRate}
-            onChange={(e) => setWithholdingTaxRate(Number(e.target.value))}
+            label="ภาษีมูลค่าเพิ่ม 7%"
+          />
+          <Typography fontWeight="bold">
+            {vat.toLocaleString("th-TH", { minimumFractionDigits: 2 })}
+          </Typography>
+        </Box>
+
+        {/* ยอดรวม VAT */}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            mb: 2,
+            backgroundColor: theme.palette.primary.light,
+            p: 1.5,
+            borderRadius: 1,
+          }}
+        >
+          <Typography fontWeight="bold">จำนวนเงินรวมทั้งสิ้น</Typography>
+          <Typography fontWeight="bold" variant="h6" color="primary">
+            {totalWithVat.toLocaleString("th-TH", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}
+          </Typography>
+        </Box>
+
+        <Divider sx={{ my: 2 }} />
+
+        {/* ภาษีหัก ณ ที่จ่าย */}
+        <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
+          <FormControl size="small" sx={{ minWidth: 150 }}>
+            <InputLabel id="select-serviceIds-label">หัก ณ ที่จ่าย</InputLabel>
+            <Select
+              input={
+                <OutlinedInput
+                  id="select-serviceIds-label"
+                  label="ภาษี ณ ที่จ่าย<"
+                />
+              }
+              value={withholdingTaxRate}
+              onChange={(e) => setWithholdingTaxRate(Number(e.target.value))}
+            >
+              <MenuItem value={0}>คิด ณ ที่จ่าย 0%</MenuItem>
+              <MenuItem value={1}>1%</MenuItem>
+              <MenuItem value={2}>2%</MenuItem>
+              <MenuItem value={3}>3%</MenuItem>
+              <MenuItem value={4}>4%</MenuItem>
+              <MenuItem value={5}>5%</MenuItem>
+              <MenuItem value={6}>6%</MenuItem>
+              <MenuItem value={7}>7%</MenuItem>
+              <MenuItem value={8}>8%</MenuItem>
+              <MenuItem value={9}>9%</MenuItem>
+              <MenuItem value={10}>10%</MenuItem>
+            </Select>
+          </FormControl>
+          <Typography fontWeight="bold">
+            {withholdingTax.toLocaleString("th-TH", {
+              minimumFractionDigits: 2,
+            })}
+          </Typography>
+        </Box>
+
+        <Divider sx={{ my: 2 }} />
+
+        {/* หมายเหตุ */}
+        <Box sx={{ mb: 2 }}>
+          <Typography variant="subtitle2" fontWeight="bold" gutterBottom>
+            หมายเหตุ (Notes)
+          </Typography>
+          <TextField
+            fullWidth
+            multiline
+            minRows={3}
+            placeholder="ระบุหมายเหตุที่ต้องการให้แสดงในใบเสนอราคา..."
+            value={headForm.note || ""}
+            onChange={(e) => setHeadForm({ ...headForm, note: e.target.value })}
+            variant="outlined"
+            size="small"
+            sx={{ bgcolor: "white" }}
+          />
+        </Box>
+
+        {/* ยอดสุทธิ */}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            backgroundColor: theme.palette.success.light,
+            p: 2,
+            borderRadius: 1,
+          }}
+        >
+          <Typography variant="h6" fontWeight="bold">
+            ยอดชำระรวม
+          </Typography>
+          <Typography variant="h5" fontWeight="bold" color="success.dark">
+            {finalTotal.toLocaleString("th-TH", { minimumFractionDigits: 2 })}
+          </Typography>
+        </Box>
+
+        {/* ปุ่มควบคุม */}
+        <Box sx={{ mt: 3, display: "flex", flexDirection: "column", gap: 2 }}>
+          <Button
+            variant="contained"
+            startIcon={<Visibility />}
+            onClick={handlePreviewInvoice}
+            fullWidth
           >
-            <MenuItem value={0}>คิด ณ ที่จ่าย 0%</MenuItem>
-            <MenuItem value={1}>1%</MenuItem>
-            <MenuItem value={2}>2%</MenuItem>
-            <MenuItem value={3}>3%</MenuItem>
-            <MenuItem value={4}>4%</MenuItem>
-            <MenuItem value={5}>5%</MenuItem>
-            <MenuItem value={6}>6%</MenuItem>
-            <MenuItem value={7}>7%</MenuItem>
-            <MenuItem value={8}>8%</MenuItem>
-            <MenuItem value={9}>9%</MenuItem>
-            <MenuItem value={10}>10%</MenuItem>
-          </Select>
-        </FormControl>
-        <Typography fontWeight="bold">
-          {withholdingTax.toLocaleString("th-TH", { minimumFractionDigits: 2 })}
-        </Typography>
-      </Box>
+            ดูตัวอย่างใบเสนอราคา
+          </Button>
 
-      <Divider sx={{ my: 2 }} />
-
-      {/* หมายเหตุ */}
-      <Box sx={{ mb: 2 }}>
-        <Typography variant="subtitle2" fontWeight="bold" gutterBottom>
-          หมายเหตุ (Notes)
-        </Typography>
-        <TextField
-          fullWidth
-          multiline
-          minRows={3}
-          placeholder="ระบุหมายเหตุที่ต้องการให้แสดงในใบเสนอราคา..."
-          value={headForm.note || ""}
-          onChange={(e) => setHeadForm({ ...headForm, note: e.target.value })}
-          variant="outlined"
-          size="small"
-          sx={{ bgcolor: "white" }}
-        />
-      </Box>
-
-      {/* ยอดสุทธิ */}
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          backgroundColor: theme.palette.success.light,
-          p: 2,
-          borderRadius: 1,
-        }}
-      >
-        <Typography variant="h6" fontWeight="bold">
-          ยอดชำระรวม
-        </Typography>
-        <Typography variant="h5" fontWeight="bold" color="success.dark">
-          {finalTotal.toLocaleString("th-TH", { minimumFractionDigits: 2 })}
-        </Typography>
-      </Box>
-
-      {/* ปุ่มควบคุม */}
-      <Box sx={{ mt: 3, display: "flex", flexDirection: "column", gap: 2 }}>
-        <Button
-          variant="contained"
-          startIcon={<Visibility />}
-          onClick={handlePreviewInvoice}
-          fullWidth
-        >
-          ดูตัวอย่างใบเสนอราคา
-        </Button>
-
-        <Button
-          variant="contained"
-          color="success"
-          onClick={handleSaveQuotation}
-          fullWidth
-          sx={{ color: "white" }}
-        >
-          บันทึกใบเสนอราคา
-        </Button>
-      </Box>
-    </Paper>
+          <Button
+            variant="contained"
+            color="success"
+            onClick={handleSaveQuotation}
+            fullWidth
+            sx={{ color: "white" }}
+          >
+            บันทึกใบเสนอราคา
+          </Button>
+        </Box>
+      </Paper>
+      <PreviewDialog open={onOpen} onClose={() => setOnOpen(false)} headForm={headForm}/>
+    </>
   );
 };
 

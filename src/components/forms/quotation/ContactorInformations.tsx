@@ -2,24 +2,21 @@ import React, { useEffect } from "react";
 import { Grid2, TextField, Box, Typography } from "@mui/material";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import BaseCard from "../../shared/BaseCard";
 import { HeadForm, useQuotationListContext } from "@/contexts/QuotationContext";
 
 // Validation Schema with Yup
 const ContactotInformationSchema = Yup.object({
   contactorName: Yup.string().required("ชื่อผู้ติดต่อจำเป็นต้องกรอก"),
-  // contactorTel: Yup.string().required("เบอร์โทรจำเป็นต้องกรอก"),
-  // contactorEmail: Yup.string()
-  //   .email("อีเมล์ไม่ถูกต้อง")
-  //   .required("อีเมล์จำเป็นต้องกรอก"),
-  // contactorAddress: Yup.string().required("ที่อยู่จำเป็นต้องกรอก"),
 });
 
 const ContactotInformation: React.FC = () => {
 
-  const { footerForm, setFooterForm, headForm, products, setHeadForm } = useQuotationListContext();
+  const { headForm, setHeadForm } = useQuotationListContext();
 
-  
+  // useEffect(() => {
+  //   console.log(headForm)
+  // }, [headForm])
+
   return (
     <>
       <Formik<HeadForm>
@@ -27,7 +24,6 @@ const ContactotInformation: React.FC = () => {
         validationSchema={ContactotInformationSchema}
         enableReinitialize
         onSubmit={(values) => {
-          console.log("บันทึกข้อมูล:", values);
           setHeadForm(values);
         }}
       >

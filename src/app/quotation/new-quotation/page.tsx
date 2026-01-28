@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useEffect } from "react";
-import { Box, Grid2, Typography } from "@mui/material";
+import React from "react";
+import { Grid2 } from "@mui/material";
 
 // components
 import CompanyInformation from "@/components/forms/quotation/CompanyInformations";
@@ -11,18 +11,8 @@ import PageContainer from "@/components/shared/PageContainer";
 import PricingTable from "@/components/forms/pricing-table/PricingTable";
 import PricingSummary from "@/components/forms/pricing-table/PricingSummary";
 import DashboardCard from "@/components/shared/DashboardCard";
-import { usePricingContext } from "@/contexts/PricingContext";
-import {
-  headerClean,
-  useQuotationListContext,
-} from "@/contexts/QuotationContext";
 
 const NewQuotation = () => {
-  const { setBreadcrumbs } = useBreadcrumbContext();
-  const { setCategories, setDiscount, setVatIncluded, setWithholdingTaxRate } =
-    usePricingContext();
-  const { setHeadForm, isPreview } = useQuotationListContext();
-
   return (
     <PageContainer>
       <DashboardCard title="เพิ่มใบเสนอราคาใหม่">

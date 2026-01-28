@@ -45,16 +45,16 @@ const QuotationHeader: React.FC<QuotationHeaderProps> = ({
           {/* ข้อมูลลูกค้า (ฝั่งซ้าย) */}
           <Grid2 size={6}>
             <Typography variant="h6" sx={{ fontSize: 16, mb: 1, fontWeight: "bold" }}>
-              ลูกค้า: คุณ{headForm.contactorName}
+              ลูกค้า: คุณ{headForm?.contactorName}
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5, fontSize: 12 }}>
-              เบอร์โทรศัพท์: {headForm.companyTel}
+              เบอร์โทรศัพท์: {headForm?.companyTel}
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5, fontSize: 12 }}>
-              อีเมล: {headForm.contactorEmail}
+              อีเมล: {headForm?.contactorEmail}
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5, fontSize: 12 }}>
-              ที่อยู่ {headForm.contactorAddress}
+              ที่อยู่ {headForm?.contactorAddress}
             </Typography>
           </Grid2>
 
@@ -67,11 +67,11 @@ const QuotationHeader: React.FC<QuotationHeaderProps> = ({
               ใบเสนอราคา
             </Typography>
             <Typography variant="body2" sx={{ fontSize: 12 }}>
-              <strong>เลขที่:</strong> {headForm.quotationNumber}
+              <strong>เลขที่:</strong> {headForm?.quotationNumber}
             </Typography>
             <Typography variant="body2" sx={{ mt: 0.5, fontSize: 12 }}>
               <strong>ออกเมื่อวันที่:</strong>{" "}
-              {formatThaiDate(headForm.dateCreate)}
+              {formatThaiDate(headForm?.dateCreate)}
             </Typography>
 
             <Typography
@@ -83,15 +83,15 @@ const QuotationHeader: React.FC<QuotationHeaderProps> = ({
                 fontSize: 14,
               }}
             >
-              {headForm.companyName} สาขา {headForm.branch}
+              {headForm?.companyName} สาขา {headForm?.branch}
             </Typography>
 
-            {headForm.taxId && (
+            {headForm?.taxId && (
               <Typography
                 variant="h6"
                 sx={{ lineHeight: 1.2, mt: 0.5, fontSize: 11 }}
               >
-                เลขประจำตัวผู้เสียภาษี {headForm.taxId}
+                เลขประจำตัวผู้เสียภาษี {headForm?.taxId}
               </Typography>
             )}
 
@@ -100,14 +100,14 @@ const QuotationHeader: React.FC<QuotationHeaderProps> = ({
               color="text.secondary"
               sx={{ display: "block", lineHeight: 1.4, mt: 0.5, fontSize: 11 }}
             >
-              {headForm.companyAddress}
+              {headForm?.companyAddress}
             </Typography>
             <Typography
               variant="caption"
               color="text.secondary"
               sx={{ lineHeight: 1, fontSize: 11 }}
             >
-              โทร: {headForm.contactorTel}
+              โทร: {headForm?.contactorTel}
             </Typography>
           </Grid2>
         </Grid2>
@@ -133,7 +133,7 @@ const QuotationHeader: React.FC<QuotationHeaderProps> = ({
           ใบเสนอราคา
         </Typography>
         <Typography variant="body2" sx={{ fontSize: 12 }}>
-          <strong>เลขที่:</strong> {headForm.quotationNumber}
+          <strong>เลขที่:</strong> {headForm?.quotationNumber}
         </Typography>
       </Box>
       <Box sx={{ textAlign: "right" }}>

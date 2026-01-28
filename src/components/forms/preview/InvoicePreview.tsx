@@ -1,33 +1,24 @@
 import type React from "react";
-import {
-  Box,
-  Typography,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Divider,
-  Grid2,
-} from "@mui/material";
+import { Box } from "@mui/material";
 import { usePricingContext } from "@/contexts/PricingContext";
-import { useQuotationListContext } from "@/contexts/QuotationContext";
-import { useLayoutEffect, useMemo, useRef, useState } from "react";
+import { HeadForm, useQuotationListContext } from "@/contexts/QuotationContext";
+import { useEffect, useMemo } from "react";
 import QuotationHeader from "./QuotationHeader";
 import "./preview.css";
 import QuotationSummary from "./QuotationSummary";
 import QuotationFooter from "./QuotationFooter";
 import QuotationTable from "./QuotationTable";
+import { ContactSupportOutlined } from "@mui/icons-material";
 
-interface InvoiceProps { }
+interface InvoiceProps {
+  headData: HeadForm;
+}
 
 // Adjusted for new layout where each item takes 2 rows (name + details)
 const ROWS_PER_PAGE_FIRST = 8;
 const ROWS_PER_PAGE_OTHER = 14;
 
-const InvoicePreview: React.FC<InvoiceProps> = ({ }) => {
+const InvoicePreview: React.FC<InvoiceProps> = ({ headData: headForm }) => {
   const {
     categories,
     getSubtotal,
@@ -39,67 +30,16 @@ const InvoicePreview: React.FC<InvoiceProps> = ({ }) => {
     getCategoryTotal,
     getWithholdingTaxAmount,
   } = usePricingContext();
-  const { headForm } = useQuotationListContext();
+  // const { headForm } = useQuotationListContext();
+
+  useEffect(() => {
+    console.log(headForm);
+  }, [headForm]);
 
   const displayNote = headForm?.note;
 
   const subtotal = getSubtotal();
   const taxAmount = getTaxAmount();
-
-  // Flatten logic to handle pagination
-  // const pages = useMemo(() => {
-  //   const flattenedRows: Array<{
-  //     type: "header" | "item_name" | "item_details" | "subtotal";
-  //     data?: any;
-  //   }> = [];
-
-  //   categories.forEach((category, catIndex) => {
-  //     // Add Category Header
-  //     flattenedRows.push({
-  //       type: "header",
-  //       data: { name: category.name, index: catIndex + 1, id: category.id },
-  //     });
-
-  //     // Add Items - now creates two rows per item: name row and details row
-  //     category.subItems.forEach((item, itemIndex) => {
-  //       // Name row
-  //       flattenedRows.push({
-  //         type: "item_name",
-  //         data: { ...item, displayIndex: `${catIndex + 1}.${itemIndex + 1}` },
-  //       });
-  //       // Details row
-  //       flattenedRows.push({
-  //         type: "item_details",
-  //         data: { ...item },
-  //       });
-  //     });
-
-  //     // Add Category Subtotal
-  //     flattenedRows.push({
-  //       type: "subtotal",
-  //       data: { total: getCategoryTotal(category.id) },
-  //     });
-  //   });
-
-  //   const resultPages: Array<typeof flattenedRows> = [];
-  //   let currentPage: typeof flattenedRows = [];
-  //   let currentLimit = ROWS_PER_PAGE_FIRST;
-
-  //   flattenedRows.forEach((row, index) => {
-  //     if (currentPage.length >= currentLimit) {
-  //       resultPages.push(currentPage);
-  //       currentPage = [];
-  //       currentLimit = ROWS_PER_PAGE_OTHER;
-  //     }
-  //     currentPage.push(row);
-  //   });
-
-  //   if (currentPage.length > 0) {
-  //     resultPages.push(currentPage);
-  //   }
-
-  //   return resultPages;
-  // }, [categories, getCategoryTotal, headForm]);
 
   // Flatten logic to handle pagination
   const pages = useMemo(() => {
