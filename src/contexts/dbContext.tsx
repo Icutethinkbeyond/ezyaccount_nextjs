@@ -8,7 +8,7 @@ import React, {
   ReactNode,
   useEffect,
 } from "react";
-import { FormDataFooter, HeadForm, Product } from "./productServiceListContext";
+import { FormDataFooter, HeadForm, Product } from "./QuotationContext";
 
 // กำหนดประเภทของสินค้าย่อย
 export interface Quotation {

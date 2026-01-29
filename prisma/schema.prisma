@@ -228,11 +228,7 @@ model DocumentPaper {
   globalDiscount Float   @default(0) // ตรงกับ state: discount (ส่วนลดท้ายบิล)
 
   // ✅ Summary Fields (Calculated values)
-  subTotal           Float @default(0) // ราคารวมก่อนลด
-  totalAfterDiscount Float @default(0) // ราคาหลังหักส่วนลด
-  vatAmount          Float @default(0) // มูลค่าภาษี
-  grandTotal         Float @default(0) // ราคาสุทธิ (Net Total)
-  withholdingTax     Float @default(0) // หัก ณ ที่จ่าย (เผื่อไว้)
+  withholdingTax Float @default(0) // หัก ณ ที่จ่าย
 
   // ✅ Notes field
   note String? // หมายเหตุ

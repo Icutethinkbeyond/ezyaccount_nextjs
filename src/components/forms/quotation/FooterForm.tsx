@@ -17,11 +17,12 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import { useQuotationListContext, type Product } from "@/contexts/QuotationContext";
-import { toNumber, uniqueId } from "lodash";
+import { useQuotationListContext, type Product, ISubProduct, ICategoryInput, ISubItemInput } from "@/contexts/QuotationContext";
+import { toNumber } from "lodash";
 import { useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
 import { formatNumber } from "@/utils/utils";
+
 
 interface FooterProps {
   isEdit?: boolean | null | undefined;
@@ -35,9 +36,10 @@ const FooterForm: React.FC<FooterProps> = ({ isEdit = false, documentId }) => {
     useQuotationListContext();
 
   const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | any>
+    e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>
   ) => {
-    const { name, value, type, checked } = e.target;
+    const target = e.target as HTMLInputElement;
+    const { name, value, type, checked } = target;
     setFooterForm({
       ...footerForm,
       [name]: type === "checkbox" ? checked : value,
@@ -60,15 +62,15 @@ const FooterForm: React.FC<FooterProps> = ({ isEdit = false, documentId }) => {
   const handleSavePost = async (status: string) => {
     try {
       // แปลง products เป็น categories format
-      const categories: any[] = [];
+      const categories: ICategoryInput[] = [];
 
       products.forEach((product: Product) => {
         if (product.isSubjectItem) {
           // สร้างหมวดหมู่จาก Product ที่เป็นหัวหมวด
-          const category = {
+          const category: ICategoryInput = {
             id: `cat-${Date.now()}-${Math.random()}`,
             name: product.productService,
-            subItems: [] as any[],
+            subItems: [],
           };
 
           // เพิ่มรายการย่อยจาก subProductList
@@ -134,15 +136,15 @@ const FooterForm: React.FC<FooterProps> = ({ isEdit = false, documentId }) => {
       }
 
       // แปลง products เป็น categories format
-      const categories: any[] = [];
+      const categories: ICategoryInput[] = [];
 
       products.forEach((product: Product) => {
         if (product.isSubjectItem) {
           // สร้างหมวดหมู่จาก Product ที่เป็นหัวหมวด
-          const category = {
+          const category: ICategoryInput = {
             id: `cat-${Date.now()}-${Math.random()}`,
             name: product.productService,
-            subItems: [] as any[],
+            subItems: [],
           };
 
           // เพิ่มรายการย่อยจาก subProductList

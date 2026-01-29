@@ -8,27 +8,29 @@ import {
 } from "@mui/x-data-grid";
 import {
     Box,
-    Button,
     IconButton,
     Typography,
-    CircularProgress,
-    TextField,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 import {
-    Restore,
-    DeleteForever,
     ArrowBack,
-    Search,
 } from "@mui/icons-material";
 import { CustomNoRowsOverlay } from "@/components/shared/NoData";
 import { CustomToolbar } from "@/components/shared/CustomToolbar";
+import SearchBox from "@/components/shared/SearchBox";
+import { TrashActionButtons } from "@/components/quotation/ActionButtons";
+import {
+    documentIdColumn,
+    deletedDateColumn,
+    customerNameColumn,
+    grandTotalColumn
+} from "@/components/quotation/TableColumns";
+import { IQuotation, IQuotationTableRow, TrashTableProps } from "@/contexts/QuotationContext";
 
-
-const TrashTable: React.FC = () => {
+const TrashTable: React.FC<TrashTableProps> = () => {
     const router = useRouter();
-    const [rows, setRows] = useState<any[]>([]);
-    const [filteredRows, setFilteredRows] = useState<any[]>([]);
+    const [rows, setRows] = useState<IQuotationTableRow[]>([]);
+    const [filteredRows, setFilteredRows] = useState<IQuotationTableRow[]>([]);
     const [searchQuery, setSearchQuery] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(true);
     const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
@@ -43,7 +45,7 @@ const TrashTable: React.FC = () => {
             const data = await result.json();
 
             if (Array.isArray(data)) {
-                const mappedData = data.map((item: any) => ({
+                const mappedData: IQuotationTableRow[] = data.map((item: IQuotation) => ({
                     ...item,
                     keyId: item.documentIdNo,
                     id: item.documentIdNo,
@@ -53,6 +55,7 @@ const TrashTable: React.FC = () => {
             } else {
                 console.error("Data received is not an array:", data);
                 setRows([]);
+                setFilteredRows([]);
             }
         } catch (error) {
             console.error("Failed to fetch deleted quotations", error);
@@ -75,7 +78,7 @@ const TrashTable: React.FC = () => {
         // Debounce: รอ 2 วินาที หลังจากหยุดพิมพ์แล้วค่อยค้นหา
         const timeoutId = setTimeout(() => {
             const query = searchQuery.toLowerCase().trim();
-            const filtered = rows.filter((row: any) => {
+            const filtered = rows.filter((row: IQuotationTableRow) => {
                 const documentIdNo = row.documentIdNo?.toLowerCase() || "";
                 const contactorName = row.contactor?.contactorName?.toLowerCase() || "";
                 const companyName = row.customerCompany?.companyName?.toLowerCase() || "";
@@ -129,58 +132,21 @@ const TrashTable: React.FC = () => {
     };
 
     const columns: GridColDef[] = [
-        {
-            field: "keyId",
-            headerName: "เลขที่เอกสาร",
-            width: 200,
-            valueGetter: (value, row) => row.documentIdNo,
-        },
-        {
-            field: "deletedAt",
-            headerName: "วันที่ลบ",
-            width: 150,
-            valueGetter: (value, row) => {
-                if (!row.deletedAt) return "-";
-                return new Date(row.deletedAt).toLocaleDateString("th-TH");
-            },
-        },
-        {
-            field: "contactorName",
-            headerName: "ชื่อลูกค้า",
-            width: 250,
-            valueGetter: (value, row) => row.contactor?.contactorName || "-",
-        },
-        {
-            field: "grandTotal",
-            headerName: "ยอดรวมสุทธิ",
-            width: 200,
-            valueGetter: (value, row) => row.grandTotal?.toLocaleString(),
-        },
+        documentIdColumn,
+        deletedDateColumn,
+        customerNameColumn,
+        grandTotalColumn,
         {
             field: "Actions",
             headerName: "",
             width: 150,
             sortable: false,
             renderCell: (params) => (
-                <>
-                    <IconButton
-                        size="small"
-                        color="success"
-                        title="กู้คืนรายการ"
-                        onClick={() => handleRestore(params.row.documentId)}
-                    >
-                        <Restore />
-                    </IconButton>
-
-                    <IconButton
-                        size="small"
-                        color="error"
-                        title="ลบถาวร"
-                        onClick={() => handlePermanentDelete(params.row.documentId)}
-                    >
-                        <DeleteForever />
-                    </IconButton>
-                </>
+                <TrashActionButtons
+                    documentId={params.row.documentId}
+                    onRestore={handleRestore}
+                    onPermanentDelete={handlePermanentDelete}
+                />
             ),
         },
     ];
@@ -197,17 +163,9 @@ const TrashTable: React.FC = () => {
             </Box>
 
             <Box mb={2}>
-                <TextField
-                    fullWidth
-                    variant="outlined"
-                    placeholder="ค้นหาด้วย เลขที่เอกสาร, ชื่อลูกค้า, ชื่อบริษัท หรือ ยอดเงิน..."
+                <SearchBox
                     value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    InputProps={{
-                        startAdornment: (
-                            <Search sx={{ color: "action.active", mr: 1 }} />
-                        ),
-                    }}
+                    onChange={setSearchQuery}
                 />
             </Box>
 

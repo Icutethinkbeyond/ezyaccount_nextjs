@@ -7,13 +7,11 @@ import PricingTable from "@/components/forms/pricing-table/PricingTable";
 import PricingSummary from "@/components/forms/pricing-table/PricingSummary";
 import { useEffect, useState } from "react";
 import { usePricingContext } from "@/contexts/PricingContext";
-import {
-  headerClean,
-  useQuotationListContext,
-} from "@/contexts/QuotationContext";
+import { useQuotationListContext } from "@/contexts/QuotationContext";
 import { useBreadcrumbContext } from "@/contexts/BreadcrumbContext";
 import { useRouter } from "next/navigation";
-import HeaderEditForm from "@/components/forms/quotation/HeaderEditForm";
+import CompanyInformations from "@/components/forms/quotation/CompanyInformations";
+import ContactorInformations from "@/components/forms/quotation/ContactorInformations";
 
 function EditQuotation({ params }: { params: { id: string } }) {
   const { setCategories, setDiscount, setVatIncluded, setWithholdingTaxRate } =
@@ -86,7 +84,7 @@ function EditQuotation({ params }: { params: { id: string } }) {
       } catch (error) {
         console.error("❌ Error loading quotation:", error);
         alert("ไม่สามารถโหลดข้อมูลใบเสนอราคาได้");
-        router.push(`/income/quotation`);
+        router.push(`/quotation`);
       } finally {
         setLoading(false);
       }
@@ -111,19 +109,29 @@ function EditQuotation({ params }: { params: { id: string } }) {
   return (
     <PageContainer>
       <DashboardCard title="แก้ไขใบเสนอราคา">
-        <Grid2 container spacing={3} sx={{ p: 3 }}>
-          <Grid2 size={12}>
-            <HeaderEditForm />
+        <Grid2 container spacing={3}>
+
+          {/* ข้อมูลบริษัท และ ข้อมูลผู้ติดต่อ - แสดงแบบซ้าย-ขวา */}
+          <Grid2 size={6}>
+            <CompanyInformations />
           </Grid2>
+          <Grid2 size={6}>
+            <ContactorInformations />
+          </Grid2>
+
+          {/* ตารางสินค้า */}
           <Grid2 size={12}>
             <PricingTable />
           </Grid2>
+
+          {/* สรุปยอด */}
           <Grid2 container size={12}>
             <Grid2 size={6}></Grid2>
             <Grid2 size={6}>
               <PricingSummary isEdit={true} quotationId={params.id} />
             </Grid2>
           </Grid2>
+
         </Grid2>
       </DashboardCard>
     </PageContainer>
@@ -131,3 +139,4 @@ function EditQuotation({ params }: { params: { id: string } }) {
 }
 
 export default EditQuotation;
+

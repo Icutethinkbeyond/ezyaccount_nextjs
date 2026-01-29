@@ -1,6 +1,5 @@
 "use client";
 
-// contexts/ProductServiceListContext.tsx
 import { toNumber } from "lodash";
 import React, {
   createContext,
@@ -12,8 +11,47 @@ import React, {
 } from "react";
 import { calculateFooterTotals, calculateTax } from "@/utils/utils";
 
-// กำหนดประเภทของสินค้าย่อย
-export interface SubProduct {
+// ==================== ENUMS ====================
+
+export enum DOCUMENT_TYPE {
+  QUOTATION = 'Quotation',
+  INVOICE = 'Invoice',
+  RECEIPT = 'Receipt',
+}
+
+export enum DOCUMENT_STATUS {
+  DRAFT = 'Draft',
+  WAITING = 'Waiting',
+  APPROVE = 'Approve',
+  CANCEL = 'Cancel',
+}
+
+// ==================== INTERFACES ====================
+
+// ----- Contact & Company Types -----
+
+export interface IContactor {
+  contactorId: string;
+  contactorName: string;
+  contactorEmail?: string;
+  contactorTel?: string;
+  contactorAddress?: string;
+}
+
+export interface ICustomerCompany {
+  customerCompanyId: string;
+  companyName: string;
+  companyTel?: string;
+  customerCompanyEmail?: string;
+  taxId?: string;
+  branch?: string;
+  companyAddress?: string;
+}
+
+// ----- Product & Item Types -----
+
+/** ข้อมูลสินค้าย่อย (SubProduct) */
+export interface ISubProduct {
   isSubjectItem: boolean;
   productServiceKey: number;
   productService: string;
@@ -25,8 +63,49 @@ export interface SubProduct {
   subProductServiceNumber: number;
 }
 
-//กำหนดประเภทของ footer
-export interface FormDataFooter {
+/** ข้อมูลสินค้าหลัก (Product) */
+export interface IProduct {
+  isSubjectItem: boolean;
+  productService: string;
+  description: string;
+  amount: number;
+  price: number;
+  discount: number;
+  total: number;
+  productServiceNumber: number;
+  subProductList: ISubProduct[];
+  totalAmount: number;
+  totalPrice: number;
+  totalDiscount: number;
+  sumTotal: number;
+  totalAmountDue: number;
+}
+
+// ----- Document Types -----
+
+export interface IDocumentCategory {
+  categoryId: string;
+  name: string;
+  orderIndex: number;
+  items: IDocumentItem[];
+}
+
+export interface IDocumentItem {
+  itemId: string;
+  name?: string;
+  description: string;
+  unit: string;
+  qty: number;
+  pricePerUnit: number;
+  remark?: string;
+  totalPrice: number;
+  orderIndex: number;
+}
+
+// ----- Form Types -----
+
+/** ข้อมูล Footer ของเอกสาร */
+export interface IFormDataFooter {
   total: number;
   discountPrice: number;
   priceAfterDiscount: number;
@@ -38,25 +117,8 @@ export interface FormDataFooter {
   totalAmountDue: number;
 }
 
-// กำหนดประเภทของสินค้า
-export interface Product {
-  isSubjectItem: boolean;
-  productService: string;
-  description: string;
-  amount: number;
-  price: number;
-  discount: number;
-  total: number;
-  productServiceNumber: number;
-  subProductList: SubProduct[];
-  totalAmount: number;
-  totalPrice: number;
-  totalDiscount: number;
-  sumTotal: number;
-  totalAmountDue: number;
-}
-
-export interface HeadForm {
+/** ข้อมูล Header ของเอกสาร */
+export interface IHeadForm {
   quotationNumber: string;
   companyName: string;
   companyTel: string;
@@ -72,7 +134,64 @@ export interface HeadForm {
   note: string;
 }
 
-export const productClean = {
+// ----- Quotation Types -----
+
+export interface IQuotation {
+  documentId: string;
+  documentIdNo: string;
+  docType: string;
+  docMonth?: string;
+  docYear?: string;
+  documentDetials?: string;
+
+  customerCompany?: ICustomerCompany;
+  customerCompanyId?: string;
+
+  contactor?: IContactor;
+  contactorId?: string;
+
+  documentType: DOCUMENT_TYPE;
+  documentStatus: DOCUMENT_STATUS;
+  documentCreateDate?: Date | string;
+  documentExpire?: Date | string;
+
+  includeVat: boolean;
+  taxRate: number;
+  globalDiscount: number;
+
+  subTotal: number;
+  totalAfterDiscount: number;
+  vatAmount: number;
+  grandTotal: number;
+  withholdingTax: number;
+
+  note?: string;
+
+  categories: IDocumentCategory[];
+
+  isDeleted: boolean;
+  deletedAt?: Date | string | null;
+
+  createdAt: Date | string;
+  updatedAt: Date | string;
+}
+
+export interface IQuotationTableRow extends IQuotation {
+  keyId: string;
+  id: string;
+}
+
+// ==================== TYPE ALIASES ====================
+
+/** Alias สำหรับความเข้ากันได้กับโค้ดเดิม */
+export type SubProduct = ISubProduct;
+export type Product = IProduct;
+export type FormDataFooter = IFormDataFooter;
+export type HeadForm = IHeadForm;
+
+// ==================== DEFAULT VALUES ====================
+
+export const PRODUCT_CLEAN: IProduct = {
   isSubjectItem: true,
   productServiceNumber: 0,
   productService: "",
@@ -89,7 +208,7 @@ export const productClean = {
   totalAmountDue: 0,
 };
 
-export const subProductClean = {
+export const SUB_PRODUCT_CLEAN: ISubProduct = {
   isSubjectItem: false,
   subProductServiceNumber: 0,
   productService: "",
@@ -101,7 +220,7 @@ export const subProductClean = {
   productServiceKey: 0,
 };
 
-export const footerFormClean = {
+export const FOOTER_FORM_CLEAN: IFormDataFooter = {
   total: 0,
   discountPrice: 0,
   priceAfterDiscount: 0,
@@ -113,7 +232,7 @@ export const footerFormClean = {
   totalAmountDue: 0,
 };
 
-export const headerClean = {
+export const headerClean: IHeadForm = {
   quotationNumber: "",
   companyName: "",
   companyTel: "",
@@ -127,7 +246,36 @@ export const headerClean = {
   dateCreate: "",
   includeTax: false,
   note: "",
+};
+
+
+// ==================== COMPONENT PROPS ====================
+
+/** Props สำหรับ QuotationsTable component */
+export type QuotationsTableProps = Record<string, never>;
+
+/** Props สำหรับ TrashTable component */
+export type TrashTableProps = Record<string, never>;
+
+/** Props สำหรับ Category Input */
+export interface ICategoryInput {
+  id: string;
+  name: string;
+  subItems: ISubItemInput[];
 }
+
+/** Props สำหรับ SubItem Input */
+export interface ISubItemInput {
+  id: string;
+  description: string;
+  unit: string;
+  qty: number;
+  pricePerUnit: number;
+  remark: string;
+}
+
+// ==================== CONTEXT ====================
+
 
 // กำหนดประเภทของ Context
 interface QuotationListContextProps {
@@ -178,11 +326,11 @@ const QuotationListContext = createContext<
 export const QuotationProvider = ({ children }: { children: ReactNode }) => {
 
   const [products, setProducts] = useState<Product[]>([]);
-  const [footerForm, setFooterForm] = useState<FormDataFooter>(footerFormClean);
-  const [productEdit, setProductEdit] = useState<Product>(productClean);
+  const [footerForm, setFooterForm] = useState<FormDataFooter>(FOOTER_FORM_CLEAN);
+  const [productEdit, setProductEdit] = useState<Product>(PRODUCT_CLEAN);
   const [headForm, setHeadForm] = useState<HeadForm>(headerClean);
   const [subProductEdit, setSubProductEdit] =
-    useState<SubProduct>(subProductClean);
+    useState<SubProduct>(SUB_PRODUCT_CLEAN);
   const [isProductEdit, setIsProductEdit] = useState<boolean>(false);
   const [isSubProductEdit, setIsSubProductEdit] = useState<boolean>(false);
 

@@ -20,24 +20,8 @@ import AddIcon from "@mui/icons-material/Add"
 import DeleteIcon from "@mui/icons-material/Delete"
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
 import ExpandLessIcon from "@mui/icons-material/ExpandLess"
-import { usePricingContext } from "@/contexts/PricingContext"
+import { usePricingContext, SubItem, Category } from "@/contexts/PricingContext"
 import { calculateSubItemTotal } from "@/utils/utils"
-
-interface SubItem {
-  id: string
-  name: string
-  description: string
-  unit: string
-  qty: number
-  pricePerUnit: number
-  remark: string
-}
-
-interface MainCategory {
-  id: string
-  name: string
-  subItems: SubItem[]
-}
 
 const PricingTable: React.FC = () => {
   const theme = useTheme()

@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
-import { Grid2, TextField, Box, Typography } from "@mui/material";
+import { Grid2, TextField } from "@mui/material";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import BaseCard from "../../shared/BaseCard";
+import FormSection from "../../shared/FormSection";
 import { HeadForm, useQuotationListContext } from "@/contexts/QuotationContext";
 
 // Validation Schema with Yup
@@ -16,7 +16,7 @@ const CompanyInformationSchema = Yup.object({
 });
 
 const CompanyInformation: React.FC = () => {
-  
+
   const { footerForm, setFooterForm, headForm, products, setHeadForm } =
     useQuotationListContext();
 
@@ -38,10 +38,7 @@ const CompanyInformation: React.FC = () => {
 
           return (
             <Form>
-              <Box p={3} border="1px solid #ccc" borderRadius="8px">
-                <Typography variant="h3" gutterBottom>
-                  ข้อมูลบริษัท
-                </Typography>
+              <FormSection title="ข้อมูลบริษัท">
                 <Grid2 container spacing={2} mt={5}></Grid2>
                 <Grid2 container spacing={2}>
                   <Grid2 size={6}>
@@ -125,7 +122,7 @@ const CompanyInformation: React.FC = () => {
                     />
                   </Grid2>
                 </Grid2>
-              </Box>
+              </FormSection>
             </Form>
           );
         }}

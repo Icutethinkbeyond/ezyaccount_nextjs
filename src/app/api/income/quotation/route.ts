@@ -5,6 +5,7 @@ import fs from 'fs';
 import path from 'path';
 import { exec as execCallback } from 'child_process';
 import { promisify } from 'util';
+import { IQuotation } from '@/contexts/QuotationContext';
 
 // แปลง exec ให้รองรับ Promises
 const exec = promisify(execCallback);
@@ -30,6 +31,7 @@ export async function GET(req: NextRequest) {
         });
 
         // กรองข้อมูลใน JS เพื่อรองรับข้อมูลเก่าที่ฟิลด์ isDeleted ยังไม่มีค่า
+        // Note: Using 'any' here because Prisma's generated type differs from IQuotation
         const filteredDocs = allDocs.filter((doc: any) =>
             showDeleted ? doc.isDeleted === true : doc.isDeleted !== true
         );
