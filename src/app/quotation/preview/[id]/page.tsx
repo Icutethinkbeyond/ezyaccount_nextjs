@@ -178,7 +178,7 @@ export default function QuotationPreviewPage({
   };
 
   const handleBack = () => {
-    router.back();
+    router.push("/quotation");
   };
 
   if (loading) {

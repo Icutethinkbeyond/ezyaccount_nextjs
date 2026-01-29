@@ -12,7 +12,7 @@ export default function InvoicePage() {
   const router = useRouter();
 
   const handleBack = () => {
-    router.back();
+    router.push("/quotation");
   };
 
   return (
