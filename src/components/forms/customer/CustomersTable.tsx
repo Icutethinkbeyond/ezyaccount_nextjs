@@ -15,14 +15,13 @@ import {
 import { useRouter } from "next/navigation";
 import {
     Add,
-    Edit,
+    EditCalendar,
     Delete,
 } from "@mui/icons-material";
 import { CustomNoRowsOverlay } from "@/components/shared/NoData";
 import { CustomToolbar } from "@/components/shared/CustomToolbar";
 import SearchBox from "@/components/shared/SearchBox";
 import PageHeader from "@/components/shared/PageHeader";
-import Swal from "sweetalert2";
 
 interface Customer {
     contactorId: string;
@@ -109,33 +108,18 @@ const CustomersTable: React.FC = () => {
     }, [searchQuery, rows]);
 
     const handleDelete = async (contactorId: string) => {
-        const result = await Swal.fire({
-            title: 'ยืนยันการลบ?',
-            text: "คุณต้องการลบข้อมูลลูกค้านี้หรือไม่?",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'ลบ',
-            cancelButtonText: 'ยกเลิก'
-        });
+        try {
+            const response = await fetch(`/api/customer/${contactorId}`, {
+                method: 'DELETE',
+            });
 
-        if (result.isConfirmed) {
-            try {
-                const response = await fetch(`/api/customer/${contactorId}`, {
-                    method: 'DELETE',
-                });
-
-                if (response.ok) {
-                    Swal.fire('ลบแล้ว!', 'ข้อมูลลูกค้าถูกลบเรียบร้อย', 'success');
-                    fetchCustomers();
-                } else {
-                    Swal.fire('เกิดข้อผิดพลาด', 'ไม่สามารถลบข้อมูลได้', 'error');
-                }
-            } catch (error) {
-                console.error("Error deleting customer:", error);
-                Swal.fire('เกิดข้อผิดพลาด', 'ไม่สามารถลบข้อมูลได้', 'error');
+            if (response.ok) {
+                fetchCustomers();
+            } else {
+                console.error("Failed to delete customer");
             }
+        } catch (error) {
+            console.error("Error deleting customer:", error);
         }
     };
 
@@ -157,6 +141,12 @@ const CustomersTable: React.FC = () => {
             width: 180,
         },
         {
+            field: "contactorAddress",
+            headerName: "ที่อยู่",
+            flex: 1,
+            minWidth: 200,
+        },
+        {
             field: "Actions",
             headerName: "",
             width: 100,
@@ -166,19 +156,19 @@ const CustomersTable: React.FC = () => {
                     <Tooltip title="แก้ไข">
                         <IconButton
                             size="small"
+                            color="secondary"
                             onClick={() => router.push(`/customer/edit-customer/${params.row.contactorId}`)}
-                            sx={{ color: "#1976d2" }}
                         >
-                            <Edit fontSize="small" />
+                            <EditCalendar />
                         </IconButton>
                     </Tooltip>
                     <Tooltip title="ลบ">
                         <IconButton
                             size="small"
+                            sx={{ color: '#d33' }}
                             onClick={() => handleDelete(params.row.contactorId)}
-                            sx={{ color: "#d33" }}
                         >
-                            <Delete fontSize="small" />
+                            <Delete />
                         </IconButton>
                     </Tooltip>
                 </Box>
