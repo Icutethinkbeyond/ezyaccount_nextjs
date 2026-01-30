@@ -115,14 +115,12 @@ const ProductsTable: React.FC = () => {
             });
 
             if (response.ok) {
-                alert("ลบสินค้าสำเร็จ");
                 fetchProducts();
             } else {
-                alert("ไม่สามารถลบสินค้าได้");
+                console.error("Failed to delete product");
             }
         } catch (error) {
             console.error("Error deleting product:", error);
-            alert("เกิดข้อผิดพลาด");
         }
     };
 

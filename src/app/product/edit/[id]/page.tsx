@@ -34,7 +34,6 @@ const EditProductPage = ({ params }: { params: { id: string } }) => {
             });
         } catch (error) {
             console.error("Error fetching product:", error);
-            alert("ไม่สามารถโหลดข้อมูลสินค้าได้");
             router.push("/product");
         } finally {
             setLoading(false);
@@ -60,14 +59,12 @@ const EditProductPage = ({ params }: { params: { id: string } }) => {
             });
 
             if (response.ok) {
-                alert("แก้ไขสินค้าสำเร็จ");
                 router.push("/product");
             } else {
-                alert("ไม่สามารถแก้ไขสินค้าได้");
+                console.error("Failed to update product");
             }
         } catch (error) {
             console.error("Error updating product:", error);
-            alert("เกิดข้อผิดพลาด");
         }
     };
 
