@@ -67,7 +67,7 @@ const QuotationTable: React.FC<QuotationTableProps> = ({
                 color: "white",
                 fontSize: 12,
                 textAlign: "right",
-                width: "100px",
+                width: "120px",
               }}
             >
               ราคา/หน่วย
@@ -77,7 +77,7 @@ const QuotationTable: React.FC<QuotationTableProps> = ({
                 color: "white",
                 fontSize: 12,
                 textAlign: "right",
-                width: "100px",
+                width: "120px",
               }}
             >
               จำนวนเงิน
