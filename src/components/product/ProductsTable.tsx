@@ -15,7 +15,7 @@ import {
 import { useRouter } from "next/navigation";
 import {
     Add,
-    Edit,
+    EditCalendar,
     Delete,
     Visibility,
 } from "@mui/icons-material";
@@ -157,28 +157,28 @@ const ProductsTable: React.FC = () => {
             sortable: false,
             renderCell: (params) => (
                 <Box sx={{ display: "flex", gap: 1 }}>
+                    <Tooltip title="แก้ไข">
+                        <IconButton
+                            size="small"
+                            color="secondary"
+                            onClick={() => router.push(`/product/edit/${params.row.id}`)}
+                        >
+                            <EditCalendar fontSize="small" />
+                        </IconButton>
+                    </Tooltip>
                     <Tooltip title="ดูข้อมูล">
                         <IconButton
                             size="small"
-                            color="info"
+                            color="primary"
                             onClick={() => router.push(`/product/view/${params.row.id}`)}
                         >
                             <Visibility fontSize="small" />
                         </IconButton>
                     </Tooltip>
-                    <Tooltip title="แก้ไข">
-                        <IconButton
-                            size="small"
-                            color="primary"
-                            onClick={() => router.push(`/product/edit/${params.row.id}`)}
-                        >
-                            <Edit fontSize="small" />
-                        </IconButton>
-                    </Tooltip>
                     <Tooltip title="ลบ">
                         <IconButton
                             size="small"
-                            color="error"
+                            sx={{ color: '#d33' }}
                             onClick={() => handleDelete(params.row.id)}
                         >
                             <Delete fontSize="small" />
