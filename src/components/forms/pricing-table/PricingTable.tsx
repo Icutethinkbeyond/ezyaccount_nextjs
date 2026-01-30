@@ -1,6 +1,5 @@
 "use client"
 
-import React from "react"
 import {
   Box,
   Button,
@@ -15,11 +14,13 @@ import {
   TextField,
   Typography,
   useTheme,
+  Autocomplete,
 } from "@mui/material"
 import AddIcon from "@mui/icons-material/Add"
 import DeleteIcon from "@mui/icons-material/Delete"
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
 import ExpandLessIcon from "@mui/icons-material/ExpandLess"
+import React, { useEffect, useState } from "react"
 import { usePricingContext, SubItem, Category } from "@/contexts/PricingContext"
 import { calculateSubItemTotal } from "@/utils/utils"
 
@@ -32,12 +33,26 @@ const PricingTable: React.FC = () => {
     addSubItem,
     removeSubItem,
     updateSubItem,
-    updateCategoryName, // Added updateCategoryName from context
+    updateCategoryName,
     getCategoryTotal,
     getTotalPrice,
   } = usePricingContext()
 
-  const [expandedCategories, setExpandedCategories] = React.useState<Record<string, boolean>>({})
+  const [expandedCategories, setExpandedCategories] = useState<Record<string, boolean>>({})
+  const [allProducts, setAllProducts] = useState<any[]>([])
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch("/api/inventory/product")
+        const data = await response.json()
+        setAllProducts(data)
+      } catch (error) {
+        console.error("Error fetching products:", error)
+      }
+    }
+    fetchProducts()
+  }, [])
 
   const handleAddCategory = () => {
     addCategory("")
@@ -182,18 +197,40 @@ const PricingTable: React.FC = () => {
                           {catIndex + 1}.{itemIndex + 1}
                         </TableCell>
                         <TableCell colSpan={6}>
-                          <TextField
-                            fullWidth
-                            placeholder="ชื่อสินค้า"
-                            value={item.name}
-                            onChange={(e) => updateSubItem(category.id, item.id, { name: e.target.value })}
-                            variant="standard"
-                            sx={{
-                              '& .MuiInputBase-input': {
-                                fontWeight: "bold",
-                                fontSize: "1.1rem",
-                              },
+                          <Autocomplete
+                            freeSolo
+                            options={allProducts}
+                            getOptionLabel={(option) => {
+                              if (typeof option === 'string') return option;
+                              return option.productName || "";
                             }}
+                            value={item.name}
+                            onInputChange={(event, newInputValue) => {
+                              updateSubItem(category.id, item.id, { name: newInputValue });
+                            }}
+                            onChange={(event, newValue: any) => {
+                              if (newValue && typeof newValue !== 'string') {
+                                updateSubItem(category.id, item.id, {
+                                  name: newValue.productName,
+                                  description: newValue.productDescription || "",
+                                  unit: newValue.aboutProduct?.unitName || "",
+                                  pricePerUnit: newValue.aboutProduct?.productPrice || 0,
+                                });
+                              }
+                            }}
+                            renderInput={(params) => (
+                              <TextField
+                                {...params}
+                                placeholder="ชื่อสินค้า"
+                                variant="standard"
+                                sx={{
+                                  '& .MuiInputBase-input': {
+                                    fontWeight: "bold",
+                                    fontSize: "1.1rem",
+                                  },
+                                }}
+                              />
+                            )}
                           />
                         </TableCell>
                         <TableCell>
