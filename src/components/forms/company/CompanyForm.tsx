@@ -15,7 +15,7 @@ import {
 import PageContainer from "@/components/shared/PageContainer";
 import PageHeader from "@/components/shared/PageHeader";
 import { Save as SaveIcon } from "@mui/icons-material";
-import { useNotifyContext } from "@/contexts/NotifyContext";
+
 import FormSection from "@/components/shared/FormSection";
 
 interface CompanyFormProps {
@@ -38,15 +38,7 @@ export default function CompanyForm({ title = "ข้อมูลบริษั
         companyRegistrationDate: "",
     });
 
-    const { setNotify } = useNotifyContext();
 
-    const showNotification = (message: string, color: "success" | "error") => {
-        setNotify({
-            open: true,
-            message: message,
-            color: color,
-        });
-    };
 
     useEffect(() => {
         if (companyId) {
@@ -81,7 +73,7 @@ export default function CompanyForm({ title = "ข้อมูลบริษั
             }
         } catch (error) {
             console.error("Failed to fetch company data", error);
-            showNotification("Failed to load company data", "error");
+            alert("Failed to load company data");
         } finally {
             setLoading(false);
         }
@@ -112,7 +104,7 @@ export default function CompanyForm({ title = "ข้อมูลบริษั
 
             if (res.ok) {
                 const data = await res.json();
-                showNotification("บันทึกข้อมูลสำเร็จ", "success");
+                alert("บันทึกข้อมูลสำเร็จ");
 
                 // Handle response similarly
                 const profile = Array.isArray(data) ? data[0] : data;
@@ -137,11 +129,11 @@ export default function CompanyForm({ title = "ข้อมูลบริษั
                 }
             } else {
                 const errorData = await res.json();
-                showNotification(errorData.error || "บันทึกข้อมูลไม่สำเร็จ", "error");
+                alert(errorData.error || "บันทึกข้อมูลไม่สำเร็จ");
             }
         } catch (error) {
             console.error("Error saving data:", error);
-            showNotification("เกิดข้อผิดพลาดในการเชื่อมต่อ", "error");
+            alert("เกิดข้อผิดพลาดในการเชื่อมต่อ");
         } finally {
             setSaving(false);
         }

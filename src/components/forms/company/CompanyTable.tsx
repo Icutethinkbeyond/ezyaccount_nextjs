@@ -16,30 +16,24 @@ import { useRouter } from "next/navigation";
 import {
     Add,
     Edit,
+    EditCalendar,
     Delete,
+    Visibility,
 } from "@mui/icons-material";
+import { Tooltip } from "@mui/material";
 import { CustomNoRowsOverlay } from "@/components/shared/NoData";
 import { CustomToolbar } from "@/components/shared/CustomToolbar";
 import PageHeader from "@/components/shared/PageHeader";
-import { useNotifyContext } from "@/contexts/NotifyContext";
+
 
 const CompanyTable = () => {
     const router = useRouter();
     const [rows, setRows] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
-    const { setNotify } = useNotifyContext();
     const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
         page: 0,
         pageSize: 10,
     });
-
-    const showNotification = (message: string, color: "success" | "error") => {
-        setNotify({
-            open: true,
-            message: message,
-            color: color,
-        });
-    };
 
     const fetchCompanyData = async () => {
         try {
@@ -56,7 +50,7 @@ const CompanyTable = () => {
             }
         } catch (error) {
             console.error("Failed to fetch data", error);
-            showNotification("ไม่สามารถโหลดข้อมูลได้", "error");
+            alert("ไม่สามารถโหลดข้อมูลได้");
         } finally {
             setLoading(false);
         }
@@ -77,14 +71,14 @@ const CompanyTable = () => {
             });
 
             if (res.ok) {
-                showNotification("ลบข้อมูลสำเร็จ", "success");
+                alert("ลบข้อมูลสำเร็จ");
                 fetchCompanyData();
             } else {
-                showNotification("ลบข้อมูลไม่สำเร็จ", "error");
+                alert("ลบข้อมูลไม่สำเร็จ");
             }
         } catch (error) {
             console.error("Error deleting company:", error);
-            showNotification("เกิดข้อผิดพลาดในการลบข้อมูล", "error");
+            alert("เกิดข้อผิดพลาดในการลบข้อมูล");
         }
     };
 
@@ -100,21 +94,35 @@ const CompanyTable = () => {
             sortable: false,
             renderCell: (params) => (
                 <Box>
-                    <IconButton
-                        color="primary"
-                        onClick={() => router.push(`/company/edit-company/${params.row.companyId}`)}
-                        size="small"
-                        sx={{ mr: 1 }}
-                    >
-                        <Edit fontSize="small" />
-                    </IconButton>
-                    <IconButton
-                        color="error"
-                        onClick={() => handleDelete(params.row.companyId)}
-                        size="small"
-                    >
-                        <Delete fontSize="small" />
-                    </IconButton>
+                    <Tooltip title="แก้ไข">
+                        <IconButton
+                            color="secondary"
+                            onClick={() => router.push(`/company/edit-company/${params.row.companyId}`)}
+                            size="small"
+                        >
+                            <EditCalendar />
+                        </IconButton>
+                    </Tooltip>
+
+                    <Tooltip title="ดูข้อมูล">
+                        <IconButton
+                            color="primary"
+                            onClick={() => router.push(`/company/edit-company/${params.row.companyId}`)}
+                            size="small"
+                        >
+                            <Visibility />
+                        </IconButton>
+                    </Tooltip>
+
+                    <Tooltip title="ลบ">
+                        <IconButton
+                            size="small"
+                            sx={{ color: '#d33' }}
+                            onClick={() => handleDelete(params.row.companyId)}
+                        >
+                            <Delete />
+                        </IconButton>
+                    </Tooltip>
                 </Box>
             ),
         },
