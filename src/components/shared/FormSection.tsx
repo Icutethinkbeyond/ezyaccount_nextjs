@@ -17,8 +17,16 @@ const FormSection: React.FC<FormSectionProps> = ({
     padding = 3
 }) => {
     return (
-        <Box p={padding} border="1px solid #ccc" borderRadius="8px">
-            <Typography variant="h3" gutterBottom>
+        <Box
+            p={padding}
+            sx={{
+                border: "1px solid #e5eaef",
+                borderRadius: "12px",
+                height: "100%",
+                backgroundColor: "#ffffff"
+            }}
+        >
+            <Typography variant="h5" fontWeight={500} gutterBottom sx={{ mb: 2, color: "text.primary" }}>
                 {title}
             </Typography>
             {children}

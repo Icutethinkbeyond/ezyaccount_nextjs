@@ -193,15 +193,16 @@ const PricingSummary: React.FC<PricingSummaryProps> = ({
   return (
     <>
       <Paper
-        elevation={3}
+        elevation={0}
         sx={{
           p: 3,
-          backgroundColor: "#f9f9f9",
-          borderRadius: 2,
+          backgroundColor: "#ffffff",
+          borderRadius: "12px",
+          border: "1px solid #e5eaef",
         }}
       >
         {/* หัวข้อสรุปราคา */}
-        <Typography variant="h6" gutterBottom fontWeight="bold">
+        <Typography variant="h5" fontWeight={500} gutterBottom sx={{ mb: 2, color: "text.primary" }}>
           สรุปราคา
         </Typography>
 
@@ -210,7 +211,7 @@ const PricingSummary: React.FC<PricingSummaryProps> = ({
         {/* รวมเป็นเงิน */}
         <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
           <Typography>รวมเป็นเงิน</Typography>
-          <Typography fontWeight="bold">
+          <Typography fontWeight={500}>
             {subtotal.toLocaleString("th-TH", { minimumFractionDigits: 2 })}
           </Typography>
         </Box>
@@ -230,7 +231,7 @@ const PricingSummary: React.FC<PricingSummaryProps> = ({
         {/* ราคาหลังหักส่วนลด */}
         <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
           <Typography>ราคาหลังหักส่วนลด</Typography>
-          <Typography fontWeight="bold">
+          <Typography fontWeight={500}>
             {priceAfterDiscount.toLocaleString("th-TH", {
               minimumFractionDigits: 2,
             })}
@@ -250,7 +251,7 @@ const PricingSummary: React.FC<PricingSummaryProps> = ({
             }
             label="ภาษีมูลค่าเพิ่ม 7%"
           />
-          <Typography fontWeight="bold">
+          <Typography fontWeight={500}>
             {vat.toLocaleString("th-TH", { minimumFractionDigits: 2 })}
           </Typography>
         </Box>
@@ -266,8 +267,8 @@ const PricingSummary: React.FC<PricingSummaryProps> = ({
             borderRadius: 1,
           }}
         >
-          <Typography fontWeight="bold">จำนวนเงินรวมทั้งสิ้น</Typography>
-          <Typography fontWeight="bold" variant="h6" color="primary">
+          <Typography fontWeight={500}>จำนวนเงินรวมทั้งสิ้น</Typography>
+          <Typography fontWeight={500} variant="h6" color="primary">
             {totalWithVat.toLocaleString("th-TH", {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
@@ -304,7 +305,7 @@ const PricingSummary: React.FC<PricingSummaryProps> = ({
               <MenuItem value={10}>10%</MenuItem>
             </Select>
           </FormControl>
-          <Typography fontWeight="bold">
+          <Typography fontWeight={500}>
             {withholdingTax.toLocaleString("th-TH", {
               minimumFractionDigits: 2,
             })}
@@ -341,10 +342,10 @@ const PricingSummary: React.FC<PricingSummaryProps> = ({
             borderRadius: 1,
           }}
         >
-          <Typography variant="h6" fontWeight="bold">
+          <Typography variant="h6" fontWeight={500}>
             ยอดชำระรวม
           </Typography>
-          <Typography variant="h5" fontWeight="bold" color="success.dark">
+          <Typography variant="h5" fontWeight={500} color="success.dark">
             {finalTotal.toLocaleString("th-TH", { minimumFractionDigits: 2 })}
           </Typography>
         </Box>

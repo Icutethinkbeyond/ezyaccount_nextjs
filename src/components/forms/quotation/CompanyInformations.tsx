@@ -78,19 +78,21 @@ const CompanyInformation: React.FC = () => {
           return (
             <Form>
               <FormSection title="ข้อมูลบริษัท">
-                <Grid2 container spacing={2} mt={5}></Grid2>
                 <Grid2 container spacing={2}>
                   {/* Company Name with Autocomplete */}
                   <Grid2 size={12}>
                     <Autocomplete
                       freeSolo
+                      disableClearable={false}
                       options={suggestions}
                       loading={loading}
                       inputValue={values.companyName || ""}
                       onInputChange={(event, newValue, reason) => {
-                        if (reason === "input") {
+                        if (reason === "input" || reason === "clear") {
                           setFieldValue("companyName", newValue);
-                          debouncedFetch(newValue);
+                          if (reason === "input") {
+                            debouncedFetch(newValue);
+                          }
                         }
                       }}
                       onOpen={() => fetchSuggestions(values.companyName || "")}
@@ -105,19 +107,32 @@ const CompanyInformation: React.FC = () => {
                       isOptionEqualToValue={(option, value) =>
                         option.companyId === value.companyId
                       }
-                      noOptionsText={values.companyName ? "ไม่พบข้อมูล พิมพ์เพื่อสร้างใหม่" : "พิมพ์เพื่อค้นหา"}
+                      noOptionsText={values.companyName ? "ไม่พบข้อมูล พิมพ์เพื่อใช้ชื่อบริษัทนี้" : "พิมพ์เพื่อค้นหาบริษัท..."}
                       loadingText="กำลังค้นหา..."
                       renderOption={(props, option) => (
                         <Box component="li" {...props} key={option.companyId}>
-                          <Box display="flex" alignItems="center" gap={1}>
-                            <Business sx={{ color: "#33CC99", fontSize: 18 }} />
-                            <Box>
-                              <Typography variant="body2" fontWeight={500}>
+                          <Box display="flex" alignItems="center" gap={1.5} py={0.5} width="100%">
+                            <Business sx={{ color: "primary.main", fontSize: 22 }} />
+                            <Box sx={{ flexGrow: 1 }}>
+                              <Typography variant="body1" fontWeight={500} component="span">
                                 {option.companyName}
                               </Typography>
-                              <Typography variant="caption" color="text.secondary">
-                                {option.companyTaxId && `Tax: ${option.companyTaxId}`}
-                                {option.companyPhoneNumber && ` • Tel: ${option.companyPhoneNumber}`}
+                              <Typography variant="body2" color="text.secondary" component="span" sx={{ ml: 1 }}>
+                                {option.companyTaxId ? ` • ${option.companyTaxId}` : ""}
+                                {option.companyPhoneNumber ? ` • ${option.companyPhoneNumber}` : ""}
+                              </Typography>
+                              <Typography
+                                variant="caption"
+                                color="text.disabled"
+                                display="block"
+                                sx={{
+                                  whiteSpace: 'nowrap',
+                                  overflow: 'hidden',
+                                  textOverflow: 'ellipsis',
+                                  maxWidth: '400px'
+                                }}
+                              >
+                                {option.companyAddress || "ไม่ระบุที่อยู่"}
                               </Typography>
                             </Box>
                           </Box>
@@ -133,7 +148,7 @@ const CompanyInformation: React.FC = () => {
                           fullWidth
                           error={touched.companyName && Boolean(errors.companyName)}
                           helperText={<ErrorMessage name="companyName" />}
-                          placeholder="พิมพ์เพื่อค้นหาบริษัทที่บันทึกไว้..."
+                          placeholder="พิมพ์เพื่อค้นหาบริษัทที่เคยบันทึกไว้..."
                         />
                       )}
                     />

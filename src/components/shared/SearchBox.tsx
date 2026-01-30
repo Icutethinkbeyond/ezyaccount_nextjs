@@ -1,6 +1,6 @@
 import React from "react";
-import { TextField, InputAdornment } from "@mui/material";
-import { Search } from "@mui/icons-material";
+import { TextField, InputAdornment, IconButton } from "@mui/material";
+import { Search, Clear } from "@mui/icons-material";
 
 interface SearchBoxProps {
     value: string;
@@ -16,6 +16,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({
     return (
         <TextField
             fullWidth
+            size="small"
             variant="outlined"
             placeholder={placeholder}
             value={value}
@@ -23,11 +24,28 @@ const SearchBox: React.FC<SearchBoxProps> = ({
             InputProps={{
                 startAdornment: (
                     <InputAdornment position="start">
-                        <Search sx={{ color: "action.active" }} />
+                        <Search sx={{ color: "action.active", fontSize: 20 }} />
                     </InputAdornment>
                 ),
+                endAdornment: value ? (
+                    <InputAdornment position="end">
+                        <IconButton
+                            size="small"
+                            onClick={() => onChange("")}
+                            edge="end"
+                        >
+                            <Clear fontSize="small" />
+                        </IconButton>
+                    </InputAdornment>
+                ) : null,
             }}
-            sx={{ mb: 1 }}
+            sx={{
+                mb: 1,
+                bgcolor: 'white',
+                '& .MuiOutlinedInput-root': {
+                    borderRadius: '8px'
+                }
+            }}
         />
     );
 };

@@ -20,6 +20,7 @@ import AddIcon from "@mui/icons-material/Add"
 import DeleteIcon from "@mui/icons-material/Delete"
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
 import ExpandLessIcon from "@mui/icons-material/ExpandLess"
+import InventoryIcon from "@mui/icons-material/Inventory"
 import React, { useEffect, useState } from "react"
 import { usePricingContext, SubItem, Category } from "@/contexts/PricingContext"
 import { calculateSubItemTotal } from "@/utils/utils"
@@ -95,7 +96,7 @@ const PricingTable: React.FC = () => {
           mb: 3,
         }}
       >
-        <Typography variant="h5" fontWeight="bold">
+        <Typography variant="h5" fontWeight={500}>
           ตารางราคา
         </Typography>
         <Button
@@ -116,15 +117,15 @@ const PricingTable: React.FC = () => {
       <TableContainer component={Paper} sx={{ boxShadow: 3 }}>
         <Table>
           <TableHead>
-            <TableRow sx={{ bgcolor: "#e0e0e0" }}>
-              <TableCell sx={{ fontWeight: "bold", width: "5%" }}>#</TableCell>
-              <TableCell sx={{ fontWeight: "bold", width: "35%" }}>รายการ</TableCell>
-              <TableCell sx={{ fontWeight: "bold", width: "10%" }}>หน่วย</TableCell>
-              <TableCell sx={{ fontWeight: "bold", width: "10%" }}>จำนวน</TableCell>
-              <TableCell sx={{ fontWeight: "bold", width: "12%" }}>ราคา/หน่วย</TableCell>
-              <TableCell sx={{ fontWeight: "bold", width: "12%" }}>ราคา</TableCell>
-              <TableCell sx={{ fontWeight: "bold", width: "12%" }}>หมายเหตุ</TableCell>
-              <TableCell sx={{ fontWeight: "bold", width: "4%" }}>ลบ</TableCell>
+            <TableRow sx={{ bgcolor: "#f6f9fc" }}>
+              <TableCell sx={{ fontWeight: 500, width: "5%" }}>#</TableCell>
+              <TableCell sx={{ fontWeight: 500, width: "35%" }}>รายการ</TableCell>
+              <TableCell sx={{ fontWeight: 500, width: "10%" }}>หน่วย</TableCell>
+              <TableCell sx={{ fontWeight: 500, width: "10%" }}>จำนวน</TableCell>
+              <TableCell sx={{ fontWeight: 500, width: "12%" }}>ราคา/หน่วย</TableCell>
+              <TableCell sx={{ fontWeight: 500, width: "12%" }}>ราคา</TableCell>
+              <TableCell sx={{ fontWeight: 500, width: "12%" }}>หมายเหตุ</TableCell>
+              <TableCell sx={{ fontWeight: 500, width: "4%" }}>ลบ</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -142,7 +143,7 @@ const PricingTable: React.FC = () => {
                   <TableCell
                     sx={{
                       color: "white",
-                      fontWeight: "bold",
+                      fontWeight: 500,
                       fontSize: "1.1rem",
                     }}
                   >
@@ -158,7 +159,7 @@ const PricingTable: React.FC = () => {
                       sx={{
                         '& .MuiInputBase-input': {
                           color: "white",
-                          fontWeight: "bold",
+                          fontWeight: 500,
                           fontSize: "1.1rem",
                         },
                         '& .MuiInput-underline:before': {
@@ -193,20 +194,23 @@ const PricingTable: React.FC = () => {
                     <React.Fragment key={item.id}>
                       {/* Product Name Row */}
                       <TableRow sx={{ bgcolor: "#f0f7ff" }}>
-                        <TableCell sx={{ fontWeight: "bold", fontSize: "1.1rem" }}>
+                        <TableCell sx={{ fontWeight: 500, fontSize: "1.1rem" }}>
                           {catIndex + 1}.{itemIndex + 1}
                         </TableCell>
                         <TableCell colSpan={6}>
                           <Autocomplete
                             freeSolo
+                            disableClearable={false}
                             options={allProducts}
                             getOptionLabel={(option) => {
                               if (typeof option === 'string') return option;
                               return option.productName || "";
                             }}
                             value={item.name}
-                            onInputChange={(event, newInputValue) => {
-                              updateSubItem(category.id, item.id, { name: newInputValue });
+                            onInputChange={(event, newInputValue, reason) => {
+                              if (reason === "input" || reason === "clear") {
+                                updateSubItem(category.id, item.id, { name: newInputValue });
+                              }
                             }}
                             onChange={(event, newValue: any) => {
                               if (newValue && typeof newValue !== 'string') {
@@ -218,14 +222,46 @@ const PricingTable: React.FC = () => {
                                 });
                               }
                             }}
+                            isOptionEqualToValue={(option, value) =>
+                              typeof value === 'string' ? option.productName === value : option.id === value.id
+                            }
+                            noOptionsText={item.name ? "ไม่พบข้อมูล พิมพ์เพื่อเพิ่มรายการใหม่" : "พิมพ์เพื่อค้นหาสินค้า..."}
+                            renderOption={(props, option) => (
+                              <Box component="li" {...props} key={option.id}>
+                                <Box display="flex" alignItems="center" gap={1.5} py={0.5} width="100%">
+                                  <InventoryIcon sx={{ color: "primary.main", fontSize: 22 }} />
+                                  <Box sx={{ flexGrow: 1 }}>
+                                    <Typography variant="body1" fontWeight={500} component="span">
+                                      {option.productName}
+                                    </Typography>
+                                    <Typography variant="body2" color="primary.main" component="span" sx={{ ml: 1, fontWeight: 500 }}>
+                                      • ฿{Number(option.aboutProduct?.productPrice || 0).toLocaleString()} / {option.aboutProduct?.unitName || "หน่วย"}
+                                    </Typography>
+                                    <Typography
+                                      variant="caption"
+                                      color="text.disabled"
+                                      display="block"
+                                      sx={{
+                                        whiteSpace: 'nowrap',
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis',
+                                        maxWidth: '400px'
+                                      }}
+                                    >
+                                      {option.productDescription || "ไม่มีรายละเอียดสินค้า"}
+                                    </Typography>
+                                  </Box>
+                                </Box>
+                              </Box>
+                            )}
                             renderInput={(params) => (
                               <TextField
                                 {...params}
-                                placeholder="ชื่อสินค้า"
+                                placeholder="สินค้า"
                                 variant="standard"
                                 sx={{
                                   '& .MuiInputBase-input': {
-                                    fontWeight: "bold",
+                                    fontWeight: 500,
                                     fontSize: "1.1rem",
                                   },
                                 }}
@@ -335,12 +371,12 @@ const PricingTable: React.FC = () => {
                 {isCategoryExpanded(category.id) && category.subItems.length > 0 && (
                   <TableRow sx={{ bgcolor: "#f5f5f5" }}>
                     <TableCell colSpan={5} sx={{ textAlign: "right" }}>
-                      <Typography variant="body1" fontWeight="bold">
-                        รวมรวม
+                      <Typography variant="body1" fontWeight={500}>
+                        รวมหมวดหมู่
                       </Typography>
                     </TableCell>
                     <TableCell>
-                      <Typography variant="body1" fontWeight="bold">
+                      <Typography variant="body1" fontWeight={500}>
                         {getCategoryTotal(category.id).toLocaleString("th-TH", {
                           minimumFractionDigits: 2,
                           maximumFractionDigits: 2,
@@ -358,16 +394,16 @@ const PricingTable: React.FC = () => {
               <TableRow
                 sx={{
                   bgcolor: theme.palette.primary.main,
-                  "& td": { color: "white", fontWeight: "bold" },
+                  "& td": { color: "white", fontWeight: 500 },
                 }}
               >
                 <TableCell colSpan={5} sx={{ textAlign: "right" }}>
-                  <Typography variant="h6" sx={{ color: "white" }}>
+                  <Typography variant="h6" sx={{ color: "white", fontWeight: 500 }}>
                     มูลค่ารวมทั้งหมด
                   </Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography variant="h6" sx={{ color: "white" }}>
+                  <Typography variant="h6" sx={{ color: "white", fontWeight: 500 }}>
                     {getTotalPrice().toLocaleString("th-TH", {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,

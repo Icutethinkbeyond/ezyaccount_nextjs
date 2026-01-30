@@ -28,12 +28,7 @@ const ContactotInformation: React.FC = () => {
   const [loading, setLoading] = useState(false);
 
   // Fetch customers for autocomplete
-  const fetchSuggestions = async (search: string) => {
-    if (!search || search.length < 1) {
-      setSuggestions([]);
-      return;
-    }
-
+  const fetchSuggestions = async (search: string = "") => {
     setLoading(true);
     try {
       const response = await fetch(`/api/customer?search=${encodeURIComponent(search)}`);
@@ -82,19 +77,24 @@ const ContactotInformation: React.FC = () => {
 
           return (
             <Form>
-              <FormSection title="ข้อมูลลูกค้า">
-                <Grid2 container spacing={2} mt={5}>
+              <FormSection title="ข้อมูลลูกค้า / ผู้ติดต่อ">
+                <Grid2 container spacing={2}>
                   {/* ช่องชื่อผู้ติดต่อ พร้อม Autocomplete */}
                   <Grid2 size={12}>
                     <Autocomplete
                       freeSolo
+                      disableClearable={false}
                       options={suggestions}
                       loading={loading}
+                      openOnFocus
+                      onOpen={() => fetchSuggestions(values.contactorName || "")}
                       inputValue={values.contactorName || ""}
                       onInputChange={(event, newValue, reason) => {
-                        if (reason === "input") {
+                        if (reason === "input" || reason === "clear") {
                           setFieldValue("contactorName", newValue);
-                          debouncedFetch(newValue);
+                          if (reason === "input") {
+                            debouncedFetch(newValue);
+                          }
                         }
                       }}
                       onChange={(event, newValue) => {
@@ -108,19 +108,39 @@ const ContactotInformation: React.FC = () => {
                       isOptionEqualToValue={(option, value) =>
                         option.contactorId === value.contactorId
                       }
-                      noOptionsText={values.contactorName ? "ไม่พบข้อมูล พิมพ์เพื่อสร้างใหม่" : "พิมพ์เพื่อค้นหา"}
+                      noOptionsText={values.contactorName ? "ไม่พบข้อมูล พิมพ์เพื่อใช้ชื่อผู้ติดต่อนี้" : "พิมพ์เพื่อค้นหาลูกค้า..."}
                       loadingText="กำลังค้นหา..."
                       renderOption={(props, option) => (
                         <Box component="li" {...props} key={option.contactorId}>
-                          <Box display="flex" alignItems="center" gap={1}>
-                            <Person sx={{ color: "#33CC99", fontSize: 18 }} />
-                            <Box>
-                              <Typography variant="body2" fontWeight={500}>
+                          <Box display="flex" alignItems="center" gap={1.5} py={0.8} width="100%">
+                            <Person sx={{ color: "primary.main", fontSize: 24 }} />
+                            <Box sx={{ flexGrow: 1 }}>
+                              <Typography variant="subtitle1" fontWeight={500} component="div" sx={{ lineHeight: 1.2 }}>
                                 {option.contactorName}
                               </Typography>
-                              <Typography variant="caption" color="text.secondary">
-                                {option.contactorTel && `${option.contactorTel}`}
-                                {option.contactorEmail && ` • ${option.contactorEmail}`}
+                              <Box display="flex" alignItems="center" gap={1} mt={0.3}>
+                                <Typography variant="body2" color="text.secondary">
+                                  📞 {option.contactorTel || "ไม่มีเบอร์โทร"}
+                                </Typography>
+                                {option.contactorEmail && (
+                                  <Typography variant="body2" color="text.secondary">
+                                    • ✉️ {option.contactorEmail}
+                                  </Typography>
+                                )}
+                              </Box>
+                              <Typography
+                                variant="caption"
+                                color="text.disabled"
+                                display="block"
+                                sx={{
+                                  mt: 0.5,
+                                  whiteSpace: 'nowrap',
+                                  overflow: 'hidden',
+                                  textOverflow: 'ellipsis',
+                                  maxWidth: '450px'
+                                }}
+                              >
+                                📍 {option.contactorAddress || "ไม่ระบุที่อยู่"}
                               </Typography>
                             </Box>
                           </Box>
@@ -137,7 +157,7 @@ const ContactotInformation: React.FC = () => {
                           required
                           error={touched.contactorName && Boolean(errors.contactorName)}
                           helperText={<ErrorMessage name="contactorName" />}
-                          placeholder="พิมพ์ชื่อเพื่อค้นหาหรือสร้างใหม่..."
+                          placeholder="พิมพ์เพื่อค้นหาลูกค้าที่เคยบันทึกไว้..."
                         />
                       )}
                     />

@@ -6,8 +6,8 @@ import theme from "../theme";
 
 
 export const dm = Prompt({
-  weight: ["400", "500", "700"],
-  subsets: ["latin"],
+  weight: ["300", "400", "500", "700"],
+  subsets: ["latin", "thai"],
   display: "swap",
   fallback: ["Helvetica", "Arial", "sans-serif"],
 });
@@ -66,8 +66,8 @@ const baselightTheme = createTheme({
       600: "#2A3547",
     },
     text: {
-      primary: "#000",
-      secondary: "rgba(0,0,0,0.87)",
+      primary: "#2A3547",
+      secondary: "#5A6A85",
     },
     action: {
       disabledBackground: "rgba(73,82,88,0.12)",
@@ -115,20 +115,28 @@ const baselightTheme = createTheme({
     },
     button: {
       textTransform: "none",
-      fontWeight: "400",
+      fontWeight: "500",
     },
     subtitle1: {
       fontSize: "1rem",
       fontWeight: "400",
+      lineHeight: "1.5",
     },
     subtitle2: {
       fontSize: "0.875rem",
+      fontWeight: "400",
+      lineHeight: "1.5",
+    },
+    body1: {
+      fontWeight: "400",
+    },
+    body2: {
       fontWeight: "400",
     },
   },
   components: {
 
-  
+
     MuiCssBaseline: {
       styleOverrides: {
         ".MuiPaper-elevation9, .MuiPopover-root .MuiPaper-elevation": {
@@ -255,7 +263,7 @@ const baselightTheme = createTheme({
     },
 
   },
-  
+
 });
 
 export { baselightTheme };
