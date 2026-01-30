@@ -112,37 +112,34 @@ const ContactotInformation: React.FC = () => {
                       loadingText="กำลังค้นหา..."
                       renderOption={(props, option) => (
                         <Box component="li" {...props} key={option.contactorId}>
-                          <Box display="flex" alignItems="center" gap={1.5} py={0.8} width="100%">
-                            <Person sx={{ color: "primary.main", fontSize: 24 }} />
-                            <Box sx={{ flexGrow: 1 }}>
-                              <Typography variant="subtitle1" fontWeight={500} component="div" sx={{ lineHeight: 1.2 }}>
-                                {option.contactorName}
+                          <Box sx={{ flexGrow: 1, py: 0.8 }}>
+                            <Typography variant="subtitle1" fontWeight={500} component="div" sx={{ lineHeight: 1.2 }}>
+                              {option.contactorName}
+                            </Typography>
+                            <Box display="flex" alignItems="center" gap={1} mt={0.3}>
+                              <Typography variant="body2" color="text.secondary">
+                                {option.contactorTel || "ไม่มีเบอร์โทร"}
                               </Typography>
-                              <Box display="flex" alignItems="center" gap={1} mt={0.3}>
+                              {option.contactorEmail && (
                                 <Typography variant="body2" color="text.secondary">
-                                  📞 {option.contactorTel || "ไม่มีเบอร์โทร"}
+                                  • {option.contactorEmail}
                                 </Typography>
-                                {option.contactorEmail && (
-                                  <Typography variant="body2" color="text.secondary">
-                                    • ✉️ {option.contactorEmail}
-                                  </Typography>
-                                )}
-                              </Box>
-                              <Typography
-                                variant="caption"
-                                color="text.disabled"
-                                display="block"
-                                sx={{
-                                  mt: 0.5,
-                                  whiteSpace: 'nowrap',
-                                  overflow: 'hidden',
-                                  textOverflow: 'ellipsis',
-                                  maxWidth: '450px'
-                                }}
-                              >
-                                📍 {option.contactorAddress || "ไม่ระบุที่อยู่"}
-                              </Typography>
+                              )}
                             </Box>
+                            <Typography
+                              variant="caption"
+                              color="text.disabled"
+                              display="block"
+                              sx={{
+                                mt: 0.5,
+                                whiteSpace: 'nowrap',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                maxWidth: '450px'
+                              }}
+                            >
+                              {option.contactorAddress || "ไม่ระบุที่อยู่"}
+                            </Typography>
                           </Box>
                         </Box>
                       )}

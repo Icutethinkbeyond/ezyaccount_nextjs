@@ -111,30 +111,27 @@ const CompanyInformation: React.FC = () => {
                       loadingText="กำลังค้นหา..."
                       renderOption={(props, option) => (
                         <Box component="li" {...props} key={option.companyId}>
-                          <Box display="flex" alignItems="center" gap={1.5} py={0.5} width="100%">
-                            <Business sx={{ color: "primary.main", fontSize: 22 }} />
-                            <Box sx={{ flexGrow: 1 }}>
-                              <Typography variant="body1" fontWeight={500} component="span">
-                                {option.companyName}
-                              </Typography>
-                              <Typography variant="body2" color="text.secondary" component="span" sx={{ ml: 1 }}>
-                                {option.companyTaxId ? ` • ${option.companyTaxId}` : ""}
-                                {option.companyPhoneNumber ? ` • ${option.companyPhoneNumber}` : ""}
-                              </Typography>
-                              <Typography
-                                variant="caption"
-                                color="text.disabled"
-                                display="block"
-                                sx={{
-                                  whiteSpace: 'nowrap',
-                                  overflow: 'hidden',
-                                  textOverflow: 'ellipsis',
-                                  maxWidth: '400px'
-                                }}
-                              >
-                                {option.companyAddress || "ไม่ระบุที่อยู่"}
-                              </Typography>
-                            </Box>
+                          <Box sx={{ flexGrow: 1, py: 0.5 }}>
+                            <Typography variant="body1" fontWeight={500} component="span">
+                              {option.companyName}
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary" component="span" sx={{ ml: 1 }}>
+                              {option.companyTaxId ? ` • ${option.companyTaxId}` : ""}
+                              {option.companyPhoneNumber ? ` • ${option.companyPhoneNumber}` : ""}
+                            </Typography>
+                            <Typography
+                              variant="caption"
+                              color="text.disabled"
+                              display="block"
+                              sx={{
+                                whiteSpace: 'nowrap',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                maxWidth: '400px'
+                              }}
+                            >
+                              {option.companyAddress || "ไม่ระบุที่อยู่"}
+                            </Typography>
                           </Box>
                         </Box>
                       )}

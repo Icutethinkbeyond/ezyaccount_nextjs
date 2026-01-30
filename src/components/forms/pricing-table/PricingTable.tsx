@@ -228,29 +228,26 @@ const PricingTable: React.FC = () => {
                             noOptionsText={item.name ? "ไม่พบข้อมูล พิมพ์เพื่อเพิ่มรายการใหม่" : "พิมพ์เพื่อค้นหาสินค้า..."}
                             renderOption={(props, option) => (
                               <Box component="li" {...props} key={option.id}>
-                                <Box display="flex" alignItems="center" gap={1.5} py={0.5} width="100%">
-                                  <InventoryIcon sx={{ color: "primary.main", fontSize: 22 }} />
-                                  <Box sx={{ flexGrow: 1 }}>
-                                    <Typography variant="body1" fontWeight={500} component="span">
-                                      {option.productName}
-                                    </Typography>
-                                    <Typography variant="body2" color="primary.main" component="span" sx={{ ml: 1, fontWeight: 500 }}>
-                                      • ฿{Number(option.aboutProduct?.productPrice || 0).toLocaleString()} / {option.aboutProduct?.unitName || "หน่วย"}
-                                    </Typography>
-                                    <Typography
-                                      variant="caption"
-                                      color="text.disabled"
-                                      display="block"
-                                      sx={{
-                                        whiteSpace: 'nowrap',
-                                        overflow: 'hidden',
-                                        textOverflow: 'ellipsis',
-                                        maxWidth: '400px'
-                                      }}
-                                    >
-                                      {option.productDescription || "ไม่มีรายละเอียดสินค้า"}
-                                    </Typography>
-                                  </Box>
+                                <Box sx={{ flexGrow: 1, py: 0.5 }}>
+                                  <Typography variant="body1" fontWeight={500} component="span">
+                                    {option.productName}
+                                  </Typography>
+                                  <Typography variant="body2" color="primary.main" component="span" sx={{ ml: 1, fontWeight: 500 }}>
+                                    • ฿{Number(option.aboutProduct?.productPrice || 0).toLocaleString()} / {option.aboutProduct?.unitName || "หน่วย"}
+                                  </Typography>
+                                  <Typography
+                                    variant="caption"
+                                    color="text.disabled"
+                                    display="block"
+                                    sx={{
+                                      whiteSpace: 'nowrap',
+                                      overflow: 'hidden',
+                                      textOverflow: 'ellipsis',
+                                      maxWidth: '400px'
+                                    }}
+                                  >
+                                    {option.productDescription || "ไม่มีรายละเอียดสินค้า"}
+                                  </Typography>
                                 </Box>
                               </Box>
                             )}
