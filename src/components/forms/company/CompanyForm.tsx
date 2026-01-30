@@ -15,7 +15,8 @@ import {
 import PageContainer from "@/components/shared/PageContainer";
 import PageHeader from "@/components/shared/PageHeader";
 import { Save as SaveIcon } from "@mui/icons-material";
-import { useNotifyContext } from "@/contexts/NotifyContext";
+
+import FormSection from "@/components/shared/FormSection";
 
 interface CompanyFormProps {
     title?: string;
@@ -37,15 +38,7 @@ export default function CompanyForm({ title = "ข้อมูลบริษั
         companyRegistrationDate: "",
     });
 
-    const { setNotify } = useNotifyContext();
 
-    const showNotification = (message: string, color: "success" | "error") => {
-        setNotify({
-            open: true,
-            message: message,
-            color: color,
-        });
-    };
 
     useEffect(() => {
         if (companyId) {
@@ -80,7 +73,7 @@ export default function CompanyForm({ title = "ข้อมูลบริษั
             }
         } catch (error) {
             console.error("Failed to fetch company data", error);
-            showNotification("Failed to load company data", "error");
+            alert("Failed to load company data");
         } finally {
             setLoading(false);
         }
@@ -111,7 +104,7 @@ export default function CompanyForm({ title = "ข้อมูลบริษั
 
             if (res.ok) {
                 const data = await res.json();
-                showNotification("บันทึกข้อมูลสำเร็จ", "success");
+                alert("บันทึกข้อมูลสำเร็จ");
 
                 // Handle response similarly
                 const profile = Array.isArray(data) ? data[0] : data;
@@ -136,11 +129,11 @@ export default function CompanyForm({ title = "ข้อมูลบริษั
                 }
             } else {
                 const errorData = await res.json();
-                showNotification(errorData.error || "บันทึกข้อมูลไม่สำเร็จ", "error");
+                alert(errorData.error || "บันทึกข้อมูลไม่สำเร็จ");
             }
         } catch (error) {
             console.error("Error saving data:", error);
-            showNotification("เกิดข้อผิดพลาดในการเชื่อมต่อ", "error");
+            alert("เกิดข้อผิดพลาดในการเชื่อมต่อ");
         } finally {
             setSaving(false);
         }
@@ -157,134 +150,133 @@ export default function CompanyForm({ title = "ข้อมูลบริษั
     return (
         <PageContainer title={title} description="Manage company details">
             {/* Header Section */}
-            <PageHeader
-                title={title}
-                actions={
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        size="large"
-                        startIcon={<SaveIcon />}
-                        onClick={handleSave}
-                        disabled={saving}
-                        sx={{ px: 4 }}
-                    >
-                        {saving ? "กำลังบันทึก..." : "บันทึกข้อมูล"}
-                    </Button>
-                }
-            />
+            <PageHeader title={title} />
 
             <Box mt={3}>
                 <Card elevation={0} sx={{ border: '1px solid #e5eaef' }}>
                     <CardContent sx={{ p: 4 }}>
-                        <Typography variant="h6" sx={{ mb: 1, color: "text.primary", fontWeight: 600 }}>
-                            รายละเอียดนิติบุคคล
-                        </Typography>
-                        <Typography variant="body2" color="textSecondary" sx={{ mb: 3 }}>
-                            ข้อมูลนี้จะถูกนำไปแสดงในส่วนหัวของเอกสารใบเสนอราคาและใบแจ้งหนี้
-                        </Typography>
+                        <FormSection title="ข้อมูลบริษัท">
+                            <Grid container spacing={2} mt={5}></Grid>
+                            <Grid container spacing={2}>
+                                {/* Row 1: Name & Phone */}
+                                <Grid item xs={12} md={6}>
+                                    <TextField
+                                        fullWidth
+                                        label="ชื่อบริษัท"
+                                        name="companyName"
+                                        value={formData.companyName}
+                                        onChange={handleChange}
+                                        variant="outlined"
+                                        size="small"
+                                    />
+                                </Grid>
+                                <Grid item xs={12} md={6}>
+                                    <TextField
+                                        fullWidth
+                                        label="เบอร์โทร"
+                                        name="companyPhoneNumber"
+                                        value={formData.companyPhoneNumber}
+                                        onChange={handleChange}
+                                        variant="outlined"
+                                        size="small"
+                                    />
+                                </Grid>
 
-                        <Divider sx={{ mb: 4 }} />
+                                {/* Row 2: Tax ID */}
+                                <Grid item xs={12}>
+                                    <TextField
+                                        fullWidth
+                                        label="เลขที่เสียภาษี"
+                                        name="companyTaxId"
+                                        value={formData.companyTaxId}
+                                        onChange={handleChange}
+                                        variant="outlined"
+                                        size="small"
+                                    />
+                                </Grid>
 
-                        <Grid container spacing={3}>
-                            <Grid item xs={12} md={6}>
-                                <TextField
-                                    fullWidth
-                                    label="ชื่อบริษัท"
-                                    name="companyName"
-                                    value={formData.companyName}
-                                    onChange={handleChange}
-                                    variant="outlined"
-                                    placeholder="เช่น บริษัท ตัวอย่าง จำกัด"
-                                    InputLabelProps={{ shrink: true }}
-                                />
-                            </Grid>
-                            <Grid item xs={12} md={6}>
-                                <TextField
-                                    fullWidth
-                                    label="เลขประจำตัวผู้เสียภาษี"
-                                    name="companyTaxId"
-                                    value={formData.companyTaxId}
-                                    onChange={handleChange}
-                                    variant="outlined"
-                                    placeholder="เลข 13 หลัก"
-                                    InputLabelProps={{ shrink: true }}
-                                />
-                            </Grid>
+                                {/* Row 3: Registration Date */}
+                                <Grid item xs={12}>
+                                    <TextField
+                                        fullWidth
+                                        label="วันที่จดทะเบียน"
+                                        name="companyRegistrationDate"
+                                        value={formData.companyRegistrationDate}
+                                        onChange={handleChange}
+                                        type="date"
+                                        variant="outlined"
+                                        size="small"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                    />
+                                </Grid>
 
-                            <Grid item xs={12}>
-                                <TextField
-                                    fullWidth
-                                    label="ที่อยู่"
-                                    name="companyAddress"
-                                    value={formData.companyAddress}
-                                    onChange={handleChange}
-                                    multiline
-                                    rows={3}
-                                    variant="outlined"
-                                    placeholder="บ้านเลขที่ ถนน แขวง/ตำบล เขต/อำเภอ จังหวัด รหัสไปรษณีย์"
-                                    InputLabelProps={{ shrink: true }}
-                                />
-                            </Grid>
+                                {/* Row 4: Address */}
+                                <Grid item xs={12}>
+                                    <TextField
+                                        fullWidth
+                                        label="ที่อยู่"
+                                        name="companyAddress"
+                                        value={formData.companyAddress}
+                                        onChange={handleChange}
+                                        multiline
+                                        rows={3}
+                                        variant="outlined"
+                                        size="small"
+                                    />
+                                </Grid>
 
-                            <Grid item xs={12} md={6}>
-                                <TextField
-                                    fullWidth
-                                    label="เบอร์โทรศัพท์"
-                                    name="companyPhoneNumber"
-                                    value={formData.companyPhoneNumber}
-                                    onChange={handleChange}
-                                    variant="outlined"
-                                    InputLabelProps={{ shrink: true }}
-                                />
+                                {/* Additional Fields (Merged as requested) */}
+                                <Grid item xs={12} md={6}>
+                                    <TextField
+                                        fullWidth
+                                        label="อีเมล"
+                                        name="companyEmail"
+                                        value={formData.companyEmail}
+                                        onChange={handleChange}
+                                        variant="outlined"
+                                        size="small"
+                                    />
+                                </Grid>
+                                <Grid item xs={12} md={6}>
+                                    <TextField
+                                        fullWidth
+                                        label="เว็บไซต์"
+                                        name="companyWebsite"
+                                        value={formData.companyWebsite}
+                                        onChange={handleChange}
+                                        variant="outlined"
+                                        size="small"
+                                    />
+                                </Grid>
+                                <Grid item xs={12} md={6}>
+                                    <TextField
+                                        fullWidth
+                                        label="ประเภทธุรกิจ"
+                                        name="companyBusinessType"
+                                        value={formData.companyBusinessType}
+                                        onChange={handleChange}
+                                        variant="outlined"
+                                        size="small"
+                                    />
+                                </Grid>
                             </Grid>
-                            <Grid item xs={12} md={6}>
-                                <TextField
-                                    fullWidth
-                                    label="อีเมล"
-                                    name="companyEmail"
-                                    value={formData.companyEmail}
-                                    onChange={handleChange}
-                                    variant="outlined"
-                                    InputLabelProps={{ shrink: true }}
-                                />
-                            </Grid>
-                            <Grid item xs={12} md={6}>
-                                <TextField
-                                    fullWidth
-                                    label="เว็บไซต์"
-                                    name="companyWebsite"
-                                    value={formData.companyWebsite}
-                                    onChange={handleChange}
-                                    variant="outlined"
-                                    placeholder="https://www.example.com"
-                                    InputLabelProps={{ shrink: true }}
-                                />
-                            </Grid>
-                            <Grid item xs={12} md={6}>
-                                <TextField
-                                    fullWidth
-                                    label="ประเภทธุรกิจ"
-                                    name="companyBusinessType"
-                                    value={formData.companyBusinessType}
-                                    onChange={handleChange}
-                                    variant="outlined"
-                                    InputLabelProps={{ shrink: true }}
-                                />
-                            </Grid>
-                            <Grid item xs={12} md={6}>
-                                <TextField
-                                    fullWidth
-                                    label="วันที่จดทะเบียน"
-                                    name="companyRegistrationDate"
-                                    value={formData.companyRegistrationDate}
-                                    onChange={handleChange}
-                                    type="date"
-                                    InputLabelProps={{ shrink: true }}
-                                    variant="outlined"
-                                />
-                            </Grid>
-                        </Grid>
+                        </FormSection>
+
+                        <Box mt={3}>
+                            <Button
+                                variant="contained"
+                                color="success"
+                                size="large"
+                                fullWidth
+                                onClick={handleSave}
+                                disabled={saving}
+                                sx={{ color: "white" }}
+                            >
+                                {saving ? "กำลังบันทึก..." : "บันทึกข้อมูล"}
+                            </Button>
+                        </Box>
                     </CardContent>
                 </Card>
             </Box>
