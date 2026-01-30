@@ -6,7 +6,7 @@ import { Formik, Field, Form, ErrorMessage, FormikHelpers } from "formik";
 import * as Yup from "yup";
 import FormSection from "../../shared/FormSection";
 import { useRouter } from "next/navigation";
-import Swal from "sweetalert2";
+
 
 import { Customer } from "@/interfaces/Customer";
 
@@ -56,30 +56,13 @@ const CustomerForm: React.FC<CustomerFormProps> = ({ initialData, isEdit = false
             });
 
             if (response.ok) {
-                Swal.fire({
-                    icon: 'success',
-                    title: isEdit ? 'แก้ไขสำเร็จ!' : 'บันทึกสำเร็จ!',
-                    text: isEdit ? 'แก้ไขข้อมูลลูกค้าเรียบร้อย' : 'เพิ่มลูกค้าใหม่เรียบร้อย',
-                    timer: 1500,
-                    showConfirmButton: false,
-                }).then(() => {
-                    router.push('/customer');
-                });
+                router.push('/customer');
             } else {
                 const error = await response.json();
-                Swal.fire({
-                    icon: 'error',
-                    title: 'เกิดข้อผิดพลาด',
-                    text: error.error || 'ไม่สามารถบันทึกข้อมูลได้',
-                });
+                console.error("Error saving customer:", error);
             }
         } catch (error) {
             console.error("Error saving customer:", error);
-            Swal.fire({
-                icon: 'error',
-                title: 'เกิดข้อผิดพลาด',
-                text: 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้',
-            });
         } finally {
             setSubmitting(false);
         }
