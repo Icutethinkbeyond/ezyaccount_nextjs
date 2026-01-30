@@ -48,12 +48,17 @@ export const customerNameColumn: GridColDef = {
 
 /**
  * Reusable column definition for grand total
+ * Now reads pre-calculated value from backend
  */
 export const grandTotalColumn: GridColDef = {
-    field: "repirePrice",
+    field: "grandTotal",
     headerName: "ยอดรวมสุทธิ",
     width: 200,
-    valueGetter: (value, row) => row.grandTotal?.toLocaleString(),
+    valueGetter: (value, row) => {
+        // Read pre-calculated value from backend
+        const grandTotal = row.grandTotal || row.calculated?.grandTotal || 0;
+        return grandTotal.toLocaleString("th-TH", { minimumFractionDigits: 2 });
+    },
 };
 
 /**

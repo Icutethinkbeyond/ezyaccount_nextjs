@@ -3,9 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "clean-metadata": "find . -name '._*' -delete",
     "dev": "npx prisma generate --no-engine && npx prisma db push && next dev",
-    "build": "npm run clean-metadata && next build",
+    "build": "next build",
     "start": "next start",
     "production": "next build && next start",
     "lint": "next lint"

@@ -31,6 +31,7 @@ import { Visibility } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 import PreviewDialog from "../preview/DialogPreview";
 import { useEffect, useState } from "react";
+import { calculateQuotationTotals } from "@/utils/quotationCalculations";
 
 interface PricingSummaryProps {
   isEdit?: boolean;
@@ -68,18 +69,26 @@ const PricingSummary: React.FC<PricingSummaryProps> = ({
 
   /**
    * ======================
-   * ส่วนคำนวณราคา
+   * ส่วนคำนวณราคา - ใช้ Utility Function
    * ======================
    */
-  const subtotal = getTotalPrice(); // ราคารวมก่อนหักส่วนลด
-  const priceAfterDiscount = subtotal - discount; // ราคาหลังหักส่วนลด
-  const vat = vatIncluded
-    ? priceAfterDiscount * (taxRate / 100) // คำนวณ VAT
-    : 0;
+  const subtotal = getTotalPrice(); // ราคารวมก่อนหักส่วนลด (จาก PricingContext)
 
-  const totalWithVat = priceAfterDiscount + vat; // รวม VAT
-  const withholdingTax = getWithholdingTaxAmount(); // ภาษี ณ ที่จ่าย
-  const finalTotal = totalWithVat - withholdingTax; // ยอดสุทธิที่ต้องชำระ
+  // ใช้ utility function สำหรับการคำนวณทั้งหมด
+  const calculations = calculateQuotationTotals(
+    categories,
+    discount,
+    vatIncluded,
+    taxRate,
+    withholdingTaxRate * subtotal / 100 // แปลง % เป็นจำนวนเงิน
+  );
+
+  // สำหรับความเข้ากันได้กับโค้ดเดิม (backward compatibility)
+  const priceAfterDiscount = calculations.totalAfterDiscount;
+  const vat = calculations.vatAmount;
+  const totalWithVat = calculations.totalWithVat;
+  const withholdingTax = calculations.withholdingTaxAmount;
+  const finalTotal = calculations.grandTotal;
 
   /**
    * เปิดหน้า Preview ใบเสนอราคา

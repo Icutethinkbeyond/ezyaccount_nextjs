@@ -6,6 +6,7 @@ import path from 'path';
 import { exec as execCallback } from 'child_process';
 import { promisify } from 'util';
 import { IQuotation } from '@/contexts/QuotationContext';
+import { calculateQuotationTotals } from '@/utils/quotationCalculations';
 
 // แปลง exec ให้รองรับ Promises
 const exec = promisify(execCallback);
@@ -24,6 +25,11 @@ export async function GET(req: NextRequest) {
             include: {
                 customerCompany: true,
                 contactor: true,
+                categories: {
+                    include: {
+                        items: true
+                    }
+                }
             },
             orderBy: {
                 createdAt: 'desc'
@@ -36,8 +42,29 @@ export async function GET(req: NextRequest) {
             showDeleted ? doc.isDeleted === true : doc.isDeleted !== true
         );
 
-        console.log(`Fetched ${filteredDocs.length} quotations (trash=${showDeleted})`);
-        return NextResponse.json(filteredDocs);
+        // คำนวณ totals สำหรับแต่ละเอกสาร
+        const docsWithCalculations = filteredDocs.map((doc: any) => {
+            const calculations = calculateQuotationTotals(
+                doc.categories || [],
+                doc.globalDiscount || 0,
+                doc.includeVat || false,
+                doc.taxRate || 7,
+                doc.withholdingTax || 0
+            );
+
+            return {
+                ...doc,
+                // เพิ่มค่าที่คำนวณแล้ว
+                calculated: calculations,
+                // เพิ่ม grandTotal โดยตรงเพื่อความสะดวก (backward compatibility)
+                grandTotal: calculations.grandTotal,
+                subtotal: calculations.subtotal,
+                vatAmount: calculations.vatAmount,
+            };
+        });
+
+        console.log(`Fetched ${docsWithCalculations.length} quotations (trash=${showDeleted})`);
+        return NextResponse.json(docsWithCalculations);
     } catch (error) {
         console.error("Error fetching quotations:", error);
         return NextResponse.json({ error: 'Internal Server Error', details: String(error) }, { status: 500 });

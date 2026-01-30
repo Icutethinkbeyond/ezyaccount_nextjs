@@ -89,17 +89,6 @@ export async function PATCH(
 
         console.log("Updating quotation with data:", JSON.stringify(data, null, 2));
 
-        let subTotal = 0;
-        data.categories.forEach(cat => {
-            cat.subItems.forEach(item => {
-                subTotal += (item.qty || 0) * (item.pricePerUnit || 0);
-            });
-        });
-
-        const totalAfterDiscount = subTotal - (data.globalDiscount || 0);
-        const vatAmount = data.includeVat ? (totalAfterDiscount * (data.taxRate || 7) / 100) : 0;
-        const grandTotal = totalAfterDiscount + vatAmount;
-
         const existingQuotation = await prisma.documentPaper.findUnique({
             where: { documentId },
             include: {
@@ -156,11 +145,6 @@ export async function PATCH(
                 includeVat: data.includeVat,
                 taxRate: data.taxRate || 7,
                 globalDiscount: data.globalDiscount,
-
-                subTotal: subTotal,
-                totalAfterDiscount: totalAfterDiscount,
-                vatAmount: vatAmount,
-                grandTotal: grandTotal,
                 withholdingTax: data.withholdingTax,
                 note: data.note || null,
 
