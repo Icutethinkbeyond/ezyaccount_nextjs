@@ -25,6 +25,14 @@ function EditQuotation({ params }: { params: { id: string } }) {
     const fetchQuotationData = async () => {
       try {
         setLoading(true);
+
+        // 🛡️ Reset ข้อมูลเก่าก่อน fetch เพื่อป้องกันข้อมูลปนกัน
+        console.log("🔄 Resetting old data before loading...");
+        setCategories([]);
+        setDiscount(0);
+        setVatIncluded(false);
+        setWithholdingTaxRate(0);
+
         const response = await fetch(`/api/income/quotation/${params.id}`);
 
         if (!response.ok) {
