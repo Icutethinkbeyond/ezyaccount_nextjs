@@ -137,15 +137,8 @@ const EditProductPage = ({ params }: { params: { id: string } }) => {
                         </Grid2>
 
                         <Grid2 size={12}>
-                            <Box sx={{ display: "flex", gap: 2, justifyContent: "flex-end" }}>
-                                <Button
-                                    variant="outlined"
-                                    color="secondary"
-                                    onClick={() => router.back()}
-                                >
-                                    ยกเลิก
-                                </Button>
-                                <Button type="submit" variant="contained" color="primary">
+                            <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+                                <Button type="submit" variant="contained" color="success">
                                     บันทึกการแก้ไข
                                 </Button>
                             </Box>

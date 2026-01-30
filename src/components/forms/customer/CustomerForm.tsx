@@ -148,14 +148,7 @@ const CustomerForm: React.FC<CustomerFormProps> = ({ initialData, isEdit = false
                         </Grid2>
                     </FormSection>
 
-                    <Box mt={3} display="flex" gap={2} justifyContent="flex-end">
-                        <Button
-                            variant="outlined"
-                            onClick={() => router.push('/customer')}
-                            sx={{ textTransform: "none" }}
-                        >
-                            ยกเลิก
-                        </Button>
+                    <Box mt={3} display="flex" justifyContent="flex-end">
                         <Button
                             type="submit"
                             variant="contained"

@@ -235,17 +235,20 @@ export default function CompanyForm({ title = "ข้อมูลบริษั
                                 </Grid>
                             </Grid>
                         </FormSection>
-                        <Box mt={3}>
+                        <Box mt={3} display="flex" justifyContent="flex-end">
                             <Button
                                 variant="contained"
                                 color="success"
-                                size="large"
-                                fullWidth
                                 onClick={handleSave}
                                 disabled={saving}
-                                sx={{ color: "white" }}
+                                sx={{
+                                    backgroundColor: "#33CC99",
+                                    "&:hover": { backgroundColor: "#009933" },
+                                    color: "white",
+                                    textTransform: "none"
+                                }}
                             >
-                                {saving ? "กำลังบันทึก..." : "บันทึกข้อมูล"}
+                                {saving ? "กำลังบันทึก..." : (companyId ? "บันทึกการแก้ไข" : "บันทึก")}
                             </Button>
                         </Box>
                     </CardContent>
