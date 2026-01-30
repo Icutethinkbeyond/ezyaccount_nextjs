@@ -182,11 +182,10 @@ const CompanyTable = () => {
                 }
             />
 
-            <Box mt={2} mb={2}>
+            <Box mb={2}>
                 <SearchBox
                     value={searchQuery}
                     onChange={setSearchQuery}
-                    placeholder="ค้นหาด้วย ชื่อบริษัท, เลขผู้เสียภาษี, เบอร์โทรศัพท์ หรือ อีเมล..."
                 />
             </Box>
 
