@@ -1,6 +1,10 @@
 
+
 import {
   IconReceipt2,
+  IconPackage,
+  IconBuilding,
+  IconUsers,
 } from "@tabler/icons-react";
 
 import { uniqueId } from "lodash";
@@ -16,20 +20,20 @@ export const useMenuItems = () => {
     {
       id: uniqueId(),
       title: "ข้อมูลบริษัท",
-      icon: IconReceipt2,
+      icon: IconBuilding,
       href: `/company`,
     },
     {
       id: uniqueId(),
       title: "ข้อมูลลูกค้า",
-      icon: IconReceipt2,
+      icon: IconUsers,
       href: `/customer`,
     },
     {
       id: uniqueId(),
       title: "ข้อมูลสินค้า",
-      icon: IconReceipt2,
-      href: ``,
+      icon: IconPackage,
+      href: `/product`,
     },
   ];
 };
