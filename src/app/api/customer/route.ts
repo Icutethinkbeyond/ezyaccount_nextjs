@@ -3,20 +3,23 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-// GET - ดึงรายชื่อลูกค้าทั้งหมด (ทุก Contactor)
+// GET - ดึงรายชื่อลูกค้าที่สร้างจากหน้า customer เท่านั้น (isStandalone = true)
 export async function GET(req: NextRequest) {
     try {
         const { searchParams } = new URL(req.url);
         const search = searchParams.get('search') || '';
 
         const customers = await prisma.contactor.findMany({
-            where: search ? {
-                OR: [
-                    { contactorName: { contains: search, mode: 'insensitive' } },
-                    { contactorEmail: { contains: search, mode: 'insensitive' } },
-                    { contactorTel: { contains: search, mode: 'insensitive' } },
-                ]
-            } : undefined,
+            where: {
+                isStandalone: true, // ดึงเฉพาะที่สร้างจากหน้า customer
+                ...(search ? {
+                    OR: [
+                        { contactorName: { contains: search, mode: 'insensitive' } },
+                        { contactorEmail: { contains: search, mode: 'insensitive' } },
+                        { contactorTel: { contains: search, mode: 'insensitive' } },
+                    ]
+                } : {})
+            },
             orderBy: {
                 createdAt: 'desc'
             }
@@ -31,7 +34,7 @@ export async function GET(req: NextRequest) {
     }
 }
 
-// POST - สร้างลูกค้าใหม่ (Contactor)
+// POST - สร้างลูกค้าใหม่ (จากหน้า customer = isStandalone: true)
 export async function POST(req: NextRequest) {
     try {
         const data = await req.json();
@@ -48,13 +51,14 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: 'ชื่อผู้ติดต่อจำเป็นต้องกรอก' }, { status: 400 });
         }
 
-        // สร้าง Contactor
+        // สร้าง Contactor พร้อมกำหนด isStandalone = true
         const customer = await prisma.contactor.create({
             data: {
                 contactorName,
                 contactorTel: contactorTel || null,
                 contactorEmail: contactorEmail || null,
                 contactorAddress: contactorAddress || null,
+                isStandalone: true, // ระบุว่าสร้างจากหน้า customer
             }
         });
 
