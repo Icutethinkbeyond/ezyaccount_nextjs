@@ -106,35 +106,68 @@ export async function PATCH(
             return NextResponse.json({ error: 'Quotation not found' }, { status: 404 });
         }
 
-        if (!existingQuotation.customerCompanyId) {
-            return NextResponse.json({ error: 'Invalid quotation data' }, { status: 400 });
+        // Update or Create CustomerCompany
+        let customerCompanyId = existingQuotation.customerCompanyId;
+        if (customerCompanyId) {
+            await prisma.customerCompany.update({
+                where: { customerCompanyId },
+                data: {
+                    companyName: data.companyName,
+                    taxId: data.taxId,
+                    companyTel: data.companyTel,
+                    branch: data.branch,
+                    companyAddress: data.companyAddress,
+                }
+            });
+        } else {
+            console.log("⚠️ customerCompanyId missing on quotation, creating new link...");
+            const newCustomer = await prisma.customerCompany.create({
+                data: {
+                    companyName: data.companyName,
+                    taxId: data.taxId,
+                    companyTel: data.companyTel,
+                    branch: data.branch,
+                    companyAddress: data.companyAddress,
+                }
+            });
+            customerCompanyId = newCustomer.customerCompanyId;
         }
 
-        await prisma.customerCompany.update({
-            where: { customerCompanyId: existingQuotation.customerCompanyId },
-            data: {
-                companyName: data.companyName,
-                taxId: data.taxId,
-                companyTel: data.companyTel,
-                branch: data.branch,
-                companyAddress: data.companyAddress,
-            }
-        });
-
-        if (!existingQuotation.contactorId) {
-            return NextResponse.json({ error: 'Invalid quotation data' }, { status: 400 });
+        // Update or Create Contactor
+        let contactorId = existingQuotation.contactorId;
+        if (contactorId) {
+            await prisma.contactor.update({
+                where: { contactorId },
+                data: {
+                    contactorName: data.contactorName,
+                    contactorTel: data.contactorTel,
+                    contactorEmail: data.contactorEmail,
+                    contactorAddress: data.contactorAddress,
+                }
+            });
+        } else {
+            console.log("⚠️ contactorId missing on quotation, creating new link...");
+            const newContactor = await prisma.contactor.create({
+                data: {
+                    contactorName: data.contactorName,
+                    contactorTel: data.contactorTel,
+                    contactorEmail: data.contactorEmail,
+                    contactorAddress: data.contactorAddress,
+                    customerCompanyId: customerCompanyId
+                }
+            });
+            contactorId = newContactor.contactorId;
         }
 
-        await prisma.contactor.update({
-            where: { contactorId: existingQuotation.contactorId },
-            data: {
-                contactorName: data.contactorName,
-                contactorTel: data.contactorTel,
-                contactorEmail: data.contactorEmail,
-                contactorAddress: data.contactorAddress,
-            }
-        });
+        // Ensure DocumentPaper is linked to the (potentially newly created) records
+        if (customerCompanyId !== existingQuotation.customerCompanyId || contactorId !== existingQuotation.contactorId) {
+            await prisma.documentPaper.update({
+                where: { documentId },
+                data: { customerCompanyId, contactorId }
+            });
+        }
 
+        // Delete old categories before creating new ones
         await prisma.documentCategory.deleteMany({
             where: { documentPaperId: documentId }
         });
