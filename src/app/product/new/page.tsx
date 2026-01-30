@@ -34,14 +34,12 @@ const NewProductPage = () => {
             });
 
             if (response.ok) {
-                alert("เพิ่มสินค้าสำเร็จ");
                 router.push("/product");
             } else {
-                alert("ไม่สามารถเพิ่มสินค้าได้");
+                console.error("Failed to create product");
             }
         } catch (error) {
             console.error("Error creating product:", error);
-            alert("เกิดข้อผิดพลาด");
         }
     };
 
