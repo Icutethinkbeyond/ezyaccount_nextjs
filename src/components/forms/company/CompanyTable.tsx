@@ -122,7 +122,7 @@ const CompanyTable = () => {
         { field: 'companyEmail', headerName: 'อีเมล', width: 200 },
         {
             field: 'actions',
-            headerName: 'จัดการ',
+            headerName: '',
             width: 120,
             sortable: false,
             renderCell: (params) => (
