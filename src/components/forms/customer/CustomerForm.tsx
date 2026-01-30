@@ -2,17 +2,20 @@
 
 import React from "react";
 import { Grid2, TextField, Button, Box } from "@mui/material";
-import { Formik, Field, Form, ErrorMessage } from "formik";
+import { Formik, Field, Form, ErrorMessage, FormikHelpers } from "formik";
 import * as Yup from "yup";
 import FormSection from "../../shared/FormSection";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
+
+import { Customer } from "@/interfaces/Customer";
 
 // Validation Schema
 const CustomerFormSchema = Yup.object({
     contactorName: Yup.string().required("ชื่อผู้ติดต่อจำเป็นต้องกรอก"),
 });
 
+// Use Partial<Customer> or Pick<Customer> if appropriate, or redefine if strictly for form
 export interface CustomerFormData {
     contactorId?: string;
     contactorName: string;
@@ -36,7 +39,7 @@ const defaultFormData: CustomerFormData = {
 const CustomerForm: React.FC<CustomerFormProps> = ({ initialData, isEdit = false }) => {
     const router = useRouter();
 
-    const handleSubmit = async (values: CustomerFormData, { setSubmitting }: any) => {
+    const handleSubmit = async (values: CustomerFormData, { setSubmitting }: FormikHelpers<CustomerFormData>) => {
         try {
             const url = isEdit
                 ? `/api/customer/${initialData?.contactorId}`

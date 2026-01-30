@@ -23,14 +23,7 @@ import { CustomToolbar } from "@/components/shared/CustomToolbar";
 import SearchBox from "@/components/shared/SearchBox";
 import PageHeader from "@/components/shared/PageHeader";
 
-interface Customer {
-    contactorId: string;
-    contactorName: string;
-    contactorTel: string | null;
-    contactorEmail: string | null;
-    contactorAddress: string | null;
-    createdAt: string;
-}
+import { Customer } from "@/interfaces/Customer";
 
 interface CustomerTableRow extends Customer {
     id: string;

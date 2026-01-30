@@ -14,11 +14,16 @@ export interface CompanyProfile {
     updatedAt?: string | Date;
 }
 
-// Customer (Keeping for compatibility if used elsewhere)
-export interface Customer {
-    customerId: string;
-    customerEmail: string;
-    customerTaxId: string;
+export interface CustomerCompany {
+    customerCompanyId: string;
+    companyName: string;
+    companyTel?: string | null;
+    customerCompanyEmail?: string | null;
+    taxId?: string | null;
+    branch?: string | null;
+    companyAddress?: string | null;
+    createdAt?: string | Date;
+    updatedAt?: string | Date;
 }
 
 export const initialCompany: CompanyProfile = {
@@ -31,4 +36,14 @@ export const initialCompany: CompanyProfile = {
     companyWebsite: '',
     companyBusinessType: '',
     companyRegistrationDate: '',
+};
+
+export const initialCustomerCompany: CustomerCompany = {
+    customerCompanyId: '',
+    companyName: '',
+    companyTel: '',
+    customerCompanyEmail: '',
+    taxId: '',
+    branch: '',
+    companyAddress: '',
 };

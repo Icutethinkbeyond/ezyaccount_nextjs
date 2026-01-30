@@ -18,6 +18,8 @@ import PageHeader from "@/components/shared/PageHeader";
 import FormSection from "@/components/shared/FormSection";
 import { ArrowBack } from "@mui/icons-material";
 
+import { Product } from "@/interfaces/Product";
+
 const DetailItem = ({ label, value }: { label: string; value: string | number | undefined | null }) => (
     <Box mb={2}>
         <Typography variant="caption" color="textSecondary" display="block" gutterBottom>
@@ -32,7 +34,7 @@ const DetailItem = ({ label, value }: { label: string; value: string | number | 
 const ViewProductPage = ({ params }: { params: { id: string } }) => {
     const router = useRouter();
     const [loading, setLoading] = useState(true);
-    const [product, setProduct] = useState<any>(null);
+    const [product, setProduct] = useState<Product | null>(null);
 
     useEffect(() => {
         if (params.id) {

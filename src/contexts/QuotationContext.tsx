@@ -10,6 +10,9 @@ import React, {
   useEffect,
 } from "react";
 import { calculateFooterTotals, calculateTax } from "@/utils/utils";
+import { Customer } from "@/interfaces/Customer";
+import { CustomerCompany } from "@/interfaces/Company";
+
 
 // ==================== ENUMS ====================
 
@@ -30,23 +33,11 @@ export enum DOCUMENT_STATUS {
 
 // ----- Contact & Company Types -----
 
-export interface IContactor {
-  contactorId: string;
-  contactorName: string;
-  contactorEmail?: string;
-  contactorTel?: string;
-  contactorAddress?: string;
-}
+// ----- Contact & Company Types -----
 
-export interface ICustomerCompany {
-  customerCompanyId: string;
-  companyName: string;
-  companyTel?: string;
-  customerCompanyEmail?: string;
-  taxId?: string;
-  branch?: string;
-  companyAddress?: string;
-}
+// Use shared interfaces
+export type IContactor = Customer;
+export type ICustomerCompany = CustomerCompany;
 
 // ----- Product & Item Types -----
 

@@ -3,32 +3,33 @@ export interface Category {
   categoryId: string;
   categoryName: string;
   categoryDesc?: string | null;
-  products: Product[];
+  products?: Product[];
   _count?: {
-    equipments: number
+    products?: number
   }
 }
 
 export interface AboutProduct {
-  aboutProductId: string | null
-  product: Product | null
-  productId: string | null,
-  productPrice: number
-  productDiscountPrice: number
-  productStock: number
-  productBrand: string | null
-  unitName: string
+  aboutProductId: string;
+  productId: string;
+  productPrice: number;
+  productDiscountPrice: number | null;
+  productStock: number;
+  productBrand: string | null;
+  unitName: string | null;
 }
 
 export interface Product {
-  productId: string | null,
-  productName: string,
-  productSKU: string | null,
-  productDescription: string | null,
-  aboutProduct: AboutProduct,
-  productImage: string | null,
-  category: Category
-  categoryId: string | null
+  productId: string;
+  productName: string;
+  productSKU: string | null;
+  productDescription: string | null;
+  productImage: string | null;
+  aboutProduct?: AboutProduct | null;
+  category?: Category | null;
+  categoryId: string | null;
+  createdAt?: string | Date;
+  updatedAt?: string | Date;
 }
 
 export const initialCategory: Category = {
@@ -41,7 +42,6 @@ export const initialCategory: Category = {
 
 export const initialAboutProduct: AboutProduct = {
   aboutProductId: "",
-  product: null,
   productId: "",
   productPrice: 0,
   productDiscountPrice: 0,
