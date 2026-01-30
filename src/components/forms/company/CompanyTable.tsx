@@ -22,12 +22,15 @@ import { Tooltip } from "@mui/material";
 import { CustomNoRowsOverlay } from "@/components/shared/NoData";
 import { CustomToolbar } from "@/components/shared/CustomToolbar";
 import PageHeader from "@/components/shared/PageHeader";
+import SearchBox from "@/components/shared/SearchBox";
 import { CompanyProfile } from "@/interfaces/Company";
 
 
 const CompanyTable = () => {
     const router = useRouter();
     const [rows, setRows] = useState<CompanyProfile[]>([]);
+    const [filteredRows, setFilteredRows] = useState<CompanyProfile[]>([]);
+    const [searchQuery, setSearchQuery] = useState<string>("");
     const [loading, setLoading] = useState(true);
     const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
         page: 0,
@@ -46,6 +49,7 @@ const CompanyTable = () => {
                     id: item.companyId,
                 }));
                 setRows(rowsWithId);
+                setFilteredRows(rowsWithId);
             }
         } catch (error) {
             console.error("Failed to fetch data", error);
@@ -58,6 +62,36 @@ const CompanyTable = () => {
     useEffect(() => {
         fetchCompanyData();
     }, []);
+
+    // Debounced search logic
+    useEffect(() => {
+        if (!searchQuery.trim()) {
+            setFilteredRows(rows);
+            return;
+        }
+
+        const timeoutId = setTimeout(() => {
+            const query = searchQuery.toLowerCase().trim();
+            const filtered = rows.filter((row: CompanyProfile) => {
+                const name = row.companyName?.toLowerCase() || "";
+                const taxId = row.companyTaxId?.toLowerCase() || "";
+                const phone = row.companyPhoneNumber?.toLowerCase() || "";
+                const email = row.companyEmail?.toLowerCase() || "";
+                const type = row.companyBusinessType?.toLowerCase() || "";
+
+                return (
+                    name.includes(query) ||
+                    taxId.includes(query) ||
+                    phone.includes(query) ||
+                    email.includes(query) ||
+                    type.includes(query)
+                );
+            });
+            setFilteredRows(filtered);
+        }, 500); // 500ms debounce
+
+        return () => clearTimeout(timeoutId);
+    }, [searchQuery, rows]);
 
     const handleDelete = async (id: string) => {
         if (!confirm("คุณต้องการลบข้อมูลบริษัทนี้ใช่หรือไม่?")) {
@@ -148,12 +182,21 @@ const CompanyTable = () => {
                 }
             />
 
+            <Box mt={2} mb={2}>
+                <SearchBox
+                    value={searchQuery}
+                    onChange={setSearchQuery}
+                    placeholder="ค้นหาด้วย ชื่อบริษัท, เลขผู้เสียภาษี, เบอร์โทรศัพท์ หรือ อีเมล..."
+                />
+            </Box>
+
             <Box p={3} border="1px solid #ccc" borderRadius="8px" mb={2} mt={2}>
                 <DataGrid
                     initialState={{ pagination: { paginationModel } }}
                     pageSizeOptions={[5, 10]}
+                    checkboxSelection
                     disableRowSelectionOnClick
-                    rows={rows}
+                    rows={filteredRows}
                     columns={columns}
                     loading={loading}
                     onPaginationModelChange={setPaginationModel}
