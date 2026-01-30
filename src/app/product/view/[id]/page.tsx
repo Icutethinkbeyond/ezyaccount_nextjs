@@ -24,7 +24,6 @@ const ViewProductPage = ({ params }: { params: { id: string } }) => {
             setProduct(data);
         } catch (error) {
             console.error("Error fetching product:", error);
-            alert("ไม่สามารถโหลดข้อมูลสินค้าได้");
             router.push("/product");
         } finally {
             setLoading(false);
