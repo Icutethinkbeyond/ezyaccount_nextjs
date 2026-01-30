@@ -9,13 +9,11 @@ import {
 import {
     Box,
     Button,
-    Chip,
     IconButton,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 import {
     Add,
-    Edit,
     EditCalendar,
     Delete,
     Visibility,
@@ -24,11 +22,12 @@ import { Tooltip } from "@mui/material";
 import { CustomNoRowsOverlay } from "@/components/shared/NoData";
 import { CustomToolbar } from "@/components/shared/CustomToolbar";
 import PageHeader from "@/components/shared/PageHeader";
+import { CompanyProfile } from "@/interfaces/Company";
 
 
 const CompanyTable = () => {
     const router = useRouter();
-    const [rows, setRows] = useState<any[]>([]);
+    const [rows, setRows] = useState<CompanyProfile[]>([]);
     const [loading, setLoading] = useState(true);
     const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
         page: 0,
@@ -42,7 +41,7 @@ const CompanyTable = () => {
             if (res.ok) {
                 const data = await res.json();
                 const items = Array.isArray(data) ? data : [data].filter(Boolean);
-                const rowsWithId = items.map((item: any) => ({
+                const rowsWithId = items.map((item: CompanyProfile) => ({
                     ...item,
                     id: item.companyId,
                 }));
@@ -107,7 +106,7 @@ const CompanyTable = () => {
                     <Tooltip title="ดูข้อมูล">
                         <IconButton
                             color="primary"
-                            onClick={() => router.push(`/company/edit-company/${params.row.companyId}`)}
+                            onClick={() => router.push(`/company/view-company/${params.row.companyId}`)}
                             size="small"
                         >
                             <Visibility />

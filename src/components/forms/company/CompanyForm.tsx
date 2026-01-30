@@ -4,19 +4,17 @@ import React, { useState, useEffect } from "react";
 import {
     Card,
     CardContent,
-    Typography,
     Grid,
     TextField,
     Button,
     Box,
-    Divider,
     CircularProgress,
 } from "@mui/material";
 import PageContainer from "@/components/shared/PageContainer";
 import PageHeader from "@/components/shared/PageHeader";
-import { Save as SaveIcon } from "@mui/icons-material";
-
+import { useRouter } from "next/navigation";
 import FormSection from "@/components/shared/FormSection";
+import { CompanyProfile } from "@/interfaces/Company";
 
 interface CompanyFormProps {
     title?: string;
@@ -24,10 +22,22 @@ interface CompanyFormProps {
     companyId?: string; // Optional: If provided, Edit Mode. If not, Create Mode.
 }
 
+interface CompanyFormData {
+    companyName: string;
+    companyTaxId: string;
+    companyAddress: string;
+    companyPhoneNumber: string;
+    companyEmail: string;
+    companyWebsite: string;
+    companyBusinessType: string;
+    companyRegistrationDate: string;
+}
+
 export default function CompanyForm({ title = "ข้อมูลบริษัท", onSuccess, companyId }: CompanyFormProps) {
+    const router = useRouter();
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<CompanyFormData>({
         companyName: "",
         companyTaxId: "",
         companyAddress: "",
@@ -38,13 +48,11 @@ export default function CompanyForm({ title = "ข้อมูลบริษั
         companyRegistrationDate: "",
     });
 
-
-
     useEffect(() => {
         if (companyId) {
             fetchCompanyData(companyId);
         } else {
-            setLoading(false); // If creating new, stop loading immediately
+            setLoading(false);
         }
     }, [companyId]);
 
@@ -53,20 +61,18 @@ export default function CompanyForm({ title = "ข้อมูลบริษั
             setLoading(true);
             const res = await fetch(`/api/companies/${id}`);
             if (res.ok) {
-                const data = await res.json();
-                const profile = data; // Single object expected from /api/companies/[id]
-
-                if (profile) {
+                const data: CompanyProfile = await res.json();
+                if (data) {
                     setFormData({
-                        companyName: profile.companyName || "",
-                        companyTaxId: profile.companyTaxId || "",
-                        companyAddress: profile.companyAddress || "",
-                        companyPhoneNumber: profile.companyPhoneNumber || "",
-                        companyEmail: profile.companyEmail || "",
-                        companyWebsite: profile.companyWebsite || "",
-                        companyBusinessType: profile.companyBusinessType || "",
-                        companyRegistrationDate: profile.companyRegistrationDate
-                            ? new Date(profile.companyRegistrationDate).toISOString().split('T')[0]
+                        companyName: data.companyName || "",
+                        companyTaxId: data.companyTaxId || "",
+                        companyAddress: data.companyAddress || "",
+                        companyPhoneNumber: data.companyPhoneNumber || "",
+                        companyEmail: data.companyEmail || "",
+                        companyWebsite: data.companyWebsite || "",
+                        companyBusinessType: data.companyBusinessType || "",
+                        companyRegistrationDate: data.companyRegistrationDate
+                            ? new Date(data.companyRegistrationDate).toISOString().split('T')[0]
                             : "",
                     });
                 }
@@ -90,11 +96,10 @@ export default function CompanyForm({ title = "ข้อมูลบริษั
     const handleSave = async () => {
         try {
             setSaving(true);
-
-            const url = companyId ? `/api/companies/${companyId}` : "/api/companies";
             const method = companyId ? "PUT" : "POST";
+            const endpoint = companyId ? `/api/companies/${companyId}` : "/api/companies";
 
-            const res = await fetch(url, {
+            const res = await fetch(endpoint, {
                 method: method,
                 headers: {
                     "Content-Type": "application/json",
@@ -103,30 +108,11 @@ export default function CompanyForm({ title = "ข้อมูลบริษั
             });
 
             if (res.ok) {
-                const data = await res.json();
                 alert("บันทึกข้อมูลสำเร็จ");
-
-                // Handle response similarly
-                const profile = Array.isArray(data) ? data[0] : data;
-
-                if (profile) {
-                    setFormData({
-                        companyName: profile.companyName || "",
-                        companyTaxId: profile.companyTaxId || "",
-                        companyAddress: profile.companyAddress || "",
-                        companyPhoneNumber: profile.companyPhoneNumber || "",
-                        companyEmail: profile.companyEmail || "",
-                        companyWebsite: profile.companyWebsite || "",
-                        companyBusinessType: profile.companyBusinessType || "",
-                        companyRegistrationDate: profile.companyRegistrationDate
-                            ? new Date(profile.companyRegistrationDate).toISOString().split('T')[0]
-                            : "",
-                    });
-                }
-
                 if (onSuccess) {
                     onSuccess();
                 }
+                router.push("/company");
             } else {
                 const errorData = await res.json();
                 alert(errorData.error || "บันทึกข้อมูลไม่สำเร็จ");
@@ -149,16 +135,12 @@ export default function CompanyForm({ title = "ข้อมูลบริษั
 
     return (
         <PageContainer title={title} description="Manage company details">
-            {/* Header Section */}
             <PageHeader title={title} />
-
             <Box mt={3}>
                 <Card elevation={0} sx={{ border: '1px solid #e5eaef' }}>
                     <CardContent sx={{ p: 4 }}>
                         <FormSection title="ข้อมูลบริษัท">
-                            <Grid container spacing={2} mt={5}></Grid>
                             <Grid container spacing={2}>
-                                {/* Row 1: Name & Phone */}
                                 <Grid item xs={12} md={6}>
                                     <TextField
                                         fullWidth
@@ -181,8 +163,6 @@ export default function CompanyForm({ title = "ข้อมูลบริษั
                                         size="small"
                                     />
                                 </Grid>
-
-                                {/* Row 2: Tax ID */}
                                 <Grid item xs={12}>
                                     <TextField
                                         fullWidth
@@ -194,8 +174,6 @@ export default function CompanyForm({ title = "ข้อมูลบริษั
                                         size="small"
                                     />
                                 </Grid>
-
-                                {/* Row 3: Registration Date */}
                                 <Grid item xs={12}>
                                     <TextField
                                         fullWidth
@@ -206,13 +184,9 @@ export default function CompanyForm({ title = "ข้อมูลบริษั
                                         type="date"
                                         variant="outlined"
                                         size="small"
-                                        InputLabelProps={{
-                                            shrink: true,
-                                        }}
+                                        InputLabelProps={{ shrink: true }}
                                     />
                                 </Grid>
-
-                                {/* Row 4: Address */}
                                 <Grid item xs={12}>
                                     <TextField
                                         fullWidth
@@ -226,8 +200,6 @@ export default function CompanyForm({ title = "ข้อมูลบริษั
                                         size="small"
                                     />
                                 </Grid>
-
-                                {/* Additional Fields (Merged as requested) */}
                                 <Grid item xs={12} md={6}>
                                     <TextField
                                         fullWidth
@@ -263,7 +235,6 @@ export default function CompanyForm({ title = "ข้อมูลบริษั
                                 </Grid>
                             </Grid>
                         </FormSection>
-
                         <Box mt={3}>
                             <Button
                                 variant="contained"
