@@ -26,8 +26,8 @@ export const useMenuItems = () => {
     {
       id: uniqueId(),
       title: "ข้อมูลลูกค้า",
-      icon: IconReceipt2,
-      href: ``,
+      icon: IconUsers,
+      href: `/customer`,
     },
     {
       id: uniqueId(),
