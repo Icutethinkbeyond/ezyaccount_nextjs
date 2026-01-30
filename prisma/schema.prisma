@@ -26,7 +26,7 @@ model User {
   roleId  String?  @db.ObjectId
 
   profile        Profile?
-  companyProfile CompanyProfile?
+  companyProfiles CompanyProfile[]
   address        String?
   resetTokens    ResetToken[]
 
@@ -103,7 +103,7 @@ model CompanyProfile {
   companyRegistrationDate DateTime?
   companyBusinessType     String?
   user                    User      @relation(fields: [userId], references: [userId])
-  userId                  String    @unique @db.ObjectId
+  userId                  String    @db.ObjectId
 
   customerCompanies CustomerCompany[]
 
