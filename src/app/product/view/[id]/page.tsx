@@ -1,11 +1,33 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Box, Button, Typography, Grid2, Paper, Divider } from "@mui/material";
+import {
+    Box,
+    Button,
+    Typography,
+    Grid,
+    Card,
+    CardContent,
+    CircularProgress,
+    Divider,
+    IconButton
+} from "@mui/material";
 import { useRouter } from "next/navigation";
 import PageContainer from "@/components/shared/PageContainer";
-import DashboardCard from "@/components/shared/DashboardCard";
-import { ArrowBack, Edit } from "@mui/icons-material";
+import PageHeader from "@/components/shared/PageHeader";
+import FormSection from "@/components/shared/FormSection";
+import { ArrowBack } from "@mui/icons-material";
+
+const DetailItem = ({ label, value }: { label: string; value: string | number | undefined | null }) => (
+    <Box mb={2}>
+        <Typography variant="caption" color="textSecondary" display="block" gutterBottom>
+            {label}
+        </Typography>
+        <Typography variant="body1" color="textPrimary" sx={{ fontWeight: 500 }}>
+            {value || "-"}
+        </Typography>
+    </Box>
+);
 
 const ViewProductPage = ({ params }: { params: { id: string } }) => {
     const router = useRouter();
@@ -13,7 +35,9 @@ const ViewProductPage = ({ params }: { params: { id: string } }) => {
     const [product, setProduct] = useState<any>(null);
 
     useEffect(() => {
-        fetchProduct();
+        if (params.id) {
+            fetchProduct();
+        }
     }, [params.id]);
 
     const fetchProduct = async () => {
@@ -33,11 +57,9 @@ const ViewProductPage = ({ params }: { params: { id: string } }) => {
     if (loading) {
         return (
             <PageContainer>
-                <DashboardCard title="ข้อมูลสินค้า">
-                    <Box sx={{ p: 3, textAlign: "center" }}>
-                        กำลังโหลดข้อมูล...
-                    </Box>
-                </DashboardCard>
+                <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '400px' }}>
+                    <CircularProgress />
+                </Box>
             </PageContainer>
         );
     }
@@ -45,99 +67,65 @@ const ViewProductPage = ({ params }: { params: { id: string } }) => {
     if (!product) {
         return (
             <PageContainer>
-                <DashboardCard title="ข้อมูลสินค้า">
-                    <Box sx={{ p: 3, textAlign: "center" }}>
-                        ไม่พบข้อมูลสินค้า
-                    </Box>
-                </DashboardCard>
+                <Box sx={{ textAlign: 'center', mt: 5 }}>
+                    <Typography variant="h6" color="error">ไม่พบข้อมูลสินค้า</Typography>
+                    <Button variant="outlined" sx={{ mt: 2 }} onClick={() => router.push('/product')}>
+                        ย้อนกลับ
+                    </Button>
+                </Box>
             </PageContainer>
         );
     }
 
-    const InfoRow = ({ label, value }: { label: string; value: string | number }) => (
-        <Box sx={{ py: 2 }}>
-            <Typography variant="body2" color="text.secondary" gutterBottom>
-                {label}
-            </Typography>
-            <Typography variant="body1" sx={{ fontWeight: 500 }}>
-                {value || "-"}
-            </Typography>
-        </Box>
-    );
-
     return (
-        <PageContainer>
-            <DashboardCard title="ข้อมูลสินค้า">
-                <Box sx={{ p: 3 }}>
-                    {/* Header Actions */}
-                    <Box sx={{ display: "flex", gap: 2, mb: 3 }}>
-                        <Button
-                            variant="outlined"
-                            startIcon={<ArrowBack />}
-                            onClick={() => router.back()}
-                        >
-                            ย้อนกลับ
-                        </Button>
-                        <Button
-                            variant="contained"
-                            startIcon={<Edit />}
-                            onClick={() => router.push(`/product/edit/${params.id}`)}
-                        >
-                            แก้ไขสินค้า
-                        </Button>
-                    </Box>
+        <PageContainer title="รายละเอียดสินค้า" description="View product details">
+            <Box display="flex" alignItems="center" gap={1} mb={2}>
+                <IconButton
+                    onClick={() => router.push('/product')}
+                    sx={{
+                        ml: -1,
+                        color: 'text.secondary',
+                        '&:hover': { color: 'primary.main' }
+                    }}
+                >
+                    <ArrowBack />
+                </IconButton>
+                <Typography variant="h3" fontWeight="bold">
+                    รายละเอียดสินค้า
+                </Typography>
+            </Box>
 
-                    <Divider sx={{ mb: 3 }} />
-
-                    {/* Product Information - Essential Fields Only */}
-                    <Grid2 container spacing={3}>
-                        {/* ชื่อสินค้า */}
-                        <Grid2 size={12}>
-                            <Paper elevation={1} sx={{ p: 3, borderRadius: 2 }}>
-                                <InfoRow label="ชื่อสินค้า" value={product.productName} />
-                            </Paper>
-                        </Grid2>
-
-                        {/* รายละเอียด */}
-                        <Grid2 size={12}>
-                            <Paper elevation={1} sx={{ p: 3, borderRadius: 2 }}>
-                                <Typography variant="body2" color="text.secondary" gutterBottom>
-                                    รายละเอียดสินค้า
-                                </Typography>
-                                <Typography
-                                    variant="body1"
-                                    sx={{
-                                        fontWeight: 500,
-                                        whiteSpace: "pre-wrap",
-                                        minHeight: "60px"
-                                    }}
-                                >
-                                    {product.productDescription || "ไม่มีรายละเอียด"}
-                                </Typography>
-                            </Paper>
-                        </Grid2>
-
-                        {/* ราคาและหน่วย */}
-                        <Grid2 size={6}>
-                            <Paper elevation={1} sx={{ p: 3, borderRadius: 2 }}>
-                                <InfoRow
-                                    label="ราคา"
-                                    value={`${Number(product.aboutProduct?.productPrice || 0).toLocaleString("th-TH")} บาท`}
-                                />
-                            </Paper>
-                        </Grid2>
-
-                        <Grid2 size={6}>
-                            <Paper elevation={1} sx={{ p: 3, borderRadius: 2 }}>
-                                <InfoRow
-                                    label="หน่วย"
-                                    value={product.aboutProduct?.unitName || "ชิ้น"}
-                                />
-                            </Paper>
-                        </Grid2>
-                    </Grid2>
-                </Box>
-            </DashboardCard>
+            <Box mt={3}>
+                <Card elevation={0} sx={{ border: '1px solid #e5eaef' }}>
+                    <CardContent sx={{ p: 4 }}>
+                        <FormSection title="ข้อมูลทั่วไป">
+                            <Grid container spacing={3} mt={2}>
+                                <Grid item xs={12} md={6}>
+                                    <DetailItem label="ชื่อสินค้า" value={product.productName} />
+                                </Grid>
+                                <Grid item xs={12} md={6}>
+                                    <DetailItem
+                                        label="ราคา"
+                                        value={`${Number(product.aboutProduct?.productPrice || 0).toLocaleString("th-TH")} บาท`}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} md={6}>
+                                    <DetailItem
+                                        label="หน่วย"
+                                        value={product.aboutProduct?.unitName}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <DetailItem
+                                        label="รายละเอียดสินค้า"
+                                        value={product.productDescription || "ไม่มีรายละเอียด"}
+                                    />
+                                </Grid>
+                            </Grid>
+                        </FormSection>
+                    </CardContent>
+                </Card>
+            </Box>
         </PageContainer>
     );
 };

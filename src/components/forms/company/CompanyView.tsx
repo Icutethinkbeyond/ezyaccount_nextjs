@@ -9,9 +9,9 @@ import {
     Box,
     Button,
     CircularProgress,
+    IconButton,
 } from "@mui/material";
 import PageContainer from "@/components/shared/PageContainer";
-import PageHeader from "@/components/shared/PageHeader";
 import FormSection from "@/components/shared/FormSection";
 import { useRouter } from "next/navigation";
 import { ArrowBack } from "@mui/icons-material";
@@ -80,18 +80,21 @@ export default function CompanyView({ companyId }: CompanyViewProps) {
 
     return (
         <PageContainer title="รายละเอียดบริษัท" description="View company details">
-            <PageHeader
-                title="รายละเอียดบริษัท"
-                actions={
-                    <Button
-                        variant="outlined"
-                        startIcon={<ArrowBack />}
-                        onClick={() => router.push('/company')}
-                    >
-                        ย้อนกลับ
-                    </Button>
-                }
-            />
+            <Box display="flex" alignItems="center" gap={1} mb={2}>
+                <IconButton
+                    onClick={() => router.push('/company')}
+                    sx={{
+                        ml: -1,
+                        color: 'text.secondary',
+                        '&:hover': { color: 'primary.main' }
+                    }}
+                >
+                    <ArrowBack />
+                </IconButton>
+                <Typography variant="h3" fontWeight="bold">
+                    รายละเอียดบริษัท
+                </Typography>
+            </Box>
 
             <Box mt={3}>
                 <Card elevation={0} sx={{ border: '1px solid #e5eaef' }}>
