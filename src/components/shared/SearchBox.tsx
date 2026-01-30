@@ -11,7 +11,7 @@ interface SearchBoxProps {
 const SearchBox: React.FC<SearchBoxProps> = ({
     value,
     onChange,
-    placeholder = "ค้นหาด้วย เลขที่เอกสาร, ชื่อลูกค้า, ชื่อบริษัท หรือ ยอดเงิน..."
+    placeholder = "ค้นหา..."
 }) => {
     return (
         <TextField
