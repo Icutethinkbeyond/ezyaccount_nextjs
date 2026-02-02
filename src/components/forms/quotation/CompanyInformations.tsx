@@ -20,20 +20,21 @@ const CompanyInformation: React.FC = () => {
 
   // Fetch company profiles for autocomplete
   const fetchSuggestions = async (search: string) => {
+    if (search.length < 3) {
+      setSuggestions([]);
+      return;
+    }
+
     setLoading(true);
     try {
       const response = await fetch('/api/companies');
       const data = await response.json();
       if (Array.isArray(data)) {
-        if (search) {
-          const filtered = data.filter((c: CompanyProfile) =>
-            c.companyName.toLowerCase().includes(search.toLowerCase()) ||
-            c.companyTaxId?.toLowerCase().includes(search.toLowerCase())
-          );
-          setSuggestions(filtered);
-        } else {
-          setSuggestions(data);
-        }
+        const filtered = data.filter((c: CompanyProfile) =>
+          c.companyName.toLowerCase().includes(search.toLowerCase()) ||
+          c.companyTaxId?.toLowerCase().includes(search.toLowerCase())
+        );
+        setSuggestions(filtered);
       }
     } catch (error) {
       console.error("Error fetching suggestions:", error);
@@ -145,7 +146,7 @@ const CompanyInformation: React.FC = () => {
                           fullWidth
                           error={touched.companyName && Boolean(errors.companyName)}
                           helperText={<ErrorMessage name="companyName" />}
-                          placeholder="พิมพ์เพื่อค้นหาบริษัทที่เคยบันทึกไว้..."
+                          placeholder="ค้นหาบริษัท..."
                         />
                       )}
                     />
