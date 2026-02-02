@@ -17,7 +17,6 @@ function EditQuotation({ params }: { params: { id: string } }) {
   const { setCategories, setDiscount, setVatIncluded, setWithholdingTaxRate } =
     usePricingContext();
   const { setHeadForm } = useQuotationListContext();
-  const { setBreadcrumbs } = useBreadcrumbContext();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
 

@@ -29,7 +29,7 @@ type NavGroup = {
 interface ItemType {
   item: NavGroup;
   pathDirect: string;
-  onClick: (event: React.MouseEvent<HTMLElement>) => void;
+  onClick?: (event: React.MouseEvent<HTMLElement>) => void;
 }
 
 const NavItem = ({ item, pathDirect, onClick }: ItemType) => {
@@ -37,7 +37,7 @@ const NavItem = ({ item, pathDirect, onClick }: ItemType) => {
   const theme = useTheme();
   const pathname = usePathname(); // Get the current path using usePathname from Next.js
   const itemIcon = <Icon stroke={1.5} size="1.3rem" />;
-  
+
   const ListItemStyled = styled(ListItem)(() => ({
     padding: 0,
     ".MuiButtonBase-root": {
@@ -79,7 +79,7 @@ const NavItem = ({ item, pathDirect, onClick }: ItemType) => {
       event.preventDefault();
       setOpen((prev) => !prev); // Toggle the submenu
     } else {
-      onClick(event); // Call onClick for navigation if no children
+      if (onClick) onClick(event); // Call onClick for navigation if no children and onClick is defined
     }
   };
 
