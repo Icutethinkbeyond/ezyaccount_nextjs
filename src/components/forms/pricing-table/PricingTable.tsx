@@ -41,19 +41,22 @@ const PricingTable: React.FC = () => {
 
   const [expandedCategories, setExpandedCategories] = useState<Record<string, boolean>>({})
   const [allProducts, setAllProducts] = useState<any[]>([])
+  const [loadingProducts, setLoadingProducts] = useState(false)
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await fetch("/api/inventory/product")
-        const data = await response.json()
-        setAllProducts(data)
-      } catch (error) {
-        console.error("Error fetching products:", error)
-      }
+  const fetchProducts = async () => {
+    if (allProducts.length > 0 || loadingProducts) return;
+
+    setLoadingProducts(true);
+    try {
+      const response = await fetch("/api/inventory/product")
+      const data = await response.json()
+      setAllProducts(data)
+    } catch (error) {
+      console.error("Error fetching products:", error)
+    } finally {
+      setLoadingProducts(false);
     }
-    fetchProducts()
-  }, [])
+  }
 
   const handleAddCategory = () => {
     addCategory("")
@@ -201,7 +204,8 @@ const PricingTable: React.FC = () => {
                           <Autocomplete
                             freeSolo
                             disableClearable={false}
-                            options={allProducts}
+                            options={item.name && item.name.length >= 3 ? allProducts : []}
+                            loading={loadingProducts}
                             getOptionLabel={(option) => {
                               if (typeof option === 'string') return option;
                               return option.productName || "";
@@ -210,6 +214,9 @@ const PricingTable: React.FC = () => {
                             onInputChange={(event, newInputValue, reason) => {
                               if (reason === "input" || reason === "clear") {
                                 updateSubItem(category.id, item.id, { name: newInputValue });
+                                if (newInputValue.length >= 3) {
+                                  fetchProducts();
+                                }
                               }
                             }}
                             onChange={(event, newValue: any) => {
@@ -254,7 +261,7 @@ const PricingTable: React.FC = () => {
                             renderInput={(params) => (
                               <TextField
                                 {...params}
-                                placeholder="สินค้า"
+                                placeholder="ค้นหาสินค้า..."
                                 variant="standard"
                                 sx={{
                                   '& .MuiInputBase-input': {

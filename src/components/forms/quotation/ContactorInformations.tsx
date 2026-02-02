@@ -29,6 +29,11 @@ const ContactotInformation: React.FC = () => {
 
   // Fetch customers for autocomplete
   const fetchSuggestions = async (search: string = "") => {
+    if (search.length < 3) {
+      setSuggestions([]);
+      return;
+    }
+
     setLoading(true);
     try {
       const response = await fetch(`/api/customer?search=${encodeURIComponent(search)}`);
@@ -154,7 +159,7 @@ const ContactotInformation: React.FC = () => {
                           required
                           error={touched.contactorName && Boolean(errors.contactorName)}
                           helperText={<ErrorMessage name="contactorName" />}
-                          placeholder="พิมพ์เพื่อค้นหาลูกค้าที่เคยบันทึกไว้..."
+                          placeholder="ค้นหาลูกค้า..."
                         />
                       )}
                     />
