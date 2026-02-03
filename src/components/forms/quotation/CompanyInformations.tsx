@@ -146,7 +146,7 @@ const CompanyInformation: React.FC = () => {
                           fullWidth
                           error={touched.companyName && Boolean(errors.companyName)}
                           helperText={<ErrorMessage name="companyName" />}
-                          placeholder="ค้นหาบริษัท..."
+                          placeholder="พิมพ์ 3 ตัวอักษรเพื่อเริ่มค้นหา..."
                         />
                       )}
                     />
