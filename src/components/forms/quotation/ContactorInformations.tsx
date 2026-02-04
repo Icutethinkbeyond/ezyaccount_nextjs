@@ -159,7 +159,7 @@ const ContactotInformation: React.FC = () => {
                           required
                           error={touched.contactorName && Boolean(errors.contactorName)}
                           helperText={<ErrorMessage name="contactorName" />}
-                          placeholder="ค้นหาลูกค้า..."
+                          placeholder="พิมพ์ 3 ตัวอักษรเพื่อเริ่มค้นหา..."
                         />
                       )}
                     />
