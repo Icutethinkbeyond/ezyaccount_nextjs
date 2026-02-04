@@ -109,14 +109,15 @@ const QuotationsTable: React.FC<QuotationsTableProps> = () => {
   const headerActions = (
     <>
       <Button
-        variant="outlined"
         startIcon={<DeleteSweep />}
         onClick={() => router.push("/quotation/trash")}
         sx={{
-          color: "#d33",
-          borderColor: "#d33",
-          "&:hover": { borderColor: "#b22", backgroundColor: "rgba(211, 51, 51, 0.04)" },
+          backgroundColor: "#ffe2e6",
+          color: "#d32f2f",
+          "&:hover": { backgroundColor: "#f9c2c8" },
           textTransform: "none",
+          px: 2,
+          mr: 1,
         }}
       >
         ถังขยะ

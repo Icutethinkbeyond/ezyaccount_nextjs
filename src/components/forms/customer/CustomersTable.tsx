@@ -4,7 +4,7 @@ import React, { useCallback } from "react";
 import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { Box, Button, IconButton, Tooltip } from "@mui/material";
 import { useRouter } from "next/navigation";
-import { Add, EditCalendar, Delete } from "@mui/icons-material";
+import { Add, EditCalendar, Delete, Visibility } from "@mui/icons-material";
 import { GenericDataTable } from "@/components/shared/GenericDataTable";
 import { useDataTable } from "@/hooks/useDataTable";
 import { useDebounceSearch } from "@/hooks/useDebounceSearch";
@@ -66,7 +66,7 @@ const CustomersTable: React.FC = () => {
         {
             field: "Actions",
             headerName: "",
-            width: 100,
+            width: 150,
             sortable: false,
             renderCell: (params: GridRenderCellParams) => (
                 <Box>
@@ -77,6 +77,15 @@ const CustomersTable: React.FC = () => {
                             onClick={() => router.push(`/customer/edit-customer/${params.row.contactorId}`)}
                         >
                             <EditCalendar />
+                        </IconButton>
+                    </Tooltip>
+                    <Tooltip title="ดูข้อมูล">
+                        <IconButton
+                            color="primary"
+                            onClick={() => router.push(`/customer/view-customer/${params.row.contactorId}`)}
+                            size="small"
+                        >
+                            <Visibility />
                         </IconButton>
                     </Tooltip>
                     <Tooltip title="ลบ">
