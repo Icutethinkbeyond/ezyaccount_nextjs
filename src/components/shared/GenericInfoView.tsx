@@ -2,19 +2,34 @@
 
 import React from "react";
 import {
-    Card,
-    CardContent,
-    Typography,
     Grid,
     Box,
     Button,
-    CircularProgress,
-    IconButton,
+    Divider,
+    Paper,
+    Skeleton,
+    Avatar,
+    Stack,
+    Typography,
 } from "@mui/material";
-import PageContainer from "@/components/shared/PageContainer";
-import FormSection from "@/components/shared/FormSection";
 import { useRouter } from "next/navigation";
-import { ArrowBack } from "@mui/icons-material";
+import {
+    ArrowBack,
+    Description,
+    Business,
+    Phone,
+    Email,
+    LocationOn,
+    Language,
+    Category,
+    Event,
+    Payments,
+    AccountCircle,
+    Badge,
+} from "@mui/icons-material";
+import PageContainer from "@/components/shared/PageContainer";
+import DashboardCard from "@/components/shared/DashboardCard";
+import PageHeader from "@/components/shared/PageHeader";
 
 export type ViewStatus = 'loading' | 'error' | 'notFound' | 'ready';
 
@@ -22,26 +37,76 @@ export interface FieldConfig<T> {
     label: string;
     key: keyof T | string;
     format?: (value: any) => string;
+    icon?: React.ReactNode;
+}
+
+export interface SectionConfig<T> {
+    sectionTitle: string;
+    fields: FieldConfig<T>[];
 }
 
 interface GenericInfoViewProps<T> {
     title: string;
     backPath: string;
     data: T | null;
-    fields: FieldConfig<T>[];
+    fields?: FieldConfig<T>[];
+    sections?: SectionConfig<T>[];
     status: ViewStatus;
     errorMessage?: string;
     notFoundMessage?: string;
 }
 
-const DetailItem = ({ label, value }: { label: string; value: string | undefined | null }) => (
+const getIconForField = (label: string, icon?: React.ReactNode) => {
+    if (icon) return icon;
+    const lowerLabel = label.toLowerCase();
+
+    // Using theme palette colors
+    if (lowerLabel.includes("ชื่อ") || lowerLabel.includes("name")) return <Business fontSize="small" color="primary" />;
+    if (lowerLabel.includes("โทร") || lowerLabel.includes("phone") || lowerLabel.includes("tel")) return <Phone fontSize="small" color="success" />;
+    if (lowerLabel.includes("อีเมล") || lowerLabel.includes("email")) return <Email fontSize="small" color="warning" />;
+    if (lowerLabel.includes("ที่อยู่") || lowerLabel.includes("address")) return <LocationOn fontSize="small" color="error" />;
+    if (lowerLabel.includes("เว็บ") || lowerLabel.includes("web")) return <Language fontSize="small" color="info" />;
+    if (lowerLabel.includes("ประเภท") || lowerLabel.includes("type")) return <Category fontSize="small" color="secondary" />;
+    if (lowerLabel.includes("วัน") || lowerLabel.includes("date")) return <Event fontSize="small" color="primary" />;
+    if (lowerLabel.includes("ราคา") || lowerLabel.includes("price")) return <Payments fontSize="small" color="success" />;
+    if (lowerLabel.includes("ภาษี") || lowerLabel.includes("tax")) return <Badge fontSize="small" color="info" />;
+    if (lowerLabel.includes("คน") || lowerLabel.includes("contact")) return <AccountCircle fontSize="small" color="primary" />;
+
+    return <Description fontSize="small" color="action" />;
+};
+
+const DetailItem = ({ label, value, icon }: { label: string; value: string | undefined | null; icon?: React.ReactNode }) => (
     <Box mb={2}>
-        <Typography variant="caption" color="textSecondary" display="block" gutterBottom>
-            {label}
-        </Typography>
-        <Typography variant="body1" color="textPrimary">
+        <Stack direction="row" spacing={1} alignItems="center" mb={1}>
+            {getIconForField(label, icon)}
+            <Typography variant="subtitle2" fontWeight={600} color="textSecondary">
+                {label}
+            </Typography>
+        </Stack>
+        <Typography variant="body1" color="textPrimary" sx={{ ml: 3.5, fontWeight: 500 }}>
             {value || "-"}
         </Typography>
+        <Divider sx={{ mt: 1.5, opacity: 0.5 }} />
+    </Box>
+);
+
+const LoadingSkeleton = ({ title }: { title: string }) => (
+    <Box>
+        <Box mb={2}>
+            <Skeleton variant="text" width="30%" height={40} />
+        </Box>
+        <DashboardCard title="">
+            <Grid container spacing={4}>
+                {[...Array(6)].map((_, i) => (
+                    <Grid item xs={12} md={6} key={i}>
+                        <Box sx={{ mb: 2 }}>
+                            <Skeleton variant="text" width="40%" height={20} sx={{ mb: 1 }} />
+                            <Skeleton variant="rectangular" height={30} sx={{ borderRadius: "4px" }} />
+                        </Box>
+                    </Grid>
+                ))}
+            </Grid>
+        </DashboardCard>
     </Box>
 );
 
@@ -50,35 +115,15 @@ export function GenericInfoView<T>({
     backPath,
     data,
     fields,
+    sections,
     status,
     errorMessage = "Cannot load data",
     notFoundMessage = "Data not found",
 }: GenericInfoViewProps<T>) {
     const router = useRouter();
 
-    if (status === 'loading') {
-        return (
-            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '400px' }}>
-                <CircularProgress />
-            </Box>
-        );
-    }
-
-    if (status === 'error' || status === 'notFound' || !data) {
-        return (
-            <Box sx={{ textAlign: 'center', mt: 5 }}>
-                <Typography variant="h6" color="error">
-                    {status === 'notFound' ? notFoundMessage : errorMessage}
-                </Typography>
-                <Button variant="outlined" sx={{ mt: 2 }} onClick={() => router.push(backPath)}>
-                    Back
-                </Button>
-            </Box>
-        );
-    }
-
-    // Helper to access nested properties if needed, though for now simple key access is enough
     const getValue = (item: T, field: FieldConfig<T>) => {
+        if (!item) return "-";
         const val = (item as any)[field.key];
         if (field.format) {
             return field.format(val);
@@ -86,63 +131,100 @@ export function GenericInfoView<T>({
         return val;
     };
 
+    if (status === 'loading') {
+        return (
+            <PageContainer title={title} description={`View ${title}`}>
+                <LoadingSkeleton title={title} />
+            </PageContainer>
+        );
+    }
+
+    if (status === 'error' || status === 'notFound' || !data) {
+        return (
+            <PageContainer title={title} description={`View ${title}`}>
+                <Box p={4} textAlign="center">
+                    <Paper
+                        elevation={0}
+                        variant="outlined"
+                        sx={{
+                            p: 6,
+                            borderRadius: '16px',
+                            borderStyle: 'dashed',
+                            backgroundColor: 'background.default'
+                        }}
+                    >
+                        <Avatar sx={{ width: 80, height: 80, mx: "auto", mb: 2, bgcolor: "warning.light" }}>
+                            <Description fontSize="large" color="warning" />
+                        </Avatar>
+                        <Typography variant="h4" gutterBottom>
+                            {status === 'notFound' ? "ไม่พบข้อมูล" : "เกิดข้อผิดพลาด"}
+                        </Typography>
+                        <Typography variant="body1" color="textSecondary" mb={3}>
+                            {status === 'notFound' ? notFoundMessage : errorMessage}
+                        </Typography>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            startIcon={<ArrowBack />}
+                            onClick={() => router.push(backPath)}
+                            sx={{ borderRadius: "8px" }}
+                        >
+                            กลับไปยังรายการ
+                        </Button>
+                    </Paper>
+                </Box>
+            </PageContainer>
+        );
+    }
+
     return (
         <PageContainer title={title} description={`View ${title}`}>
-            <Box display="flex" alignItems="center" gap={1} mb={2}>
-                <IconButton
+            <Box mb={4} display="flex" alignItems="center">
+                <Button
+                    variant="contained"
+                    color="primary"
+                    startIcon={<ArrowBack />}
                     onClick={() => router.push(backPath)}
-                    sx={{
-                        ml: -1,
-                        color: 'text.secondary',
-                        '&:hover': { color: 'primary.main' }
-                    }}
+                    sx={{ textTransform: "none", borderRadius: "8px", boxShadow: "none" }}
                 >
-                    <ArrowBack />
-                </IconButton>
-                <Typography variant="h3" fontWeight="bold">
-                    {title}
-                </Typography>
+                    ย้อนกลับ
+                </Button>
             </Box>
 
             <Box mt={3}>
-                <Card elevation={0} sx={{ border: '1px solid #e5eaef' }}>
-                    <CardContent sx={{ p: 4 }}>
-                        <Box
-                            sx={{
-                                backgroundColor: '#fff',
-                                borderRadius: '12px',
-                                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
-                                overflow: 'hidden',
-                                mb: 2,
-                                border: '1px solid #e5eaef',
-                            }}
-                        >
-                            <Box
-                                sx={{
-                                    backgroundColor: '#e5fafb',
-                                    borderBottom: '2px solid #03c9d7',
-                                    padding: '16px 24px',
-                                }}
-                            >
-                                <Typography variant="h6" fontWeight={600} color="#2A3547">
-                                    ข้อมูลทั่วไป
-                                </Typography>
-                            </Box>
-                            <Box p={3}>
-                                <Grid container spacing={3}>
-                                    {fields.map((field, index) => (
-                                        <Grid item xs={12} md={6} key={index}>
+                {sections ? (
+                    sections.map((section, sIdx) => (
+                        <Box key={sIdx} mb={3}>
+                            <DashboardCard title={section.sectionTitle}>
+                                <Grid container spacing={4}>
+                                    {section.fields.map((field, fIdx) => (
+                                        <Grid item xs={12} md={6} key={fIdx}>
                                             <DetailItem
                                                 label={field.label}
-                                                value={getValue(data, field)}
+                                                value={getValue(data as T, field)}
+                                                icon={field.icon}
                                             />
                                         </Grid>
                                     ))}
                                 </Grid>
-                            </Box>
+                            </DashboardCard>
                         </Box>
-                    </CardContent>
-                </Card>
+                    ))
+                ) : (
+                    <DashboardCard title="ข้อมูลรายละเอียด">
+                        <Grid container spacing={4}>
+                            {fields?.map((field, index) => (
+                                <Grid item xs={12} md={6} key={index}>
+                                    <DetailItem
+                                        label={field.label}
+                                        value={getValue(data as T, field)}
+                                        icon={field.icon}
+                                    />
+                                </Grid>
+                            ))}
+                        </Grid>
+                    </DashboardCard>
+                )}
             </Box>
         </PageContainer>
     );
