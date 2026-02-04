@@ -121,7 +121,6 @@ const TrashTable: React.FC<TrashTableProps> = () => {
             onPaginationChange={setPaginationModel}
             getRowId={(row) => row.keyId}
             customHeader={customHeader}
-            checkboxSelection={false}
         />
     );
 };
