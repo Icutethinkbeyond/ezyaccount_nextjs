@@ -90,18 +90,31 @@ const QuotationsTable: React.FC<QuotationsTableProps> = () => {
     grandTotalColumn,
     {
       field: "Actions",
-      headerName: "",
+      headerName: "การจัดการ",
+      headerAlign: "center",
+      align: "center",
+      disableColumnMenu: true,
       width: 200,
       sortable: false,
       renderCell: (params: GridRenderCellParams) => (
-        <QuotationActionButtons
-          documentId={params.row.documentId}
-          onEdit={(id) => router.push(`/quotation/edit-quotation/${id}`)}
-          onPreview={(id) => window.open(`/quotation/preview/${id}`, "_blank")}
-          onDownloadPDF={handlePDFDownload}
-          onDelete={handleDelete}
-          isDownloading={downloadingId === params.row.documentId}
-        />
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            width: "100%",
+            height: "100%",
+          }}
+        >
+          <QuotationActionButtons
+            documentId={params.row.documentId}
+            onEdit={(id) => router.push(`/quotation/edit-quotation/${id}`)}
+            onPreview={(id) => window.open(`/quotation/preview/${id}`, "_blank")}
+            onDownloadPDF={handlePDFDownload}
+            onDelete={handleDelete}
+            isDownloading={downloadingId === params.row.documentId}
+          />
+        </Box>
       ),
     },
   ];

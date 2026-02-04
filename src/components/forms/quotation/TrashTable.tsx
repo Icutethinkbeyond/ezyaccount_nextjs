@@ -85,15 +85,28 @@ const TrashTable: React.FC<TrashTableProps> = () => {
         grandTotalColumn,
         {
             field: "Actions",
-            headerName: "",
+            headerName: "การจัดการ",
+            headerAlign: "center",
+            align: "center",
+            disableColumnMenu: true,
             width: 150,
             sortable: false,
             renderCell: (params: GridRenderCellParams) => (
-                <TrashActionButtons
-                    documentId={params.row.documentId}
-                    onRestore={handleRestore}
-                    onPermanentDelete={handlePermanentDelete}
-                />
+                <Box
+                    sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        width: "100%",
+                        height: "100%",
+                    }}
+                >
+                    <TrashActionButtons
+                        documentId={params.row.documentId}
+                        onRestore={handleRestore}
+                        onPermanentDelete={handlePermanentDelete}
+                    />
+                </Box>
             ),
         },
     ];

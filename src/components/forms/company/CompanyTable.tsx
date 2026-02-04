@@ -68,11 +68,21 @@ const CompanyTable = () => {
         { field: "companyEmail", headerName: "อีเมล", width: 200 },
         {
             field: "actions",
-            headerName: "",
-            width: 120,
+            headerName: "การจัดการ",
+            headerAlign: "center",
+            align: "center",
+            disableColumnMenu: true,
+            width: 150,
             sortable: false,
             renderCell: (params: GridRenderCellParams) => (
-                <Box>
+                <Box
+                    sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        gap: 0.5,
+                    }}
+                >
                     <Tooltip title="แก้ไข">
                         <IconButton
                             color="secondary"

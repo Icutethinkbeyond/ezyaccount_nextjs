@@ -80,11 +80,21 @@ const ProductsTable: React.FC = () => {
         { field: "unit", headerName: "หน่วย", width: 120 },
         {
             field: "actions",
-            headerName: "",
+            headerName: "การจัดการ",
+            headerAlign: "center",
+            align: "center",
+            disableColumnMenu: true,
             width: 160,
             sortable: false,
             renderCell: (params: GridRenderCellParams) => (
-                <Box sx={{ display: "flex", gap: 1 }}>
+                <Box
+                    sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        gap: 0.5,
+                    }}
+                >
                     <Tooltip title="แก้ไข">
                         <IconButton
                             size="small"

@@ -65,11 +65,21 @@ const CustomersTable: React.FC = () => {
         { field: "contactorAddress", headerName: "ที่อยู่", flex: 1, minWidth: 200 },
         {
             field: "Actions",
-            headerName: "",
+            headerName: "การจัดการ",
+            headerAlign: "center",
+            align: "center",
+            disableColumnMenu: true,
             width: 150,
             sortable: false,
             renderCell: (params: GridRenderCellParams) => (
-                <Box>
+                <Box
+                    sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        gap: 0.5,
+                    }}
+                >
                     <Tooltip title="แก้ไข">
                         <IconButton
                             size="small"
