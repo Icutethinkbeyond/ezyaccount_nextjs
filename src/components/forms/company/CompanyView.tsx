@@ -42,7 +42,7 @@ export default function CompanyView({ companyId }: CompanyViewProps) {
         {
             label: "วันที่จดทะเบียน",
             key: "companyRegistrationDate",
-            format: (val) => val ? new Date(val).toLocaleDateString("th-TH") : "-"
+            format: (val: any) => val ? new Date(val).toLocaleDateString("th-TH") : "-"
         },
         { label: "อีเมล", key: "companyEmail" },
         { label: "เว็บไซต์", key: "companyWebsite" },
