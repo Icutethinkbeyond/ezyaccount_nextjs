@@ -24,7 +24,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({
             InputProps={{
                 startAdornment: (
                     <InputAdornment position="start">
-                        <Search sx={{ color: "action.active", fontSize: 20 }} />
+                        <Search sx={{ color: "#03c9d7", fontSize: 22 }} />
                     </InputAdornment>
                 ),
                 endAdornment: value ? (
@@ -33,6 +33,11 @@ const SearchBox: React.FC<SearchBoxProps> = ({
                             size="small"
                             onClick={() => onChange("")}
                             edge="end"
+                            sx={{
+                                '&:hover': {
+                                    color: '#d33',
+                                },
+                            }}
                         >
                             <Clear fontSize="small" />
                         </IconButton>
@@ -43,8 +48,28 @@ const SearchBox: React.FC<SearchBoxProps> = ({
                 mb: 1,
                 bgcolor: 'white',
                 '& .MuiOutlinedInput-root': {
-                    borderRadius: '8px'
-                }
+                    borderRadius: '10px',
+                    boxShadow: '0 1px 4px rgba(0, 0, 0, 0.06)',
+                    transition: 'all 0.2s ease-in-out',
+                    '& fieldset': {
+                        borderColor: '#e5eaef',
+                    },
+                    '&:hover fieldset': {
+                        borderColor: '#03c9d7',
+                    },
+                    '&.Mui-focused fieldset': {
+                        borderColor: '#03c9d7',
+                        borderWidth: '2px',
+                    },
+                },
+                '& .MuiInputBase-input': {
+                    padding: '10px 14px',
+                    fontSize: '0.9rem',
+                    '&::placeholder': {
+                        color: '#5A6A85',
+                        opacity: 1,
+                    },
+                },
             }}
         />
     );

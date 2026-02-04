@@ -1,28 +1,13 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import {
-    DataGrid,
-    GridColDef,
-    GridPaginationModel,
-} from "@mui/x-data-grid";
-import {
-    Box,
-    Button,
-    IconButton,
-    Tooltip,
-} from "@mui/material";
+import React, { useState, useCallback } from "react";
+import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
+import { Box, Button, IconButton, Tooltip } from "@mui/material";
 import { useRouter } from "next/navigation";
-import {
-    Add,
-    EditCalendar,
-    Delete,
-    Visibility,
-} from "@mui/icons-material";
-import { CustomNoRowsOverlay } from "@/components/shared/NoData";
-import { CustomToolbar } from "@/components/shared/CustomToolbar";
-import SearchBox from "@/components/shared/SearchBox";
-import PageHeader from "@/components/shared/PageHeader";
+import { Add, EditCalendar, Delete, Visibility } from "@mui/icons-material";
+import { GenericDataTable } from "@/components/shared/GenericDataTable";
+import { useDataTable } from "@/hooks/useDataTable";
+import { useDebounceSearch } from "@/hooks/useDebounceSearch";
 
 interface ProductRow {
     id: string;
@@ -35,76 +20,35 @@ interface ProductRow {
 
 const ProductsTable: React.FC = () => {
     const router = useRouter();
-    const [rows, setRows] = useState<ProductRow[]>([]);
-    const [filteredRows, setFilteredRows] = useState<ProductRow[]>([]);
-    const [searchQuery, setSearchQuery] = useState<string>("");
-    const [loading, setLoading] = useState<boolean>(true);
-    const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
-        page: 0,
-        pageSize: 10,
+
+    // Data mapping function
+    const mapProductData = useCallback((product: any): ProductRow => ({
+        id: product.productId,
+        keyId: product.productId,
+        productName: product.productName,
+        description: product.productDescription || "",
+        price: product.aboutProduct?.productPrice || 0,
+        unit: product.aboutProduct?.unitName || "ชิ้น",
+    }), []);
+
+    // Use data table hook
+    const {
+        rows,
+        loading,
+        paginationModel,
+        setPaginationModel,
+        refresh,
+    } = useDataTable<any, ProductRow>({
+        apiUrl: "/api/inventory/product",
+        mapData: mapProductData,
     });
 
-    const fetchProducts = async () => {
-        setLoading(true);
-        try {
-            const response = await fetch("/api/inventory/product");
-            const data = await response.json();
-
-            if (Array.isArray(data)) {
-                const mappedData: ProductRow[] = data.map((product: any) => ({
-                    id: product.productId,
-                    keyId: product.productId,
-                    productName: product.productName,
-                    description: product.productDescription || "",
-                    price: product.aboutProduct?.productPrice || 0,
-                    unit: product.aboutProduct?.unitName || "ชิ้น",
-                }));
-                setRows(mappedData);
-                setFilteredRows(mappedData);
-            } else {
-                console.error("Data received is not an array:", data);
-                setRows([]);
-                setFilteredRows([]);
-            }
-        } catch (error) {
-            console.error("Failed to fetch products", error);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    useEffect(() => {
-        fetchProducts();
-    }, []);
-
-    const handleAddClick = () => {
-        router.push("/product/new");
-    };
-
-    // Real-time search with debounce
-    useEffect(() => {
-        if (!searchQuery.trim()) {
-            setFilteredRows(rows);
-            return;
-        }
-
-        const timeoutId = setTimeout(() => {
-            const query = searchQuery.toLowerCase().trim();
-            const filtered = rows.filter((row: ProductRow) => {
-                const productName = row.productName?.toLowerCase() || "";
-                const description = row.description?.toLowerCase() || "";
-
-                return (
-                    productName.includes(query) ||
-                    description.includes(query)
-                );
-            });
-
-            setFilteredRows(filtered);
-        }, 1000);
-
-        return () => clearTimeout(timeoutId);
-    }, [searchQuery, rows]);
+    // Use debounce search hook
+    const { searchQuery, setSearchQuery, filteredRows } = useDebounceSearch({
+        rows,
+        searchFields: ["productName", "description"],
+        debounceMs: 1000,
+    });
 
     const handleDelete = async (productId: string) => {
         if (!confirm("ต้องการลบสินค้านี้ใช่หรือไม่?")) return;
@@ -115,7 +59,7 @@ const ProductsTable: React.FC = () => {
             });
 
             if (response.ok) {
-                fetchProducts();
+                refresh();
             } else {
                 console.error("Failed to delete product");
             }
@@ -125,37 +69,21 @@ const ProductsTable: React.FC = () => {
     };
 
     const columns: GridColDef[] = [
-        {
-            field: "productName",
-            headerName: "ชื่อสินค้า",
-            flex: 1,
-            minWidth: 200,
-        },
-        {
-            field: "description",
-            headerName: "รายละเอียด",
-            flex: 1,
-            minWidth: 200,
-        },
+        { field: "productName", headerName: "ชื่อสินค้า", flex: 1, minWidth: 200 },
+        { field: "description", headerName: "รายละเอียด", flex: 1, minWidth: 200 },
         {
             field: "price",
             headerName: "ราคา",
             width: 150,
-            valueFormatter: (value) => {
-                return `${Number(value).toLocaleString("th-TH")} บาท`;
-            },
+            valueFormatter: (value) => `${Number(value).toLocaleString("th-TH")} บาท`,
         },
-        {
-            field: "unit",
-            headerName: "หน่วย",
-            width: 120,
-        },
+        { field: "unit", headerName: "หน่วย", width: 120 },
         {
             field: "actions",
             headerName: "",
             width: 160,
             sortable: false,
-            renderCell: (params) => (
+            renderCell: (params: GridRenderCellParams) => (
                 <Box sx={{ display: "flex", gap: 1 }}>
                     <Tooltip title="แก้ไข">
                         <IconButton
@@ -178,7 +106,7 @@ const ProductsTable: React.FC = () => {
                     <Tooltip title="ลบ">
                         <IconButton
                             size="small"
-                            sx={{ color: '#d33' }}
+                            sx={{ color: "#d33" }}
                             onClick={() => handleDelete(params.row.id)}
                         >
                             <Delete fontSize="small" />
@@ -189,52 +117,35 @@ const ProductsTable: React.FC = () => {
         },
     ];
 
+    const headerActions = (
+        <Button
+            variant="contained"
+            startIcon={<Add />}
+            onClick={() => router.push("/product/new")}
+            sx={{
+                backgroundColor: "#33CC99",
+                color: "#fff",
+                "&:hover": { backgroundColor: "#009933" },
+                textTransform: "none",
+            }}
+        >
+            เพิ่มสินค้าใหม่
+        </Button>
+    );
+
     return (
-        <Box>
-            <PageHeader
-                title="ข้อมูลสินค้าทั้งหมด"
-                actions={
-                    <Button
-                        variant="contained"
-                        startIcon={<Add />}
-                        onClick={handleAddClick}
-                        sx={{
-                            backgroundColor: "#33CC99",
-                            color: "#fff",
-                            "&:hover": { backgroundColor: "#009933" },
-                            textTransform: "none",
-                        }}
-                    >
-                        เพิ่มสินค้าใหม่
-                    </Button>
-                }
-            />
-
-            <Box mb={2}>
-                <SearchBox
-                    value={searchQuery}
-                    onChange={setSearchQuery}
-                />
-            </Box>
-
-            <Box p={3} border="1px solid #ccc" borderRadius="8px" mb={2} mt={2}>
-                <DataGrid
-                    initialState={{ pagination: { paginationModel } }}
-                    pageSizeOptions={[5, 10, 20, 50, 100]}
-                    checkboxSelection
-                    sx={{ border: 0 }}
-                    getRowId={(row) => row.keyId}
-                    rows={filteredRows}
-                    columns={columns}
-                    onPaginationModelChange={setPaginationModel}
-                    loading={loading}
-                    slots={{
-                        noRowsOverlay: CustomNoRowsOverlay,
-                        toolbar: CustomToolbar,
-                    }}
-                />
-            </Box>
-        </Box>
+        <GenericDataTable
+            title="ข้อมูลสินค้าทั้งหมด"
+            rows={filteredRows}
+            columns={columns}
+            loading={loading}
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
+            paginationModel={paginationModel}
+            onPaginationChange={setPaginationModel}
+            getRowId={(row) => row.keyId}
+            headerActions={headerActions}
+        />
     );
 };
 
