@@ -89,7 +89,7 @@ const ProductsTable: React.FC = () => {
                         <IconButton
                             size="small"
                             color="secondary"
-                            onClick={() => router.push(`/product/edit/${params.row.id}`)}
+                            onClick={() => router.push(`/product/edit-product/${params.row.id}`)}
                         >
                             <EditCalendar fontSize="small" />
                         </IconButton>
@@ -98,7 +98,7 @@ const ProductsTable: React.FC = () => {
                         <IconButton
                             size="small"
                             color="primary"
-                            onClick={() => router.push(`/product/view/${params.row.id}`)}
+                            onClick={() => router.push(`/product/view-product/${params.row.id}`)}
                         >
                             <Visibility fontSize="small" />
                         </IconButton>
