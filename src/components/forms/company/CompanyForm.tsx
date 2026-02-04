@@ -242,8 +242,8 @@ export default function CompanyForm({ title = "ข้อมูลบริษั
                                 onClick={handleSave}
                                 disabled={saving}
                                 sx={{
-                                    backgroundColor: "#33CC99",
-                                    "&:hover": { backgroundColor: "#009933" },
+                                    backgroundColor: "#03c9d7",
+                                    "&:hover": { backgroundColor: "#05b2bd" },
                                     color: "white",
                                     textTransform: "none"
                                 }}

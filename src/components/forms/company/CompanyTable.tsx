@@ -111,9 +111,9 @@ const CompanyTable = () => {
             startIcon={<Add />}
             onClick={() => router.push("/company/new-company")}
             sx={{
-                backgroundColor: "#33CC99",
+                backgroundColor: "#03c9d7",
                 color: "#fff",
-                "&:hover": { backgroundColor: "#009933" },
+                "&:hover": { backgroundColor: "#05b2bd" },
                 textTransform: "none",
             }}
         >

@@ -94,7 +94,7 @@ const CustomerAutocomplete: React.FC<CustomerAutocompleteProps> = ({ onSelect, v
             renderOption={(props, option) => (
                 <Box component="li" {...props} key={option.contactorId}>
                     <Box display="flex" alignItems="center" gap={1.5} width="100%">
-                        <Person sx={{ color: "#33CC99", fontSize: 20 }} />
+                        <Person sx={{ color: "#03c9d7", fontSize: 20 }} />
                         <Box flex={1}>
                             <Typography variant="body2" fontWeight={500}>
                                 {option.contactorName}

@@ -140,8 +140,8 @@ const CustomerForm: React.FC<CustomerFormProps> = ({ initialData, isEdit = false
                             variant="contained"
                             disabled={isSubmitting}
                             sx={{
-                                backgroundColor: "#33CC99",
-                                "&:hover": { backgroundColor: "#009933" },
+                                backgroundColor: "#03c9d7",
+                                "&:hover": { backgroundColor: "#05b2bd" },
                                 textTransform: "none",
                             }}
                         >
