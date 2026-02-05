@@ -1,8 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from "react";
-import { Autocomplete, TextField, CircularProgress, Box, Typography } from "@mui/material";
-import { Person } from "@mui/icons-material";
+import { Autocomplete, TextField, CircularProgress, Box, Typography, useTheme } from "@mui/material";
 import debounce from "lodash/debounce";
 
 interface CustomerOption {
@@ -23,6 +22,7 @@ const CustomerAutocomplete: React.FC<CustomerAutocompleteProps> = ({ onSelect, v
     const [options, setOptions] = useState<CustomerOption[]>([]);
     const [loading, setLoading] = useState(false);
     const [inputValue, setInputValue] = useState("");
+    const theme = useTheme();
 
     // Fetch customers from API (only standalone contactors from customer page)
     const fetchCustomers = async (search: string = "") => {
@@ -93,24 +93,21 @@ const CustomerAutocomplete: React.FC<CustomerAutocompleteProps> = ({ onSelect, v
             loadingText="กำลังค้นหา..."
             renderOption={(props, option) => (
                 <Box component="li" {...props} key={option.contactorId}>
-                    <Box display="flex" alignItems="center" gap={1.5} width="100%">
-                        <Person sx={{ color: "#03c9d7", fontSize: 20 }} />
-                        <Box flex={1}>
-                            <Typography variant="body2" fontWeight={500}>
-                                {option.contactorName}
-                            </Typography>
-                            <Typography variant="caption" color="text.secondary">
-                                {option.contactorTel && `โทร: ${option.contactorTel}`}
-                                {option.contactorEmail && ` | ${option.contactorEmail}`}
-                            </Typography>
-                        </Box>
+                    <Box sx={{ py: 0.5 }}>
+                        <Typography variant="body2" fontWeight={500} sx={{ color: theme.palette.primary.main }}>
+                            {option.contactorName}
+                        </Typography>
+                        <Typography variant="caption" color="text.secondary">
+                            {option.contactorTel && `โทร: ${option.contactorTel}`}
+                            {option.contactorEmail && ` | ${option.contactorEmail}`}
+                        </Typography>
                     </Box>
                 </Box>
             )}
             renderInput={(params) => (
                 <TextField
                     {...params}
-                    label="🔍 ค้นหาลูกค้าที่บันทึกไว้"
+                    label="ค้นหาลูกค้าที่บันทึกไว้"
                     placeholder="พิมพ์ชื่อผู้ติดต่อ, เบอร์โทร หรืออีเมล์..."
                     variant="outlined"
                     size="small"
@@ -118,20 +115,29 @@ const CustomerAutocomplete: React.FC<CustomerAutocompleteProps> = ({ onSelect, v
                         ...params.InputProps,
                         endAdornment: (
                             <>
-                                {loading ? <CircularProgress color="inherit" size={18} /> : null}
+                                {loading ? (
+                                    <CircularProgress
+                                        size={18}
+                                        sx={{ color: theme.palette.primary.main }}
+                                    />
+                                ) : null}
                                 {params.InputProps.endAdornment}
                             </>
                         ),
                     }}
                     sx={{
                         "& .MuiOutlinedInput-root": {
-                            backgroundColor: "#f8f9fa",
-                            "&:hover": {
-                                backgroundColor: "#e9ecef",
+                            borderRadius: "8px",
+                            "&:hover .MuiOutlinedInput-notchedOutline": {
+                                borderColor: theme.palette.primary.main,
                             },
-                            "&.Mui-focused": {
-                                backgroundColor: "#fff",
+                            "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                                borderColor: theme.palette.primary.main,
+                                borderWidth: "2px",
                             }
+                        },
+                        "& .MuiInputLabel-root.Mui-focused": {
+                            color: theme.palette.primary.main,
                         }
                     }}
                 />
