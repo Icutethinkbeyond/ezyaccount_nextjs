@@ -99,7 +99,7 @@ const ProductsTable: React.FC = () => {
                         <IconButton
                             size="small"
                             color="secondary"
-                            onClick={() => router.push(`/product/edit-product/${params.row.id}`)}
+                            onClick={() => router.push(`/product/edit/${params.row.id}`)}
                         >
                             <EditCalendar fontSize="small" />
                         </IconButton>
