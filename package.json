@@ -51,7 +51,7 @@
     "yup": "^1.4.0"
   },
   "prisma": {
-    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
+    "seed": "tsx prisma/seed.ts"
   },
   "devDependencies": {
     "@faker-js/faker": "^9.0.3",

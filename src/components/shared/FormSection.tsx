@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, useTheme } from "@mui/material";
 
 interface FormSectionProps {
     title: string;
@@ -8,25 +8,36 @@ interface FormSectionProps {
 }
 
 /**
- * Reusable form section component with consistent styling
- * Used for wrapping form fields with a border and title
+ * Reusable form section component with clean styling
  */
 const FormSection: React.FC<FormSectionProps> = ({
     title,
     children,
     padding = 3
 }) => {
+    const theme = useTheme();
+
     return (
         <Box
             p={padding}
             sx={{
-                border: "1px solid #e5eaef",
                 borderRadius: "12px",
                 height: "100%",
-                backgroundColor: "#ffffff"
+                backgroundColor: "#ffffff",
+                boxShadow: "0 2px 8px rgba(0, 0, 0, 0.08)",
             }}
         >
-            <Typography variant="h5" fontWeight={500} gutterBottom sx={{ mb: 2, color: "text.primary" }}>
+            <Typography
+                variant="h4"
+                fontWeight={600}
+                gutterBottom
+                sx={{
+                    mb: 2,
+                    color: theme.palette.primary.main,
+                    pb: 1.5,
+                    borderBottom: `2px solid ${theme.palette.primary.main}`,
+                }}
+            >
                 {title}
             </Typography>
             {children}

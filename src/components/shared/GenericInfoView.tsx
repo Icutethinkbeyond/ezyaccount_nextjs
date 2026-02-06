@@ -86,7 +86,13 @@ const DetailItem = ({ label, value, icon }: { label: string; value: string | und
         <Typography variant="body1" color="textPrimary" sx={{ ml: 3.5, fontWeight: 500 }}>
             {value || "-"}
         </Typography>
-        <Divider sx={{ mt: 1.5, opacity: 0.5 }} />
+        <Divider
+            sx={{
+                mt: 1.5,
+                borderColor: 'primary.main',
+                opacity: 0.3,
+            }}
+        />
     </Box>
 );
 
@@ -150,7 +156,8 @@ export function GenericInfoView<T>({
                             p: 6,
                             borderRadius: '16px',
                             borderStyle: 'dashed',
-                            backgroundColor: 'background.default'
+                            borderColor: 'primary.main',
+                            backgroundColor: 'primary.light'
                         }}
                     >
                         <Avatar sx={{ width: 80, height: 80, mx: "auto", mb: 2, bgcolor: "warning.light" }}>

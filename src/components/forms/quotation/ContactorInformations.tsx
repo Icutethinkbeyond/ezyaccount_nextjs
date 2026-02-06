@@ -1,13 +1,12 @@
 "use client";
 
 import React, { useEffect, useState, useCallback } from "react";
-import { Grid2, TextField, Autocomplete, Box, Typography } from "@mui/material";
+import { Grid2, TextField, Autocomplete, Box, Typography, useTheme } from "@mui/material";
 import { Formik, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import FormSection from "../../shared/FormSection";
 import { HeadForm, useQuotationListContext } from "@/contexts/QuotationContext";
 import debounce from "lodash/debounce";
-import { Person } from "@mui/icons-material";
 
 // Validation Schema with Yup
 const ContactotInformationSchema = Yup.object({
@@ -22,10 +21,28 @@ interface CustomerOption {
   contactorAddress: string | null;
 }
 
+// Styled TextField - focus border only, no background change
+const getTextFieldSx = (theme: any) => ({
+  "& .MuiOutlinedInput-root": {
+    borderRadius: "8px",
+    "&:hover .MuiOutlinedInput-notchedOutline": {
+      borderColor: theme.palette.primary.main,
+    },
+    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+      borderColor: theme.palette.primary.main,
+      borderWidth: "2px",
+    }
+  },
+  "& .MuiInputLabel-root.Mui-focused": {
+    color: theme.palette.primary.main,
+  }
+});
+
 const ContactotInformation: React.FC = () => {
   const { headForm, setHeadForm } = useQuotationListContext();
   const [suggestions, setSuggestions] = useState<CustomerOption[]>([]);
   const [loading, setLoading] = useState(false);
+  const theme = useTheme();
 
   // Fetch customers for autocomplete
   const fetchSuggestions = async (search: string = "") => {
@@ -82,7 +99,7 @@ const ContactotInformation: React.FC = () => {
 
           return (
             <Form>
-              <FormSection title="ข้อมูลลูกค้า / ผู้ติดต่อ">
+              <FormSection title="ข้อมูลลูกค้า">
                 <Grid2 container spacing={2}>
                   {/* ช่องชื่อผู้ติดต่อ พร้อม Autocomplete */}
                   <Grid2 size={12}>
@@ -117,25 +134,19 @@ const ContactotInformation: React.FC = () => {
                       loadingText="กำลังค้นหา..."
                       renderOption={(props, option) => (
                         <Box component="li" {...props} key={option.contactorId}>
-                          <Box sx={{ flexGrow: 1, py: 0.8 }}>
-                            <Typography variant="subtitle1" fontWeight={500} component="div" sx={{ lineHeight: 1.2 }}>
+                          <Box sx={{ py: 0.5 }}>
+                            <Typography variant="subtitle1" fontWeight={500} sx={{ lineHeight: 1.2, color: theme.palette.primary.main }}>
                               {option.contactorName}
                             </Typography>
-                            <Box display="flex" alignItems="center" gap={1} mt={0.3}>
-                              <Typography variant="body2" color="text.secondary">
-                                {option.contactorTel || "ไม่มีเบอร์โทร"}
-                              </Typography>
-                              {option.contactorEmail && (
-                                <Typography variant="body2" color="text.secondary">
-                                  • {option.contactorEmail}
-                                </Typography>
-                              )}
-                            </Box>
+                            <Typography variant="body2" color="text.secondary">
+                              {option.contactorTel || "ไม่มีเบอร์โทร"}
+                              {option.contactorEmail && ` • ${option.contactorEmail}`}
+                            </Typography>
                             <Typography
                               variant="caption"
                               color="text.disabled"
-                              display="block"
                               sx={{
+                                display: "block",
                                 mt: 0.5,
                                 whiteSpace: 'nowrap',
                                 overflow: 'hidden',
@@ -160,6 +171,7 @@ const ContactotInformation: React.FC = () => {
                           error={touched.contactorName && Boolean(errors.contactorName)}
                           helperText={<ErrorMessage name="contactorName" />}
                           placeholder="พิมพ์ 3 ตัวอักษรเพื่อเริ่มค้นหา..."
+                          sx={getTextFieldSx(theme)}
                         />
                       )}
                     />
@@ -175,6 +187,7 @@ const ContactotInformation: React.FC = () => {
                       onChange={(e) => setFieldValue("contactorTel", e.target.value)}
                       error={touched.contactorTel && Boolean(errors.contactorTel)}
                       helperText={<ErrorMessage name="contactorTel" />}
+                      sx={getTextFieldSx(theme)}
                     />
                   </Grid2>
                   <Grid2 size={12}>
@@ -189,6 +202,7 @@ const ContactotInformation: React.FC = () => {
                       onChange={(e) => setFieldValue("contactorEmail", e.target.value)}
                       error={touched.contactorEmail && Boolean(errors.contactorEmail)}
                       helperText={<ErrorMessage name="contactorEmail" />}
+                      sx={getTextFieldSx(theme)}
                     />
                   </Grid2>
                   <Grid2 size={12}>
@@ -204,6 +218,7 @@ const ContactotInformation: React.FC = () => {
                       onChange={(e) => setFieldValue("contactorAddress", e.target.value)}
                       error={touched.contactorAddress && Boolean(errors.contactorAddress)}
                       helperText={<ErrorMessage name="contactorAddress" />}
+                      sx={getTextFieldSx(theme)}
                     />
                   </Grid2>
                 </Grid2>

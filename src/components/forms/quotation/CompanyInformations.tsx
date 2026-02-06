@@ -1,11 +1,10 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { Grid2, TextField, Autocomplete, Box, Typography } from "@mui/material";
+import { Grid2, TextField, Autocomplete, Box, Typography, useTheme } from "@mui/material";
 import { Formik, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import FormSection from "../../shared/FormSection";
 import { HeadForm, useQuotationListContext } from "@/contexts/QuotationContext";
 import { CompanyProfile } from "@/interfaces/Company";
-import { Business } from "@mui/icons-material";
 import debounce from "lodash/debounce";
 
 // Validation Schema with Yup
@@ -13,10 +12,28 @@ const CompanyInformationSchema = Yup.object({
   // companyName: Yup.string().required("ชื่อบริษัทจำเป็นต้องกรอก"),
 });
 
+// Styled TextField - focus border only, no background change
+const getTextFieldSx = (theme: any) => ({
+  "& .MuiOutlinedInput-root": {
+    borderRadius: "8px",
+    "&:hover .MuiOutlinedInput-notchedOutline": {
+      borderColor: theme.palette.primary.main,
+    },
+    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+      borderColor: theme.palette.primary.main,
+      borderWidth: "2px",
+    }
+  },
+  "& .MuiInputLabel-root.Mui-focused": {
+    color: theme.palette.primary.main,
+  }
+});
+
 const CompanyInformation: React.FC = () => {
   const { headForm, setHeadForm } = useQuotationListContext();
   const [suggestions, setSuggestions] = useState<CompanyProfile[]>([]);
   const [loading, setLoading] = useState(false);
+  const theme = useTheme();
 
   // Fetch company profiles for autocomplete
   const fetchSuggestions = async (search: string) => {
@@ -112,19 +129,19 @@ const CompanyInformation: React.FC = () => {
                       loadingText="กำลังค้นหา..."
                       renderOption={(props, option) => (
                         <Box component="li" {...props} key={option.companyId}>
-                          <Box sx={{ flexGrow: 1, py: 0.5 }}>
-                            <Typography variant="body1" fontWeight={500} component="span">
+                          <Box sx={{ py: 0.5 }}>
+                            <Typography variant="body1" fontWeight={500} sx={{ color: theme.palette.primary.main }}>
                               {option.companyName}
                             </Typography>
-                            <Typography variant="body2" color="text.secondary" component="span" sx={{ ml: 1 }}>
-                              {option.companyTaxId ? ` • ${option.companyTaxId}` : ""}
+                            <Typography variant="body2" color="text.secondary">
+                              {option.companyTaxId ? `เลขภาษี: ${option.companyTaxId}` : ""}
                               {option.companyPhoneNumber ? ` • ${option.companyPhoneNumber}` : ""}
                             </Typography>
                             <Typography
                               variant="caption"
                               color="text.disabled"
-                              display="block"
                               sx={{
+                                display: "block",
                                 whiteSpace: 'nowrap',
                                 overflow: 'hidden',
                                 textOverflow: 'ellipsis',
@@ -147,6 +164,7 @@ const CompanyInformation: React.FC = () => {
                           error={touched.companyName && Boolean(errors.companyName)}
                           helperText={<ErrorMessage name="companyName" />}
                           placeholder="พิมพ์ 3 ตัวอักษรเพื่อเริ่มค้นหา..."
+                          sx={getTextFieldSx(theme)}
                         />
                       )}
                     />
@@ -162,6 +180,7 @@ const CompanyInformation: React.FC = () => {
                       onChange={(e) => setFieldValue("companyTel", e.target.value)}
                       error={touched.companyTel && Boolean(errors.companyTel)}
                       helperText={<ErrorMessage name="companyTel" />}
+                      sx={getTextFieldSx(theme)}
                     />
                   </Grid2>
                   <Grid2 size={6}>
@@ -175,6 +194,7 @@ const CompanyInformation: React.FC = () => {
                       onChange={(e) => setFieldValue("taxId", e.target.value)}
                       error={touched.taxId && Boolean(errors.taxId)}
                       helperText={<ErrorMessage name="taxId" />}
+                      sx={getTextFieldSx(theme)}
                     />
                   </Grid2>
                   <Grid2 size={12}>
@@ -188,6 +208,7 @@ const CompanyInformation: React.FC = () => {
                       onChange={(e) => setFieldValue("branch", e.target.value)}
                       error={touched.branch && Boolean(errors.branch)}
                       helperText={<ErrorMessage name="branch" />}
+                      sx={getTextFieldSx(theme)}
                     />
                   </Grid2>
                   <Grid2 size={12}>
@@ -205,6 +226,7 @@ const CompanyInformation: React.FC = () => {
                       onChange={(e) => setFieldValue("dateCreate", e.target.value)}
                       error={touched.dateCreate && Boolean(errors.dateCreate)}
                       helperText={<ErrorMessage name="dateCreate" />}
+                      sx={getTextFieldSx(theme)}
                     />
                   </Grid2>
                   <Grid2 size={12}>
@@ -222,6 +244,7 @@ const CompanyInformation: React.FC = () => {
                         touched.companyAddress && Boolean(errors.companyAddress)
                       }
                       helperText={<ErrorMessage name="companyAddress" />}
+                      sx={getTextFieldSx(theme)}
                     />
                   </Grid2>
                 </Grid2>
